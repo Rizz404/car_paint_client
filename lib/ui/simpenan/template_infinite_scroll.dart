@@ -4,6 +4,7 @@ import 'package:paint_car/core/types/paginated_data.dart';
 import 'package:paint_car/core/types/pagination.dart';
 import 'package:paint_car/data/models/car_brand.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/template/cubit/template_cubit.dart';
 import 'package:paint_car/ui/shared/empty_data.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
@@ -30,7 +31,6 @@ class _TemplateInfiniteScrollState extends State<TemplateInfiniteScroll> {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
-
     _loadData(_currentPage);
   }
 
@@ -45,21 +45,15 @@ class _TemplateInfiniteScrollState extends State<TemplateInfiniteScroll> {
   }
 
   void _onScroll() {
-    final currentScroll = _scrollController.position.pixels;
     final maxScroll = _scrollController.position.maxScrollExtent;
-    final hasNextPage = _pagination != null && _pagination!.hasNextPage;
+    final currentScroll = _scrollController.position.pixels;
+    final hasNextPage = _pagination?.hasNextPage ?? false;
 
-    if (currentScroll <= maxScroll - 200) {
-      return;
+    if (currentScroll >= maxScroll - 200 && !_isLoadingMore && hasNextPage) {
+      setState(() => _isLoadingMore = true);
+      _currentPage += 1;
+      _loadData(_currentPage);
     }
-
-    if (!hasNextPage || _isLoadingMore) {
-      return;
-    }
-
-    _isLoadingMore = true;
-    _currentPage += 1;
-    _loadData(_currentPage);
   }
 
   @override
@@ -86,9 +80,7 @@ class _TemplateInfiniteScrollState extends State<TemplateInfiniteScroll> {
               if (_brands.isEmpty) {
                 return const EmptyData(message: "Brands is empty");
               }
-              final hasNextPage =
-                  _pagination != null && _pagination!.hasNextPage;
-              final itemCount = _brands.length + ((hasNextPage) ? 1 : 0);
+              final hasNextPage = _pagination?.hasNextPage ?? false;
               return Scrollbar(
                 controller: _scrollController,
                 thumbVisibility: true,
@@ -107,25 +99,22 @@ class _TemplateInfiniteScrollState extends State<TemplateInfiniteScroll> {
                     ),
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (index == _brands.length) {
-                            // ! loading nya nutupin layout items
-                            return const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          }
-                          final brand = _brands[index];
-                          return SizedBox(
-                            height: 200,
-                            child: Text(brand.name),
-                          );
-                        },
-                        childCount: itemCount,
+                        (context, index) => SizedBox(
+                          height: 200,
+                          child: Text(_brands[index].name),
+                        ),
+                        childCount: _brands.length,
                       ),
                     ),
+                    if (_isLoadingMore && hasNextPage)
+                      const SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.all(24.0),
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               );

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paint_car/features/home/pages/home_page.dart';
 import 'package:paint_car/features/template/cubit/template_cubit.dart';
+import 'package:paint_car/ui/config/configuration_theme.dart';
+import 'package:paint_car/ui/simpenan/template_infinite_scroll.dart';
 import 'dependencies/sl.dart';
 
 Future<void> main() async {
@@ -20,10 +21,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ConfigurationTheme.colorScheme,
         useMaterial3: true,
+        appBarTheme: ConfigurationTheme.appBarTheme(context),
+        textTheme: ConfigurationTheme.textTheme,
+        elevatedButtonTheme: ConfigurationTheme.elevatedButtonTheme,
+        fontFamilyFallback: ['Poppins'],
       ),
-      home: const HomePage(),
+      home: const TemplateInfiniteScroll(),
       debugShowCheckedModeBanner: false,
     );
   }

@@ -6,8 +6,6 @@ Future<void> handleBaseCubit<T>(
   Future<ApiResponse<T>> Function() apiCall, {
   Function(T data, String message)? onSuccess,
 }) async {
-  emit(BaseLoadingState());
-
   try {
     final result = await apiCall();
 
