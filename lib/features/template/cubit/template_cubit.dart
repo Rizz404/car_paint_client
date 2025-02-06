@@ -9,7 +9,7 @@ class TemplateCubit extends Cubit<BaseState> {
   final TemplateRepo templateRepo;
   TemplateCubit({
     required this.templateRepo,
-  }) : super(BaseInitialState());
+  }) : super(const BaseInitialState());
 
   Future<void> getBrands(int page, int limit) async {
     await handleBaseCubit<PaginatedData<CarBrand>>(

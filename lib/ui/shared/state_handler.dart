@@ -9,7 +9,7 @@ import 'package:paint_car/ui/shared/no_internet.dart';
 
 class StateHandler extends StatefulWidget {
   const StateHandler(
-      {super.key, required this.onSuccess, required this.onRetry});
+      {super.key, required this.onSuccess, required this.onRetry,});
   final Widget Function(BuildContext context, BaseState state) onSuccess;
   final VoidCallback onRetry;
 
@@ -28,7 +28,7 @@ class _StateHandlerState extends State<StateHandler> {
           BaseSuccessState() => widget.onSuccess(context, state),
           BaseErrorState() => ErrorStateWidget(
               message: state.message ?? ApiConstant.unknownError,
-              onRetry: widget.onRetry),
+              onRetry: widget.onRetry,),
           BaseNoInternetState() => NoInternet(
               onRetry: widget.onRetry,
             )

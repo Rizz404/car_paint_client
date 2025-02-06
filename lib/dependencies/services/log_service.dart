@@ -5,9 +5,6 @@ class LogService {
     printer: PrettyPrinter(
       methodCount: 4, // Tampilkan 2 level fungsi pemanggil
       errorMethodCount: 5, // Tampilkan stack trace hingga 5 level saat error
-      lineLength: 120, // Panjang maksimal log
-      colors: true, // Gunakan warna untuk konsol
-      printEmojis: true, // Tampilkan emoji
       dateTimeFormat: DateTimeFormat.onlyTime,
     ),
   );

@@ -19,7 +19,7 @@ class MainTextField extends StatelessWidget {
       this.obscureText,
       this.validator,
       this.maxLines = 1,
-      this.isEnabled = true});
+      this.isEnabled = true,});
 
   @override
   Widget build(BuildContext context) {

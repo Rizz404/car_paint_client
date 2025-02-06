@@ -1,4 +1,3 @@
-import 'package:paint_car/core/types/pagination.dart';
 
 sealed class ApiResponse<T> {
   final String message;

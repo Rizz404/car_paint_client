@@ -11,7 +11,7 @@ class MainElevatedButton extends StatelessWidget {
       this.bgColor,
       this.width = double.infinity,
       this.height = 46.0,
-      this.textColor = Colors.white});
+      this.textColor = Colors.white,});
   final bool isLoading;
   final void Function()? onPressed;
   final String text;
@@ -28,9 +28,9 @@ class MainElevatedButton extends StatelessWidget {
           backgroundColor: isLoading
               ? WidgetStateProperty.all(Colors.grey)
               : WidgetStateProperty.all(
-                  bgColor ?? Theme.of(context).colorScheme.primary),
+                  bgColor ?? Theme.of(context).colorScheme.primary,),
           minimumSize: WidgetStateProperty.all(Size(width, height)),
         ),
-        child: MainText(text: text, extent: Large(), color: textColor));
+        child: MainText(text: text, extent: const Large(), color: textColor),);
   }
 }

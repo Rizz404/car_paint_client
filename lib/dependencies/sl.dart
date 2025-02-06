@@ -11,14 +11,14 @@ final getIt = GetIt.instance;
 
 initializeSL() async {
   getIt.registerSingleton<SharedPreferences>(
-      await SharedPreferences.getInstance());
+      await SharedPreferences.getInstance(),);
   getIt.registerSingleton<LogService>(LogService());
   getIt.registerSingleton<TokenLocal>(TokenLocal(getIt()));
   getIt.registerLazySingleton<http.Client>(() => http.Client());
   getIt.registerLazySingleton<ApiClient>(
-      () => ApiClient(client: getIt(), tokenSp: getIt()));
+      () => ApiClient(client: getIt(), tokenSp: getIt()),);
   getIt.registerLazySingleton<TemplateRepo>(
-      () => TemplateRepo(apiClient: getIt()));
+      () => TemplateRepo(apiClient: getIt()),);
   getIt.registerFactory<TemplateCubit>(
-      () => TemplateCubit(templateRepo: getIt()));
+      () => TemplateCubit(templateRepo: getIt()),);
 }

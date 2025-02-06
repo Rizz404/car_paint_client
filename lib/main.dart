@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/features/template/cubit/template_cubit.dart';
 import 'package:paint_car/ui/config/configuration_theme.dart';
 import 'package:paint_car/ui/simpenan/template_infinite_scroll.dart';
-import 'dependencies/sl.dart';
+import 'package:paint_car/dependencies/sl.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeSL();
   runApp(MultiBlocProvider(
       providers: [BlocProvider(create: (context) => getIt<TemplateCubit>())],
-      child: const MyApp()));
+      child: const MyApp(),),);
 }
 
 class MyApp extends StatelessWidget {

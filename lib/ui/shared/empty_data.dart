@@ -12,7 +12,7 @@ class EmptyData extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         spacing: 8,
         children: [
-          Image(image: const AssetImage('assets/images/empty_data.png')),
+          const Image(image: AssetImage('assets/images/empty_data.png')),
           Text(message, textAlign: TextAlign.center),
         ],
       ),

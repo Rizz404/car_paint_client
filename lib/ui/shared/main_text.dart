@@ -31,6 +31,6 @@ class MainText extends BaseText {
         overflow: overflow,
         style: textStyle(context)!.copyWith(
           color: color,
-        ));
+        ),);
   }
 }

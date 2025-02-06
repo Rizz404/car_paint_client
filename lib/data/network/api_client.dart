@@ -31,7 +31,7 @@ class ApiClient {
 
       return _handleResponse<T>(response, fromJson);
     } on SocketException {
-      return ApiNoInternet(message: ApiConstant.noInternetConnection);
+      return const ApiNoInternet(message: ApiConstant.noInternetConnection);
     } catch (e) {
       return ApiError(message: 'GET request failed: $e');
     }
@@ -55,7 +55,7 @@ class ApiClient {
 
       return _handleResponse<T>(response, fromJson);
     } on SocketException {
-      return ApiNoInternet(message: ApiConstant.noInternetConnection);
+      return const ApiNoInternet(message: ApiConstant.noInternetConnection);
     } catch (e) {
       return ApiError(message: 'POST request failed: $e');
     }

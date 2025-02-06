@@ -20,19 +20,19 @@ class ConfigurationTheme {
     return InputDecorationTheme(
         contentPadding: const EdgeInsets.all(16),
         errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               width: 1.5,
               color: Colors.red,
             ),
-            borderRadius: BorderRadius.circular(10)),
+            borderRadius: BorderRadius.circular(10),),
         errorMaxLines: 1,
         focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               width: 1.5,
               color: Colors.red,
             ),
-            borderRadius: BorderRadius.circular(10)),
-        errorStyle: TextStyle(
+            borderRadius: BorderRadius.circular(10),),
+        errorStyle: const TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w400,
           color: Colors.red,
@@ -42,12 +42,12 @@ class ConfigurationTheme {
               width: 1.5,
               color: Colors.grey.shade300,
             ),
-            borderRadius: BorderRadius.circular(10)),
+            borderRadius: BorderRadius.circular(10),),
         focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               width: 1.5,
             ),
-            borderRadius: BorderRadius.circular(10)));
+            borderRadius: BorderRadius.circular(10),),);
   }
 
   static TextTheme get textTheme {
@@ -76,44 +76,44 @@ class ConfigurationTheme {
         fontSize: 18,
         fontWeight: FontWeight.w600,
       ),
-      titleLarge: TextStyle(
+      titleLarge: const TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.w500,
       ),
-      titleMedium: TextStyle(
+      titleMedium: const TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w500,
       ),
-      titleSmall: TextStyle(
+      titleSmall: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w500,
       ),
-      bodyLarge: TextStyle(
+      bodyLarge: const TextStyle(
         fontFamily: "Cera Pro",
         fontSize: 16,
         fontWeight: FontWeight.w400,
       ),
-      bodyMedium: TextStyle(
+      bodyMedium: const TextStyle(
         fontFamily: "Cera Pro",
         fontSize: 14,
         fontWeight: FontWeight.w400,
       ),
-      bodySmall: TextStyle(
+      bodySmall: const TextStyle(
         fontFamily: "Cera Pro",
         fontSize: 12,
         fontWeight: FontWeight.w400,
       ),
-      labelLarge: TextStyle(
+      labelLarge: const TextStyle(
         fontFamily: "Cera Pro",
         fontSize: 14,
         fontWeight: FontWeight.w400,
       ),
-      labelMedium: TextStyle(
+      labelMedium: const TextStyle(
         fontFamily: "Cera Pro",
         fontSize: 12,
         fontWeight: FontWeight.w400,
       ),
-      labelSmall: TextStyle(
+      labelSmall: const TextStyle(
         fontFamily: "Cera Pro",
         fontSize: 10,
         fontWeight: FontWeight.w400,
@@ -124,8 +124,8 @@ class ConfigurationTheme {
   static ElevatedButtonThemeData get elevatedButtonTheme {
     return ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-            minimumSize: Size(double.infinity, 56),
+            minimumSize: const Size(double.infinity, 56),
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16))));
+                borderRadius: BorderRadius.circular(16),),),);
   }
 }

@@ -10,7 +10,7 @@ class TemplateRepo {
   const TemplateRepo({required this.apiClient});
 
   Future<ApiResponse<PaginatedData<CarBrand>>> getBrands(
-      int page, int limit) async {
+      int page, int limit,) async {
     try {
       final result = await apiClient.get<PaginatedData<CarBrand>>(
         ApiConstant.brandsPath,
