@@ -44,7 +44,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, BaseState>(
       listener: (context, state) {
-        LogService.i("Login Page State: $state");
         if (state is BaseSuccessState ||
             state is BaseErrorState ||
             state is BaseNoInternetState) {
@@ -88,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    MainText(text: "Sign In", extent: ExtraLarge()),
+                    const MainText(text: "Sign In", extent: ExtraLarge()),
                     const SizedBox(height: 16),
                     Form(
                       key: formKey,
@@ -99,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                             hintText: "Email",
                             leadingIcon: const Icon(Icons.email),
                             validator: EmailValidator.validate,
-                            isEnabled: (state is! BaseLoadingState),
+                            isEnabled: state is! BaseLoadingState,
                           ),
                           const SizedBox(height: 16),
                           MainTextField(
@@ -119,14 +118,13 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             obscureText: !obscurePassword,
-                            isEnabled: (state is! BaseLoadingState),
+                            isEnabled: state is! BaseLoadingState,
                           ),
                           const SizedBox(height: 16),
                           MainElevatedButton(
                             onPressed: signIn,
                             text: "Sign In",
-                            isLoading:
-                                (state is BaseLoadingState || isSubmitted),
+                            isLoading: state is BaseLoadingState || isSubmitted,
                           ),
                         ],
                       ),

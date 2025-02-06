@@ -28,8 +28,10 @@ Future<void> handleBaseCubit<T>(
         break;
     }
   } catch (e) {
-    emit(BaseErrorState(
-      message: e.toString(),
-    ));
+    emit(
+      BaseErrorState(
+        message: e.toString(),
+      ),
+    );
   }
 }

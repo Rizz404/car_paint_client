@@ -2,7 +2,6 @@ import 'package:paint_car/core/common/api_response.dart';
 import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/data/local/token_sp.dart';
 import 'package:paint_car/data/network/api_client.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 
 class AuthRepo {
   final ApiClient apiClient;
@@ -10,7 +9,10 @@ class AuthRepo {
   const AuthRepo({required this.apiClient, required this.tokenSp});
 
   Future<ApiResponse<void>> register(
-      String username, String email, String password) async {
+    String username,
+    String email,
+    String password,
+  ) async {
     try {
       final result = await apiClient.post<void>(
         ApiConstant.registerPath,
@@ -41,13 +43,14 @@ class AuthRepo {
       );
       if (result is ApiError) {
         return ApiError(
-            message: result.message,
-            errors: (result as ApiError<String>).errors);
+          message: result.message,
+          errors: (result as ApiError<String>).errors,
+        );
       }
 
       await tokenSp.saveToken(result.data as String);
 
-      return ApiSuccess(message: result.message, data: null);
+      return ApiSuccess(message: result.message);
     } catch (e) {
       return ApiError(message: e.toString());
     }

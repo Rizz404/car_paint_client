@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/core/common/extent.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/auth/cubit/auth_cubit.dart';
 import 'package:paint_car/features/auth/pages/login_page.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/main_text_field.dart';
 import 'package:paint_car/ui/shared/show_error_snackbar.dart';
-import 'package:paint_car/ui/shared/state_handler.dart';
 import 'package:paint_car/ui/validator/email_validator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -90,7 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    MainText(text: "Sign Up", extent: ExtraLarge()),
+                    const MainText(text: "Sign Up", extent: ExtraLarge()),
                     const SizedBox(height: 16),
                     Form(
                       key: formKey,
@@ -106,7 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               }
                               return null;
                             },
-                            isEnabled: (state is! BaseLoadingState),
+                            isEnabled: state is! BaseLoadingState,
                           ),
                           const SizedBox(height: 16),
                           MainTextField(
@@ -114,7 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             hintText: "Email",
                             leadingIcon: const Icon(Icons.email),
                             validator: EmailValidator.validate,
-                            isEnabled: (state is! BaseLoadingState),
+                            isEnabled: state is! BaseLoadingState,
                           ),
                           const SizedBox(height: 16),
                           MainTextField(
@@ -134,7 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                             ),
                             obscureText: !obscurePassword,
-                            isEnabled: (state is! BaseLoadingState),
+                            isEnabled: state is! BaseLoadingState,
                           ),
                           const SizedBox(height: 16),
                           MainTextField(
@@ -164,14 +162,13 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                             ),
                             obscureText: !obscureConfirmPassword,
-                            isEnabled: (state is! BaseLoadingState),
+                            isEnabled: state is! BaseLoadingState,
                           ),
                           const SizedBox(height: 24),
                           MainElevatedButton(
                             onPressed: signUp,
                             text: "Sign Up",
-                            isLoading:
-                                (state is BaseLoadingState || isSubmitted),
+                            isLoading: state is BaseLoadingState || isSubmitted,
                           ),
                         ],
                       ),

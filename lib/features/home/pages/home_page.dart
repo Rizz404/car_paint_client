@@ -5,7 +5,6 @@ import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/auth/pages/login_page.dart';
 import 'package:paint_car/features/template/cubit/template_cubit.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
-import 'package:paint_car/ui/shared/show_error_snackbar.dart';
 
 class HomePage extends StatefulWidget {
   static route() => MaterialPageRoute(builder: (context) => const HomePage());
@@ -34,7 +33,6 @@ class _HomePageState extends State<HomePage> {
         builder: (context, state) {
           if (state is BaseSuccessState) {
             final data = state.data;
-            LogService.i('Home Page State: ${state.data}');
             return Column(
               children: [
                 MainText(text: data ?? 'Success'),

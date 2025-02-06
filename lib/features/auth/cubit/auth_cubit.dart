@@ -7,7 +7,7 @@ class AuthCubit extends Cubit<BaseState> {
   final AuthRepo authRepo;
   AuthCubit({
     required this.authRepo,
-  }) : super(BaseInitialState());
+  }) : super(const BaseInitialState());
 
   Future<void> register(
     String username,
