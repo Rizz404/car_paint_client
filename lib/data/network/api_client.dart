@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:paint_car/core/common/api_response.dart';
 import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/data/local/token_sp.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 
 class ApiClient {
   final http.Client client;
@@ -20,10 +21,11 @@ class ApiClient {
     Map<String, dynamic>? queryParameters, // Tambahkan parameter ini
   }) async {
     try {
-      Uri uri = Uri.parse('${ApiConstant.baseUrl}/$endpoint');
+      Uri uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
       if (queryParameters != null) {
         uri = uri.replace(queryParameters: queryParameters);
       }
+      LogService.i('GET request to $uri');
       final headers = await _getHeaders();
       final response = await client
           .get(uri, headers: headers)
@@ -43,8 +45,9 @@ class ApiClient {
     T Function(Map<String, dynamic>)? fromJson,
   }) async {
     try {
-      final uri = Uri.parse('${ApiConstant.baseUrl}/$endpoint');
+      final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
       final headers = await _getHeaders();
+      LogService.i('POST request to $uri with body: $body');
       final response = await client
           .post(
             uri,
@@ -52,6 +55,8 @@ class ApiClient {
             body: jsonEncode(body),
           )
           .timeout(const Duration(seconds: 15));
+      LogService.i('Response: ${response.body}');
+      LogService.i('status code: ${response.statusCode}');
 
       return _handleResponse<T>(response, fromJson);
     } on SocketException {
@@ -78,9 +83,13 @@ class ApiClient {
     final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
     final message =
         responseBody['message'] as String? ?? ApiConstant.unknownError;
+    final errors = responseBody['errors'];
 
     if (statusCode >= 300) {
-      return ApiError<T>(message: message);
+      return ApiError<T>(
+        message: message,
+        errors: errors,
+      );
     }
 
     final data = responseBody['data'];

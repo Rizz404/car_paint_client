@@ -4,7 +4,7 @@ import 'package:paint_car/core/common/api_response.dart';
 Future<void> handleBaseCubit<T>(
   Function(BaseState state) emit,
   Future<ApiResponse<T>> Function() apiCall, {
-  Function(T data, String message)? onSuccess,
+  Function(T data, String? message)? onSuccess,
 }) async {
   try {
     final result = await apiCall();
@@ -21,13 +21,15 @@ Future<void> handleBaseCubit<T>(
         }
         break;
       case ApiError<T> error:
-        emit(BaseErrorState(error.message));
+        emit(BaseErrorState(message: error.message, errors: error.errors));
         break;
-      case ApiNoInternet<T> noInternet:
+      case ApiNoInternet noInternet:
         emit(BaseNoInternetState(noInternet.message));
         break;
     }
   } catch (e) {
-    emit(BaseErrorState(e.toString()));
+    emit(BaseErrorState(
+      message: e.toString(),
+    ));
   }
 }

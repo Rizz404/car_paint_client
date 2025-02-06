@@ -17,4 +17,18 @@ class TemplateCubit extends Cubit<BaseState> {
       () => templateRepo.getBrands(page, limit),
     );
   }
+
+  Future<void> getToken() async {
+    await handleBaseCubit<String?>(
+      emit,
+      () => templateRepo.getToken(),
+    );
+  }
+
+  Future<void> logout() async {
+    await handleBaseCubit<void>(
+      emit,
+      () => templateRepo.logout(),
+    );
+  }
 }

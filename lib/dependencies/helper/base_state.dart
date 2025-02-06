@@ -12,14 +12,18 @@ class BaseLoadingState extends BaseState {
 }
 
 class BaseErrorState extends BaseState {
-  const BaseErrorState(String message) : super(message: message);
+  final dynamic errors;
+  const BaseErrorState({
+    super.message,
+    this.errors,
+  });
 }
 
 class BaseNoInternetState extends BaseState {
-  const BaseNoInternetState(String message) : super(message: message);
+  const BaseNoInternetState(String? message) : super(message: message);
 }
 
 class BaseSuccessState<T> extends BaseState {
   final T data;
-  const BaseSuccessState(this.data, String message) : super(message: message);
+  const BaseSuccessState(this.data, String? message) : super(message: message);
 }

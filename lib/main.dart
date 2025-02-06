@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paint_car/features/auth/cubit/auth_cubit.dart';
+import 'package:paint_car/features/auth/pages/login_page.dart';
 import 'package:paint_car/features/template/cubit/template_cubit.dart';
 import 'package:paint_car/ui/config/configuration_theme.dart';
-import 'package:paint_car/ui/simpenan/template_infinite_scroll.dart';
 import 'package:paint_car/dependencies/sl.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeSL();
-  runApp(MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => getIt<TemplateCubit>())],
-      child: const MyApp(),),);
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => getIt<TemplateCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<AuthCubit>(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -28,7 +39,7 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ConfigurationTheme.elevatedButtonTheme,
         fontFamilyFallback: ['Poppins'],
       ),
-      home: const TemplateInfiniteScroll(),
+      home: const LoginPage(),
       debugShowCheckedModeBanner: false,
     );
   }

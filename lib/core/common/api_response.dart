@@ -1,24 +1,26 @@
-
 sealed class ApiResponse<T> {
-  final String message;
+  final String? message;
   final T? data;
 
   const ApiResponse({
-    required this.message,
+    this.message,
     this.data,
   });
 }
 
 class ApiSuccess<T> extends ApiResponse<T> {
   const ApiSuccess({
-    required super.message,
-    required T super.data,
+    super.message,
+    super.data,
   });
 }
 
 class ApiError<T> extends ApiResponse<T> {
+  final dynamic errors;
+
   const ApiError({
     required super.message,
+    this.errors,
   });
 }
 
