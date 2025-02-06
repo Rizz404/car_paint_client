@@ -28,10 +28,13 @@ class ApiSuccessPagination<T> extends ApiSuccess<T> {
 }
 
 class ApiError<T> extends ApiResponse<T> {
-  final String error;
-
   const ApiError({
     required super.message,
-    this.error = '',
+  });
+}
+
+class ApiNoInternet<T> extends ApiResponse<T> {
+  const ApiNoInternet({
+    required super.message,
   });
 }
