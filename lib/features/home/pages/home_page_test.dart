@@ -72,15 +72,13 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             _brands.addAll(data.items);
             _pagination = data.pagination;
-            _isLoadingMore = false;
           });
+
+          _isLoadingMore = false;
         }
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('Jembut Kusut'),
-          ),
           body: StateHandler(
             onRetry: () => _loadData(_currentPage),
             onSuccess: (context, state) {
@@ -90,45 +88,22 @@ class _HomePageState extends State<HomePage> {
               final hasNextPage =
                   _pagination != null && _pagination!.hasNextPage;
               final itemCount = _brands.length + ((hasNextPage) ? 1 : 0);
-              return Scrollbar(
+              return ListView.builder(
                 controller: _scrollController,
-                thumbVisibility: true,
-                child: CustomScrollView(
-                  controller: _scrollController,
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Container(
-                        padding: const EdgeInsets.all(16.0),
-                        color: Colors.blueAccent,
-                        child: const Text(
-                          'Konten di atas ListView',
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                      ),
-                    ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (index == _brands.length) {
-                            // ! loading nya nutupin layout items
-                            return const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          }
-                          final brand = _brands[index];
-                          return SizedBox(
-                            height: 200,
-                            child: Text(brand.name),
-                          );
-                        },
-                        childCount: itemCount,
-                      ),
-                    ),
-                  ],
-                ),
+                itemCount: itemCount,
+                itemBuilder: (context, index) {
+                  if (index < _brands.length) {
+                    final brand = _brands[index];
+                    return SizedBox(
+                      height: 100,
+                      child: Text(brand.name),
+                    );
+                  }
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                },
               );
             },
           ),
