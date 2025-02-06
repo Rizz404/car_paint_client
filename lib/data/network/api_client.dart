@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:paint_car/core/common/api_response.dart';
 import 'package:paint_car/core/constants/api.dart';
-import 'package:paint_car/core/types/pagination.dart';
 import 'package:paint_car/data/local/token_sp.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 
 class ApiClient {
   final http.Client client;
@@ -19,9 +17,13 @@ class ApiClient {
   Future<ApiResponse<T>> get<T>(
     String endpoint, {
     T Function(Map<String, dynamic>)? fromJson,
+    Map<String, dynamic>? queryParameters, // Tambahkan parameter ini
   }) async {
     try {
-      final uri = Uri.parse('${ApiConstant.baseUrl}/$endpoint');
+      Uri uri = Uri.parse('${ApiConstant.baseUrl}/$endpoint');
+      if (queryParameters != null) {
+        uri = uri.replace(queryParameters: queryParameters);
+      }
       final headers = await _getHeaders();
       final response = await client
           .get(uri, headers: headers)
@@ -74,25 +76,31 @@ class ApiClient {
   ) {
     final statusCode = response.statusCode;
     final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
-    final message = responseBody['message'] as String? ?? 'Unknown message';
+    final message =
+        responseBody['message'] as String? ?? ApiConstant.unknownError;
 
     if (statusCode >= 300) {
       return ApiError<T>(message: message);
     }
+
     final data = responseBody['data'];
-    if (!responseBody.containsKey('pagination')) {
+    final paginationData = responseBody['pagination'] as Map<String, dynamic>?;
+    // ! kalo pagination nya gaada
+    if (paginationData == null) {
       return ApiSuccess<T>(
         message: message,
         data: fromJson?.call(data) ?? data as T,
       );
     }
-    final paginationData = responseBody['pagination'] as Map<String, dynamic>;
-    final pagination = Pagination.fromMap(paginationData);
+    // ! kalo pagination nya ada
+    final combinedData = {
+      'data': data,
+      'pagination': paginationData,
+    };
 
-    return ApiSuccessPagination(
+    return ApiSuccess<T>(
       message: message,
-      data: fromJson?.call({'data': data}) ?? data as T,
-      pagination: pagination,
+      data: fromJson?.call(combinedData) ?? combinedData as T,
     );
   }
 }

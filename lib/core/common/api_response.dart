@@ -17,16 +17,6 @@ class ApiSuccess<T> extends ApiResponse<T> {
   });
 }
 
-class ApiSuccessPagination<T> extends ApiSuccess<T> {
-  final Pagination pagination;
-
-  ApiSuccessPagination({
-    required super.message,
-    required super.data,
-    required this.pagination,
-  });
-}
-
 class ApiError<T> extends ApiResponse<T> {
   const ApiError({
     required super.message,
