@@ -5,9 +5,9 @@ import 'package:paint_car/core/types/pagination.dart';
 import 'package:paint_car/data/models/car_brand.dart';
 import 'package:paint_car/data/network/api_client.dart';
 
-class HomeRepo {
+class TemplateRepo {
   final ApiClient apiClient;
-  const HomeRepo({required this.apiClient});
+  const TemplateRepo({required this.apiClient});
 
   Future<ApiResponse<PaginatedData<CarBrand>>> getBrands(
       int page, int limit) async {
