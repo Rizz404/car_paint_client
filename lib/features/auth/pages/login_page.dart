@@ -93,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                     Form(
                       key: formKey,
                       child: Column(
+                        spacing: 16,
                         children: [
                           MainTextField(
                             controller: emailController,
@@ -101,7 +102,6 @@ class _LoginPageState extends State<LoginPage> {
                             validator: EmailValidator.validate,
                             isEnabled: state is! BaseLoadingState,
                           ),
-                          const SizedBox(height: 16),
                           MainTextField(
                             controller: passwordController,
                             hintText: "Password",
@@ -121,7 +121,6 @@ class _LoginPageState extends State<LoginPage> {
                             obscureText: !obscurePassword,
                             isEnabled: state is! BaseLoadingState,
                           ),
-                          const SizedBox(height: 16),
                           MainElevatedButton(
                             onPressed: signIn,
                             text: "Sign In",

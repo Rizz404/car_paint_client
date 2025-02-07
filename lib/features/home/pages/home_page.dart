@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/features/home/pages/settings_page.dart';
 import 'package:paint_car/features/home/widgets/bottom_nav_bar.dart';
-import 'package:paint_car/ui/common/extent.dart';
+import 'package:paint_car/features/home/widgets/left_drawer.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
@@ -56,6 +56,7 @@ class _HomePageState extends State<HomePage> {
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
       ),
+      drawer: LeftDrawer(),
       body: [
         _buildHomePage(),
         const SettingsPage(),

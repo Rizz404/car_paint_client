@@ -14,7 +14,11 @@ class BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: selectedIndex,
+      iconSize: 28,
+      elevation: 0.0,
       onTap: onItemTapped,
+      selectedItemColor: Theme.of(context).colorScheme.primary,
+      unselectedItemColor: Theme.of(context).disabledColor,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
