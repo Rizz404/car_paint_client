@@ -10,16 +10,17 @@ class MainTextField extends StatelessWidget {
   final Validator? validator;
   final int maxLines;
   final bool isEnabled;
-  const MainTextField(
-      {super.key,
-      required this.controller,
-      required this.hintText,
-      this.trailingIcon,
-      this.leadingIcon,
-      this.obscureText,
-      this.validator,
-      this.maxLines = 1,
-      this.isEnabled = true,});
+  const MainTextField({
+    super.key,
+    required this.controller,
+    required this.hintText,
+    this.trailingIcon,
+    this.leadingIcon,
+    this.obscureText,
+    this.validator,
+    this.maxLines = 1,
+    this.isEnabled = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +34,12 @@ class MainTextField extends StatelessWidget {
         suffixIcon: trailingIcon,
         prefixIcon: leadingIcon,
         enabled: isEnabled,
+        alignLabelWithHint: true,
+        // ! nge align icon dengan text
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 12,
+        ), // Tambahkan ini
       ),
     );
   }

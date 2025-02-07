@@ -20,7 +20,7 @@ class BaseErrorState extends BaseState {
 }
 
 class BaseNoInternetState extends BaseState {
-  const BaseNoInternetState(String? message) : super(message: message);
+  const BaseNoInternetState(String message) : super(message: message);
 }
 
 class BaseSuccessState<T> extends BaseState {

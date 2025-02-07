@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:paint_car/core/common/extent.dart';
+import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/components/base_text.dart';
 
 class MainText extends BaseText {
@@ -25,12 +25,14 @@ class MainText extends BaseText {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text,
-        textAlign: textAlign,
-        maxLines: maxLines,
-        overflow: overflow,
-        style: textStyle(context)!.copyWith(
-          color: color,
-        ),);
+    return Text(
+      text,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      overflow: overflow,
+      style: textStyle(context)!.copyWith(
+        color: color,
+      ),
+    );
   }
 }

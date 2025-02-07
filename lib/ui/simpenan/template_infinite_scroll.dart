@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/types/paginated_data.dart';
 import 'package:paint_car/core/types/pagination.dart';
 import 'package:paint_car/data/models/car_brand.dart';
-import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/template/cubit/template_cubit.dart';
 import 'package:paint_car/ui/shared/empty_data.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 
+// TODO: entah kenapa ini ga nampilin 1 pun item, walaupun kondisi nya disaat riski ngotak ngatik server, tapi tetep aneh
 class TemplateInfiniteScroll extends StatefulWidget {
   const TemplateInfiniteScroll({super.key});
 
@@ -53,7 +53,6 @@ class _TemplateInfiniteScrollState extends State<TemplateInfiniteScroll> {
       _brands.clear();
     }
     context.read<TemplateCubit>().getBrands(page, _limit);
-    LogService.i("Load data page $page");
   }
 
   void _onScroll() {
@@ -79,7 +78,9 @@ class _TemplateInfiniteScrollState extends State<TemplateInfiniteScroll> {
           if (!_brands.contains(data.items.firstOrNull)) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               setState(() {
-                _brands.addAll(data.items);
+                _brands.addAll(
+                  data.items.where((item) => !_brands.contains(item)),
+                );
                 _pagination = data.pagination;
                 _isLoadingMore = false;
               });
@@ -87,7 +88,8 @@ class _TemplateInfiniteScrollState extends State<TemplateInfiniteScroll> {
           }
 
           if (_brands.isEmpty &&
-              _pagination?.currentPage == 1 &&
+              (_pagination?.currentPage ?? 1) == 1 &&
+              _isLoadingMore &&
               _pagination?.hasNextPage == false) {
             return const EmptyData(message: "Brands is empty");
           }
@@ -99,9 +101,10 @@ class _TemplateInfiniteScrollState extends State<TemplateInfiniteScroll> {
               controller: _scrollController,
               thumbVisibility: true,
               child: CustomScrollView(
+                cacheExtent: 2000, // ! Preload area di luar viewport
                 controller: _scrollController,
                 physics:
-                    const AlwaysScrollableScrollPhysics(), // Penting untuk RefreshIndicator
+                    const AlwaysScrollableScrollPhysics(), // untuk RefreshIndicator
                 slivers: [
                   SliverToBoxAdapter(
                     child: Container(

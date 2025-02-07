@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
+import 'package:paint_car/ui/utils/snack_bar.dart';
 
-void showErrorSnackBar(BuildContext context, BaseErrorState state) {
+void showFormErrorSnackbar(BuildContext context, BaseErrorState state) {
   ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
   String errorMsg = state.message ?? "Unknown Error";
@@ -19,9 +20,9 @@ void showErrorSnackBar(BuildContext context, BaseErrorState state) {
     errorMsg = errorMsg.trim();
   }
 
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(errorMsg),
-    ),
+  SnackBarUtil.showSnackBar(
+    context: context,
+    message: errorMsg,
+    type: SnackBarType.error,
   );
 }

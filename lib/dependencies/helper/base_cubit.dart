@@ -1,3 +1,4 @@
+import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/core/common/api_response.dart';
 
@@ -7,6 +8,7 @@ Future<void> handleBaseCubit<T>(
   Function(T data, String? message)? onSuccess,
 }) async {
   try {
+    emit(const BaseLoadingState());
     final result = await apiCall();
 
     switch (result) {
@@ -24,7 +26,11 @@ Future<void> handleBaseCubit<T>(
         emit(BaseErrorState(message: error.message, errors: error.errors));
         break;
       case ApiNoInternet noInternet:
-        emit(BaseNoInternetState(noInternet.message));
+        emit(
+          BaseNoInternetState(
+            noInternet.message ?? ApiConstant.noInternetConnection,
+          ),
+        );
         break;
     }
   } catch (e) {

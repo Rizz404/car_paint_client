@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:paint_car/core/common/extent.dart';
+import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
+import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/auth/cubit/auth_cubit.dart';
 import 'package:paint_car/features/auth/pages/login_page.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/main_text_field.dart';
-import 'package:paint_car/ui/shared/show_error_snackbar.dart';
 import 'package:paint_car/ui/validator/email_validator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,11 +29,20 @@ class _RegisterPageState extends State<RegisterPage> {
   bool obscurePassword = false;
   bool obscureConfirmPassword = false;
 
-  bool isSubmitted = false;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      usernameController.text = "test";
+      emailController.text = "test@gmail.com";
+      passwordController.text = "test123";
+      confirmPasswordController.text = "test123";
+    });
+  }
 
   void signUp() async {
-    if (formKey.currentState!.validate() && !isSubmitted) {
-      isSubmitted = true;
+    if (formKey.currentState!.validate() &&
+        context.read<AuthCubit>().state is! BaseLoadingState) {
       context.read<AuthCubit>().register(
             usernameController.text,
             emailController.text,
@@ -46,35 +55,14 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, BaseState>(
       listener: (context, state) {
-        if (state is BaseSuccessState ||
-            state is BaseErrorState ||
-            state is BaseNoInternetState) {
-          isSubmitted = false;
-        }
-        if (state is BaseSuccessState) {
-          Navigator.of(context).push(LoginPage.route());
-        }
-        if (state is BaseErrorState) {
-          showErrorSnackBar(
-            context,
-            state,
-          );
-        }
-
-        if (state is BaseNoInternetState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("No Internet Connection"),
-            ),
-          );
-        }
-        if (state is BaseLoadingState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Loading..."),
-            ),
-          );
-        }
+        handleFormListenerState(
+          context: context,
+          state: state,
+          onRetry: signUp,
+          onSuccess: () {
+            Navigator.of(context).push(LoginPage.route());
+          },
+        );
       },
       builder: (context, state) {
         return Scaffold(
@@ -168,7 +156,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           MainElevatedButton(
                             onPressed: signUp,
                             text: "Sign Up",
-                            isLoading: state is BaseLoadingState || isSubmitted,
+                            isLoading: state is BaseLoadingState,
                           ),
                         ],
                       ),

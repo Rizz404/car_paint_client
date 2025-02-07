@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:paint_car/core/common/extent.dart';
+import 'package:paint_car/ui/common/extent.dart';
 
 abstract class BaseText extends StatelessWidget {
   const BaseText({

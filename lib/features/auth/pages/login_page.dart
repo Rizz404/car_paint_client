@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:paint_car/core/common/extent.dart';
+import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
+import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/auth/cubit/auth_cubit.dart';
 import 'package:paint_car/features/auth/pages/register_page.dart';
 import 'package:paint_car/features/home/pages/home_page.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/main_text_field.dart';
-import 'package:paint_car/ui/shared/show_error_snackbar.dart';
 import 'package:paint_car/ui/validator/email_validator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,11 +27,27 @@ class _LoginPageState extends State<LoginPage> {
   bool obscurePassword = false;
   bool obscureConfirmPassword = false;
 
-  bool isSubmitted = false;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      emailController.text = "test@gmail.com";
+    });
+    setState(() {
+      passwordController.text = "test123";
+    });
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   void signIn() async {
-    if (formKey.currentState!.validate() && !isSubmitted) {
-      isSubmitted = true;
+    if (formKey.currentState!.validate() &&
+        context.read<AuthCubit>().state is! BaseLoadingState) {
       context.read<AuthCubit>().login(
             emailController.text,
             passwordController.text,
@@ -40,40 +55,26 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Color getButtonColor() {
+    if (context.read<AuthCubit>().state is BaseLoadingState) {
+      return Theme.of(context).disabledColor;
+    } else {
+      return Theme.of(context).primaryColor;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, BaseState>(
       listener: (context, state) {
-        if (state is BaseSuccessState ||
-            state is BaseErrorState ||
-            state is BaseNoInternetState) {
-          isSubmitted = false;
-        }
-        if (state is BaseSuccessState) {
-          Navigator.of(context)
-              .pushAndRemoveUntil(HomePage.route(), (_) => false);
-        }
-        if (state is BaseErrorState) {
-          showErrorSnackBar(
-            context,
-            state,
-          );
-        }
-
-        if (state is BaseNoInternetState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("No Internet Connection"),
-            ),
-          );
-        }
-        if (state is BaseLoadingState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Loading..."),
-            ),
-          );
-        }
+        handleFormListenerState(
+          context: context,
+          state: state,
+          onRetry: signIn,
+          onSuccess: () {
+            Navigator.of(context).push(HomePage.route());
+          },
+        );
       },
       builder: (context, state) {
         return Scaffold(
@@ -124,7 +125,8 @@ class _LoginPageState extends State<LoginPage> {
                           MainElevatedButton(
                             onPressed: signIn,
                             text: "Sign In",
-                            isLoading: state is BaseLoadingState || isSubmitted,
+                            isLoading: state is BaseLoadingState,
+                            bgColor: getButtonColor(),
                           ),
                         ],
                       ),

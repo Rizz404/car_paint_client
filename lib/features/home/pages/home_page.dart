@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paint_car/data/models/user_model.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/auth/pages/login_page.dart';
-import 'package:paint_car/features/template/cubit/template_cubit.dart';
+import 'package:paint_car/features/shared/cubit/user_cubit.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    context.read<TemplateCubit>().getToken();
+    context.read<UserCubit>().getUserLocal();
     super.initState();
   }
 
@@ -28,17 +28,16 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Home Page'),
       ),
-      body: BlocConsumer<TemplateCubit, BaseState>(
-        listener: (context, state) {},
+      body: BlocBuilder<UserCubit, BaseState>(
         builder: (context, state) {
-          if (state is BaseSuccessState<String?>) {
+          if (state is BaseSuccessState<UserWithProfile?>) {
             final data = state.data;
             return Column(
               children: [
-                MainText(text: data ?? "No Token"),
+                MainText(text: data?.username ?? "No Token"),
                 ElevatedButton(
                   onPressed: () {
-                    context.read<TemplateCubit>().logout();
+                    context.read<UserCubit>().logout();
                     Navigator.of(context)
                         .pushAndRemoveUntil(LoginPage.route(), (_) => false);
                   },
@@ -47,7 +46,14 @@ class _HomePageState extends State<HomePage> {
               ],
             );
           } else {
-            return const MainText(text: 'Else');
+            return ElevatedButton(
+              onPressed: () {
+                context.read<UserCubit>().logout();
+                Navigator.of(context)
+                    .pushAndRemoveUntil(LoginPage.route(), (_) => false);
+              },
+              child: const Text('Logout, No Token'),
+            );
           }
         },
       ),
