@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/features/auth/cubit/auth_cubit.dart';
 import 'package:paint_car/features/auth/pages/login_page.dart';
+import 'package:paint_car/features/auth/pages/register_page.dart';
 import 'package:paint_car/features/template/cubit/template_cubit.dart';
 import 'package:paint_car/ui/config/configuration_theme.dart';
 import 'package:paint_car/dependencies/sl.dart';
+import 'package:paint_car/ui/simpenan/template_infinite_scroll.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +41,7 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ConfigurationTheme.elevatedButtonTheme,
         fontFamilyFallback: ['Poppins'],
       ),
-      home: const LoginPage(),
+      home: const RegisterPage(),
       debugShowCheckedModeBanner: false,
     );
   }

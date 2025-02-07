@@ -15,6 +15,8 @@ class TemplateCubit extends Cubit<BaseState> {
     await handleBaseCubit<PaginatedData<CarBrand>>(
       emit,
       () => templateRepo.getBrands(page, limit),
+      onSuccess: (data, message) =>
+          emit(BaseSuccessState<PaginatedData<CarBrand>>(data, message)),
     );
   }
 

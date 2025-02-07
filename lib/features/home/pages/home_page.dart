@@ -31,11 +31,11 @@ class _HomePageState extends State<HomePage> {
       body: BlocConsumer<TemplateCubit, BaseState>(
         listener: (context, state) {},
         builder: (context, state) {
-          if (state is BaseSuccessState) {
+          if (state is BaseSuccessState<String?>) {
             final data = state.data;
             return Column(
               children: [
-                MainText(text: data ?? 'Success'),
+                MainText(text: data ?? "No Token"),
                 ElevatedButton(
                   onPressed: () {
                     context.read<TemplateCubit>().logout();
