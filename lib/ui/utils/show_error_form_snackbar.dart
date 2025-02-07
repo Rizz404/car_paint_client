@@ -11,18 +11,25 @@ void showFormErrorSnackbar(BuildContext context, BaseErrorState state) {
       state.errors is List &&
       (state.errors as List).isNotEmpty) {
     final errorList = state.errors as List;
-    errorMsg = "";
+    List<String> messages = [];
+
     for (var error in errorList) {
-      if (error['message'] != null) {
-        errorMsg += "${error['message']}\n";
+      if (error is Map && error['message'] != null) {
+        messages.add(error['message'].toString().trim());
       }
     }
-    errorMsg = errorMsg.trim();
+
+    if (messages.isNotEmpty) {
+      errorMsg = messages.join(" | ");
+    }
   }
+
+  // ngapus semua \n
+  errorMsg = errorMsg.replaceAll("\n", " ");
 
   SnackBarUtil.showSnackBar(
     context: context,
-    message: errorMsg,
+    message: "Error: $errorMsg",
     type: SnackBarType.error,
   );
 }

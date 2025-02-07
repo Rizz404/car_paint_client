@@ -18,7 +18,7 @@ class ApiClient {
   Future<ApiResponse<T>> get<T>(
     String endpoint, {
     T Function(Map<String, dynamic>)? fromJson,
-    Map<String, dynamic>? queryParameters, // Tambahkan parameter ini
+    Map<String, dynamic>? queryParameters,
   }) async {
     try {
       Uri uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
@@ -30,6 +30,8 @@ class ApiClient {
       final response = await client
           .get(uri, headers: headers)
           .timeout(const Duration(seconds: 15));
+
+      LogService.i('Response: ${response.body}');
 
       return _handleResponse<T>(response, fromJson);
     } on SocketException {

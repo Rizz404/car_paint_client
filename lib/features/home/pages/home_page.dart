@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paint_car/data/models/user_model.dart';
-import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/features/auth/pages/login_page.dart';
-import 'package:paint_car/features/shared/cubit/user_cubit.dart';
+import 'package:paint_car/features/home/pages/settings_page.dart';
+import 'package:paint_car/features/home/widgets/bottom_nav_bar.dart';
+import 'package:paint_car/ui/common/extent.dart';
+import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,45 +17,49 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    context.read<UserCubit>().getUserLocal();
     super.initState();
+  }
+
+  Widget _buildHomePage() {
+    return const SingleChildScrollView(
+      child: const Column(
+        children: [
+          MainText(text: "Home Page"),
+        ],
+      ),
+    );
+  }
+
+  int _selectedIndex = 0;
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  _title() {
+    switch (_selectedIndex) {
+      case 0:
+        return "Home";
+      case 1:
+        return "Settings";
+      default:
+        return "Home";
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Page'),
+      appBar: mainAppBar(_title()),
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
-      body: BlocBuilder<UserCubit, BaseState>(
-        builder: (context, state) {
-          if (state is BaseSuccessState<UserWithProfile?>) {
-            final data = state.data;
-            return Column(
-              children: [
-                MainText(text: data?.username ?? "No Token"),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<UserCubit>().logout();
-                    Navigator.of(context)
-                        .pushAndRemoveUntil(LoginPage.route(), (_) => false);
-                  },
-                  child: const Text('Logout'),
-                ),
-              ],
-            );
-          } else {
-            return ElevatedButton(
-              onPressed: () {
-                context.read<UserCubit>().logout();
-                Navigator.of(context)
-                    .pushAndRemoveUntil(LoginPage.route(), (_) => false);
-              },
-              child: const Text('Logout, No Token'),
-            );
-          }
-        },
-      ),
+      body: [
+        _buildHomePage(),
+        const SettingsPage(),
+      ][_selectedIndex],
     );
   }
 }

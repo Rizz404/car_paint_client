@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/ui/common/extent.dart';
-import 'package:paint_car/ui/components/base_text.dart';
+import 'package:paint_car/ui/helper/base_text.dart';
 
 class MainText extends BaseText {
   const MainText({
