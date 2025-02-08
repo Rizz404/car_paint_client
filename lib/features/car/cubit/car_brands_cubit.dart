@@ -19,6 +19,7 @@ class CarBrandsCubit extends Cubit<BaseState> {
       () => carBrandsRepo.getBrands(page, limit),
       onSuccess: (data, message) =>
           emit(BaseSuccessState<PaginatedData<CarBrand>>(data, message)),
+      withLoading: false,
     );
   }
 
@@ -26,11 +27,32 @@ class CarBrandsCubit extends Cubit<BaseState> {
     await handleBaseCubit<void>(
       emit,
       () => carBrandsRepo.saveBrand(carBrand, imageFile),
+      onSuccess: (data, message) => {
+        emit(const BaseActionSuccessState()),
+        getBrands(1, 10),
+      },
     );
   }
-}
 
-class CarBrandsSaveSuccess extends BaseSuccessState<CarBrand> {
-  const CarBrandsSaveSuccess(CarBrand data, String? message)
-      : super(data, message);
+  Future<void> updateBrand(CarBrand carBrand, File? imageFile) async {
+    await handleBaseCubit<void>(
+      emit,
+      () => carBrandsRepo.updateBrand(carBrand, imageFile),
+      onSuccess: (data, message) => {
+        emit(const BaseActionSuccessState()),
+        getBrands(1, 10),
+      },
+    );
+  }
+
+  Future<void> deleteBrand(String id) async {
+    await handleBaseCubit<void>(
+      emit,
+      () => carBrandsRepo.deleteBrand(id),
+      onSuccess: (data, message) => {
+        emit(const BaseActionSuccessState()),
+        getBrands(1, 10),
+      },
+    );
+  }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: require_trailing_commas
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -33,7 +35,7 @@ class ApiClient {
           .get(uri, headers: headers)
           .timeout(const Duration(seconds: 15));
 
-      LogService.i('Response: ${response.body}');
+      LogService.i('Response GET: ${response.body}');
 
       return _handleResponse<T>(response, fromJson);
     } on SocketException {
@@ -54,30 +56,28 @@ class ApiClient {
       final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
       final headers = await _getHeaders(isMultiPart);
 
+      LogService.i('POST request to $uri');
+
       if (isMultiPart && imageFile != null) {
         var request = http.MultipartRequest('POST', uri);
 
-        // Tambahkan headers
         request.headers.addAll(headers);
 
-        // Tambahkan fields
         final bodyMap = body as Map<String, dynamic>;
         bodyMap.forEach((key, value) {
-          if (key != 'imageUrl') {
+          if (key != ApiConstant.logoKey) {
             request.fields[key] = value.toString();
           }
         });
 
-        // Tambahkan file
-        var multipartFile =
-            await http.MultipartFile.fromPath('imageUrl', imageFile.path);
+        var multipartFile = await http.MultipartFile.fromPath(
+            ApiConstant.logoKey, imageFile.path);
         request.files.add(multipartFile);
 
-        // Kirim request
         final streamedResponse = await request.send();
         final response = await http.Response.fromStream(streamedResponse);
 
-        LogService.i('Response: ${response.body}');
+        LogService.i('Response POST: ${response.body}');
         LogService.i('status code: ${response.statusCode}');
 
         return _handleResponse<T>(response, fromJson);
@@ -90,7 +90,6 @@ class ApiClient {
             )
             .timeout(const Duration(seconds: 15));
 
-        LogService.i('Response: ${response.body}');
         LogService.i('status code: ${response.statusCode}');
 
         return _handleResponse<T>(response, fromJson);
@@ -99,6 +98,92 @@ class ApiClient {
       return const ApiNoInternet(message: ApiConstant.noInternetConnection);
     } catch (e) {
       return ApiError(message: 'POST request failed: $e');
+    }
+  }
+
+  Future<ApiResponse<T>> patch<T>(
+    String endpoint,
+    dynamic body, {
+    T Function(Map<String, dynamic>)? fromJson,
+    bool isMultiPart = false,
+    File? imageFile,
+  }) async {
+    try {
+      final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
+      final headers = await _getHeaders(isMultiPart);
+
+      LogService.i('PATCH request to $uri');
+
+      if (isMultiPart && imageFile != null) {
+        var request = http.MultipartRequest('PATCH', uri);
+
+        request.headers.addAll(headers);
+
+        final bodyMap = body as Map<String, dynamic>;
+        bodyMap.forEach((key, value) {
+          if (key != ApiConstant.logoKey) {
+            request.fields[key] = value.toString();
+          }
+        });
+
+        var multipartFile = await http.MultipartFile.fromPath(
+          ApiConstant.logoKey,
+          imageFile.path,
+        );
+        request.files.add(multipartFile);
+
+        final streamedResponse = await request.send();
+        final response = await http.Response.fromStream(streamedResponse);
+
+        LogService.i('Response PATCH: ${response.body}');
+        LogService.i('status code: ${response.statusCode}');
+
+        return _handleResponse<T>(response, fromJson);
+      } else {
+        final response = await client
+            .post(
+              uri,
+              headers: headers,
+              body: jsonEncode(body),
+            )
+            .timeout(const Duration(seconds: 15));
+
+        LogService.i('status code: ${response.statusCode}');
+
+        return _handleResponse<T>(response, fromJson);
+      }
+    } on SocketException {
+      return const ApiNoInternet(message: ApiConstant.noInternetConnection);
+    } catch (e) {
+      return ApiError(message: 'PATCH request failed: $e');
+    }
+  }
+
+  Future<ApiResponse<T>> delete<T>(
+    String endpoint, {
+    T Function(Map<String, dynamic>)? fromJson,
+  }) async {
+    try {
+      final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
+      final headers = await _getHeaders(false);
+
+      LogService.i('DELETE request to $uri');
+
+      final response = await client
+          .delete(
+            uri,
+            headers: headers,
+          )
+          .timeout(const Duration(seconds: 15));
+
+      LogService.i('Response DELETE: ${response.body}');
+      LogService.i('status code: ${response.statusCode}');
+
+      return _handleResponse<T>(response, fromJson);
+    } on SocketException {
+      return const ApiNoInternet(message: ApiConstant.noInternetConnection);
+    } catch (e) {
+      return ApiError(message: 'DELETE request failed: $e');
     }
   }
 

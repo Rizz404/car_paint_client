@@ -37,10 +37,8 @@ class _StateHandlerState<C extends Cubit<BaseState>, T>
               onRetry: widget.onRetry,
             ),
           BaseNoInternetState() => NoInternet(onRetry: widget.onRetry),
-          _ => ErrorStateWidget(
-              message: state.message ?? ApiConstant.unknownError,
-              onRetry: widget.onRetry,
-            ),
+          // ! nanti replace ama loading aja
+          BaseState() => const Loading(),
         };
       },
     );

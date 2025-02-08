@@ -8,6 +8,7 @@ Future<ApiResponse<T>> handleApiResponse<T>(
     if (isGet) {
       return ApiError(message: result.message);
     }
+    // ! ini kalo error pas bukan get, dari zod
     return ApiError(
       message: result.message,
       errors: (result as ApiError).errors,
@@ -16,5 +17,6 @@ Future<ApiResponse<T>> handleApiResponse<T>(
   if (result is ApiNoInternet) {
     return ApiNoInternet(message: result.message);
   }
+  // ! gausah return ApiSuccess, karena udah di handle
   return result;
 }

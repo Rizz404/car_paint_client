@@ -5,7 +5,7 @@ class ApiConstant {
   static const String search = '/search';
   // ! URL
   static const String baseUrl =
-      'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1/';
+      'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
   // ! PATH
   static const String brandsPath = "/car-brands";
   static const String multipleBrandsPath = "/brands/multiple";
@@ -19,4 +19,5 @@ class ApiConstant {
 
   static const String noInternetConnection = 'No internet connection';
   static const String unknownError = 'Unknown error';
+  static const String logoKey = 'logo';
 }

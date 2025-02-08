@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,17 +6,22 @@ import 'package:paint_car/data/models/car_brand.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
+import 'package:paint_car/features/car/widgets/image_car_action.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
+import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/main_text_field.dart';
+import 'package:paint_car/ui/utils/snack_bar.dart';
+import 'package:paint_car/ui/utils/url_to_file.dart';
 
 class UpsertCarBrands extends StatefulWidget {
   final CarBrand? carBrand;
   const UpsertCarBrands({super.key, this.carBrand});
-  static route() => MaterialPageRoute(builder: (_) => const UpsertCarBrands());
-
+  static route({CarBrand? carBrand}) => MaterialPageRoute(
+        builder: (context) => UpsertCarBrands(carBrand: carBrand),
+      );
   @override
   State<UpsertCarBrands> createState() => _UpsertCarBrandsState();
 }
@@ -26,17 +30,22 @@ class _UpsertCarBrandsState extends State<UpsertCarBrands> {
   final nameController = TextEditingController();
   final countryController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-
   File? _selectedImage;
+  bool isUpdate = false;
 
   @override
   void initState() {
     super.initState();
-    if (widget.carBrand != null) {
+    setState(
+      () {
+        isUpdate = widget.carBrand != null;
+      },
+    );
+    if (isUpdate) {
       nameController.text = widget.carBrand!.name;
       countryController.text = widget.carBrand!.country ?? "";
+      _loadImage();
     }
-    LogService.i("Car Brand: ${widget.carBrand}");
   }
 
   @override
@@ -47,20 +56,30 @@ class _UpsertCarBrandsState extends State<UpsertCarBrands> {
     super.dispose();
   }
 
-  Future<void> pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
+  Future<void> _loadImage() async {
+    try {
+      final file = await urlToFile(widget.carBrand!.logo!);
       setState(() {
-        _selectedImage = File(pickedFile.path);
+        _selectedImage = file;
       });
+    } catch (e) {
+      LogService.e("Error loading image: $e");
     }
   }
 
-  void submitForm() {
-    if (formKey.currentState!.validate() && _selectedImage != null) {
-      LogService.i(
-          "Nama Brand: ${nameController.text}, Country: ${countryController.text}, Image: $_selectedImage");
+  void _performAction() {
+    if (isUpdate) {
+      context.read<CarBrandsCubit>().updateBrand(
+            CarBrand(
+              id: widget.carBrand!.id,
+              name: nameController.text,
+              country: countryController.text,
+              createdAt: widget.carBrand!.createdAt,
+              updatedAt: widget.carBrand!.updatedAt,
+            ),
+            _selectedImage,
+          );
+    } else {
       context.read<CarBrandsCubit>().saveBrand(
             CarBrand(
               name: nameController.text,
@@ -68,10 +87,31 @@ class _UpsertCarBrandsState extends State<UpsertCarBrands> {
             ),
             _selectedImage!,
           );
+    }
+  }
+
+  void submitForm() {
+    if (formKey.currentState!.validate() && _selectedImage != null) {
+      _performAction();
     } else if (_selectedImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please select an image")),
       );
+      SnackBarUtil.showSnackBar(
+        context: context,
+        message: "Please select an image",
+        type: SnackBarType.error,
+      );
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
     }
   }
 
@@ -84,8 +124,11 @@ class _UpsertCarBrandsState extends State<UpsertCarBrands> {
           state: state,
           onRetry: submitForm,
           onSuccess: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Car Brand saved successfully!")),
+            SnackBarUtil.showSnackBar(
+              context: context,
+              message:
+                  "Car brand ${isUpdate ? 'Updated' : 'Created'} successfully",
+              type: SnackBarType.success,
             );
             Navigator.pop(context);
           },
@@ -93,8 +136,8 @@ class _UpsertCarBrandsState extends State<UpsertCarBrands> {
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            title: const MainText(text: "Create Car Brand"),
+          appBar: mainAppBar(
+            isUpdate ? "Update Car Brands" : "Create Car Brands",
           ),
           body: Center(
             child: SingleChildScrollView(
@@ -104,16 +147,15 @@ class _UpsertCarBrandsState extends State<UpsertCarBrands> {
                 child: Column(
                   spacing: 16,
                   children: [
-                    const MainText(
-                      text: "Create Car Brands",
-                      extent: Large(),
+                    MainText(
+                      text: isUpdate ? "Update Car Brand" : "Create Car Brand",
+                      extent: const Large(),
                     ),
-                    _selectedImage == null
-                        ? ElevatedButton(
-                            onPressed: pickImage,
-                            child: const Text("Pick Image"),
-                          )
-                        : Image.file(_selectedImage!),
+                    ImageCarAction(
+                      selectedImage: _selectedImage,
+                      logoUrl: widget.carBrand?.logo,
+                      onPickImage: _pickImage,
+                    ),
                     MainTextField(
                       controller: nameController,
                       hintText: "Enter brand name",
@@ -140,7 +182,7 @@ class _UpsertCarBrandsState extends State<UpsertCarBrands> {
                     ),
                     MainElevatedButton(
                       onPressed: submitForm,
-                      text: "Save Brand",
+                      text: isUpdate ? "Update" : "Create",
                       isLoading: state is BaseLoadingState,
                     ),
                   ],

@@ -6,6 +6,7 @@ import 'package:paint_car/core/types/paginated_data.dart';
 import 'package:paint_car/core/types/pagination.dart';
 import 'package:paint_car/data/models/car_brand.dart';
 import 'package:paint_car/data/network/api_client.dart';
+import 'package:paint_car/features/shared/utils/handle_api_response.dart';
 
 class CarBrandsRepo {
   final ApiClient apiClient;
@@ -56,6 +57,38 @@ class CarBrandsRepo {
         isMultiPart: true,
         imageFile: imageFile,
         fromJson: (json) => CarBrand.fromMap(json),
+      );
+      return await handleApiResponse(result);
+    } catch (e) {
+      return ApiError(message: e.toString());
+    }
+  }
+
+  Future<ApiResponse<CarBrand>> updateBrand(
+    CarBrand carBrand,
+    File? imageFile,
+  ) async {
+    try {
+      final result = await apiClient.patch<CarBrand>(
+        '${ApiConstant.brandsPath}/${carBrand.id}',
+        {
+          'name': carBrand.name,
+          'country': carBrand.country,
+        },
+        isMultiPart: true,
+        imageFile: imageFile,
+        fromJson: (json) => CarBrand.fromMap(json),
+      );
+      return await handleApiResponse(result);
+    } catch (e) {
+      return ApiError(message: e.toString());
+    }
+  }
+
+  Future<ApiResponse<void>> deleteBrand(String id) async {
+    try {
+      final result = await apiClient.delete<void>(
+        '${ApiConstant.brandsPath}/$id',
       );
       return result;
     } catch (e) {

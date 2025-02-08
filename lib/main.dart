@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/features/auth/cubit/auth_cubit.dart';
 import 'package:paint_car/features/auth/pages/login_page.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
-import 'package:paint_car/features/car/pages/car_brands/upsert_car_brands.dart';
+import 'package:paint_car/features/car/pages/car_brands/car_brands_page.dart';
 import 'package:paint_car/features/shared/cubit/user_cubit.dart';
 import 'package:paint_car/features/template/cubit/template_cubit.dart';
 import 'package:paint_car/ui/config/configuration_theme.dart';
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ConfigurationTheme.elevatedButtonTheme,
         fontFamilyFallback: ['Poppins'],
       ),
-      home: const LoginPage(),
+      home: const CarBrandsPage(),
       debugShowCheckedModeBanner: false,
     );
   }

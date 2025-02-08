@@ -27,3 +27,7 @@ class BaseSuccessState<T> extends BaseState {
   final T data;
   const BaseSuccessState(this.data, String? message) : super(message: message);
 }
+
+class BaseActionSuccessState extends BaseState {
+  const BaseActionSuccessState() : super();
+}

@@ -13,7 +13,7 @@ void handleFormListenerState({
   required RetryCallback onRetry,
   required SuccessCallback onSuccess,
 }) {
-  if (state is BaseSuccessState) {
+  if (state is BaseActionSuccessState) {
     onSuccess();
   }
 

@@ -17,6 +17,7 @@ class AuthCubit extends Cubit<BaseState> {
     await handleBaseCubit<void>(
       emit,
       () => authRepo.register(username, email, password),
+      onSuccess: (data, message) => emit(const BaseActionSuccessState()),
     );
   }
 
@@ -27,6 +28,7 @@ class AuthCubit extends Cubit<BaseState> {
     await handleBaseCubit<void>(
       emit,
       () => authRepo.login(email, password),
+      onSuccess: (data, message) => emit(const BaseActionSuccessState()),
     );
   }
 }
