@@ -1,10 +1,11 @@
 class ApiConstant {
   // ! GENERAL
-  static const String contentType = 'application/json';
+  static const String applicationJson = 'application/json';
+  static const String multipartFormData = 'multipart/form-data';
   static const String search = '/search';
   // ! URL
   static const String baseUrl =
-      'https://stuck-hannah-riz42069-761bd10e.koyeb.app/api/v1';
+      'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1/';
   // ! PATH
   static const String brandsPath = "/car-brands";
   static const String multipleBrandsPath = "/brands/multiple";

@@ -2,31 +2,34 @@
 import 'dart:convert';
 
 class CarBrand {
-  final String id;
+  final String? id;
   final String name;
-  final String imageUrl;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-
+  final String? logo;
+  final String? country;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   CarBrand({
-    required this.id,
+    this.id,
     required this.name,
-    required this.imageUrl,
-    required this.createdAt,
-    required this.updatedAt,
+    this.logo,
+    this.country,
+    this.createdAt,
+    this.updatedAt,
   });
 
   CarBrand copyWith({
     String? id,
     String? name,
-    String? imageUrl,
+    String? logo,
+    String? country,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
     return CarBrand(
       id: id ?? this.id,
       name: name ?? this.name,
-      imageUrl: imageUrl ?? this.imageUrl,
+      logo: logo ?? this.logo,
+      country: country ?? this.country,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -36,19 +39,23 @@ class CarBrand {
     return <String, dynamic>{
       'id': id,
       'name': name,
-      'imageUrl': imageUrl,
-      'createdAt': createdAt.millisecondsSinceEpoch,
-      'updatedAt': updatedAt.millisecondsSinceEpoch,
+      'logo': logo,
+      'country': country,
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
     };
   }
 
   factory CarBrand.fromMap(Map<String, dynamic> map) {
     return CarBrand(
-      id: map['id'] as String,
+      id: map['id'] != null ? map['id'] as String : null,
       name: map['name'] as String,
-      imageUrl: map['imageUrl'] as String,
-      createdAt: DateTime.parse(map['createdAt']),
-      updatedAt: DateTime.parse(map['updatedAt']),
+      logo: map['logo'] != null ? map['logo'] as String : null,
+      country: map['country'] != null ? map['country'] as String : null,
+      createdAt:
+          map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
+      updatedAt:
+          map['updatedAt'] != null ? DateTime.parse(map['updatedAt']) : null,
     );
   }
 
@@ -59,7 +66,7 @@ class CarBrand {
 
   @override
   String toString() {
-    return 'CarBrand(id: $id, name: $name, imageUrl: $imageUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'CarBrand(id: $id, name: $name, logo: $logo, country: $country, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -68,7 +75,8 @@ class CarBrand {
 
     return other.id == id &&
         other.name == name &&
-        other.imageUrl == imageUrl &&
+        other.logo == logo &&
+        other.country == country &&
         other.createdAt == createdAt &&
         other.updatedAt == updatedAt;
   }
@@ -77,7 +85,8 @@ class CarBrand {
   int get hashCode {
     return id.hashCode ^
         name.hashCode ^
-        imageUrl.hashCode ^
+        logo.hashCode ^
+        country.hashCode ^
         createdAt.hashCode ^
         updatedAt.hashCode;
   }

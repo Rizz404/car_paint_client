@@ -26,7 +26,9 @@ class ApiClient {
         uri = uri.replace(queryParameters: queryParameters);
       }
       LogService.i('GET request to $uri');
-      final headers = await _getHeaders();
+      final headers = await _getHeaders(
+        false,
+      );
       final response = await client
           .get(uri, headers: headers)
           .timeout(const Duration(seconds: 15));
@@ -45,22 +47,54 @@ class ApiClient {
     String endpoint,
     dynamic body, {
     T Function(Map<String, dynamic>)? fromJson,
+    bool isMultiPart = false,
+    File? imageFile,
   }) async {
     try {
       final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
-      final headers = await _getHeaders();
-      LogService.i('POST request to $uri with body: $body');
-      final response = await client
-          .post(
-            uri,
-            headers: headers,
-            body: jsonEncode(body),
-          )
-          .timeout(const Duration(seconds: 15));
-      LogService.i('Response: ${response.body}');
-      LogService.i('status code: ${response.statusCode}');
+      final headers = await _getHeaders(isMultiPart);
 
-      return _handleResponse<T>(response, fromJson);
+      if (isMultiPart && imageFile != null) {
+        var request = http.MultipartRequest('POST', uri);
+
+        // Tambahkan headers
+        request.headers.addAll(headers);
+
+        // Tambahkan fields
+        final bodyMap = body as Map<String, dynamic>;
+        bodyMap.forEach((key, value) {
+          if (key != 'imageUrl') {
+            request.fields[key] = value.toString();
+          }
+        });
+
+        // Tambahkan file
+        var multipartFile =
+            await http.MultipartFile.fromPath('imageUrl', imageFile.path);
+        request.files.add(multipartFile);
+
+        // Kirim request
+        final streamedResponse = await request.send();
+        final response = await http.Response.fromStream(streamedResponse);
+
+        LogService.i('Response: ${response.body}');
+        LogService.i('status code: ${response.statusCode}');
+
+        return _handleResponse<T>(response, fromJson);
+      } else {
+        final response = await client
+            .post(
+              uri,
+              headers: headers,
+              body: jsonEncode(body),
+            )
+            .timeout(const Duration(seconds: 15));
+
+        LogService.i('Response: ${response.body}');
+        LogService.i('status code: ${response.statusCode}');
+
+        return _handleResponse<T>(response, fromJson);
+      }
     } on SocketException {
       return const ApiNoInternet(message: ApiConstant.noInternetConnection);
     } catch (e) {
@@ -68,11 +102,15 @@ class ApiClient {
     }
   }
 
-  Future<Map<String, String>> _getHeaders() async {
+  Future<Map<String, String>> _getHeaders(
+    bool isMultiPart,
+  ) async {
     final token = tokenSp.getToken();
     return {
-      'Content-Type': ApiConstant.contentType,
-      'Accept': ApiConstant.contentType,
+      'Content-Type': isMultiPart
+          ? ApiConstant.multipartFormData
+          : ApiConstant.applicationJson,
+      'Accept': ApiConstant.applicationJson,
       if (token != null) 'Authorization': 'Bearer $token',
     };
   }

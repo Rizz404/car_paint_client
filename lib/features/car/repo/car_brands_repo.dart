@@ -1,15 +1,15 @@
+import 'dart:io';
+
 import 'package:paint_car/core/common/api_response.dart';
 import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/core/types/paginated_data.dart';
 import 'package:paint_car/core/types/pagination.dart';
-import 'package:paint_car/data/local/token_sp.dart';
 import 'package:paint_car/data/models/car_brand.dart';
 import 'package:paint_car/data/network/api_client.dart';
 
-class TemplateRepo {
+class CarBrandsRepo {
   final ApiClient apiClient;
-  final TokenLocal tokenSp;
-  const TemplateRepo({required this.apiClient, required this.tokenSp});
+  const CarBrandsRepo({required this.apiClient});
 
   Future<ApiResponse<PaginatedData<CarBrand>>> getBrands(
     int page,
@@ -35,6 +35,27 @@ class TemplateRepo {
             pagination: pagination,
           );
         },
+      );
+      return result;
+    } catch (e) {
+      return ApiError(message: e.toString());
+    }
+  }
+
+  Future<ApiResponse<CarBrand>> saveBrand(
+    CarBrand carBrand,
+    File imageFile,
+  ) async {
+    try {
+      final result = await apiClient.post<CarBrand>(
+        ApiConstant.brandsPath,
+        {
+          'name': carBrand.name,
+          'country': carBrand.country,
+        },
+        isMultiPart: true,
+        imageFile: imageFile,
+        fromJson: (json) => CarBrand.fromMap(json),
       );
       return result;
     } catch (e) {

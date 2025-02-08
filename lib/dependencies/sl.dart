@@ -6,6 +6,7 @@ import "package:paint_car/dependencies/services/log_service.dart";
 import "package:paint_car/features/auth/cubit/auth_cubit.dart";
 import "package:paint_car/features/auth/repo/auth_repo.dart";
 import "package:paint_car/features/car/cubit/car_brands_cubit.dart";
+import "package:paint_car/features/car/repo/car_brands_repo.dart";
 import "package:paint_car/features/shared/cubit/user_cubit.dart";
 import "package:paint_car/features/shared/repo/user_repo.dart";
 import "package:paint_car/features/template/cubit/template_cubit.dart";
@@ -62,9 +63,14 @@ initializeSL() async {
   );
   getIt.registerFactory<AuthCubit>(() => AuthCubit(authRepo: getIt()));
   // !
+  getIt.registerLazySingleton<CarBrandsRepo>(
+    () => CarBrandsRepo(
+      apiClient: getIt(),
+    ),
+  );
   getIt.registerFactory<CarBrandsCubit>(
     () => CarBrandsCubit(
-      authRepo: getIt(),
+      carBrandsRepo: getIt(),
     ),
   );
 }

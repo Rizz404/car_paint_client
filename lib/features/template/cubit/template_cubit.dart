@@ -19,18 +19,4 @@ class TemplateCubit extends Cubit<BaseState> {
           emit(BaseSuccessState<PaginatedData<CarBrand>>(data, message)),
     );
   }
-
-  Future<void> getToken() async {
-    await handleBaseCubit<String?>(
-      emit,
-      () => templateRepo.getToken(),
-    );
-  }
-
-  Future<void> logout() async {
-    await handleBaseCubit<void>(
-      emit,
-      () => templateRepo.logout(),
-    );
-  }
 }

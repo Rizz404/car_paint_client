@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:paint_car/data/models/car_brand.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
@@ -10,7 +14,8 @@ import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/main_text_field.dart';
 
 class UpsertCarBrands extends StatefulWidget {
-  const UpsertCarBrands({super.key});
+  final CarBrand? carBrand;
+  const UpsertCarBrands({super.key, this.carBrand});
   static route() => MaterialPageRoute(builder: (_) => const UpsertCarBrands());
 
   @override
@@ -19,18 +24,54 @@ class UpsertCarBrands extends StatefulWidget {
 
 class _UpsertCarBrandsState extends State<UpsertCarBrands> {
   final nameController = TextEditingController();
+  final countryController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+
+  File? _selectedImage;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.carBrand != null) {
+      nameController.text = widget.carBrand!.name;
+      countryController.text = widget.carBrand!.country ?? "";
+    }
+    LogService.i("Car Brand: ${widget.carBrand}");
+  }
 
   @override
   void dispose() {
     nameController.dispose();
+    countryController.dispose();
+
     super.dispose();
   }
 
+  Future<void> pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+
   void submitForm() {
-    if (formKey.currentState!.validate()) {
-      // call cubit to save car brand
-      LogService.i("Nama Brand: ${nameController.text}");
+    if (formKey.currentState!.validate() && _selectedImage != null) {
+      LogService.i(
+          "Nama Brand: ${nameController.text}, Country: ${countryController.text}, Image: $_selectedImage");
+      context.read<CarBrandsCubit>().saveBrand(
+            CarBrand(
+              name: nameController.text,
+              country: countryController.text,
+            ),
+            _selectedImage!,
+          );
+    } else if (_selectedImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please select an image")),
+      );
     }
   }
 
@@ -67,6 +108,12 @@ class _UpsertCarBrandsState extends State<UpsertCarBrands> {
                       text: "Create Car Brands",
                       extent: Large(),
                     ),
+                    _selectedImage == null
+                        ? ElevatedButton(
+                            onPressed: pickImage,
+                            child: const Text("Pick Image"),
+                          )
+                        : Image.file(_selectedImage!),
                     MainTextField(
                       controller: nameController,
                       hintText: "Enter brand name",
@@ -75,6 +122,18 @@ class _UpsertCarBrandsState extends State<UpsertCarBrands> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Brand name cannot be empty";
+                        }
+                        return null;
+                      },
+                    ),
+                    MainTextField(
+                      controller: countryController,
+                      hintText: "Enter country",
+                      leadingIcon: const Icon(Icons.flag),
+                      isEnabled: state is! BaseLoadingState,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Country cannot be empty";
                         }
                         return null;
                       },
