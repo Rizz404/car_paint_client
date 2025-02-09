@@ -7,7 +7,7 @@ import 'package:paint_car/core/types/pagination.dart';
 import 'package:paint_car/data/models/car_brand.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
-import 'package:paint_car/features/car/pages/car_brands/upsert_car_brands.dart';
+import 'package:paint_car/features/car/pages/car_brands/upsert_car_brands_page.dart';
 import 'package:paint_car/features/car/widgets/car_brands/car_brands_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
@@ -86,7 +86,8 @@ class _CarBrandsPageState extends State<CarBrandsPage> {
     return Scaffold(
       appBar: mainAppBar("Car Brands"),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).push(UpsertCarBrands.route()),
+        onPressed: () =>
+            Navigator.of(context).push(UpsertCarBrandsPage.route()),
         child: const Icon(Icons.add),
       ),
       body: StateHandler<CarBrandsCubit, PaginationState<CarBrand>>(

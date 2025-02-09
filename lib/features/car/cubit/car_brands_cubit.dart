@@ -73,7 +73,7 @@ class CarBrandsCubit extends Cubit<BaseState> {
   }
 
   Future<void> deleteBrand(String id) async {
-    final index = brands.indexWhere((b) => b.id == id);
+    final index = brands.indexWhere((brand) => brand.id == id);
     if (index == -1) return;
 
     emit(BaseSuccessState(

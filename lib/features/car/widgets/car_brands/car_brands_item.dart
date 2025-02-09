@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/data/models/car_brand.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
-import 'package:paint_car/features/car/pages/car_brands/upsert_car_brands.dart';
+import 'package:paint_car/features/car/pages/car_brands/upsert_car_brands_page.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 
@@ -29,7 +29,7 @@ class _CarBrandsItemState extends State<CarBrandsItem> {
     return SizedBox(
       child: GestureDetector(
         onTap: () => Navigator.of(context)
-            .push(UpsertCarBrands.route(
+            .push(UpsertCarBrandsPage.route(
           carBrand: widget.brand,
         ))
             .then(
@@ -78,8 +78,12 @@ class _CarBrandsItemState extends State<CarBrandsItem> {
                     if (loadingProgress == null) {
                       return child;
                     }
-                    // TODO: REPLACE AMA PLACEHOLDER IMAGE
-                    return const CircularProgressIndicator();
+                    // TODO: REPLACE AMA PLACEHOLDER IMAGE DARI PT
+                    return Image.asset(
+                      "assets/images/placeholder-image-general.webp",
+                      fit: BoxFit.contain,
+                      height: 100,
+                    );
                   },
                 ),
               ],

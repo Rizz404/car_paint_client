@@ -11,10 +11,6 @@ class BaseLoadingState extends BaseState {
   const BaseLoadingState();
 }
 
-class BaseLoadingMoreState extends BaseState {
-  const BaseLoadingMoreState();
-}
-
 class BaseErrorState extends BaseState {
   final dynamic errors;
   const BaseErrorState({
@@ -32,6 +28,7 @@ class BaseSuccessState<T> extends BaseState {
   const BaseSuccessState(this.data, String? message) : super(message: message);
 }
 
+// ! untuk di listener, bukan di state handler. untuk post, patch, delete / action lah intinya
 class BaseActionSuccessState extends BaseState {
   const BaseActionSuccessState() : super();
 }

@@ -18,17 +18,17 @@ import 'package:paint_car/ui/utils/snack_bar.dart';
 import 'package:paint_car/ui/utils/url_to_file.dart';
 import 'package:paint_car/ui/validator/file_validator.dart';
 
-class UpsertCarBrands extends StatefulWidget {
+class UpsertCarBrandsPage extends StatefulWidget {
   final CarBrand? carBrand;
-  const UpsertCarBrands({super.key, this.carBrand});
+  const UpsertCarBrandsPage({super.key, this.carBrand});
   static route({CarBrand? carBrand}) => MaterialPageRoute(
-        builder: (context) => UpsertCarBrands(carBrand: carBrand),
+        builder: (context) => UpsertCarBrandsPage(carBrand: carBrand),
       );
   @override
-  State<UpsertCarBrands> createState() => _UpsertCarBrandsState();
+  State<UpsertCarBrandsPage> createState() => _UpsertCarBrandsPageState();
 }
 
-class _UpsertCarBrandsState extends State<UpsertCarBrands> {
+class _UpsertCarBrandsPageState extends State<UpsertCarBrandsPage> {
   final nameController = TextEditingController();
   final countryController = TextEditingController();
   final formKey = GlobalKey<FormState>();

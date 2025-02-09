@@ -7,14 +7,19 @@ class ApiConstant {
   static const String baseUrl =
       'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
   // ! PATH
+  // * brands
   static const String brandsPath = "/car-brands";
-  static const String multipleBrandsPath = "/brands/multiple";
+  static const String multipleBrandsPath = "$brandsPath/multiple";
+  // * workshops
   static const String workshopsPath = "/workshops";
+  // * AUTH
   static const String authPath = "/auth";
   static const String registerPath = "$authPath/register";
   static const String loginPath = "$authPath/login";
+  // * PROFILE
   static const String profilePath = "/profile";
   static const String comparePath = "$profilePath/compare";
+  // * CARS
   static const String carsPath = "/cars";
 
   // ! key
