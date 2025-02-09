@@ -6,6 +6,8 @@ import 'package:paint_car/core/types/paginated_data.dart';
 import 'package:paint_car/core/types/pagination.dart';
 import 'package:paint_car/data/models/car_brand.dart';
 import 'package:paint_car/data/network/api_client.dart';
+import 'package:paint_car/features/shared/utils/build_pagination_params.dart';
+import 'package:paint_car/features/shared/utils/from_json_pagination.dart';
 import 'package:paint_car/features/shared/utils/handle_api_response.dart';
 
 class CarBrandsRepo {
@@ -16,83 +18,55 @@ class CarBrandsRepo {
     int page,
     int limit,
   ) async {
-    try {
-      final result = await apiClient.get<PaginatedData<CarBrand>>(
-        ApiConstant.brandsPath,
-        queryParameters: {
-          'page': page.toString(),
-          'limit': limit.toString(),
-        },
-        fromJson: (json) {
-          // ! ngambil data dari json['data']
-          final brands = json['data'] as List<dynamic>;
-          final items = brands
-              .map((e) => CarBrand.fromMap(e as Map<String, dynamic>))
-              .toList();
-          final pagination =
-              Pagination.fromMap(json['pagination'] as Map<String, dynamic>);
-          return PaginatedData<CarBrand>(
-            items: items,
-            pagination: pagination,
-          );
-        },
-      );
-      return result;
-    } catch (e) {
-      return ApiError(message: e.toString());
-    }
+    final result = await apiClient.get<PaginatedData<CarBrand>>(
+      ApiConstant.brandsPath,
+      queryParameters: buildPaginationParams(page, limit),
+      fromJson: (json) => fromJsonPagination<CarBrand>(
+        json,
+        (json) => CarBrand.fromMap(json),
+      ),
+    );
+    return result;
   }
 
   Future<ApiResponse<CarBrand>> saveBrand(
     CarBrand carBrand,
     File imageFile,
   ) async {
-    try {
-      final result = await apiClient.post<CarBrand>(
-        ApiConstant.brandsPath,
-        {
-          'name': carBrand.name,
-          'country': carBrand.country,
-        },
-        isMultiPart: true,
-        imageFile: imageFile,
-        fromJson: (json) => CarBrand.fromMap(json),
-      );
-      return await handleApiResponse(result);
-    } catch (e) {
-      return ApiError(message: e.toString());
-    }
+    final result = await apiClient.post<CarBrand>(
+      ApiConstant.brandsPath,
+      {
+        'name': carBrand.name,
+        'country': carBrand.country,
+      },
+      isMultiPart: true,
+      imageFile: imageFile,
+      fromJson: (json) => CarBrand.fromMap(json),
+    );
+    return await handleApiResponse(result);
   }
 
   Future<ApiResponse<CarBrand>> updateBrand(
     CarBrand carBrand,
     File? imageFile,
   ) async {
-    try {
-      final result = await apiClient.patch<CarBrand>(
-        '${ApiConstant.brandsPath}/${carBrand.id}',
-        {
-          'name': carBrand.name,
-          'country': carBrand.country,
-        },
-        isMultiPart: true,
-        imageFile: imageFile,
-        fromJson: (json) => CarBrand.fromMap(json),
-      );
-      return await handleApiResponse(result);
-    } catch (e) {
-      return ApiError(message: e.toString());
-    }
+    final result = await apiClient.patch<CarBrand>(
+      '${ApiConstant.brandsPath}/${carBrand.id}',
+      {
+        'name': carBrand.name,
+        'country': carBrand.country,
+      },
+      isMultiPart: true,
+      imageFile: imageFile,
+      fromJson: (json) => CarBrand.fromMap(json),
+    );
+    return await handleApiResponse(result);
   }
 
   Future<ApiResponse<void>> deleteBrand(String id) async {
-    try {
-      final result = await apiClient.delete<void>(
-        '${ApiConstant.brandsPath}/$id',
-      );
-      return result;
-    } catch (e) {
-      return ApiError(message: e.toString());
-    }
+    final result = await apiClient.delete<void>(
+      '${ApiConstant.brandsPath}/$id',
+    );
+    return result;
   }
 }

@@ -11,6 +11,10 @@ class BaseLoadingState extends BaseState {
   const BaseLoadingState();
 }
 
+class BaseLoadingMoreState extends BaseState {
+  const BaseLoadingMoreState();
+}
+
 class BaseErrorState extends BaseState {
   final dynamic errors;
   const BaseErrorState({

@@ -31,6 +31,7 @@ class ImageCarAction extends StatelessWidget {
         selectedImage!,
         fit: BoxFit.contain,
         height: 400,
+        cacheHeight: 400,
       ),
     );
   }
@@ -55,6 +56,7 @@ class ImageCarAction extends StatelessWidget {
             snapshot.data!,
             fit: BoxFit.contain,
             height: 400,
+            cacheHeight: 400,
           ),
         );
       },

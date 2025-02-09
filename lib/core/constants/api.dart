@@ -17,7 +17,12 @@ class ApiConstant {
   static const String comparePath = "$profilePath/compare";
   static const String carsPath = "/cars";
 
+  // ! key
+  static const String logoKey = 'logo';
+
+  // ! error
   static const String noInternetConnection = 'No internet connection';
   static const String unknownError = 'Unknown error';
-  static const String logoKey = 'logo';
+  static const String invalidFormatRes = 'Invalid format response';
+  static const String requestTimeout = 'Request timeout';
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:paint_car/data/models/car_brand.dart';
@@ -15,6 +16,7 @@ import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/main_text_field.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 import 'package:paint_car/ui/utils/url_to_file.dart';
+import 'package:paint_car/ui/validator/file_validator.dart';
 
 class UpsertCarBrands extends StatefulWidget {
   final CarBrand? carBrand;
@@ -41,11 +43,13 @@ class _UpsertCarBrandsState extends State<UpsertCarBrands> {
         isUpdate = widget.carBrand != null;
       },
     );
-    if (isUpdate) {
-      nameController.text = widget.carBrand!.name;
-      countryController.text = widget.carBrand!.country ?? "";
-      _loadImage();
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (isUpdate) {
+        nameController.text = widget.carBrand!.name;
+        countryController.text = widget.carBrand!.country ?? "";
+        _loadImage();
+      }
+    });
   }
 
   @override
@@ -57,6 +61,7 @@ class _UpsertCarBrandsState extends State<UpsertCarBrands> {
   }
 
   Future<void> _loadImage() async {
+    if (widget.carBrand!.logo == null) return;
     try {
       final file = await urlToFile(widget.carBrand!.logo!);
       setState(() {
@@ -106,12 +111,25 @@ class _UpsertCarBrandsState extends State<UpsertCarBrands> {
   }
 
   Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-      });
+    try {
+      final pickedFile = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1024,
+        maxHeight: 1024,
+      );
+
+      if (pickedFile != null) {
+        final fileSize = await File(pickedFile.path).length();
+        fileValidatorSize(context, fileSize);
+        setState(() => _selectedImage = File(pickedFile.path));
+      }
+    } on PlatformException catch (e) {
+      LogService.e("Error picking image: $e");
+      SnackBarUtil.showSnackBar(
+        context: context,
+        message: "Something went wrong picking image",
+        type: SnackBarType.error,
+      );
     }
   }
 

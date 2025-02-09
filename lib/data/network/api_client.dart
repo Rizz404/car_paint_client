@@ -1,5 +1,6 @@
 // ignore_for_file: require_trailing_commas
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -40,6 +41,8 @@ class ApiClient {
       return _handleResponse<T>(response, fromJson);
     } on SocketException {
       return const ApiNoInternet(message: ApiConstant.noInternetConnection);
+    } on TimeoutException {
+      return const ApiError(message: ApiConstant.requestTimeout);
     } catch (e) {
       return ApiError(message: 'GET request failed: $e');
     }
@@ -141,7 +144,7 @@ class ApiClient {
         return _handleResponse<T>(response, fromJson);
       } else {
         final response = await client
-            .post(
+            .patch(
               uri,
               headers: headers,
               body: jsonEncode(body),
@@ -204,37 +207,45 @@ class ApiClient {
     http.Response response,
     T Function(Map<String, dynamic>)? fromJson,
   ) {
-    final statusCode = response.statusCode;
-    final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
-    final message =
-        responseBody['message'] as String? ?? ApiConstant.unknownError;
-    final errors = responseBody['errors'];
+    try {
+      final responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+      if (responseBody is! Map<String, dynamic>) throw const FormatException();
+      final statusCode = response.statusCode;
+      final message =
+          responseBody['message'] as String? ?? ApiConstant.unknownError;
+      final errors = responseBody['errors'];
 
-    if (statusCode >= 300) {
-      return ApiError<T>(
-        message: message,
-        errors: errors,
-      );
-    }
+      if (statusCode >= 300) {
+        return ApiError<T>(
+          message: message,
+          errors: errors,
+        );
+      }
 
-    final data = responseBody['data'];
-    final paginationData = responseBody['pagination'] as Map<String, dynamic>?;
-    // ! kalo pagination nya gaada
-    if (paginationData == null) {
+      final data = responseBody['data'];
+      final paginationData =
+          responseBody['pagination'] as Map<String, dynamic>?;
+      // ! kalo pagination nya gaada
+      if (paginationData == null) {
+        return ApiSuccess<T>(
+          message: message,
+          data: fromJson?.call(data) ?? data as T,
+        );
+      }
+      // ! kalo pagination nya ada
+      final combinedData = {
+        'data': data,
+        'pagination': paginationData,
+      };
+
       return ApiSuccess<T>(
         message: message,
-        data: fromJson?.call(data) ?? data as T,
+        data: fromJson?.call(combinedData) ?? combinedData as T,
       );
+    } on FormatException {
+      return ApiError<T>(message: ApiConstant.invalidFormatRes);
+    } catch (e) {
+      return ApiError<T>(message: ApiConstant.unknownError);
     }
-    // ! kalo pagination nya ada
-    final combinedData = {
-      'data': data,
-      'pagination': paginationData,
-    };
-
-    return ApiSuccess<T>(
-      message: message,
-      data: fromJson?.call(combinedData) ?? combinedData as T,
-    );
   }
 }
