@@ -7,6 +7,7 @@ import 'package:paint_car/core/types/pagination.dart';
 import 'package:paint_car/data/models/car_brand.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
+import 'package:paint_car/features/car/pages/car_brands/insert_many_car_brands_page.dart';
 import 'package:paint_car/features/car/pages/car_brands/upsert_car_brands_page.dart';
 import 'package:paint_car/features/car/widgets/car_brands/car_brands_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
@@ -109,15 +110,13 @@ class _CarBrandsPageState extends State<CarBrandsPage> {
                     const AlwaysScrollableScrollPhysics(), // buat RefreshIndicator
                 slivers: [
                   SliverToBoxAdapter(
-                    child: Container(
-                      padding: const EdgeInsets.all(16.0),
-                      color: Colors.blueAccent,
-                      child: const Text(
-                        'Konten di atas ListView',
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                    ),
-                  ),
+                      child: MainElevatedButton(
+                          text: "Create Many",
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              InsertManyCarBrandsPage.route(),
+                            );
+                          })),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => CarBrandsItem(

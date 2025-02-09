@@ -107,6 +107,18 @@ class CarBrandsCubit extends Cubit<BaseState> {
     );
   }
 
+  Future<void> saveManyBrands(
+      List<CarBrand> carBrands, List<File> imageFiles) async {
+    await handleBaseCubit<void>(
+      emit,
+      () => carBrandsRepo.saveManyBrands(carBrands, imageFiles),
+      onSuccess: (data, message) {
+        emit(const BaseActionSuccessState());
+        getBrands(1); // Refresh list brands
+      },
+    );
+  }
+
   Future<void> updateBrand(CarBrand carBrand, File? imageFile) async {
     await handleBaseCubit<void>(
       emit,

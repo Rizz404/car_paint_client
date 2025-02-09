@@ -15,6 +15,8 @@ class CarBrandsRepo {
   final ApiClient apiClient;
   const CarBrandsRepo({required this.apiClient});
 
+  static const String keyImageFile = 'logo';
+
   Future<ApiResponse<PaginatedData<CarBrand>>> getBrands(
     int page,
     int limit,
@@ -42,7 +44,26 @@ class CarBrandsRepo {
       },
       isMultiPart: true,
       imageFile: imageFile,
+      keyImageFile: keyImageFile,
       fromJson: (json) => CarBrand.fromMap(json),
+    );
+    return await handleApiResponse(result);
+  }
+
+  Future<ApiResponse<List<CarBrand>>> saveManyBrands(
+    List<CarBrand> carBrands,
+    List<File> imageFiles,
+  ) async {
+    final result = await apiClient.post<List<CarBrand>>(
+      ApiConstant.multipleBrandsPath,
+      {
+        'brands': jsonEncode(carBrands.map((e) => e.toMap()).toList()),
+      },
+      isMultiPart: true,
+      imageFiles: imageFiles,
+      keyImageFile: keyImageFile,
+      fromJson: (json) =>
+          (json as List).map((e) => CarBrand.fromMap(e)).toList(),
     );
     return await handleApiResponse(result);
   }
@@ -59,6 +80,7 @@ class CarBrandsRepo {
       },
       isMultiPart: true,
       imageFile: imageFile,
+      keyImageFile: keyImageFile,
       fromJson: (json) => CarBrand.fromMap(json),
     );
     return await handleApiResponse(result);

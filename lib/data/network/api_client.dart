@@ -12,6 +12,7 @@ import 'package:paint_car/dependencies/services/log_service.dart';
 class ApiClient {
   final http.Client client;
   final TokenLocal tokenSp;
+  static const Duration timeout = Duration(seconds: 30);
 
   const ApiClient({
     required this.client,
@@ -32,9 +33,7 @@ class ApiClient {
       final headers = await _getHeaders(
         false,
       );
-      final response = await client
-          .get(uri, headers: headers)
-          .timeout(const Duration(seconds: 15));
+      final response = await client.get(uri, headers: headers).timeout(timeout);
 
       LogService.i('Response GET: ${response.body}');
 
@@ -54,12 +53,57 @@ class ApiClient {
     T Function(Map<String, dynamic>)? fromJson,
     bool isMultiPart = false,
     File? imageFile,
+    String? keyImageFile,
+    List<File>? imageFiles,
   }) async {
     try {
       final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
       final headers = await _getHeaders(isMultiPart);
 
       LogService.i('POST request to $uri');
+
+      if (isMultiPart && imageFiles != null) {
+        var request = http.MultipartRequest('POST', uri);
+        request.headers.addAll(headers);
+
+        final bodyMap = body as Map<String, dynamic>;
+        bodyMap.forEach((key, value) {
+          if (key != keyImageFile) {
+            request.fields[key] = value.toString();
+          }
+        });
+
+        if (keyImageFile == null) {
+          return const ApiError(
+              message: 'keyImageFile di api_client dan di repo nya null cuk');
+        }
+
+        for (var file in imageFiles) {
+          var multipartFile = await http.MultipartFile.fromPath(
+            keyImageFile,
+            file.path,
+          );
+          request.files.add(multipartFile);
+        }
+
+        final streamedResponse = await request.send();
+        final response = await http.Response.fromStream(streamedResponse);
+
+        LogService.i('Response POST: ${response.body}');
+
+        if (body is List) {
+          for (int i = 0; i < body.length; i++) {
+            final item = body[i] as Map<String, dynamic>;
+            item.forEach((key, value) {
+              request.fields['[$i]$key'] = value.toString();
+            });
+          }
+        }
+        LogService.i('Response POST: ${response.body}');
+        LogService.i('Response POST: ${response.body}');
+        LogService.i('status code: ${response.statusCode}');
+        return _handleResponse<T>(response, fromJson);
+      }
 
       if (isMultiPart && imageFile != null) {
         var request = http.MultipartRequest('POST', uri);
@@ -68,13 +112,18 @@ class ApiClient {
 
         final bodyMap = body as Map<String, dynamic>;
         bodyMap.forEach((key, value) {
-          if (key != ApiConstant.logoKey) {
+          if (key != keyImageFile) {
             request.fields[key] = value.toString();
           }
         });
 
-        var multipartFile = await http.MultipartFile.fromPath(
-            ApiConstant.logoKey, imageFile.path);
+        if (keyImageFile == null) {
+          return const ApiError(
+              message: 'keyImageFile di api_client dan di repo nya null cuk');
+        }
+
+        var multipartFile =
+            await http.MultipartFile.fromPath(keyImageFile, imageFile.path);
         request.files.add(multipartFile);
 
         final streamedResponse = await request.send();
@@ -84,22 +133,23 @@ class ApiClient {
         LogService.i('status code: ${response.statusCode}');
 
         return _handleResponse<T>(response, fromJson);
-      } else {
-        final response = await client
-            .post(
-              uri,
-              headers: headers,
-              body: jsonEncode(body),
-            )
-            .timeout(const Duration(seconds: 15));
-
-        LogService.i('status code: ${response.statusCode}');
-
-        return _handleResponse<T>(response, fromJson);
       }
+
+      final response = await client
+          .post(
+            uri,
+            headers: headers,
+            body: jsonEncode(body),
+          )
+          .timeout(timeout);
+
+      LogService.i('status code: ${response.statusCode}');
+
+      return _handleResponse<T>(response, fromJson);
     } on SocketException {
       return const ApiNoInternet(message: ApiConstant.noInternetConnection);
     } catch (e) {
+      LogService.e('POST request failed: $e');
       return ApiError(message: 'POST request failed: $e');
     }
   }
@@ -109,6 +159,7 @@ class ApiClient {
     dynamic body, {
     T Function(Map<String, dynamic>)? fromJson,
     bool isMultiPart = false,
+    String? keyImageFile,
     File? imageFile,
   }) async {
     try {
@@ -124,13 +175,18 @@ class ApiClient {
 
         final bodyMap = body as Map<String, dynamic>;
         bodyMap.forEach((key, value) {
-          if (key != ApiConstant.logoKey) {
+          if (key != keyImageFile) {
             request.fields[key] = value.toString();
           }
         });
 
+        if (keyImageFile == null) {
+          return const ApiError(
+              message: 'keyImageFile di api_client dan di repo nya null cuk');
+        }
+
         var multipartFile = await http.MultipartFile.fromPath(
-          ApiConstant.logoKey,
+          keyImageFile,
           imageFile.path,
         );
         request.files.add(multipartFile);
@@ -149,7 +205,7 @@ class ApiClient {
               headers: headers,
               body: jsonEncode(body),
             )
-            .timeout(const Duration(seconds: 15));
+            .timeout(timeout);
 
         LogService.i('status code: ${response.statusCode}');
 
@@ -177,7 +233,7 @@ class ApiClient {
             uri,
             headers: headers,
           )
-          .timeout(const Duration(seconds: 15));
+          .timeout(timeout);
 
       LogService.i('Response DELETE: ${response.body}');
       LogService.i('status code: ${response.statusCode}');
