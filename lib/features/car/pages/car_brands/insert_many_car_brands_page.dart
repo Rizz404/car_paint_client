@@ -14,7 +14,6 @@ import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/main_text_field.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
-import 'package:paint_car/ui/validator/file_validator.dart';
 
 class InsertManyCarBrandsPage extends StatefulWidget {
   const InsertManyCarBrandsPage({super.key});
@@ -204,7 +203,9 @@ class _BrandFormItemState extends State<BrandFormItem> {
             Row(
               children: [
                 MainText(
-                    text: "Brand #${widget.index}", extent: const Medium()),
+                  text: "Brand #${widget.index}",
+                  extent: const Medium(),
+                ),
                 const Spacer(),
                 if (widget.onRemove != null)
                   IconButton(

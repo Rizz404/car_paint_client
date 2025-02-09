@@ -7,7 +7,6 @@ import 'package:paint_car/features/template/cubit/template_cubit.dart';
 import 'package:paint_car/ui/shared/empty_data.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 
-// TODO: entah kenapa ini ga nampilin 1 pun item, walaupun kondisi nya disaat riski ngotak ngatik server, tapi tetep aneh
 class TemplateInfiniteScroll extends StatefulWidget {
   const TemplateInfiniteScroll({super.key});
 

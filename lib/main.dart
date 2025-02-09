@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/features/auth/cubit/auth_cubit.dart';
-import 'package:paint_car/features/auth/pages/login_page.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/car/pages/car_brands/car_brands_page.dart';
 import 'package:paint_car/features/shared/cubit/user_cubit.dart';
