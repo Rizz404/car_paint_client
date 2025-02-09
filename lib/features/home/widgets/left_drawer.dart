@@ -41,6 +41,14 @@ class LeftDrawer extends StatelessWidget {
               leadingIcon: Icons.car_rental,
             ),
           ),
+          MainDropdown(
+            state: DropdownState(
+              title: 'Financial Menu',
+              items: HomeConstants.financialItems,
+              subtitle: 'Car',
+              leadingIcon: Icons.monetization_on,
+            ),
+          ),
         ],
       ),
     );

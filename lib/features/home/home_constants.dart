@@ -13,10 +13,20 @@ class HomeConstants {
     {'name': 'Car Models', 'route': CarModelsPage.route},
     {'name': 'Car Services', 'route': CarServicesPage.route},
     {'name': 'Car Workshops', 'route': CarWorkshopsPage.route},
+    {'name': 'Car Colors', 'route': CarWorkshopsPage.route},
+    {'name': 'Car Model Years', 'route': CarWorkshopsPage.route},
+    {'name': 'Car Model Years Color', 'route': CarWorkshopsPage.route},
+    {'name': 'Car User', 'route': CarWorkshopsPage.route},
   ];
 
   static const List<Map<String, dynamic>> userItems = const [
     {'name': 'Users', 'route': UsersPage.route},
     {'name': 'Profile', 'route': ProfilePage.route},
+  ];
+  static const List<Map<String, dynamic>> financialItems = const [
+    {'name': 'Orders', 'route': ProfilePage.route},
+    {'name': 'Transactions', 'route': ProfilePage.route},
+    {'name': 'E-Tickets', 'route': ProfilePage.route},
+    {'name': 'Payment Methods', 'route': UsersPage.route},
   ];
 }
