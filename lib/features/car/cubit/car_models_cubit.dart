@@ -5,26 +5,26 @@ import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/types/paginated_data.dart';
 import 'package:paint_car/core/types/pagination.dart';
-import 'package:paint_car/data/models/car_brand.dart';
+import 'package:paint_car/data/models/car_model.dart';
 import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/features/car/repo/car_brands_repo.dart';
+import 'package:paint_car/features/car/repo/car_models_repo.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 
-class CarBrandsCubit extends Cubit<BaseState> {
-  final CarBrandsRepo carBrandsRepo;
-  CarBrandsCubit({
-    required this.carBrandsRepo,
+class CarModelsCubit extends Cubit<BaseState> {
+  final CarModelsRepo carModelsRepo;
+  CarModelsCubit({
+    required this.carModelsRepo,
   }) : super(const BaseInitialState());
 
   final int _limit = 10;
 
-  List<CarBrand> brands = [];
+  List<CarModel> models = [];
   Pagination? pagination;
   int currentPage = 1;
   bool isLoadingMore = false;
 
-  Future<void> getBrands(int page) async {
+  Future<void> getModels(int page) async {
     if (isLoadingMore) return;
 
     isLoadingMore = page != 1;
@@ -33,12 +33,12 @@ class CarBrandsCubit extends Cubit<BaseState> {
       emit(const BaseLoadingState());
     } else {
       // kalo dah ada data, update state buat tampilin loading di bagian bawah
-      if (state is BaseSuccessState<PaginationState<CarBrand>>) {
+      if (state is BaseSuccessState<PaginationState<CarModel>>) {
         final currentState =
-            state as BaseSuccessState<PaginationState<CarBrand>>;
+            state as BaseSuccessState<PaginationState<CarModel>>;
         final data = currentState.data;
-        emit(BaseSuccessState<PaginationState<CarBrand>>(
-            PaginationState<CarBrand>(
+        emit(BaseSuccessState<PaginationState<CarModel>>(
+            PaginationState<CarModel>(
               data: data.data,
               pagination: data.pagination,
               currentPage: data.currentPage,
@@ -48,20 +48,20 @@ class CarBrandsCubit extends Cubit<BaseState> {
       }
     }
 
-    await handleBaseCubit<PaginatedData<CarBrand>>(
+    await handleBaseCubit<PaginatedData<CarModel>>(
       emit,
-      () => carBrandsRepo.getBrands(page, _limit),
+      () => carModelsRepo.getModels(page, _limit),
       onSuccess: (data, message) {
-        if (page == 1) brands.clear();
+        if (page == 1) models.clear();
 
-        brands.addAll(data.items);
+        models.addAll(data.items);
         pagination = data.pagination;
         currentPage = page;
         isLoadingMore = false;
 
         emit(BaseSuccessState(
-            PaginationState<CarBrand>(
-              data: brands,
+            PaginationState<CarModel>(
+              data: models,
               pagination: pagination!,
               currentPage: currentPage,
               isLoadingMore: isLoadingMore,
@@ -72,13 +72,13 @@ class CarBrandsCubit extends Cubit<BaseState> {
     );
   }
 
-  Future<void> deleteBrand(String id) async {
-    final index = brands.indexWhere((brand) => brand.id == id);
+  Future<void> deleteModel(String id) async {
+    final index = models.indexWhere((model) => model.id == id);
     if (index == -1) return;
 
     emit(BaseSuccessState(
-      PaginationState<CarBrand>(
-        data: brands,
+      PaginationState<CarModel>(
+        data: models,
         pagination: pagination!,
         currentPage: currentPage,
         isLoadingMore: isLoadingMore,
@@ -88,44 +88,54 @@ class CarBrandsCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<void>(
       emit,
-      () => carBrandsRepo.deleteBrand(id),
-      onSuccess: (_, __) => getBrands(1),
-    );
-  }
-
-  Future<void> refresh() => getBrands(1);
-  Future<void> loadNextPage() => getBrands(currentPage + 1);
-
-  Future<void> saveBrand(CarBrand carBrand, File imageFile) async {
-    await handleBaseCubit<void>(
-      emit,
-      () => carBrandsRepo.saveBrand(carBrand, imageFile),
-      onSuccess: (data, message) => {
-        emit(const BaseActionSuccessState()),
-        getBrands(1),
+      () => carModelsRepo.deleteModel(id),
+      onSuccess: (_, __) => {
+        models.removeAt(index),
+        emit(BaseSuccessState(
+          PaginationState<CarModel>(
+            data: models,
+            pagination: pagination!,
+            currentPage: currentPage,
+            isLoadingMore: isLoadingMore,
+          ),
+          null,
+        )),
       },
     );
   }
 
-  Future<void> saveManyBrands(
-      List<CarBrand> carBrands, List<File> imageFiles) async {
+  Future<void> refresh() => getModels(1);
+  Future<void> loadNextPage() => getModels(currentPage + 1);
+
+  Future<void> saveModel(CarModel carModel) async {
     await handleBaseCubit<void>(
       emit,
-      () => carBrandsRepo.saveManyBrands(carBrands, imageFiles),
+      () => carModelsRepo.saveModel(carModel),
+      onSuccess: (data, message) => {
+        emit(const BaseActionSuccessState()),
+        refresh(),
+      },
+    );
+  }
+
+  Future<void> saveManyModels(List<CarModel> carModels) async {
+    await handleBaseCubit<void>(
+      emit,
+      () => carModelsRepo.saveManyModels(carModels),
       onSuccess: (data, message) {
         emit(const BaseActionSuccessState());
-        getBrands(1); // Refresh list brands
+        refresh();
       },
     );
   }
 
-  Future<void> updateBrand(CarBrand carBrand, File? imageFile) async {
+  Future<void> updateModel(CarModel carModel) async {
     await handleBaseCubit<void>(
       emit,
-      () => carBrandsRepo.updateBrand(carBrand, imageFile),
+      () => carModelsRepo.updateModel(carModel),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        getBrands(1),
+        refresh(),
       },
     );
   }

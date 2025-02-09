@@ -1,28 +1,129 @@
-import 'package:flutter/material.dart';
-import 'package:paint_car/features/car/pages/car_models/upsert_car_models.dart';
+// ignore_for_file: require_trailing_commas
 
-class CarModelsPage extends StatelessWidget {
-  const CarModelsPage({super.key});
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paint_car/data/models/car_model.dart';
+import 'package:paint_car/dependencies/helper/base_state.dart';
+import 'package:paint_car/features/car/cubit/car_models_cubit.dart';
+import 'package:paint_car/features/car/pages/car_models/insert_many_car_brands_page.dart';
+import 'package:paint_car/features/car/pages/car_models/upsert_car_models.dart';
+import 'package:paint_car/features/car/widgets/car_models/car_models_item.dart';
+import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/ui/shared/loading.dart';
+import 'package:paint_car/ui/shared/main_app_bar.dart';
+import 'package:paint_car/ui/shared/main_elevated_button.dart';
+import 'package:paint_car/ui/shared/state_handler.dart';
+
+class CarModelsPage extends StatefulWidget {
   static route() => MaterialPageRoute(builder: (_) => const CarModelsPage());
+  const CarModelsPage({super.key});
+
+  @override
+  State<CarModelsPage> createState() => _CarModelsPageState();
+}
+
+class _CarModelsPageState extends State<CarModelsPage> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
+
+    context.read<CarModelsCubit>().refresh();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final cubit = context.read<CarModelsCubit>();
+    if (!_scrollController.hasClients ||
+        cubit.state is! BaseSuccessState<PaginationState<CarModel>>) {
+      return;
+    }
+
+    final data =
+        (cubit.state as BaseSuccessState<PaginationState<CarModel>>).data;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+
+    if (currentScroll >= maxScroll - 200 &&
+        !data.isLoadingMore &&
+        data.pagination.hasNextPage) {
+      cubit.loadNextPage();
+    }
+  }
+
+  void _delete(
+    String id,
+  ) async {
+    context.read<CarModelsCubit>().deleteModel(id);
+  }
+
+  void _onRefresh() {
+    context.read<CarModelsCubit>().refresh();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cars Models Page'),
-      ),
+      appBar: mainAppBar("Car Models"),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(UpsertCarModels.route());
-        },
+        onPressed: () =>
+            Navigator.of(context).push(UpsertCarModelsPage.route()),
         child: const Icon(Icons.add),
       ),
-      body: const SingleChildScrollView(
-        child: const Column(
-          children: [
-            const Text("Cars Models MEMEK Page"),
-          ],
-        ),
+      body: StateHandler<CarModelsCubit, PaginationState<CarModel>>(
+        onRetry: () => _onRefresh(),
+        onSuccess: (context, data, message) {
+          final models = data.data;
+
+          return RefreshIndicator(
+            onRefresh: () async {
+              _onRefresh();
+            },
+            child: Scrollbar(
+              controller: _scrollController,
+              thumbVisibility: true,
+              child: CustomScrollView(
+                cacheExtent: 2000, // ! Preload area di luar viewport
+                controller: _scrollController,
+                physics:
+                    const AlwaysScrollableScrollPhysics(), // buat RefreshIndicator
+                slivers: [
+                  SliverToBoxAdapter(
+                      child: MainElevatedButton(
+                          text: "Create Many",
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              InsertManyCarModelsPage.route(),
+                            );
+                          })),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) => CarModelsItem(
+                          model: models[index],
+                          onDelete: () {
+                            _delete(models[index].id!);
+                          },
+                          onRefresh: _onRefresh),
+                      childCount: models.length,
+                    ),
+                  ),
+                  if (data.isLoadingMore)
+                    const SliverToBoxAdapter(
+                      child: Loading(),
+                    ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }

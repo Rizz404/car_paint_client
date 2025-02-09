@@ -6,7 +6,9 @@ import "package:paint_car/dependencies/services/log_service.dart";
 import "package:paint_car/features/auth/cubit/auth_cubit.dart";
 import "package:paint_car/features/auth/repo/auth_repo.dart";
 import "package:paint_car/features/car/cubit/car_brands_cubit.dart";
+import "package:paint_car/features/car/cubit/car_models_cubit.dart";
 import "package:paint_car/features/car/repo/car_brands_repo.dart";
+import "package:paint_car/features/car/repo/car_models_repo.dart";
 import "package:paint_car/features/shared/cubit/user_cubit.dart";
 import "package:paint_car/features/shared/repo/user_repo.dart";
 import "package:paint_car/features/template/cubit/template_cubit.dart";
@@ -29,7 +31,7 @@ initializeSL() async {
   getIt.registerLazySingleton<ApiClient>(
     () => ApiClient(client: getIt(), tokenSp: getIt()),
   );
-  // !
+  // ! template
   getIt.registerLazySingleton<TemplateRepo>(
     () => TemplateRepo(
       apiClient: getIt(),
@@ -41,7 +43,7 @@ initializeSL() async {
       templateRepo: getIt(),
     ),
   );
-  // !
+  // ! user
   getIt.registerLazySingleton<UserRepo>(
     () => UserRepo(
       getIt(),
@@ -53,7 +55,7 @@ initializeSL() async {
       userRepo: getIt(),
     ),
   );
-  // !
+  // ! auth
   getIt.registerLazySingleton<AuthRepo>(
     () => AuthRepo(
       apiClient: getIt(),
@@ -62,7 +64,7 @@ initializeSL() async {
     ),
   );
   getIt.registerFactory<AuthCubit>(() => AuthCubit(authRepo: getIt()));
-  // !
+  // ! brands
   getIt.registerLazySingleton<CarBrandsRepo>(
     () => CarBrandsRepo(
       apiClient: getIt(),
@@ -71,6 +73,17 @@ initializeSL() async {
   getIt.registerFactory<CarBrandsCubit>(
     () => CarBrandsCubit(
       carBrandsRepo: getIt(),
+    ),
+  );
+  // ! models
+  getIt.registerLazySingleton<CarModelsRepo>(
+    () => CarModelsRepo(
+      apiClient: getIt(),
+    ),
+  );
+  getIt.registerFactory<CarModelsCubit>(
+    () => CarModelsCubit(
+      carModelsRepo: getIt(),
     ),
   );
 }

@@ -1,52 +1,97 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paint_car/data/models/car_model.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
-import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
+import 'package:paint_car/features/car/cubit/car_models_cubit.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
+import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/main_text_field.dart';
+import 'package:paint_car/ui/utils/snack_bar.dart';
 
-class UpsertCarModels extends StatefulWidget {
-  const UpsertCarModels({super.key});
-  static route() => MaterialPageRoute(builder: (_) => const UpsertCarModels());
-
+class UpsertCarModelsPage extends StatefulWidget {
+  final CarModel? carModel;
+  const UpsertCarModelsPage({super.key, this.carModel});
+  static route({CarModel? carModel}) => MaterialPageRoute(
+        builder: (context) => UpsertCarModelsPage(carModel: carModel),
+      );
   @override
-  State<UpsertCarModels> createState() => _UpsertCarModelsState();
+  State<UpsertCarModelsPage> createState() => _UpsertCarModelsPageState();
 }
 
-class _UpsertCarModelsState extends State<UpsertCarModels> {
+class _UpsertCarModelsPageState extends State<UpsertCarModelsPage> {
   final nameController = TextEditingController();
+  var carBrandId = "";
   final formKey = GlobalKey<FormState>();
+  bool isUpdate = false;
 
-  final brands = ["Toyota", "Honda", "Suzuki", "Mitsubishi"];
+  @override
+  void initState() {
+    super.initState();
+    setState(
+      () {
+        isUpdate = widget.carModel != null;
+      },
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (isUpdate) {
+        nameController.text = widget.carModel!.name;
+        carBrandId = widget.carModel!.carBrandId;
+      }
+    });
+  }
 
   @override
   void dispose() {
     nameController.dispose();
+
     super.dispose();
+  }
+
+  void _performAction() {
+    if (isUpdate) {
+      context.read<CarModelsCubit>().updateModel(
+            CarModel(
+              id: widget.carModel!.id,
+              name: nameController.text,
+              carBrandId: widget.carModel!.carBrandId,
+              createdAt: widget.carModel!.createdAt,
+              updatedAt: widget.carModel!.updatedAt,
+            ),
+          );
+    } else {
+      context.read<CarModelsCubit>().saveModel(
+            CarModel(
+              name: nameController.text,
+              carBrandId: carBrandId,
+            ),
+          );
+    }
   }
 
   void submitForm() {
     if (formKey.currentState!.validate()) {
-      // call cubit to save car brand
-      LogService.i("Nama Models: ${nameController.text}");
+      _performAction();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CarBrandsCubit, BaseState>(
+    return BlocConsumer<CarModelsCubit, BaseState>(
       listener: (context, state) {
         handleFormListenerState(
           context: context,
           state: state,
           onRetry: submitForm,
           onSuccess: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Car Brand saved successfully!")),
+            SnackBarUtil.showSnackBar(
+              context: context,
+              message:
+                  "Car model ${isUpdate ? 'Updated' : 'Created'} successfully",
+              type: SnackBarType.success,
             );
             Navigator.pop(context);
           },
@@ -54,8 +99,8 @@ class _UpsertCarModelsState extends State<UpsertCarModels> {
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            title: const MainText(text: "Create Car Models"),
+          appBar: mainAppBar(
+            isUpdate ? "Update Car Models" : "Create Car Models",
           ),
           body: Center(
             child: SingleChildScrollView(
@@ -65,25 +110,28 @@ class _UpsertCarModelsState extends State<UpsertCarModels> {
                 child: Column(
                   spacing: 16,
                   children: [
-                    const MainText(
-                      text: "Create Car Models",
-                      extent: Large(),
+                    MainText(
+                      text: isUpdate ? "Update Car Model" : "Create Car Model",
+                      extent: const Large(),
                     ),
                     MainTextField(
                       controller: nameController,
-                      hintText: "Enter models name",
+                      hintText: "Enter model name",
                       leadingIcon: const Icon(Icons.car_rental),
                       isEnabled: state is! BaseLoadingState,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Models name cannot be empty";
+                          return "Model name cannot be empty";
                         }
                         return null;
                       },
                     ),
+                    // get car brands
+                    // jadiin dropdown
+
                     MainElevatedButton(
                       onPressed: submitForm,
-                      text: "Save Models",
+                      text: isUpdate ? "Update" : "Create",
                       isLoading: state is BaseLoadingState,
                     ),
                   ],

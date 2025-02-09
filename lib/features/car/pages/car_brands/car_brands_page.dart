@@ -89,7 +89,7 @@ class _CarBrandsPageState extends State<CarBrandsPage> {
       body: StateHandler<CarBrandsCubit, PaginationState<CarBrand>>(
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
-          final brands = data.brands;
+          final brands = data.data;
 
           return RefreshIndicator(
             onRefresh: () async {
