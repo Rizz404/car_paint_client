@@ -25,13 +25,6 @@ class LeftDrawer extends StatelessWidget {
               color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
-          ListTile(
-            leading: const Icon(Icons.work),
-            title: const Text('Workshop'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
           MainDropdown(
             state: DropdownState(
               title: 'Users Menu',

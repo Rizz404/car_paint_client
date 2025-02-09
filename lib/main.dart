@@ -4,6 +4,8 @@ import 'package:paint_car/features/auth/cubit/auth_cubit.dart';
 import 'package:paint_car/features/auth/pages/login_page.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_models_cubit.dart';
+import 'package:paint_car/features/car/cubit/car_services_cubit.dart';
+import 'package:paint_car/features/car/cubit/car_workshops_cubit.dart';
 import 'package:paint_car/features/car/pages/car_brands/car_brands_page.dart';
 import 'package:paint_car/features/car/pages/car_models/car_models_page.dart';
 import 'package:paint_car/features/home/pages/home_page.dart';
@@ -33,6 +35,12 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => getIt<CarModelsCubit>(),
         ),
+        BlocProvider(
+          create: (context) => getIt<CarServicesCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<CarWorkshopsCubit>(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -54,7 +62,7 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ConfigurationTheme.elevatedButtonTheme,
         fontFamilyFallback: ['Poppins'],
       ),
-      home: const LoginPage(),
+      home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }

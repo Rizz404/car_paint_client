@@ -337,6 +337,7 @@ class ApiClient {
     } on FormatException {
       return ApiError<T>(message: ApiConstant.invalidFormatRes);
     } catch (e) {
+      LogService.e('Error: $e');
       return ApiError<T>(message: ApiConstant.unknownError);
     }
   }

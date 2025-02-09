@@ -1,13 +1,9 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:paint_car/data/models/car_model.dart';
+import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
-import 'package:paint_car/features/car/cubit/car_models_cubit.dart';
-import 'package:paint_car/features/car/widgets/image_car_action.dart';
+import 'package:paint_car/features/car/cubit/car_services_cubit.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
@@ -15,49 +11,49 @@ import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/main_text_field.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 
-class InsertManyCarModelsPage extends StatefulWidget {
-  const InsertManyCarModelsPage({super.key});
+class InsertManyCarServicesPage extends StatefulWidget {
+  const InsertManyCarServicesPage({super.key});
 
   static route() => MaterialPageRoute(
-        builder: (context) => const InsertManyCarModelsPage(),
+        builder: (context) => const InsertManyCarServicesPage(),
       );
 
   @override
-  State<InsertManyCarModelsPage> createState() =>
-      _InsertManyCarModelsPageState();
+  State<InsertManyCarServicesPage> createState() =>
+      _InsertManyCarServicesPageState();
 }
 
-class _InsertManyCarModelsPageState extends State<InsertManyCarModelsPage> {
-  final List<ModelFormData> _models = [ModelFormData()];
+class _InsertManyCarServicesPageState extends State<InsertManyCarServicesPage> {
+  final List<ServiceFormData> _services = [ServiceFormData()];
   final _formKey = GlobalKey<FormState>();
 
-  void _addModel() => setState(() => _models.add(ModelFormData()));
+  void _addService() => setState(() => _services.add(ServiceFormData()));
 
-  void _removeModel(int index) => setState(() => _models.removeAt(index));
+  void _removeService(int index) => setState(() => _services.removeAt(index));
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final validModels = _models.where((b) => b.isValid).toList();
-    final invalidModels = _models.where((b) => !b.isValid).toList();
+    final validServices = _services.where((b) => b.isValid).toList();
+    final invalidServices = _services.where((b) => !b.isValid).toList();
 
-    if (invalidModels.isNotEmpty) {
+    if (invalidServices.isNotEmpty) {
       SnackBarUtil.showSnackBar(
         context: context,
-        message: "Please fill all fields and select image for each model",
+        message: "Please fill all fields for each service",
         type: SnackBarType.error,
       );
       return;
     }
 
-    context.read<CarModelsCubit>().saveManyModels(
-          validModels.map((b) => b.toCarModel()).toList(),
+    context.read<CarServicesCubit>().saveManyServices(
+          validServices.map((b) => b.toCarService()).toList(),
         );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CarModelsCubit, BaseState>(
+    return BlocConsumer<CarServicesCubit, BaseState>(
       listener: (context, state) {
         handleFormListenerState(
           context: context,
@@ -66,7 +62,7 @@ class _InsertManyCarModelsPageState extends State<InsertManyCarModelsPage> {
           onSuccess: () {
             SnackBarUtil.showSnackBar(
               context: context,
-              message: "Multiple models created successfully",
+              message: "Multiple services created successfully",
               type: SnackBarType.success,
             );
             Navigator.pop(context);
@@ -75,16 +71,16 @@ class _InsertManyCarModelsPageState extends State<InsertManyCarModelsPage> {
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: mainAppBar("Create Multiple Models"),
+          appBar: mainAppBar("Create Multiple Services"),
           body: Form(
             key: _formKey,
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
-              itemCount: _models.length,
-              itemBuilder: (ctx, i) => ModelFormItem(
+              itemCount: _services.length,
+              itemBuilder: (ctx, i) => ServiceFormItem(
                 key: ValueKey(i),
-                data: _models[i],
-                onRemove: () => _removeModel(i),
+                data: _services[i],
+                onRemove: () => _removeService(i),
                 index: i + 1,
                 isEnabled: state is! BaseLoadingState,
               ),
@@ -95,7 +91,7 @@ class _InsertManyCarModelsPageState extends State<InsertManyCarModelsPage> {
             children: [
               FloatingActionButton(
                 heroTag: 'add',
-                onPressed: _addModel,
+                onPressed: _addService,
                 child: const Icon(Icons.add),
               ),
               const SizedBox(height: 16),
@@ -114,15 +110,15 @@ class _InsertManyCarModelsPageState extends State<InsertManyCarModelsPage> {
   }
 }
 
-class ModelFormData {
+class ServiceFormData {
   final TextEditingController nameController = TextEditingController();
-  var carBrandId = "";
+  final TextEditingController priceController = TextEditingController();
+  bool get isValid =>
+      nameController.text.isNotEmpty && priceController.text.isNotEmpty;
 
-  bool get isValid => nameController.text.isNotEmpty && carBrandId.isNotEmpty;
-
-  CarModel toCarModel() => CarModel(
+  CarService toCarService() => CarService(
         name: nameController.text,
-        carBrandId: carBrandId,
+        price: priceController.text,
       );
 
   void dispose() {
@@ -130,14 +126,14 @@ class ModelFormData {
   }
 }
 
-class ModelFormItem extends StatefulWidget {
-  final ModelFormData data;
-  final ValueChanged<ModelFormData>? onChanged;
+class ServiceFormItem extends StatefulWidget {
+  final ServiceFormData data;
+  final ValueChanged<ServiceFormData>? onChanged;
   final VoidCallback? onRemove;
   final int index;
   final bool isEnabled;
 
-  const ModelFormItem({
+  const ServiceFormItem({
     super.key,
     required this.data,
     this.onChanged,
@@ -147,10 +143,10 @@ class ModelFormItem extends StatefulWidget {
   });
 
   @override
-  State<ModelFormItem> createState() => _ModelFormItemState();
+  State<ServiceFormItem> createState() => _ServiceFormItemState();
 }
 
-class _ModelFormItemState extends State<ModelFormItem> {
+class _ServiceFormItemState extends State<ServiceFormItem> {
   @override
   void dispose() {
     widget.data.dispose();
@@ -169,7 +165,7 @@ class _ModelFormItemState extends State<ModelFormItem> {
             Row(
               children: [
                 MainText(
-                  text: "Model #${widget.index}",
+                  text: "Service #${widget.index}",
                   extent: const Medium(),
                 ),
                 const Spacer(),
@@ -184,12 +180,12 @@ class _ModelFormItemState extends State<ModelFormItem> {
             const SizedBox(height: 16),
             MainTextField(
               controller: widget.data.nameController,
-              hintText: "Enter model name",
+              hintText: "Enter service name",
               leadingIcon: const Icon(Icons.car_rental),
               isEnabled: widget.isEnabled,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "Model name cannot be empty";
+                  return "Service name cannot be empty";
                 }
                 return null;
               },

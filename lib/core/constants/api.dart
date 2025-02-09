@@ -13,6 +13,9 @@ class ApiConstant {
   // * models
   static const String modelsPath = "/car-models";
   static const String multipleModelsPath = "$modelsPath/multiple";
+  // * services
+  static const String servicesPath = "/car-services";
+  static const String multipleServicesPath = "$servicesPath/multiple";
   // * workshops
   static const String workshopsPath = "/workshops";
   // * AUTH

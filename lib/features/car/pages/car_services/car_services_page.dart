@@ -2,27 +2,27 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paint_car/data/models/car_model.dart';
+import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/features/car/cubit/car_models_cubit.dart';
-import 'package:paint_car/features/car/pages/car_models/insert_many_car_models_page.dart';
-import 'package:paint_car/features/car/pages/car_models/upsert_car_models.dart';
-import 'package:paint_car/features/car/widgets/car_models/car_models_item.dart';
+import 'package:paint_car/features/car/cubit/car_services_cubit.dart';
+import 'package:paint_car/features/car/pages/car_services/insert_many_car_services_page.dart';
+import 'package:paint_car/features/car/pages/car_services/upsert_car_services.dart';
+import 'package:paint_car/features/car/widgets/car_services/car_services_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 
-class CarModelsPage extends StatefulWidget {
-  static route() => MaterialPageRoute(builder: (_) => const CarModelsPage());
-  const CarModelsPage({super.key});
+class CarServicesPage extends StatefulWidget {
+  static route() => MaterialPageRoute(builder: (_) => const CarServicesPage());
+  const CarServicesPage({super.key});
 
   @override
-  State<CarModelsPage> createState() => _CarModelsPageState();
+  State<CarServicesPage> createState() => _CarServicesPageState();
 }
 
-class _CarModelsPageState extends State<CarModelsPage> {
+class _CarServicesPageState extends State<CarServicesPage> {
   late final ScrollController _scrollController;
 
   @override
@@ -30,7 +30,7 @@ class _CarModelsPageState extends State<CarModelsPage> {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<CarModelsCubit>().refresh();
+    context.read<CarServicesCubit>().refresh();
   }
 
   @override
@@ -41,14 +41,14 @@ class _CarModelsPageState extends State<CarModelsPage> {
   }
 
   void _onScroll() {
-    final cubit = context.read<CarModelsCubit>();
+    final cubit = context.read<CarServicesCubit>();
     if (!_scrollController.hasClients ||
-        cubit.state is! BaseSuccessState<PaginationState<CarModel>>) {
+        cubit.state is! BaseSuccessState<PaginationState<CarService>>) {
       return;
     }
 
     final data =
-        (cubit.state as BaseSuccessState<PaginationState<CarModel>>).data;
+        (cubit.state as BaseSuccessState<PaginationState<CarService>>).data;
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
 
@@ -62,26 +62,26 @@ class _CarModelsPageState extends State<CarModelsPage> {
   void _delete(
     String id,
   ) async {
-    context.read<CarModelsCubit>().deleteModel(id);
+    context.read<CarServicesCubit>().deleteService(id);
   }
 
   void _onRefresh() {
-    context.read<CarModelsCubit>().refresh();
+    context.read<CarServicesCubit>().refresh();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: mainAppBar("Car Models"),
+      appBar: mainAppBar("Car Services"),
       floatingActionButton: FloatingActionButton(
         onPressed: () =>
-            Navigator.of(context).push(UpsertCarModelsPage.route()),
+            Navigator.of(context).push(UpsertCarServicesPage.route()),
         child: const Icon(Icons.add),
       ),
-      body: StateHandler<CarModelsCubit, PaginationState<CarModel>>(
+      body: StateHandler<CarServicesCubit, PaginationState<CarService>>(
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
-          final models = data.data;
+          final services = data.data;
 
           return RefreshIndicator(
             onRefresh: () async {
@@ -101,18 +101,18 @@ class _CarModelsPageState extends State<CarModelsPage> {
                           text: "Create Many",
                           onPressed: () {
                             Navigator.of(context).push(
-                              InsertManyCarModelsPage.route(),
+                              InsertManyCarServicesPage.route(),
                             );
                           })),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) => CarModelsItem(
-                          model: models[index],
+                      (context, index) => CarServicesItem(
+                          service: services[index],
                           onDelete: () {
-                            _delete(models[index].id!);
+                            _delete(services[index].id!);
                           },
                           onRefresh: _onRefresh),
-                      childCount: models.length,
+                      childCount: services.length,
                     ),
                   ),
                   if (data.isLoadingMore)
