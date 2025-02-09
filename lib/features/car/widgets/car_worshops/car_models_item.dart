@@ -61,7 +61,6 @@ class _CarModelsItemState extends State<CarModelsItem> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     GestureDetector(
                       child: SizedBox(

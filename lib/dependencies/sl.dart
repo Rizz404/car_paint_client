@@ -12,7 +12,7 @@ import "package:paint_car/features/car/cubit/car_workshops_cubit.dart";
 import "package:paint_car/features/car/repo/car_brands_repo.dart";
 import "package:paint_car/features/car/repo/car_models_repo.dart";
 import "package:paint_car/features/car/repo/car_services_repo.dart";
-import "package:paint_car/features/car/repo/car_workshops_repo%20.dart";
+import "package:paint_car/features/car/repo/car_workshops_repo.dart";
 import "package:paint_car/features/shared/cubit/user_cubit.dart";
 import "package:paint_car/features/shared/repo/user_repo.dart";
 import "package:paint_car/features/template/cubit/template_cubit.dart";
