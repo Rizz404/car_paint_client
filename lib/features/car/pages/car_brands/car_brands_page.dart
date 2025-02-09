@@ -23,6 +23,7 @@ class CarBrandsPage extends StatefulWidget {
 }
 
 class _CarBrandsPageState extends State<CarBrandsPage> {
+  static const limit = 10;
   late final ScrollController _scrollController;
 
   @override
@@ -30,7 +31,7 @@ class _CarBrandsPageState extends State<CarBrandsPage> {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<CarBrandsCubit>().refresh();
+    context.read<CarBrandsCubit>().refresh(limit);
   }
 
   // void evictCachedImages() {
@@ -74,7 +75,7 @@ class _CarBrandsPageState extends State<CarBrandsPage> {
   }
 
   void _onRefresh() {
-    context.read<CarBrandsCubit>().refresh();
+    context.read<CarBrandsCubit>().refresh(limit);
   }
 
   @override

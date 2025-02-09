@@ -17,14 +17,12 @@ class CarBrandsCubit extends Cubit<BaseState> {
     required this.carBrandsRepo,
   }) : super(const BaseInitialState());
 
-  final int _limit = 10;
-
   List<CarBrand> brands = [];
   Pagination? pagination;
   int currentPage = 1;
   bool isLoadingMore = false;
 
-  Future<void> getBrands(int page) async {
+  Future<void> getBrands(int page, {int limit = 10}) async {
     if (isLoadingMore) return;
 
     isLoadingMore = page != 1;
@@ -50,7 +48,7 @@ class CarBrandsCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<PaginatedData<CarBrand>>(
       emit,
-      () => carBrandsRepo.getBrands(page, _limit),
+      () => carBrandsRepo.getBrands(page, limit),
       onSuccess: (data, message) {
         if (page == 1) brands.clear();
 
@@ -93,7 +91,10 @@ class CarBrandsCubit extends Cubit<BaseState> {
     );
   }
 
-  Future<void> refresh() => getBrands(1);
+  Future<void> refresh(
+    int limit,
+  ) =>
+      getBrands(1, limit: limit);
   Future<void> loadNextPage() => getBrands(currentPage + 1);
 
   Future<void> saveBrand(CarBrand carBrand, File imageFile) async {

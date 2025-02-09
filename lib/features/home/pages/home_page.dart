@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:paint_car/features/home/pages/settings_page.dart';
 import 'package:paint_car/features/home/widgets/bottom_nav_bar.dart';
 import 'package:paint_car/features/home/widgets/left_drawer.dart';
+import 'package:paint_car/features/user/pages/user_page.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
@@ -43,6 +44,8 @@ class _HomePageState extends State<HomePage> {
         return "Home";
       case 1:
         return "Settings";
+      case 2:
+        return "User";
       default:
         return "Home";
     }
@@ -60,6 +63,7 @@ class _HomePageState extends State<HomePage> {
       body: [
         _buildHomePage(),
         const SettingsPage(),
+        const UserPage(),
       ][_selectedIndex],
     );
   }

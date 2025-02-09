@@ -30,6 +30,11 @@ class BottomNavBar extends StatelessWidget {
           label: 'Settings',
           tooltip: 'Settings',
         ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+          tooltip: 'Profile',
+        ),
       ],
     );
   }

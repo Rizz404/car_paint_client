@@ -10,12 +10,6 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      child: const Column(
-        children: [
-          const Text("Settings Page"),
-        ],
-      ),
-    );
+    return const SizedBox();
   }
 }

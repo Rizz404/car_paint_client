@@ -7,6 +7,7 @@ import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/car/pages/car_brands/upsert_car_brands_page.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
+import 'package:paint_car/ui/shared/image_network.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 
 class CarBrandsItem extends StatefulWidget {
@@ -68,24 +69,11 @@ class _CarBrandsItemState extends State<CarBrandsItem> {
                         icon: const Icon(Icons.delete))
                   ],
                 ),
-                Image.network(
-                  widget.brand.logo!,
-                  fit: BoxFit.contain,
-                  headers: const {"Cache-Control": "max-age=604800"},
-                  cacheHeight: 100,
+                ImageNetwork(
+                  src: widget.brand.logo!,
+                  width: 100,
                   height: 100,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    }
-                    // TODO: REPLACE AMA PLACEHOLDER IMAGE DARI PT
-                    return Image.asset(
-                      "assets/images/placeholder-image-general.webp",
-                      fit: BoxFit.contain,
-                      height: 100,
-                    );
-                  },
-                ),
+                )
               ],
             );
           },

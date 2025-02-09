@@ -176,6 +176,8 @@ class _BrandFormItemState extends State<BrandFormItem> {
         widget.onChanged?.call(widget.data);
       }
     } on PlatformException catch (e) {
+      // TODO: DELETE LATERR
+
       LogService.e("Error picking image: $e");
       SnackBarUtil.showSnackBar(
         context: context,

@@ -68,6 +68,7 @@ class _UpsertCarBrandsPageState extends State<UpsertCarBrandsPage> {
         _selectedImage = file;
       });
     } catch (e) {
+      // TODO: DELETE LATERR
       LogService.e("Error loading image: $e");
     }
   }
@@ -124,6 +125,8 @@ class _UpsertCarBrandsPageState extends State<UpsertCarBrandsPage> {
         setState(() => _selectedImage = File(pickedFile.path));
       }
     } on PlatformException catch (e) {
+      // TODO: DELETE LATERR
+
       LogService.e("Error picking image: $e");
       SnackBarUtil.showSnackBar(
         context: context,

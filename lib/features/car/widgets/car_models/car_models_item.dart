@@ -7,6 +7,7 @@ import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/cubit/car_models_cubit.dart';
 import 'package:paint_car/features/car/pages/car_models/upsert_car_models.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
+import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 
 class CarModelsItem extends StatefulWidget {
@@ -59,10 +60,16 @@ class _CarModelsItemState extends State<CarModelsItem> {
             return Column(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: 300,
-                      child: Text(widget.model.name),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: 100,
+                        child: MainText(
+                          text: widget.model.name,
+                        ),
+                      ),
                     ),
                     IconButton(
                         onPressed: () {

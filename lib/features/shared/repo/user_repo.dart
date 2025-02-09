@@ -15,6 +15,8 @@ class UserRepo {
     try {
       return userSp.getUser();
     } catch (e) {
+      // TODO: DELETE LATERR
+
       LogService.e("Error dari repo: $e");
       return null;
     }
@@ -25,6 +27,8 @@ class UserRepo {
       await tokenSp.removeToken();
       await userSp.removeUser();
     } catch (e) {
+      // TODO: DELETE LATERR
+
       LogService.e("Error dari repo: $e");
     }
   }

@@ -1,4 +1,5 @@
 import 'package:paint_car/core/common/api_response.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 
 Future<ApiResponse<T>> handleApiResponse<T>(
   ApiResponse<T> result, {
@@ -9,6 +10,8 @@ Future<ApiResponse<T>> handleApiResponse<T>(
       return ApiError(message: result.message);
     }
     // ! ini kalo error pas bukan get, dari zod
+    // TODO: DELETE LATERR
+    LogService.i(result.message ?? "ERROR TEST");
     return ApiError(
       message: result.message,
       errors: (result as ApiError).errors,

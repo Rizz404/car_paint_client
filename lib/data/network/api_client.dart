@@ -29,11 +29,15 @@ class ApiClient {
       if (queryParameters != null) {
         uri = uri.replace(queryParameters: queryParameters);
       }
+      // TODO: DELETE LATERR
+
       LogService.i('GET request to $uri');
       final headers = await _getHeaders(
         false,
       );
       final response = await client.get(uri, headers: headers).timeout(timeout);
+
+      // TODO: DELETE LATERR
 
       LogService.i('Response GET: ${response.body}');
 
@@ -59,6 +63,8 @@ class ApiClient {
     try {
       final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
       final headers = await _getHeaders(isMultiPart);
+
+      // TODO: DELETE LATERR
 
       LogService.i('POST request to $uri');
 
@@ -89,6 +95,8 @@ class ApiClient {
         final streamedResponse = await request.send();
         final response = await http.Response.fromStream(streamedResponse);
 
+        // TODO: DELETE LATERR
+
         LogService.i('Response POST: ${response.body}');
 
         if (body is List) {
@@ -99,8 +107,14 @@ class ApiClient {
             });
           }
         }
+        // TODO: DELETE LATERR
+
         LogService.i('Response POST: ${response.body}');
+        // TODO: DELETE LATERR
+
         LogService.i('Response POST: ${response.body}');
+        // TODO: DELETE LATERR
+
         LogService.i('status code: ${response.statusCode}');
         return _handleResponse<T>(response, fromJson);
       }
@@ -129,7 +143,11 @@ class ApiClient {
         final streamedResponse = await request.send();
         final response = await http.Response.fromStream(streamedResponse);
 
+        // TODO: DELETE LATERR
+
         LogService.i('Response POST: ${response.body}');
+        // TODO: DELETE LATERR
+
         LogService.i('status code: ${response.statusCode}');
 
         return _handleResponse<T>(response, fromJson);
@@ -143,12 +161,16 @@ class ApiClient {
           )
           .timeout(timeout);
 
+      // TODO: DELETE LATERR
+
       LogService.i('status code: ${response.statusCode}');
 
       return _handleResponse<T>(response, fromJson);
     } on SocketException {
       return const ApiNoInternet(message: ApiConstant.noInternetConnection);
     } catch (e) {
+      // TODO: DELETE LATERR
+
       LogService.e('POST request failed: $e');
       return ApiError(message: 'POST request failed: $e');
     }
@@ -165,6 +187,8 @@ class ApiClient {
     try {
       final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
       final headers = await _getHeaders(isMultiPart);
+
+      // TODO: DELETE LATERR
 
       LogService.i('PATCH request to $uri');
 
@@ -194,7 +218,11 @@ class ApiClient {
         final streamedResponse = await request.send();
         final response = await http.Response.fromStream(streamedResponse);
 
+        // TODO: DELETE LATERR
+
         LogService.i('Response PATCH: ${response.body}');
+        // TODO: DELETE LATERR
+
         LogService.i('status code: ${response.statusCode}');
 
         return _handleResponse<T>(response, fromJson);
@@ -206,6 +234,8 @@ class ApiClient {
               body: jsonEncode(body),
             )
             .timeout(timeout);
+
+        // TODO: DELETE LATERR
 
         LogService.i('status code: ${response.statusCode}');
 
@@ -226,6 +256,8 @@ class ApiClient {
       final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
       final headers = await _getHeaders(false);
 
+      // TODO: DELETE LATERR
+
       LogService.i('DELETE request to $uri');
 
       final response = await client
@@ -235,7 +267,11 @@ class ApiClient {
           )
           .timeout(timeout);
 
+      // TODO: DELETE LATERR
+
       LogService.i('Response DELETE: ${response.body}');
+      // TODO: DELETE LATERR
+
       LogService.i('status code: ${response.statusCode}');
 
       return _handleResponse<T>(response, fromJson);

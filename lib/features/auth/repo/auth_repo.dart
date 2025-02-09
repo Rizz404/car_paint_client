@@ -61,7 +61,6 @@ class AuthRepo {
 
       return await handleApiResponse(result);
     } catch (e) {
-      LogService.e(e.toString());
       return ApiError(message: e.toString());
     }
   }
