@@ -11,11 +11,13 @@ class MainTextField extends StatelessWidget {
   final int maxLines;
   final bool isEnabled;
   final TextInputType keyboardType;
+  final void Function(String)? onChanged;
   const MainTextField({
     super.key,
     required this.controller,
     required this.hintText,
     this.trailingIcon,
+    this.onChanged,
     this.leadingIcon,
     this.obscureText,
     this.validator,
@@ -32,6 +34,7 @@ class MainTextField extends StatelessWidget {
       validator: validator,
       obscureText: obscureText ?? false,
       maxLines: maxLines,
+      onChanged: onChanged,
       decoration: InputDecoration(
         hintText: hintText,
         suffixIcon: trailingIcon,

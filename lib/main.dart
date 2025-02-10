@@ -11,6 +11,7 @@ import 'package:paint_car/features/car/cubit/car_models_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_services_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_workshops_cubit.dart';
 import 'package:paint_car/features/car/pages/car_services/car_services_page.dart';
+import 'package:paint_car/features/car/pages/car_workshops/car_workshops_page.dart';
 import 'package:paint_car/features/financial/cubit/e_tickets_cubit.dart';
 import 'package:paint_car/features/financial/cubit/orders_cubit.dart';
 import 'package:paint_car/features/financial/cubit/payment_method_cubit.dart';
@@ -93,7 +94,7 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ConfigurationTheme.elevatedButtonTheme,
         fontFamilyFallback: ['Poppins'],
       ),
-      home: const HomePage(),
+      home: const CarWorkshopsPage(),
       debugShowCheckedModeBanner: false,
     );
   }
