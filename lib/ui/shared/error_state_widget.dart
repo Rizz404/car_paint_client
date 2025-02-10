@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 
 class ErrorStateWidget extends StatelessWidget {
   final String message;
@@ -9,6 +10,11 @@ class ErrorStateWidget extends StatelessWidget {
     required this.message,
     required this.onRetry,
   });
+  // TODO: DELETE THIS
+  _onRetry() {
+    LogService.i("ON RETRY, ERROR STATE WIDGET");
+    onRetry();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +26,7 @@ class ErrorStateWidget extends StatelessWidget {
           const SizedBox(height: 8),
           Text(message, textAlign: TextAlign.center),
           const SizedBox(height: 16),
-          ElevatedButton(onPressed: onRetry, child: const Text("Retry")),
+          ElevatedButton(onPressed: _onRetry, child: const Text("Retry")),
         ],
       ),
     );

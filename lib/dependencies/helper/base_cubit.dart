@@ -39,7 +39,7 @@ Future<void> handleBaseCubit<T>(
   } catch (e) {
     emit(
       BaseErrorState(
-        message: e.toString(),
+        message: 'Unexpected error: $e',
       ),
     );
   }

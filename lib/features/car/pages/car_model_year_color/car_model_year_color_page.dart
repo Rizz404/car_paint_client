@@ -11,7 +11,6 @@ import 'package:paint_car/features/car/widgets/car_model_year_color/car_model_ye
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
-import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 
 class CarModelYearColorPage extends StatefulWidget {

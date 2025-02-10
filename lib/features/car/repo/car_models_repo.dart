@@ -25,7 +25,7 @@ class CarModelsRepo {
         (json) => CarModel.fromMap(json),
       ),
     );
-    return result;
+    return await handleApiResponse(result);
   }
 
   Future<ApiResponse<CarModel>> saveModel(

@@ -23,7 +23,7 @@ class CarModelYearColorRepo {
         (json) => CarModelYearColor.fromMap(json),
       ),
     );
-    return result;
+    return await handleApiResponse(result);
   }
 
   Future<ApiResponse<CarModelYearColor>> saveModel(
@@ -37,7 +37,7 @@ class CarModelYearColorRepo {
       },
       fromJson: (json) => CarModelYearColor.fromMap(json),
     );
-    return await handleApiResponse(result);
+    return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<CarModelYearColor>> updateModel(
@@ -52,13 +52,13 @@ class CarModelYearColorRepo {
       },
       fromJson: (json) => CarModelYearColor.fromMap(json),
     );
-    return await handleApiResponse(result);
+    return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<void>> deleteModel(String id) async {
     final result = await apiClient.delete<void>(
       '${ApiConstant.carModelYearColorsPath}/$id',
     );
-    return result;
+    return await handleApiResponse(result, isGet: false);
   }
 }

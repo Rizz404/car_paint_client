@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:paint_car/core/common/api_response.dart';
 import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/core/types/paginated_data.dart';
@@ -25,7 +23,7 @@ class CarModelYearsRepo {
         (json) => CarModelYears.fromMap(json),
       ),
     );
-    return result;
+    return await handleApiResponse(result);
   }
 
   Future<ApiResponse<CarModelYears>> saveModel(
@@ -39,7 +37,7 @@ class CarModelYearsRepo {
       },
       fromJson: (json) => CarModelYears.fromMap(json),
     );
-    return await handleApiResponse(result);
+    return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<CarModelYears>> updateModel(
@@ -54,13 +52,13 @@ class CarModelYearsRepo {
       },
       fromJson: (json) => CarModelYears.fromMap(json),
     );
-    return await handleApiResponse(result);
+    return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<void>> deleteModel(String id) async {
     final result = await apiClient.delete<void>(
       '${ApiConstant.carModelYearsPath}/$id',
     );
-    return result;
+    return await handleApiResponse(result, isGet: false);
   }
 }

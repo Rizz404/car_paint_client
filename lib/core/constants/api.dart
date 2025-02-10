@@ -49,9 +49,19 @@ class ApiConstant {
 
   // ! error
   static const String noInternetConnection = 'No internet connection';
-  static const String unknownError = 'Unknown error';
   static const String invalidFormatRes = 'Invalid format response';
   static const String requestTimeout = 'Request timeout';
+  static const String socketException =
+      "Cannot connect to the server. Please check your internet connection.";
+  static const String clientException =
+      "There was a problem connecting to the server. Please try again later.";
+  static const String httpException =
+      "There was a problem with the HTTP connection. Please try again later.";
+  static const String formatException =
+      "The data received is invalid. Please try again.";
+  static const String handshakeException =
+      "There was a security (SSL) issue connecting to the server. Please try again later.";
+  static const String unknownError = "An error occurred. Please try again.";
 
   // ! query params
   static const int limit = 10;

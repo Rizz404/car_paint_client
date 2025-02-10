@@ -3,11 +3,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:paint_car/core/common/api_response.dart';
 import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/data/local/token_sp.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 
 class ApiClient {
   final http.Client client;
@@ -23,32 +26,20 @@ class ApiClient {
     String endpoint, {
     T Function(Map<String, dynamic>)? fromJson,
     Map<String, dynamic>? queryParameters,
+    CancelToken? cancelToken,
+    int retryMax = 3,
   }) async {
-    try {
+    return _executeRequestWithRetry(() async {
       Uri uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
       if (queryParameters != null) {
         uri = uri.replace(queryParameters: queryParameters);
       }
-      // TODO: DELETE LATERR
-
       LogService.i('GET request to $uri');
-      final headers = await _getHeaders(
-        false,
-      );
+      final headers = await _getHeaders(false);
       final response = await client.get(uri, headers: headers).timeout(timeout);
-
-      // TODO: DELETE LATERR
-
       LogService.i('Response GET: ${response.body}');
-
       return _handleResponse<T>(response, fromJson);
-    } on SocketException {
-      return const ApiNoInternet(message: ApiConstant.noInternetConnection);
-    } on TimeoutException {
-      return const ApiError(message: ApiConstant.requestTimeout);
-    } catch (e) {
-      return ApiError(message: 'GET request failed: $e');
-    }
+    }, cancelToken: cancelToken, maxRetries: retryMax);
   }
 
   Future<ApiResponse<T>> post<T>(
@@ -59,121 +50,45 @@ class ApiClient {
     File? imageFile,
     String? keyImageFile,
     List<File>? imageFiles,
+    CancelToken? cancelToken,
+    int retryMax = 3,
   }) async {
-    try {
+    return _executeRequestWithRetry(() async {
       final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
       final headers = await _getHeaders(isMultiPart);
-
-      // TODO: DELETE LATERR
-
       LogService.i('POST request to $uri');
 
       if (isMultiPart && imageFiles != null) {
-        var request = http.MultipartRequest('POST', uri);
-        request.headers.addAll(headers);
-
-        final bodyMap = body as Map<String, dynamic>;
-        bodyMap.forEach((key, value) {
-          if (key != keyImageFile) {
-            request.fields[key] = value.toString();
-          }
-        });
-
-        if (keyImageFile == null) {
-          return const ApiError(
-              message: 'keyImageFile di api_client dan di repo nya null cuk');
-        }
-
-        for (var file in imageFiles) {
-          var multipartFile = await http.MultipartFile.fromPath(
-            keyImageFile,
-            file.path,
-          );
-          request.files.add(multipartFile);
-        }
-
-        final streamedResponse = await request.send();
-        final response = await http.Response.fromStream(streamedResponse);
-
-        // TODO: DELETE LATERR
-
-        LogService.i('Response POST: ${response.body}');
-
-        if (body is List) {
-          for (int i = 0; i < body.length; i++) {
-            final item = body[i] as Map<String, dynamic>;
-            item.forEach((key, value) {
-              request.fields['[$i]$key'] = value.toString();
-            });
-          }
-        }
-        // TODO: DELETE LATERR
-
-        LogService.i('Response POST: ${response.body}');
-        // TODO: DELETE LATERR
-
-        LogService.i('Response POST: ${response.body}');
-        // TODO: DELETE LATERR
-
-        LogService.i('status code: ${response.statusCode}');
-        return _handleResponse<T>(response, fromJson);
+        return _sendMultipartRequest<T>(
+          'POST',
+          uri,
+          headers,
+          body as Map<String, dynamic>,
+          keyImageFile,
+          imageFiles: imageFiles,
+          fromJson: fromJson,
+        );
       }
 
       if (isMultiPart && imageFile != null) {
-        var request = http.MultipartRequest('POST', uri);
-
-        request.headers.addAll(headers);
-
-        final bodyMap = body as Map<String, dynamic>;
-        bodyMap.forEach((key, value) {
-          if (key != keyImageFile) {
-            request.fields[key] = value.toString();
-          }
-        });
-
-        if (keyImageFile == null) {
-          return const ApiError(
-              message: 'keyImageFile di api_client dan di repo nya null cuk');
-        }
-
-        var multipartFile =
-            await http.MultipartFile.fromPath(keyImageFile, imageFile.path);
-        request.files.add(multipartFile);
-
-        final streamedResponse = await request.send();
-        final response = await http.Response.fromStream(streamedResponse);
-
-        // TODO: DELETE LATERR
-
-        LogService.i('Response POST: ${response.body}');
-        // TODO: DELETE LATERR
-
-        LogService.i('status code: ${response.statusCode}');
-
-        return _handleResponse<T>(response, fromJson);
+        return _sendMultipartRequest<T>(
+          'POST',
+          uri,
+          headers,
+          body as Map<String, dynamic>,
+          keyImageFile,
+          imageFile: imageFile,
+          fromJson: fromJson,
+        );
       }
 
       final response = await client
-          .post(
-            uri,
-            headers: headers,
-            body: jsonEncode(body),
-          )
+          .post(uri, headers: headers, body: jsonEncode(body))
           .timeout(timeout);
-
-      // TODO: DELETE LATERR
-
-      LogService.i('status code: ${response.statusCode}');
-
+      LogService.i('Response POST: ${response.body}');
+      LogService.i('status code POST: ${response.statusCode}');
       return _handleResponse<T>(response, fromJson);
-    } on SocketException {
-      return const ApiNoInternet(message: ApiConstant.noInternetConnection);
-    } catch (e) {
-      // TODO: DELETE LATERR
-
-      LogService.e('POST request failed: $e');
-      return ApiError(message: 'POST request failed: $e');
-    }
+    }, cancelToken: cancelToken, maxRetries: retryMax);
   }
 
   Future<ApiResponse<T>> patch<T>(
@@ -183,108 +98,172 @@ class ApiClient {
     bool isMultiPart = false,
     String? keyImageFile,
     File? imageFile,
+    CancelToken? cancelToken,
+    int retryMax = 3,
   }) async {
-    try {
+    return _executeRequestWithRetry(() async {
       final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
       final headers = await _getHeaders(isMultiPart);
-
-      // TODO: DELETE LATERR
-
       LogService.i('PATCH request to $uri');
 
       if (isMultiPart && imageFile != null) {
-        var request = http.MultipartRequest('PATCH', uri);
-
-        request.headers.addAll(headers);
-
-        final bodyMap = body as Map<String, dynamic>;
-        bodyMap.forEach((key, value) {
-          if (key != keyImageFile) {
-            request.fields[key] = value.toString();
-          }
-        });
-
-        if (keyImageFile == null) {
-          return const ApiError(
-              message: 'keyImageFile di api_client dan di repo nya null cuk');
-        }
-
-        var multipartFile = await http.MultipartFile.fromPath(
+        return _sendMultipartRequest<T>(
+          'PATCH',
+          uri,
+          headers,
+          body as Map<String, dynamic>,
           keyImageFile,
-          imageFile.path,
+          imageFile: imageFile,
+          fromJson: fromJson,
         );
-        request.files.add(multipartFile);
-
-        final streamedResponse = await request.send();
-        final response = await http.Response.fromStream(streamedResponse);
-
-        // TODO: DELETE LATERR
-
-        LogService.i('Response PATCH: ${response.body}');
-        // TODO: DELETE LATERR
-
-        LogService.i('status code: ${response.statusCode}');
-
-        return _handleResponse<T>(response, fromJson);
-      } else {
-        final response = await client
-            .patch(
-              uri,
-              headers: headers,
-              body: jsonEncode(body),
-            )
-            .timeout(timeout);
-
-        // TODO: DELETE LATERR
-
-        LogService.i('status code: ${response.statusCode}');
-
-        return _handleResponse<T>(response, fromJson);
       }
-    } on SocketException {
-      return const ApiNoInternet(message: ApiConstant.noInternetConnection);
-    } catch (e) {
-      return ApiError(message: 'PATCH request failed: $e');
-    }
+
+      final response = await client
+          .patch(uri, headers: headers, body: jsonEncode(body))
+          .timeout(timeout);
+      LogService.i('Response PATCH: ${response.body}');
+      LogService.i('status code: patch ${response.statusCode}');
+      return _handleResponse<T>(response, fromJson);
+    }, cancelToken: cancelToken, maxRetries: retryMax);
   }
 
   Future<ApiResponse<T>> delete<T>(
     String endpoint, {
     T Function(Map<String, dynamic>)? fromJson,
+    CancelToken? cancelToken,
+    int retryMax = 3,
   }) async {
-    try {
+    return _executeRequestWithRetry(() async {
       final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
       final headers = await _getHeaders(false);
-
-      // TODO: DELETE LATERR
-
       LogService.i('DELETE request to $uri');
-
-      final response = await client
-          .delete(
-            uri,
-            headers: headers,
-          )
-          .timeout(timeout);
-
-      // TODO: DELETE LATERR
-
+      final response =
+          await client.delete(uri, headers: headers).timeout(timeout);
       LogService.i('Response DELETE: ${response.body}');
-      // TODO: DELETE LATERR
-
-      LogService.i('status code: ${response.statusCode}');
-
+      LogService.i('status code DELETE: ${response.statusCode}');
       return _handleResponse<T>(response, fromJson);
-    } on SocketException {
-      return const ApiNoInternet(message: ApiConstant.noInternetConnection);
-    } catch (e) {
-      return ApiError(message: 'DELETE request failed: $e');
+    }, cancelToken: cancelToken, maxRetries: retryMax);
+  }
+
+  Future<ApiResponse<T>> _sendMultipartRequest<T>(
+    String method,
+    Uri uri,
+    Map<String, String> headers,
+    Map<String, dynamic> bodyMap,
+    String? keyImageFile, {
+    File? imageFile,
+    List<File>? imageFiles,
+    T Function(Map<String, dynamic>)? fromJson,
+  }) async {
+    if (keyImageFile == null) {
+      return const ApiError(
+          message: 'keyImageFile di api_client dan di repo nya null');
+    }
+
+    final request = http.MultipartRequest(method, uri);
+    request.headers.addAll(headers);
+
+    bodyMap.forEach((key, value) {
+      if (key != keyImageFile) {
+        request.fields[key] = value.toString();
+      }
+    });
+
+    if (imageFiles != null) {
+      for (var file in imageFiles) {
+        final multipartFile =
+            await http.MultipartFile.fromPath(keyImageFile, file.path);
+        request.files.add(multipartFile);
+      }
+    } else if (imageFile != null) {
+      final multipartFile =
+          await http.MultipartFile.fromPath(keyImageFile, imageFile.path);
+      request.files.add(multipartFile);
+    }
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+    LogService.i(
+        'Response multipart request: method: $method: ${response.body}');
+    LogService.i('status code: ${response.statusCode}');
+    return _handleResponse<T>(response, fromJson);
+  }
+
+  Future<ApiResponse<T>> _executeRequestWithRetry<T>(
+    Future<ApiResponse<T>> Function() request, {
+    CancelToken? cancelToken,
+    int maxRetries = 3,
+  }) async {
+    int attempt = 0;
+    while (true) {
+      if (cancelToken?.isCancelled == true) {
+        return ApiError<T>(
+          message: "Permintaan telah dibatalkan oleh pengguna.",
+        );
+      }
+
+      final connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.none) {
+        return const ApiNoInternet(
+          message:
+              "Tidak ada koneksi internet. Periksa koneksi Anda dan coba lagi.",
+        );
+      }
+
+      try {
+        final response = await request();
+
+        if (response is ApiError &&
+            (response.message == ApiConstant.noInternetConnection ||
+                response.message == ApiConstant.requestTimeout)) {
+          if (attempt < maxRetries) {
+            attempt++;
+            LogService.i(
+                'Mengulangi request karena error server (message: ${response.message}), percobaan ke-$attempt');
+            await Future.delayed(const Duration(seconds: 1));
+            continue;
+          }
+        }
+        return response;
+      } catch (e) {
+        if (attempt < maxRetries) {
+          attempt++;
+          LogService.i(
+              'Mengulangi request karena exception: $e, percobaan ke-$attempt');
+          await Future.delayed(const Duration(seconds: 1));
+          continue;
+        }
+        return ApiError<T>(
+          message: _getUserFriendlyErrorMessage(e, maxRetries, attempt),
+        );
+      }
     }
   }
 
-  Future<Map<String, String>> _getHeaders(
-    bool isMultiPart,
-  ) async {
+  String _getUserFriendlyErrorMessage(
+    Object error,
+    int maxRetries,
+    int attempts,
+  ) {
+    switch (error) {
+      case TimeoutException _:
+        return ApiConstant.requestTimeout;
+      case SocketException _:
+        return ApiConstant.socketException;
+      case http.ClientException _:
+        return ApiConstant.clientException;
+      case HttpException _:
+        return ApiConstant.httpException;
+      case FormatException _:
+        return ApiConstant.formatException;
+      case HandshakeException _:
+        return ApiConstant.handshakeException;
+      default:
+        return ApiConstant.unknownError;
+    }
+  }
+
+  Future<Map<String, String>> _getHeaders(bool isMultiPart) async {
     final token = tokenSp.getToken();
     return {
       'Content-Type': isMultiPart
@@ -319,14 +298,14 @@ class ApiClient {
       final data = responseBody['data'];
       final paginationData =
           responseBody['pagination'] as Map<String, dynamic>?;
-      // ! kalo pagination nya gaada
+
       if (paginationData == null) {
         return ApiSuccess<T>(
           message: message,
           data: fromJson?.call(data) ?? data as T,
         );
       }
-      // ! kalo pagination nya ada
+
       final combinedData = {
         'data': data,
         'pagination': paginationData,

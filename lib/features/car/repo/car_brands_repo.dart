@@ -28,7 +28,7 @@ class CarBrandsRepo {
         (json) => CarBrand.fromMap(json),
       ),
     );
-    return result;
+    return await handleApiResponse(result);
   }
 
   Future<ApiResponse<CarBrand>> saveBrand(
@@ -89,6 +89,6 @@ class CarBrandsRepo {
     final result = await apiClient.delete<void>(
       '${ApiConstant.brandsPath}/$id',
     );
-    return result;
+    return await handleApiResponse(result, isGet: false);
   }
 }

@@ -3,14 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/constants/api.dart';
+// ignore: unused_import
 import 'package:paint_car/data/models/e_ticket.dart';
+// ignore: unused_import
 import 'package:paint_car/data/models/payment_method.dart';
 import 'package:paint_car/data/models/transactions.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/features/financial/cubit/e_tickets_cubit.dart';
-import 'package:paint_car/features/financial/cubit/payment_method_cubit.dart';
 import 'package:paint_car/features/financial/cubit/transactions_cubit.dart';
-import 'package:paint_car/features/financial/widgets/payment_method_item.dart';
 import 'package:paint_car/features/financial/widgets/transactions_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/ui/shared/loading.dart';

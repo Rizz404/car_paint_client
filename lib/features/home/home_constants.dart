@@ -24,7 +24,6 @@ class HomeConstants {
     {'name': 'Car Colors', 'route': CarColorsPage.route},
     {'name': 'Car Model Years', 'route': CarModelYearsPage.route},
     {'name': 'Car Model Years Color', 'route': CarModelYearColorPage.route},
-    {'name': 'Car User', 'route': CarWorkshopsPage.route},
   ];
 
   static const List<Map<String, dynamic>> userItems = const [

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'dart:convert';
 
 import 'package:paint_car/core/common/api_response.dart';
@@ -25,7 +27,7 @@ class CarColorsRepo {
         (json) => CarColor.fromMap(json),
       ),
     );
-    return result;
+    return await handleApiResponse(result);
   }
 
   Future<ApiResponse<CarColor>> saveColor(
@@ -59,6 +61,6 @@ class CarColorsRepo {
     final result = await apiClient.delete<void>(
       '${ApiConstant.colorsPath}/$id',
     );
-    return result;
+    return await handleApiResponse(result, isGet: false);
   }
 }

@@ -3,10 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/constants/api.dart';
-import 'package:paint_car/data/models/e_ticket.dart';
 import 'package:paint_car/data/models/orders.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/features/financial/cubit/e_tickets_cubit.dart';
 import 'package:paint_car/features/financial/cubit/orders_cubit.dart';
 import 'package:paint_car/features/financial/widgets/orders_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
