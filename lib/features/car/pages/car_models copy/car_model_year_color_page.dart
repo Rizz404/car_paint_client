@@ -3,36 +3,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/constants/api.dart';
-import 'package:paint_car/data/models/car_color.dart';
+import 'package:paint_car/data/models/car_model_year_color.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/features/car/cubit/car_colors_cubit.dart';
-import 'package:paint_car/features/car/pages/car_colors/insert_many_car_colors_page.dart';
-import 'package:paint_car/features/car/pages/car_colors/upsert_car_colors.dart';
-import 'package:paint_car/features/car/widgets/car_colors/car_colors_item.dart';
+import 'package:paint_car/features/car/cubit/car_model_year_color_cubit.dart';
+import 'package:paint_car/features/car/pages/car_models%20copy/upsert_car_model_year_color_.dart';
+import 'package:paint_car/features/car/widgets/car_model_year_color/car_model_year_color_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 
-class CarColorsPage extends StatefulWidget {
-  static route() => MaterialPageRoute(builder: (_) => const CarColorsPage());
-  const CarColorsPage({super.key});
+class CarModelYearColorPage extends StatefulWidget {
+  static route() =>
+      MaterialPageRoute(builder: (_) => const CarModelYearColorPage());
+  const CarModelYearColorPage({super.key});
 
   @override
-  State<CarColorsPage> createState() => _CarColorsPageState();
+  State<CarModelYearColorPage> createState() => _CarModelYearColorPageState();
 }
 
-class _CarColorsPageState extends State<CarColorsPage> {
+class _CarModelYearColorPageState extends State<CarModelYearColorPage> {
   late final ScrollController _scrollController;
-  static const int limit = ApiConstant.limit;
+  static const limit = ApiConstant.limit;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<CarColorsCubit>().refresh(limit);
+    context.read<CarModelYearColorCubit>().refresh(limit);
   }
 
   @override
@@ -43,14 +43,15 @@ class _CarColorsPageState extends State<CarColorsPage> {
   }
 
   void _onScroll() {
-    final cubit = context.read<CarColorsCubit>();
+    final cubit = context.read<CarModelYearColorCubit>();
     if (!_scrollController.hasClients ||
-        cubit.state is! BaseSuccessState<PaginationState<CarColor>>) {
+        cubit.state is! BaseSuccessState<PaginationState<CarModelYearColor>>) {
       return;
     }
 
     final data =
-        (cubit.state as BaseSuccessState<PaginationState<CarColor>>).data;
+        (cubit.state as BaseSuccessState<PaginationState<CarModelYearColor>>)
+            .data;
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
 
@@ -64,26 +65,27 @@ class _CarColorsPageState extends State<CarColorsPage> {
   void _delete(
     String id,
   ) async {
-    context.read<CarColorsCubit>().deleteColor(id);
+    context.read<CarModelYearColorCubit>().deleteModel(id);
   }
 
   void _onRefresh() {
-    context.read<CarColorsCubit>().refresh(limit);
+    context.read<CarModelYearColorCubit>().refresh(limit);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: mainAppBar("Car Colors"),
+      appBar: mainAppBar("Car ModelYearColor"),
       floatingActionButton: FloatingActionButton(
         onPressed: () =>
-            Navigator.of(context).push(UpsertCarColorsPage.route()),
+            Navigator.of(context).push(UpsertCarModelYearColor.route()),
         child: const Icon(Icons.add),
       ),
-      body: StateHandler<CarColorsCubit, PaginationState<CarColor>>(
+      body: StateHandler<CarModelYearColorCubit,
+          PaginationState<CarModelYearColor>>(
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
-          final colors = data.data;
+          final modelYearColor = data.data;
 
           return RefreshIndicator(
             onRefresh: () async {
@@ -98,23 +100,15 @@ class _CarColorsPageState extends State<CarColorsPage> {
                 physics:
                     const AlwaysScrollableScrollPhysics(), // buat RefreshIndicator
                 slivers: [
-                  SliverToBoxAdapter(
-                      child: MainElevatedButton(
-                          text: "Create Many",
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              InsertManyCarColorsPage.route(),
-                            );
-                          })),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) => CarColorsItem(
-                          color: colors[index],
+                      (context, index) => CarModelYearColorItem(
+                          model: modelYearColor[index],
                           onDelete: () {
-                            _delete(colors[index].id!);
+                            _delete(modelYearColor[index].id!);
                           },
                           onRefresh: _onRefresh),
-                      childCount: colors.length,
+                      childCount: modelYearColor.length,
                     ),
                   ),
                   if (data.isLoadingMore)

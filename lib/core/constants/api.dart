@@ -20,8 +20,10 @@ class ApiConstant {
   static const String workshopsPath = "/workshops";
   // * colors
   static const String colorsPath = "/colors";
-  // * colors
+  // * model years
   static const String carModelYearsPath = "/car-model-years";
+  // * model year colors
+  static const String carModelYearColorsPath = "/car-model-year-colors";
   // * AUTH
   static const String authPath = "/auth";
   static const String registerPath = "$authPath/register";

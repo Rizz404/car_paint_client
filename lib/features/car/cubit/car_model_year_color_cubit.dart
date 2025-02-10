@@ -3,24 +3,24 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/types/paginated_data.dart';
 import 'package:paint_car/core/types/pagination.dart';
-import 'package:paint_car/data/models/car_model_years.dart';
+import 'package:paint_car/data/models/car_model_year_color.dart';
 import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/features/car/repo/car_model_years_repo.dart';
+import 'package:paint_car/features/car/repo/car_model_year_color_repo.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 
-class CarModelYearsCubit extends Cubit<BaseState> {
-  final CarModelYearsRepo carModelYearsRepo;
-  CarModelYearsCubit({
-    required this.carModelYearsRepo,
+class CarModelYearColorCubit extends Cubit<BaseState> {
+  final CarModelYearColorRepo carModelYearColorRepo;
+  CarModelYearColorCubit({
+    required this.carModelYearColorRepo,
   }) : super(const BaseInitialState());
 
-  List<CarModelYears> modelYear = [];
+  List<CarModelYearColor> modelYearColor = [];
   Pagination? pagination;
   int currentPage = 1;
   bool isLoadingMore = false;
 
-  Future<void> getModelYear(int page, {int limit = 10}) async {
+  Future<void> getModelYearColor(int page, {int limit = 10}) async {
     if (isLoadingMore) return;
 
     isLoadingMore = page != 1;
@@ -29,12 +29,12 @@ class CarModelYearsCubit extends Cubit<BaseState> {
       emit(const BaseLoadingState());
     } else {
       // kalo dah ada data, update state buat tampilin loading di bagian bawah
-      if (state is BaseSuccessState<PaginationState<CarModelYears>>) {
+      if (state is BaseSuccessState<PaginationState<CarModelYearColor>>) {
         final currentState =
-            state as BaseSuccessState<PaginationState<CarModelYears>>;
+            state as BaseSuccessState<PaginationState<CarModelYearColor>>;
         final data = currentState.data;
-        emit(BaseSuccessState<PaginationState<CarModelYears>>(
-            PaginationState<CarModelYears>(
+        emit(BaseSuccessState<PaginationState<CarModelYearColor>>(
+            PaginationState<CarModelYearColor>(
               data: data.data,
               pagination: data.pagination,
               currentPage: data.currentPage,
@@ -44,20 +44,20 @@ class CarModelYearsCubit extends Cubit<BaseState> {
       }
     }
 
-    await handleBaseCubit<PaginatedData<CarModelYears>>(
+    await handleBaseCubit<PaginatedData<CarModelYearColor>>(
       emit,
-      () => carModelYearsRepo.getModelYears(page, limit),
+      () => carModelYearColorRepo.getModels(page, limit),
       onSuccess: (data, message) {
-        if (page == 1) modelYear.clear();
+        if (page == 1) modelYearColor.clear();
 
-        modelYear.addAll(data.items);
+        modelYearColor.addAll(data.items);
         pagination = data.pagination;
         currentPage = page;
         isLoadingMore = false;
 
         emit(BaseSuccessState(
-            PaginationState<CarModelYears>(
-              data: modelYear,
+            PaginationState<CarModelYearColor>(
+              data: modelYearColor,
               pagination: pagination!,
               currentPage: currentPage,
               isLoadingMore: isLoadingMore,
@@ -69,12 +69,12 @@ class CarModelYearsCubit extends Cubit<BaseState> {
   }
 
   Future<void> deleteModel(String id) async {
-    final index = modelYear.indexWhere((model) => model.id == id);
+    final index = modelYearColor.indexWhere((model) => model.id == id);
     if (index == -1) return;
 
     emit(BaseSuccessState(
-      PaginationState<CarModelYears>(
-        data: modelYear,
+      PaginationState<CarModelYearColor>(
+        data: modelYearColor,
         pagination: pagination!,
         currentPage: currentPage,
         isLoadingMore: isLoadingMore,
@@ -84,12 +84,12 @@ class CarModelYearsCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<void>(
       emit,
-      () => carModelYearsRepo.deleteModel(id),
+      () => carModelYearColorRepo.deleteModel(id),
       onSuccess: (_, __) => {
-        modelYear.removeAt(index),
+        modelYearColor.removeAt(index),
         emit(BaseSuccessState(
-          PaginationState<CarModelYears>(
-            data: modelYear,
+          PaginationState<CarModelYearColor>(
+            data: modelYearColor,
             pagination: pagination!,
             currentPage: currentPage,
             isLoadingMore: isLoadingMore,
@@ -103,27 +103,27 @@ class CarModelYearsCubit extends Cubit<BaseState> {
   Future<void> refresh(
     int limit,
   ) =>
-      getModelYear(1, limit: limit);
-  Future<void> loadNextPage() => getModelYear(currentPage + 1);
+      getModelYearColor(1, limit: limit);
+  Future<void> loadNextPage() => getModelYearColor(currentPage + 1);
 
-  Future<void> saveModel(CarModelYears carModelYears) async {
+  Future<void> saveModel(CarModelYearColor carModelYearColor) async {
     await handleBaseCubit<void>(
       emit,
-      () => carModelYearsRepo.saveModel(carModelYears),
+      () => carModelYearColorRepo.saveModel(carModelYearColor),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        getModelYear(1),
+        getModelYearColor(1),
       },
     );
   }
 
-  Future<void> updateModel(CarModelYears carModelYears) async {
+  Future<void> updateModel(CarModelYearColor carModelYearColor) async {
     await handleBaseCubit<void>(
       emit,
-      () => carModelYearsRepo.updateModel(carModelYears),
+      () => carModelYearColorRepo.updateModel(carModelYearColor),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        getModelYear(1),
+        getModelYearColor(1),
       },
     );
   }

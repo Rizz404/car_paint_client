@@ -15,14 +15,12 @@ class CarColorsCubit extends Cubit<BaseState> {
     required this.carColorsRepo,
   }) : super(const BaseInitialState());
 
-  final int _limit = 10;
-
   List<CarColor> colors = [];
   Pagination? pagination;
   int currentPage = 1;
   bool isLoadingMore = false;
 
-  Future<void> getColors(int page) async {
+  Future<void> getColors(int page, {int limit = 10}) async {
     if (isLoadingMore) return;
 
     isLoadingMore = page != 1;
@@ -48,7 +46,7 @@ class CarColorsCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<PaginatedData<CarColor>>(
       emit,
-      () => carColorsRepo.getColors(page, _limit),
+      () => carColorsRepo.getColors(page, limit),
       onSuccess: (data, message) {
         if (page == 1) colors.clear();
 
@@ -102,7 +100,10 @@ class CarColorsCubit extends Cubit<BaseState> {
     );
   }
 
-  Future<void> refresh() => getColors(1);
+  Future<void> refresh(
+    int limit,
+  ) =>
+      getColors(1, limit: limit);
   Future<void> loadNextPage() => getColors(currentPage + 1);
 
   Future<void> saveColor(CarColor carColor) async {
@@ -111,7 +112,7 @@ class CarColorsCubit extends Cubit<BaseState> {
       () => carColorsRepo.saveColor(carColor),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        refresh(),
+        getColors(1),
       },
     );
   }
@@ -122,7 +123,7 @@ class CarColorsCubit extends Cubit<BaseState> {
       () => carColorsRepo.updateColor(carColor),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        refresh(),
+        getColors(1),
       },
     );
   }

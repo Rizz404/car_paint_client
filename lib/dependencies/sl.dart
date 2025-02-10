@@ -7,12 +7,14 @@ import "package:paint_car/features/auth/cubit/auth_cubit.dart";
 import "package:paint_car/features/auth/repo/auth_repo.dart";
 import "package:paint_car/features/car/cubit/car_brands_cubit.dart";
 import "package:paint_car/features/car/cubit/car_colors_cubit.dart";
+import "package:paint_car/features/car/cubit/car_model_year_color_cubit.dart";
 import "package:paint_car/features/car/cubit/car_model_years_cubit.dart";
 import "package:paint_car/features/car/cubit/car_models_cubit.dart";
 import "package:paint_car/features/car/cubit/car_services_cubit.dart";
 import "package:paint_car/features/car/cubit/car_workshops_cubit.dart";
 import "package:paint_car/features/car/repo/car_brands_repo.dart";
 import "package:paint_car/features/car/repo/car_colors_repo.dart";
+import "package:paint_car/features/car/repo/car_model_year_color_repo.dart";
 import "package:paint_car/features/car/repo/car_model_years_repo.dart";
 import "package:paint_car/features/car/repo/car_models_repo.dart";
 import "package:paint_car/features/car/repo/car_services_repo.dart";
@@ -116,7 +118,7 @@ initializeSL() async {
       carWorkshopsRepo: getIt(),
     ),
   );
-  // ! workshops
+  // ! car colors
   getIt.registerLazySingleton<CarColorsRepo>(
     () => CarColorsRepo(
       apiClient: getIt(),
@@ -127,6 +129,7 @@ initializeSL() async {
       carColorsRepo: getIt(),
     ),
   );
+  // ! car model years
   getIt.registerLazySingleton<CarModelYearsRepo>(
     () => CarModelYearsRepo(
       apiClient: getIt(),
@@ -135,6 +138,17 @@ initializeSL() async {
   getIt.registerFactory<CarModelYearsCubit>(
     () => CarModelYearsCubit(
       carModelYearsRepo: getIt(),
+    ),
+  );
+  // ! car model years
+  getIt.registerLazySingleton<CarModelYearColorRepo>(
+    () => CarModelYearColorRepo(
+      apiClient: getIt(),
+    ),
+  );
+  getIt.registerFactory<CarModelYearColorCubit>(
+    () => CarModelYearColorCubit(
+      carModelYearColorRepo: getIt(),
     ),
   );
 }

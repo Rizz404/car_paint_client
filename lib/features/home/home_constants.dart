@@ -1,6 +1,7 @@
 import 'package:paint_car/features/car/pages/car_brands/car_brands_page.dart';
 import 'package:paint_car/features/car/pages/car_colors/car_colors_page.dart';
 import 'package:paint_car/features/car/pages/car_model_years/car_model_years_page.dart';
+import 'package:paint_car/features/car/pages/car_models%20copy/car_model_year_color_page.dart';
 import 'package:paint_car/features/car/pages/car_models/car_models_page.dart';
 import 'package:paint_car/features/car/pages/car_workshops/car_workshops_page.dart';
 import 'package:paint_car/features/car/pages/cars_page.dart';
@@ -18,7 +19,7 @@ class HomeConstants {
     {'name': 'Car Workshops', 'route': CarWorkshopsPage.route},
     {'name': 'Car Colors', 'route': CarColorsPage.route},
     {'name': 'Car Model Years', 'route': CarModelYearsPage.route},
-    {'name': 'Car Model Years Color', 'route': CarWorkshopsPage.route},
+    {'name': 'Car Model Years Color', 'route': CarModelYearColorPage.route},
     {'name': 'Car User', 'route': CarWorkshopsPage.route},
   ];
 

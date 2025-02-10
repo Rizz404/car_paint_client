@@ -8,37 +8,37 @@ class CarModelYearColor {
   final String? id;
   final String carModelYearId;
   final String colorId;
+  final CarModelYears? carModelYear;
+  final CarColor? color;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final CarModelYears carModelYear;
-  final CarColor color;
   CarModelYearColor({
     this.id,
     required this.carModelYearId,
     required this.colorId,
+    this.carModelYear,
+    this.color,
     this.createdAt,
     this.updatedAt,
-    required this.carModelYear,
-    required this.color,
   });
 
   CarModelYearColor copyWith({
     String? id,
     String? carModelYearId,
     String? colorId,
-    DateTime? createdAt,
-    DateTime? updatedAt,
     CarModelYears? carModelYear,
     CarColor? color,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return CarModelYearColor(
       id: id ?? this.id,
       carModelYearId: carModelYearId ?? this.carModelYearId,
       colorId: colorId ?? this.colorId,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
       carModelYear: carModelYear ?? this.carModelYear,
       color: color ?? this.color,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -47,10 +47,10 @@ class CarModelYearColor {
       'id': id,
       'carModelYearId': carModelYearId,
       'colorId': colorId,
+      'carModelYear': carModelYear?.toMap(),
+      'color': color?.toMap(),
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
-      'carModelYear': carModelYear.toMap(),
-      'color': color.toMap(),
     };
   }
 
@@ -59,15 +59,18 @@ class CarModelYearColor {
       id: map['id'] != null ? map['id'] as String : null,
       carModelYearId: map['carModelYearId'] as String,
       colorId: map['colorId'] as String,
+      carModelYear: map['carModelYear'] != null
+          ? CarModelYears.fromMap(map['carModelYear'] as Map<String, dynamic>)
+          : null,
+      color: map['color'] != null
+          ? CarColor.fromMap(map['color'] as Map<String, dynamic>)
+          : null,
       createdAt: map['createdAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int)
+          ? DateTime.parse(map['createdAt'] as String)
           : null,
       updatedAt: map['updatedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int)
+          ? DateTime.parse(map['updatedAt'] as String)
           : null,
-      carModelYear:
-          CarModelYears.fromMap(map['carModelYear'] as Map<String, dynamic>),
-      color: CarColor.fromMap(map['color'] as Map<String, dynamic>),
     );
   }
 
@@ -78,7 +81,7 @@ class CarModelYearColor {
 
   @override
   String toString() {
-    return 'CarModelYearColor(id: $id, carModelYearId: $carModelYearId, colorId: $colorId, createdAt: $createdAt, updatedAt: $updatedAt, carModelYear: $carModelYear, color: $color)';
+    return 'CarModelYearColor(id: $id, carModelYearId: $carModelYearId, colorId: $colorId, carModelYear: $carModelYear, color: $color, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -88,10 +91,10 @@ class CarModelYearColor {
     return other.id == id &&
         other.carModelYearId == carModelYearId &&
         other.colorId == colorId &&
-        other.createdAt == createdAt &&
-        other.updatedAt == updatedAt &&
         other.carModelYear == carModelYear &&
-        other.color == color;
+        other.color == color &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt;
   }
 
   @override
@@ -99,9 +102,9 @@ class CarModelYearColor {
     return id.hashCode ^
         carModelYearId.hashCode ^
         colorId.hashCode ^
-        createdAt.hashCode ^
-        updatedAt.hashCode ^
         carModelYear.hashCode ^
-        color.hashCode;
+        color.hashCode ^
+        createdAt.hashCode ^
+        updatedAt.hashCode;
   }
 }

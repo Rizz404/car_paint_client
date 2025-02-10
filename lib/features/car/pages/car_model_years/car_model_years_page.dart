@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/data/models/car_model_years.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/cubit/car_model_years_cubit.dart';
@@ -24,13 +25,14 @@ class CarModelYearsPage extends StatefulWidget {
 
 class _CarModelYearsPageState extends State<CarModelYearsPage> {
   late final ScrollController _scrollController;
+  static const int limit = ApiConstant.limit;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<CarModelYearsCubit>().refresh();
+    context.read<CarModelYearsCubit>().refresh(limit);
   }
 
   @override
@@ -66,7 +68,7 @@ class _CarModelYearsPageState extends State<CarModelYearsPage> {
   }
 
   void _onRefresh() {
-    context.read<CarModelYearsCubit>().refresh();
+    context.read<CarModelYearsCubit>().refresh(limit);
   }
 
   @override
