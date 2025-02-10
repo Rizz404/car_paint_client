@@ -148,6 +148,16 @@ initializeSL() async {
       carModelYearsRepo: getIt(),
     ),
   );
+  getIt.registerLazySingleton<CarModelYearColorRepo>(
+    () => CarModelYearColorRepo(
+      apiClient: getIt(),
+    ),
+  );
+  getIt.registerFactory<CarModelYearColorCubit>(
+    () => CarModelYearColorCubit(
+      carModelYearColorRepo: getIt(),
+    ),
+  );
   // ! e ticket
   getIt.registerLazySingleton<ETicketRepo>(
     () => ETicketRepo(
@@ -181,7 +191,7 @@ initializeSL() async {
       paymentMethodRepo: getIt(),
     ),
   );
-  // ! car model years
+  // ! transactions
   getIt.registerLazySingleton<TransactionsRepo>(
     () => TransactionsRepo(
       apiClient: getIt(),
