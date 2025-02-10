@@ -94,7 +94,7 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ConfigurationTheme.elevatedButtonTheme,
         fontFamilyFallback: ['Poppins'],
       ),
-      home: const CarWorkshopsPage(),
+      home: const LoginPage(),
       debugShowCheckedModeBanner: false,
     );
   }

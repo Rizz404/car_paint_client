@@ -104,17 +104,17 @@ class User {
 }
 
 class UserWithProfile extends User {
-  final UserProfile userProfile;
+  final UserProfile? userProfile;
 
   UserWithProfile({
     required String id,
     required String username,
     required String email,
-    required String profileImage,
+    String profileImage = "",
     required DateTime createdAt,
     required DateTime updatedAt,
     String? newAccessToken,
-    required this.userProfile,
+    this.userProfile,
   }) : super(
           id: id,
           username: username,
@@ -125,17 +125,44 @@ class UserWithProfile extends User {
           newAccessToken: newAccessToken,
         );
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other.runtimeType != runtimeType) return false;
+    if (other is! UserWithProfile) return false;
+    return super == other && other.userProfile == userProfile;
+  }
+
+  @override
+  int get hashCode => super.hashCode ^ userProfile.hashCode;
+
+  UserWithProfile copyWith({
+    String? id,
+    String? username,
+    String? email,
+    String? profileImage,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? newAccessToken,
+    UserProfile? userProfile,
+  }) {
+    return UserWithProfile(
+      id: id ?? this.id,
+      username: username ?? this.username,
+      email: email ?? this.email,
+      profileImage: profileImage ?? this.profileImage,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      newAccessToken: newAccessToken ?? this.newAccessToken,
+      userProfile: userProfile ?? this.userProfile,
+    );
+  }
+
+  @override
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'userProfile': userProfile.toMap(),
-      'id': id,
-      'username': username,
-      'email': email,
-      'profileImage': profileImage,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
-      'newAccessToken': newAccessToken,
-    };
+    final map = super.toMap();
+    map['userProfile'] = userProfile?.toMap();
+    return map;
   }
 
   factory UserWithProfile.fromMap(Map<String, dynamic> map) {
@@ -143,20 +170,26 @@ class UserWithProfile extends User {
       id: map['id'] as String,
       username: map['username'] as String,
       email: map['email'] as String,
-      profileImage: map['profileImage'] ?? "",
-      createdAt: DateTime.parse(map['createdAt']),
-      updatedAt: DateTime.parse(map['updatedAt']),
-      newAccessToken: map['newAccessToken'] as String? ?? "",
-      userProfile: UserProfile.fromMap(map['userProfile']),
+      profileImage: map['profileImage'] as String,
+      createdAt: DateTime.parse(map['createdAt'] as String),
+      updatedAt: DateTime.parse(map['updatedAt'] as String),
+      newAccessToken: map['newAccessToken'] != null
+          ? map['newAccessToken'] as String
+          : null,
+      userProfile: map['userProfile'] != null
+          ? UserProfile.fromMap(map['userProfile'] as Map<String, dynamic>)
+          : null,
     );
   }
 
+  @override
   String toJson() => json.encode(toMap());
 
   factory UserWithProfile.fromJson(String source) =>
       UserWithProfile.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() =>
-      'UserWithProfile(userProfile: $userProfile), id: $id, username: $username, email: $email, profileImage: $profileImage, createdAt: $createdAt, updatedAt: $updatedAt, newAccessToken: $newAccessToken)';
+  String toString() {
+    return 'UserWithProfile(${super.toString()}, userProfile: $userProfile)';
+  }
 }
