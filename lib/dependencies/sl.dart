@@ -19,6 +19,14 @@ import "package:paint_car/features/car/repo/car_model_years_repo.dart";
 import "package:paint_car/features/car/repo/car_models_repo.dart";
 import "package:paint_car/features/car/repo/car_services_repo.dart";
 import "package:paint_car/features/car/repo/car_workshops_repo.dart";
+import "package:paint_car/features/financial/cubit/e_tickets_cubit.dart";
+import "package:paint_car/features/financial/cubit/orders_cubit.dart";
+import "package:paint_car/features/financial/cubit/payment_method_cubit.dart";
+import "package:paint_car/features/financial/cubit/transactions_cubit.dart";
+import "package:paint_car/features/financial/repo/e_tickets_repo.dart";
+import "package:paint_car/features/financial/repo/orders_repo.dart";
+import "package:paint_car/features/financial/repo/payment_method_repo.dart";
+import "package:paint_car/features/financial/repo/transactions_repo.dart";
 import "package:paint_car/features/shared/cubit/user_cubit.dart";
 import "package:paint_car/features/shared/repo/user_repo.dart";
 import "package:paint_car/features/template/cubit/template_cubit.dart";
@@ -140,15 +148,48 @@ initializeSL() async {
       carModelYearsRepo: getIt(),
     ),
   );
-  // ! car model years
-  getIt.registerLazySingleton<CarModelYearColorRepo>(
-    () => CarModelYearColorRepo(
+  // ! e ticket
+  getIt.registerLazySingleton<ETicketRepo>(
+    () => ETicketRepo(
       apiClient: getIt(),
     ),
   );
-  getIt.registerFactory<CarModelYearColorCubit>(
-    () => CarModelYearColorCubit(
-      carModelYearColorRepo: getIt(),
+  getIt.registerFactory<ETicketCubit>(
+    () => ETicketCubit(
+      eTicketRepo: getIt(),
+    ),
+  );
+  // ! orders
+  getIt.registerLazySingleton<OrdersRepo>(
+    () => OrdersRepo(
+      apiClient: getIt(),
+    ),
+  );
+  getIt.registerFactory<OrdersCubit>(
+    () => OrdersCubit(
+      ordersRepo: getIt(),
+    ),
+  );
+  // ! payment method
+  getIt.registerLazySingleton<PaymentMethodRepo>(
+    () => PaymentMethodRepo(
+      apiClient: getIt(),
+    ),
+  );
+  getIt.registerFactory<PaymentMethodCubit>(
+    () => PaymentMethodCubit(
+      paymentMethodRepo: getIt(),
+    ),
+  );
+  // ! car model years
+  getIt.registerLazySingleton<TransactionsRepo>(
+    () => TransactionsRepo(
+      apiClient: getIt(),
+    ),
+  );
+  getIt.registerFactory<TransactionsCubit>(
+    () => TransactionsCubit(
+      transactionsRepo: getIt(),
     ),
   );
 }

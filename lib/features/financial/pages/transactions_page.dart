@@ -3,36 +3,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/constants/api.dart';
-import 'package:paint_car/data/models/car_model_year_color.dart';
+import 'package:paint_car/data/models/e_ticket.dart';
+import 'package:paint_car/data/models/payment_method.dart';
+import 'package:paint_car/data/models/transactions.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/features/car/cubit/car_model_year_color_cubit.dart';
-import 'package:paint_car/features/car/pages/car_models%20copy/upsert_car_model_year_color_.dart';
-import 'package:paint_car/features/car/widgets/car_model_year_color/car_model_year_color_item.dart';
+import 'package:paint_car/features/financial/cubit/e_tickets_cubit.dart';
+import 'package:paint_car/features/financial/cubit/payment_method_cubit.dart';
+import 'package:paint_car/features/financial/cubit/transactions_cubit.dart';
+import 'package:paint_car/features/financial/widgets/payment_method_item.dart';
+import 'package:paint_car/features/financial/widgets/transactions_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
-import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 
-class CarModelYearColorPage extends StatefulWidget {
-  static route() =>
-      MaterialPageRoute(builder: (_) => const CarModelYearColorPage());
-  const CarModelYearColorPage({super.key});
+class TransactionsPage extends StatefulWidget {
+  static route() => MaterialPageRoute(builder: (_) => const TransactionsPage());
+  const TransactionsPage({super.key});
 
   @override
-  State<CarModelYearColorPage> createState() => _CarModelYearColorPageState();
+  State<TransactionsPage> createState() => _TransactionsPageState();
 }
 
-class _CarModelYearColorPageState extends State<CarModelYearColorPage> {
+class _TransactionsPageState extends State<TransactionsPage> {
   late final ScrollController _scrollController;
-  static const limit = ApiConstant.limit;
+  static const int limit = ApiConstant.limit;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<CarModelYearColorCubit>().refresh(limit);
+    context.read<TransactionsCubit>().refresh(limit);
   }
 
   @override
@@ -43,15 +45,14 @@ class _CarModelYearColorPageState extends State<CarModelYearColorPage> {
   }
 
   void _onScroll() {
-    final cubit = context.read<CarModelYearColorCubit>();
+    final cubit = context.read<TransactionsCubit>();
     if (!_scrollController.hasClients ||
-        cubit.state is! BaseSuccessState<PaginationState<CarModelYearColor>>) {
+        cubit.state is! BaseSuccessState<PaginationState<Transactions>>) {
       return;
     }
 
     final data =
-        (cubit.state as BaseSuccessState<PaginationState<CarModelYearColor>>)
-            .data;
+        (cubit.state as BaseSuccessState<PaginationState<Transactions>>).data;
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
 
@@ -62,30 +63,18 @@ class _CarModelYearColorPageState extends State<CarModelYearColorPage> {
     }
   }
 
-  void _delete(
-    String id,
-  ) async {
-    context.read<CarModelYearColorCubit>().deleteModel(id);
-  }
-
   void _onRefresh() {
-    context.read<CarModelYearColorCubit>().refresh(limit);
+    context.read<TransactionsCubit>().refresh(limit);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: mainAppBar("Car ModelYearColor"),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            Navigator.of(context).push(UpsertCarModelYearColor.route()),
-        child: const Icon(Icons.add),
-      ),
-      body: StateHandler<CarModelYearColorCubit,
-          PaginationState<CarModelYearColor>>(
+      appBar: mainAppBar("Car Models"),
+      body: StateHandler<TransactionsCubit, PaginationState<Transactions>>(
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
-          final modelYearColor = data.data;
+          final models = data.data;
 
           return RefreshIndicator(
             onRefresh: () async {
@@ -102,13 +91,9 @@ class _CarModelYearColorPageState extends State<CarModelYearColorPage> {
                 slivers: [
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) => CarModelYearColorItem(
-                          model: modelYearColor[index],
-                          onDelete: () {
-                            _delete(modelYearColor[index].id!);
-                          },
-                          onRefresh: _onRefresh),
-                      childCount: modelYearColor.length,
+                      (context, index) =>
+                          TransactionsItem(transactions: models[index]),
+                      childCount: models.length,
                     ),
                   ),
                   if (data.isLoadingMore)

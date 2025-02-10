@@ -12,6 +12,7 @@ import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/main_text_field.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
+import 'package:paint_car/ui/validator/number_validator.dart';
 
 class UpsertCarWorkshopsPage extends StatefulWidget {
   final CarWorkshop? carWorkshop;
@@ -190,12 +191,8 @@ class _UpsertCarWorkshopsPageState extends State<UpsertCarWorkshopsPage> {
                       hintText: "Enter phone number",
                       leadingIcon: const Icon(Icons.phone),
                       isEnabled: state is! BaseLoadingState,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Phone number cannot be empty";
-                        }
-                        return null;
-                      },
+                      validator: numberValidator,
+                      keyboardType: TextInputType.phone,
                     ),
                     MainTextField(
                       controller: addressController,

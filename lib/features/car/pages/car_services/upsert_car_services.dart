@@ -10,6 +10,7 @@ import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/main_text_field.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
+import 'package:paint_car/ui/validator/number_validator.dart';
 
 class UpsertCarServicesPage extends StatefulWidget {
   final CarService? carService;
@@ -132,12 +133,8 @@ class _UpsertCarServicesPageState extends State<UpsertCarServicesPage> {
                       hintText: "Enter service price",
                       leadingIcon: const Icon(Icons.money),
                       isEnabled: state is! BaseLoadingState,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Service price cannot be empty";
-                        }
-                        return null;
-                      },
+                      validator: numberValidator,
+                      keyboardType: TextInputType.number,
                     ),
                     MainElevatedButton(
                       onPressed: submitForm,

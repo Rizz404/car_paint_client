@@ -10,6 +10,11 @@ import 'package:paint_car/features/car/cubit/car_model_years_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_models_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_services_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_workshops_cubit.dart';
+import 'package:paint_car/features/car/pages/car_services/car_services_page.dart';
+import 'package:paint_car/features/financial/cubit/e_tickets_cubit.dart';
+import 'package:paint_car/features/financial/cubit/orders_cubit.dart';
+import 'package:paint_car/features/financial/cubit/payment_method_cubit.dart';
+import 'package:paint_car/features/financial/cubit/transactions_cubit.dart';
 import 'package:paint_car/features/home/pages/home_page.dart';
 import 'package:paint_car/features/shared/cubit/user_cubit.dart';
 import 'package:paint_car/features/template/cubit/template_cubit.dart';
@@ -55,6 +60,18 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => getIt<CarModelYearColorCubit>(),
         ),
+        BlocProvider(
+          create: (context) => getIt<ETicketCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<OrdersCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<PaymentMethodCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<TransactionsCubit>(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -76,7 +93,7 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ConfigurationTheme.elevatedButtonTheme,
         fontFamilyFallback: ['Poppins'],
       ),
-      home: const LoginPage(),
+      home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }
