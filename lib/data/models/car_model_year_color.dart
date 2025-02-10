@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:paint_car/data/models/car_colors.dart';
+import 'package:paint_car/data/models/car_color.dart';
 import 'package:paint_car/data/models/car_model_years.dart';
 
 class CarModelYearColor {
@@ -11,7 +11,7 @@ class CarModelYearColor {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final CarModelYears carModelYear;
-  final CarColors color;
+  final CarColor color;
   CarModelYearColor({
     this.id,
     required this.carModelYearId,
@@ -29,7 +29,7 @@ class CarModelYearColor {
     DateTime? createdAt,
     DateTime? updatedAt,
     CarModelYears? carModelYear,
-    CarColors? color,
+    CarColor? color,
   }) {
     return CarModelYearColor(
       id: id ?? this.id,
@@ -67,7 +67,7 @@ class CarModelYearColor {
           : null,
       carModelYear:
           CarModelYears.fromMap(map['carModelYear'] as Map<String, dynamic>),
-      color: CarColors.fromMap(map['color'] as Map<String, dynamic>),
+      color: CarColor.fromMap(map['color'] as Map<String, dynamic>),
     );
   }
 

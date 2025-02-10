@@ -2,43 +2,43 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paint_car/data/models/car_model.dart';
+import 'package:paint_car/data/models/car_color.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/features/car/cubit/car_models_cubit.dart';
-import 'package:paint_car/features/car/pages/car_models/upsert_car_models.dart';
+import 'package:paint_car/features/car/cubit/car_colors_cubit.dart';
+import 'package:paint_car/features/car/pages/car_colors/upsert_car_colors.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 
-class CarModelsItem extends StatefulWidget {
-  final CarModel model;
+class CarColorsItem extends StatefulWidget {
+  final CarColor color;
   final Function() onDelete;
   final Function() onRefresh;
-  const CarModelsItem(
+  const CarColorsItem(
       {super.key,
-      required this.model,
+      required this.color,
       required this.onDelete,
       required this.onRefresh});
 
   @override
-  State<CarModelsItem> createState() => _CarModelsItemState();
+  State<CarColorsItem> createState() => _CarColorsItemState();
 }
 
-class _CarModelsItemState extends State<CarModelsItem> {
+class _CarColorsItemState extends State<CarColorsItem> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       child: GestureDetector(
         onTap: () => Navigator.of(context)
-            .push(UpsertCarModelsPage.route(
-          carModel: widget.model,
+            .push(UpsertCarColorsPage.route(
+          carColor: widget.color,
         ))
             .then(
           (_) {
             widget.onRefresh();
           },
         ),
-        child: BlocConsumer<CarModelsCubit, BaseState>(
+        child: BlocConsumer<CarColorsCubit, BaseState>(
           listener: (context, state) {
             handleFormListenerState(
               context: context,
@@ -49,7 +49,7 @@ class _CarModelsItemState extends State<CarModelsItem> {
               onSuccess: () {
                 SnackBarUtil.showSnackBar(
                   context: context,
-                  message: "Car model deleted successfully",
+                  message: "Car color deleted successfully",
                   type: SnackBarType.success,
                 );
                 Navigator.pop(context);
@@ -66,7 +66,7 @@ class _CarModelsItemState extends State<CarModelsItem> {
                       child: SizedBox(
                         height: 100,
                         child: MainText(
-                          text: widget.model.name,
+                          text: widget.color.name,
                         ),
                       ),
                     ),

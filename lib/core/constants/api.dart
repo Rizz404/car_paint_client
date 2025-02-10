@@ -18,6 +18,8 @@ class ApiConstant {
   static const String multipleServicesPath = "$servicesPath/multiple";
   // * workshops
   static const String workshopsPath = "/workshops";
+  // * colors
+  static const String colorsPath = "/colors";
   // * AUTH
   static const String authPath = "/auth";
   static const String registerPath = "$authPath/register";

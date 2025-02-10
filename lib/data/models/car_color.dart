@@ -1,25 +1,25 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-class CarColors {
+class CarColor {
   final String? id;
   final String name;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  CarColors({
+  CarColor({
     this.id,
     required this.name,
     this.createdAt,
     this.updatedAt,
   });
 
-  CarColors copyWith({
+  CarColor copyWith({
     String? id,
     String? name,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
-    return CarColors(
+    return CarColor(
       id: id ?? this.id,
       name: name ?? this.name,
       createdAt: createdAt ?? this.createdAt,
@@ -36,8 +36,8 @@ class CarColors {
     };
   }
 
-  factory CarColors.fromMap(Map<String, dynamic> map) {
-    return CarColors(
+  factory CarColor.fromMap(Map<String, dynamic> map) {
+    return CarColor(
       id: map['id'] != null ? map['id'] as String : null,
       name: map['name'] as String,
       createdAt: map['createdAt'] != null
@@ -51,16 +51,16 @@ class CarColors {
 
   String toJson() => json.encode(toMap());
 
-  factory CarColors.fromJson(String source) =>
-      CarColors.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory CarColor.fromJson(String source) =>
+      CarColor.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'CarColors(id: $id, name: $name, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'CarColor(id: $id, name: $name, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
-  bool operator ==(covariant CarColors other) {
+  bool operator ==(covariant CarColor other) {
     if (identical(this, other)) return true;
 
     return other.id == id &&

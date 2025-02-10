@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/features/auth/cubit/auth_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
+import 'package:paint_car/features/car/cubit/car_colors_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_models_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_services_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_workshops_cubit.dart';
@@ -37,6 +38,9 @@ Future<void> main() async {
         ),
         BlocProvider(
           create: (context) => getIt<CarWorkshopsCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<CarColorsCubit>(),
         ),
       ],
       child: const MyApp(),
