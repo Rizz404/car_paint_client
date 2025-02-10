@@ -38,7 +38,7 @@ class CarColorsRepo {
       },
       fromJson: (json) => CarColor.fromMap(json),
     );
-    return await handleApiResponse(result);
+    return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<CarColor>> updateColor(
@@ -52,7 +52,7 @@ class CarColorsRepo {
       },
       fromJson: (json) => CarColor.fromMap(json),
     );
-    return await handleApiResponse(result);
+    return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<void>> deleteColor(String id) async {

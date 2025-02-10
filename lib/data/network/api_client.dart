@@ -307,6 +307,8 @@ class ApiClient {
           responseBody['message'] as String? ?? ApiConstant.unknownError;
       final errors = responseBody['errors'];
 
+      LogService.e('Response: $responseBody');
+
       if (statusCode >= 300) {
         return ApiError<T>(
           message: message,

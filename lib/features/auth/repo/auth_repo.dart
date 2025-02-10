@@ -31,7 +31,7 @@ class AuthRepo {
         },
       );
 
-      return await handleApiResponse(result);
+      return await handleApiResponse(result, isGet: false);
     } catch (e) {
       return ApiError(message: e.toString());
     }
@@ -58,7 +58,7 @@ class AuthRepo {
         await userSp.saveUser(result.data!);
       }
 
-      return await handleApiResponse(result);
+      return await handleApiResponse(result, isGet: false);
     } catch (e) {
       return ApiError(message: e.toString());
     }

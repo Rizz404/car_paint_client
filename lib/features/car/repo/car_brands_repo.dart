@@ -46,7 +46,7 @@ class CarBrandsRepo {
       keyImageFile: keyImageFile,
       fromJson: (json) => CarBrand.fromMap(json),
     );
-    return await handleApiResponse(result);
+    return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<List<CarBrand>>> saveManyBrands(
@@ -64,7 +64,7 @@ class CarBrandsRepo {
       fromJson: (json) =>
           (json as List).map((e) => CarBrand.fromMap(e)).toList(),
     );
-    return await handleApiResponse(result);
+    return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<CarBrand>> updateBrand(
@@ -82,7 +82,7 @@ class CarBrandsRepo {
       keyImageFile: keyImageFile,
       fromJson: (json) => CarBrand.fromMap(json),
     );
-    return await handleApiResponse(result);
+    return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<void>> deleteBrand(String id) async {

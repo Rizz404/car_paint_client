@@ -39,7 +39,7 @@ class CarModelsRepo {
       },
       fromJson: (json) => CarModel.fromMap(json),
     );
-    return await handleApiResponse(result);
+    return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<List<CarModel>>> saveManyModels(
@@ -53,7 +53,7 @@ class CarModelsRepo {
       fromJson: (json) =>
           (json as List).map((e) => CarModel.fromMap(e)).toList(),
     );
-    return await handleApiResponse(result);
+    return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<CarModel>> updateModel(
@@ -67,7 +67,7 @@ class CarModelsRepo {
       },
       fromJson: (json) => CarModel.fromMap(json),
     );
-    return await handleApiResponse(result);
+    return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<void>> deleteModel(String id) async {

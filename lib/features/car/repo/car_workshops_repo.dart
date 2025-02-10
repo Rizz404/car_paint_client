@@ -41,7 +41,7 @@ class CarWorkshopsRepo {
       },
       fromJson: (json) => CarWorkshop.fromMap(json),
     );
-    return await handleApiResponse(result);
+    return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<CarWorkshop>> updateWorkshop(
@@ -60,7 +60,7 @@ class CarWorkshopsRepo {
       },
       fromJson: (json) => CarWorkshop.fromMap(json),
     );
-    return await handleApiResponse(result);
+    return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<void>> deleteWorkshop(String id) async {
