@@ -16,7 +16,7 @@ class CarModelYears {
     required this.year,
     this.createdAt,
     this.updatedAt,
-    required this.carModel,
+    this.carModel,
   });
 
   CarModelYears copyWith({

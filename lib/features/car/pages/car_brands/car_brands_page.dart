@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/data/models/car_brand.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
@@ -23,7 +24,7 @@ class CarBrandsPage extends StatefulWidget {
 }
 
 class _CarBrandsPageState extends State<CarBrandsPage> {
-  static const limit = 10;
+  static const limit = ApiConstant.limit;
   late final ScrollController _scrollController;
 
   @override

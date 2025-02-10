@@ -1,5 +1,6 @@
 import 'package:paint_car/features/car/pages/car_brands/car_brands_page.dart';
 import 'package:paint_car/features/car/pages/car_colors/car_colors_page.dart';
+import 'package:paint_car/features/car/pages/car_model_years/car_model_years_page.dart';
 import 'package:paint_car/features/car/pages/car_models/car_models_page.dart';
 import 'package:paint_car/features/car/pages/car_workshops/car_workshops_page.dart';
 import 'package:paint_car/features/car/pages/cars_page.dart';
@@ -16,7 +17,7 @@ class HomeConstants {
     // TODO: SEMUA YANG ROUTE NYA MASIH GAJELAS LAKUIN
     {'name': 'Car Workshops', 'route': CarWorkshopsPage.route},
     {'name': 'Car Colors', 'route': CarColorsPage.route},
-    {'name': 'Car Model Years', 'route': CarWorkshopsPage.route},
+    {'name': 'Car Model Years', 'route': CarModelYearsPage.route},
     {'name': 'Car Model Years Color', 'route': CarWorkshopsPage.route},
     {'name': 'Car User', 'route': CarWorkshopsPage.route},
   ];

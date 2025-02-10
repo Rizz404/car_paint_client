@@ -3,7 +3,7 @@ import 'dart:convert';
 
 class CarModel {
   final String? id;
-  final String carBrandId;
+  final String? carBrandId;
   final String name;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -45,7 +45,8 @@ class CarModel {
   factory CarModel.fromMap(Map<String, dynamic> map) {
     return CarModel(
       id: map['id'] != null ? map['id'] as String : null,
-      carBrandId: map['carBrandId'] as String,
+      carBrandId:
+          map['carBrandId'] != null ? map['carBrandId'] as String : null,
       name: map['name'] as String,
       createdAt: map['createdAt'] != null
           ? DateTime.parse(map['createdAt'] as String)

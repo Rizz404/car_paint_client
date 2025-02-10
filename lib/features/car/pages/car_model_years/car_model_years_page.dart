@@ -2,37 +2,35 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paint_car/core/constants/api.dart';
-import 'package:paint_car/data/models/car_model.dart';
+import 'package:paint_car/data/models/car_model_years.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/features/car/cubit/car_models_cubit.dart';
-import 'package:paint_car/features/car/pages/car_models/insert_many_car_models_page.dart';
-import 'package:paint_car/features/car/pages/car_models/upsert_car_models.dart';
-import 'package:paint_car/features/car/widgets/car_models/car_models_item.dart';
+import 'package:paint_car/features/car/cubit/car_model_years_cubit.dart';
+import 'package:paint_car/features/car/pages/car_model_years/upsert_car_model_years.dart';
+import 'package:paint_car/features/car/widgets/car_model_years/car_models_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 
-class CarModelsPage extends StatefulWidget {
-  static route() => MaterialPageRoute(builder: (_) => const CarModelsPage());
-  const CarModelsPage({super.key});
+class CarModelYearsPage extends StatefulWidget {
+  static route() =>
+      MaterialPageRoute(builder: (_) => const CarModelYearsPage());
+  const CarModelYearsPage({super.key});
 
   @override
-  State<CarModelsPage> createState() => _CarModelsPageState();
+  State<CarModelYearsPage> createState() => _CarModelYearsPageState();
 }
 
-class _CarModelsPageState extends State<CarModelsPage> {
+class _CarModelYearsPageState extends State<CarModelYearsPage> {
   late final ScrollController _scrollController;
-  static const limit = ApiConstant.limit;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<CarModelsCubit>().refresh(limit);
+    context.read<CarModelYearsCubit>().refresh();
   }
 
   @override
@@ -43,14 +41,14 @@ class _CarModelsPageState extends State<CarModelsPage> {
   }
 
   void _onScroll() {
-    final cubit = context.read<CarModelsCubit>();
+    final cubit = context.read<CarModelYearsCubit>();
     if (!_scrollController.hasClients ||
-        cubit.state is! BaseSuccessState<PaginationState<CarModel>>) {
+        cubit.state is! BaseSuccessState<PaginationState<CarModelYears>>) {
       return;
     }
 
     final data =
-        (cubit.state as BaseSuccessState<PaginationState<CarModel>>).data;
+        (cubit.state as BaseSuccessState<PaginationState<CarModelYears>>).data;
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
 
@@ -64,26 +62,26 @@ class _CarModelsPageState extends State<CarModelsPage> {
   void _delete(
     String id,
   ) async {
-    context.read<CarModelsCubit>().deleteModel(id);
+    context.read<CarModelYearsCubit>().deleteModel(id);
   }
 
   void _onRefresh() {
-    context.read<CarModelsCubit>().refresh(limit);
+    context.read<CarModelYearsCubit>().refresh();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: mainAppBar("Car Models"),
+      appBar: mainAppBar("Car Model Years"),
       floatingActionButton: FloatingActionButton(
         onPressed: () =>
-            Navigator.of(context).push(UpsertCarModelsPage.route()),
+            Navigator.of(context).push(UpsertCarModelYearsPage.route()),
         child: const Icon(Icons.add),
       ),
-      body: StateHandler<CarModelsCubit, PaginationState<CarModel>>(
+      body: StateHandler<CarModelYearsCubit, PaginationState<CarModelYears>>(
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
-          final models = data.data;
+          final modelYearsCarModelYears = data.data;
 
           return RefreshIndicator(
             onRefresh: () async {
@@ -98,23 +96,15 @@ class _CarModelsPageState extends State<CarModelsPage> {
                 physics:
                     const AlwaysScrollableScrollPhysics(), // buat RefreshIndicator
                 slivers: [
-                  SliverToBoxAdapter(
-                      child: MainElevatedButton(
-                          text: "Create Many",
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              InsertManyCarModelsPage.route(),
-                            );
-                          })),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) => CarModelsItem(
-                          model: models[index],
+                      (context, index) => CarModelYearsItem(
+                          model: modelYearsCarModelYears[index],
                           onDelete: () {
-                            _delete(models[index].id!);
+                            _delete(modelYearsCarModelYears[index].id!);
                           },
                           onRefresh: _onRefresh),
-                      childCount: models.length,
+                      childCount: modelYearsCarModelYears.length,
                     ),
                   ),
                   if (data.isLoadingMore)

@@ -20,6 +20,8 @@ class ApiConstant {
   static const String workshopsPath = "/workshops";
   // * colors
   static const String colorsPath = "/colors";
+  // * colors
+  static const String carModelYearsPath = "/car-model-years";
   // * AUTH
   static const String authPath = "/auth";
   static const String registerPath = "$authPath/register";
@@ -38,4 +40,7 @@ class ApiConstant {
   static const String unknownError = 'Unknown error';
   static const String invalidFormatRes = 'Invalid format response';
   static const String requestTimeout = 'Request timeout';
+
+  // ! query params
+  static const int limit = 10;
 }

@@ -10,6 +10,7 @@ class MainTextField extends StatelessWidget {
   final Validator? validator;
   final int maxLines;
   final bool isEnabled;
+  final TextInputType keyboardType;
   const MainTextField({
     super.key,
     required this.controller,
@@ -18,6 +19,7 @@ class MainTextField extends StatelessWidget {
     this.leadingIcon,
     this.obscureText,
     this.validator,
+    this.keyboardType = TextInputType.text,
     this.maxLines = 1,
     this.isEnabled = true,
   });
@@ -25,6 +27,7 @@ class MainTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: keyboardType,
       controller: controller,
       validator: validator,
       obscureText: obscureText ?? false,
@@ -35,6 +38,7 @@ class MainTextField extends StatelessWidget {
         prefixIcon: leadingIcon,
         enabled: isEnabled,
         alignLabelWithHint: true,
+
         // ! nge align icon dengan text
         contentPadding: const EdgeInsets.symmetric(
           vertical: 16,
