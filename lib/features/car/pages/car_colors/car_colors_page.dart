@@ -10,6 +10,7 @@ import 'package:paint_car/features/car/pages/car_colors/insert_many_car_colors_p
 import 'package:paint_car/features/car/pages/car_colors/upsert_car_colors.dart';
 import 'package:paint_car/features/car/widgets/car_colors/car_colors_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
@@ -26,17 +27,20 @@ class CarColorsPage extends StatefulWidget {
 class _CarColorsPageState extends State<CarColorsPage> {
   late final ScrollController _scrollController;
   static const int limit = ApiConstant.limit;
+  late final CancelToken _cancelToken;
 
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<CarColorsCubit>().refresh(limit);
+    _onRefresh();
   }
 
   @override
   void dispose() {
+    _cancelToken.cancel();
     _scrollController.dispose();
 
     super.dispose();
@@ -57,18 +61,20 @@ class _CarColorsPageState extends State<CarColorsPage> {
     if (currentScroll >= maxScroll - 200 &&
         !data.isLoadingMore &&
         data.pagination.hasNextPage) {
-      cubit.loadNextPage();
+      cubit.loadNextPage(
+        _cancelToken,
+      );
     }
   }
 
   void _delete(
     String id,
   ) async {
-    context.read<CarColorsCubit>().deleteColor(id);
+    await context.read<CarColorsCubit>().deleteColor(id, _cancelToken);
   }
 
-  void _onRefresh() {
-    context.read<CarColorsCubit>().refresh(limit);
+  void _onRefresh() async {
+    await context.read<CarColorsCubit>().refresh(limit, _cancelToken);
   }
 
   @override

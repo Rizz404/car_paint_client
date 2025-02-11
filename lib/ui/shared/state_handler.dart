@@ -22,6 +22,26 @@ class StateHandler<C extends Cubit<BaseState>, T> extends StatefulWidget {
 
 class _StateHandlerState<C extends Cubit<BaseState>, T>
     extends State<StateHandler<C, T>> {
+  bool _isRetrying = false;
+
+  void _handleRetry() async {
+    if (_isRetrying) return;
+
+    setState(() {
+      _isRetrying = true;
+    });
+
+    try {
+      widget.onRetry();
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isRetrying = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<C, BaseState>(
@@ -33,10 +53,13 @@ class _StateHandlerState<C extends Cubit<BaseState>, T>
             widget.onSuccess(context, data, message),
           BaseErrorState(:final message) => ErrorStateWidget(
               message: message ?? "Error",
-              onRetry: widget.onRetry,
+              onRetry: _handleRetry,
+              isRetrying: _isRetrying,
             ),
-          BaseNoInternetState() => NoInternet(onRetry: widget.onRetry),
-          // ! nanti replace ama loading aja
+          BaseNoInternetState() => NoInternet(
+              onRetry: _handleRetry,
+              isRetrying: _isRetrying,
+            ),
           BaseState() => const Loading(),
         };
       },

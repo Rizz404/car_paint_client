@@ -1,32 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
+import 'package:paint_car/ui/shared/main_text.dart';
 
 class ErrorStateWidget extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
+  final bool isRetrying;
 
   const ErrorStateWidget({
-    super.key,
     required this.message,
     required this.onRetry,
+    this.isRetrying = false,
   });
-  // TODO: DELETE THIS
-  _onRetry() {
-    LogService.i("ON RETRY, ERROR STATE WIDGET");
-    onRetry();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        spacing: 10,
         children: [
-          const Icon(Icons.error, color: Colors.red, size: 48),
-          const SizedBox(height: 8),
-          Text(message, textAlign: TextAlign.center),
-          const SizedBox(height: 16),
-          ElevatedButton(onPressed: _onRetry, child: const Text("Retry")),
+          const Icon(Icons.error, size: 48, color: Colors.red),
+          MainText(
+            text: message,
+            textAlign: TextAlign.center,
+          ),
+          if (isRetrying)
+            const CircularProgressIndicator()
+          else
+            ElevatedButton(
+              onPressed: onRetry,
+              child: const Text('Retry'),
+            ),
         ],
       ),
     );

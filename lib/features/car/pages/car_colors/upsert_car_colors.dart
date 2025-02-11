@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/data/models/car_color.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/cubit/car_colors_cubit.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
@@ -25,10 +26,12 @@ class _UpsertCarColorsPageState extends State<UpsertCarColorsPage> {
   final nameController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool isUpdate = false;
+  late final CancelToken _cancelToken;
 
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
     setState(
       () {
         isUpdate = widget.carColor != null;
@@ -44,7 +47,7 @@ class _UpsertCarColorsPageState extends State<UpsertCarColorsPage> {
   @override
   void dispose() {
     nameController.dispose();
-
+    _cancelToken.cancel();
     super.dispose();
   }
 
@@ -55,12 +58,14 @@ class _UpsertCarColorsPageState extends State<UpsertCarColorsPage> {
               id: widget.carColor?.id!,
               name: nameController.text,
             ),
+            _cancelToken,
           );
     } else {
       context.read<CarColorsCubit>().saveColor(
             CarColor(
               name: nameController.text,
             ),
+            _cancelToken,
           );
     }
   }

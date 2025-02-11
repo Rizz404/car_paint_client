@@ -8,6 +8,7 @@ import 'package:paint_car/features/car/cubit/car_colors_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_model_year_color_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_model_years_cubit.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
@@ -40,6 +41,7 @@ class UpsertCarModelYearColorState extends State<UpsertCarModelYearColor> {
   final formKey = GlobalKey<FormState>();
   bool isUpdate = false;
   static const int limit = 50;
+  final CancelToken _cancelToken = CancelToken();
 
   @override
   void initState() {
@@ -92,7 +94,7 @@ class UpsertCarModelYearColorState extends State<UpsertCarModelYearColor> {
   }
 
   void getColors() {
-    context.read<CarColorsCubit>().refresh(limit);
+    context.read<CarColorsCubit>().refresh(limit, _cancelToken);
   }
 
   @override

@@ -10,7 +10,8 @@ Future<void> handleBaseCubit<T>(
 }) async {
   try {
     if (withLoading) {
-      emit(const BaseLoadingState());
+      // ignore: prefer_const_constructors
+      emit(BaseLoadingState());
     }
     final result = await apiCall();
 

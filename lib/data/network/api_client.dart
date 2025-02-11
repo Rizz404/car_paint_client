@@ -198,15 +198,14 @@ class ApiClient {
     while (true) {
       if (cancelToken?.isCancelled == true) {
         return ApiError<T>(
-          message: "Permintaan telah dibatalkan oleh pengguna.",
+          message: ApiConstant.cancelTokenException,
         );
       }
 
       final connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.none) {
         return const ApiNoInternet(
-          message:
-              "Tidak ada koneksi internet. Periksa koneksi Anda dan coba lagi.",
+          message: ApiConstant.socketException,
         );
       }
 
@@ -232,6 +231,11 @@ class ApiClient {
               'Mengulangi request karena exception: $e, percobaan ke-$attempt');
           await Future.delayed(const Duration(seconds: 1));
           continue;
+        }
+        if (cancelToken?.isCancelled == true) {
+          return ApiError<T>(
+            message: ApiConstant.cancelTokenException,
+          );
         }
         return ApiError<T>(
           message: _getUserFriendlyErrorMessage(e, maxRetries, attempt),

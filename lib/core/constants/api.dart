@@ -61,6 +61,7 @@ class ApiConstant {
       "The data received is invalid. Please try again.";
   static const String handshakeException =
       "There was a security (SSL) issue connecting to the server. Please try again later.";
+  static const String cancelTokenException = "Request has been cancelled.";
   static const String unknownError = "An error occurred. Please try again.";
 
   // ! query params

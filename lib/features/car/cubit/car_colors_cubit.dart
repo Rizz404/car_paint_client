@@ -8,8 +8,9 @@ import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/repo/car_colors_repo.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 
-class CarColorsCubit extends Cubit<BaseState> {
+class CarColorsCubit extends Cubit<BaseState> with Cancelable {
   final CarColorsRepo carColorsRepo;
   CarColorsCubit({
     required this.carColorsRepo,
@@ -20,7 +21,14 @@ class CarColorsCubit extends Cubit<BaseState> {
   int currentPage = 1;
   bool isLoadingMore = false;
 
-  Future<void> getColors(int page, {int limit = 10}) async {
+  @override
+  Future<void> close() {
+    cancelRequests();
+    return super.close();
+  }
+
+  Future<void> getColors(int page, CancelToken cancelToken,
+      {int limit = 10}) async {
     if (isLoadingMore) return;
 
     isLoadingMore = page != 1;
@@ -46,7 +54,7 @@ class CarColorsCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<PaginatedData<CarColor>>(
       emit,
-      () => carColorsRepo.getColors(page, limit),
+      () => carColorsRepo.getColors(page, limit, cancelToken),
       onSuccess: (data, message) {
         if (page == 1) colors.clear();
 
@@ -68,7 +76,7 @@ class CarColorsCubit extends Cubit<BaseState> {
     );
   }
 
-  Future<void> deleteColor(String id) async {
+  Future<void> deleteColor(String id, CancelToken cancelToken) async {
     final index = colors.indexWhere((color) => color.id == id);
     if (index == -1) return;
 
@@ -84,7 +92,7 @@ class CarColorsCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<void>(
       emit,
-      () => carColorsRepo.deleteColor(id),
+      () => carColorsRepo.deleteColor(id, cancelToken),
       onSuccess: (_, __) => {
         colors.removeAt(index),
         emit(BaseSuccessState(
@@ -100,30 +108,38 @@ class CarColorsCubit extends Cubit<BaseState> {
     );
   }
 
-  Future<void> refresh(
-    int limit,
-  ) =>
-      getColors(1, limit: limit);
-  Future<void> loadNextPage() => getColors(currentPage + 1);
+  // ! implementasiin di semuanya
+  Future<void> refresh(int limit, CancelToken cancelToken) async {
+    colors.clear();
+    pagination = null;
+    currentPage = 1;
+    isLoadingMore = false;
+    emit(const BaseLoadingState());
 
-  Future<void> saveColor(CarColor carColor) async {
+    await getColors(1, cancelToken, limit: limit);
+  }
+
+  Future<void> loadNextPage(CancelToken cancelToken) =>
+      getColors(currentPage + 1, cancelToken);
+
+  Future<void> saveColor(CarColor carColor, CancelToken cancelToken) async {
     await handleBaseCubit<void>(
       emit,
-      () => carColorsRepo.saveColor(carColor),
+      () => carColorsRepo.saveColor(carColor, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        getColors(1),
+        getColors(1, cancelToken),
       },
     );
   }
 
-  Future<void> updateColor(CarColor carColor) async {
+  Future<void> updateColor(CarColor carColor, CancelToken cancelToken) async {
     await handleBaseCubit<void>(
       emit,
-      () => carColorsRepo.updateColor(carColor),
+      () => carColorsRepo.updateColor(carColor, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        getColors(1),
+        getColors(1, cancelToken),
       },
     );
   }
