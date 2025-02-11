@@ -93,7 +93,7 @@ class UpsertCarModelYearColorState extends State<UpsertCarModelYearColor> {
   }
 
   void getCarModelYears() {
-    context.read<CarModelYearsCubit>().refresh(limit);
+    context.read<CarModelYearsCubit>().refresh(limit, _cancelToken);
   }
 
   void getColors() {

@@ -6,6 +6,7 @@ import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/cubit/car_model_years_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_models_cubit.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
@@ -29,6 +30,7 @@ class UpsertCarModelYearsPage extends StatefulWidget {
 }
 
 class _UpsertCarModelYearsPageState extends State<UpsertCarModelYearsPage> {
+  late final CancelToken _cancelToken;
   final yearController = TextEditingController();
   final carBrandIdController = TextEditingController();
   var selectedCarModelId;
@@ -39,6 +41,7 @@ class _UpsertCarModelYearsPageState extends State<UpsertCarModelYearsPage> {
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
     getModel();
     setState(
       () {
@@ -68,6 +71,7 @@ class _UpsertCarModelYearsPageState extends State<UpsertCarModelYearsPage> {
               carModelId: selectedCarModelId,
               year: int.parse(yearController.text),
             ),
+            _cancelToken,
           );
     } else {
       context.read<CarModelYearsCubit>().saveModel(
@@ -75,6 +79,7 @@ class _UpsertCarModelYearsPageState extends State<UpsertCarModelYearsPage> {
               carModelId: selectedCarModelId,
               year: int.parse(yearController.text),
             ),
+            _cancelToken,
           );
     }
   }

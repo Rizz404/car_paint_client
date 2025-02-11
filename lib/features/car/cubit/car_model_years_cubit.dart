@@ -8,19 +8,27 @@ import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/repo/car_model_years_repo.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 
-class CarModelYearsCubit extends Cubit<BaseState> {
+class CarModelYearsCubit extends Cubit<BaseState> with Cancelable {
   final CarModelYearsRepo carModelYearsRepo;
   CarModelYearsCubit({
     required this.carModelYearsRepo,
   }) : super(const BaseInitialState());
+
+  @override
+  Future<void> close() {
+    cancelRequests();
+    return super.close();
+  }
 
   List<CarModelYears> modelYear = [];
   Pagination? pagination;
   int currentPage = 1;
   bool isLoadingMore = false;
 
-  Future<void> getModelYear(int page, {int limit = 10}) async {
+  Future<void> getModelYear(int page, CancelToken cancelToken,
+      {int limit = 10}) async {
     if (isLoadingMore) return;
 
     isLoadingMore = page != 1;
@@ -46,7 +54,7 @@ class CarModelYearsCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<PaginatedData<CarModelYears>>(
       emit,
-      () => carModelYearsRepo.getModelYears(page, limit),
+      () => carModelYearsRepo.getModelYears(page, limit, cancelToken),
       onSuccess: (data, message) {
         if (page == 1) modelYear.clear();
 
@@ -68,7 +76,10 @@ class CarModelYearsCubit extends Cubit<BaseState> {
     );
   }
 
-  Future<void> deleteModel(String id) async {
+  Future<void> deleteModel(
+    String id,
+    CancelToken cancelToken,
+  ) async {
     final index = modelYear.indexWhere((model) => model.id == id);
     if (index == -1) return;
 
@@ -84,7 +95,7 @@ class CarModelYearsCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<void>(
       emit,
-      () => carModelYearsRepo.deleteModel(id),
+      () => carModelYearsRepo.deleteModel(id, cancelToken),
       onSuccess: (_, __) => {
         modelYear.removeAt(index),
         emit(BaseSuccessState(
@@ -102,28 +113,35 @@ class CarModelYearsCubit extends Cubit<BaseState> {
 
   Future<void> refresh(
     int limit,
+    CancelToken cancelToken,
   ) =>
-      getModelYear(1, limit: limit);
-  Future<void> loadNextPage() => getModelYear(currentPage + 1);
+      getModelYear(1, limit: limit, cancelToken);
+  Future<void> loadNextPage() => getModelYear(currentPage + 1, cancelToken);
 
-  Future<void> saveModel(CarModelYears carModelYears) async {
+  Future<void> saveModel(
+    CarModelYears carModelYears,
+    CancelToken cancelToken,
+  ) async {
     await handleBaseCubit<void>(
       emit,
-      () => carModelYearsRepo.saveModel(carModelYears),
+      () => carModelYearsRepo.saveModel(carModelYears, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        getModelYear(1),
+        getModelYear(1, cancelToken),
       },
     );
   }
 
-  Future<void> updateModel(CarModelYears carModelYears) async {
+  Future<void> updateModel(
+    CarModelYears carModelYears,
+    CancelToken cancelToken,
+  ) async {
     await handleBaseCubit<void>(
       emit,
-      () => carModelYearsRepo.updateModel(carModelYears),
+      () => carModelYearsRepo.updateModel(carModelYears, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        getModelYear(1),
+        getModelYear(1, cancelToken),
       },
     );
   }
