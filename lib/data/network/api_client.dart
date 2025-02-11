@@ -210,7 +210,12 @@ class ApiClient {
       }
 
       try {
-        final response = await request();
+        final response = await request().timeout(timeout, onTimeout: () {
+          cancelToken?.cancel();
+          return ApiError<T>(
+            message: ApiConstant.requestTimeout,
+          );
+        });
 
         if (response is ApiError &&
             (response.message == ApiConstant.noInternetConnection ||

@@ -28,6 +28,8 @@ class PaymentMethodCubit extends Cubit<BaseState> with Cancelable {
 
   Future<void> getPaymentMethod(int page, CancelToken cancelToken,
       {int limit = 10}) async {
+    cancelRequests();
+
     if (isLoadingMore) return;
 
     isLoadingMore = page != 1;

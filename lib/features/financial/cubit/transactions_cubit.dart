@@ -29,6 +29,8 @@ class TransactionsCubit extends Cubit<BaseState> with Cancelable {
 
   Future<void> getTransactions(int page, CancelToken cancelToken,
       {int limit = 10}) async {
+    cancelRequests();
+
     if (isLoadingMore) return;
 
     isLoadingMore = page != 1;
