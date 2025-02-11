@@ -10,8 +10,9 @@ import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/repo/car_brands_repo.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 
-class CarBrandsCubit extends Cubit<BaseState> {
+class CarBrandsCubit extends Cubit<BaseState> with Cancelable {
   final CarBrandsRepo carBrandsRepo;
   CarBrandsCubit({
     required this.carBrandsRepo,
@@ -22,7 +23,14 @@ class CarBrandsCubit extends Cubit<BaseState> {
   int currentPage = 1;
   bool isLoadingMore = false;
 
-  Future<void> getBrands(int page, {int limit = 10}) async {
+  @override
+  Future<void> close() {
+    cancelRequests();
+    return super.close();
+  }
+
+  Future<void> getBrands(int page, CancelToken cancelToken,
+      {int limit = 10}) async {
     if (isLoadingMore) return;
 
     isLoadingMore = page != 1;
@@ -48,7 +56,7 @@ class CarBrandsCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<PaginatedData<CarBrand>>(
       emit,
-      () => carBrandsRepo.getBrands(page, limit),
+      () => carBrandsRepo.getBrands(page, limit, cancelToken),
       onSuccess: (data, message) {
         if (page == 1) brands.clear();
 
@@ -70,7 +78,7 @@ class CarBrandsCubit extends Cubit<BaseState> {
     );
   }
 
-  Future<void> deleteBrand(String id) async {
+  Future<void> deleteBrand(String id, CancelToken cancelToken) async {
     final index = brands.indexWhere((brand) => brand.id == id);
     if (index == -1) return;
 
@@ -86,47 +94,48 @@ class CarBrandsCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<void>(
       emit,
-      () => carBrandsRepo.deleteBrand(id),
-      onSuccess: (_, __) => getBrands(1),
+      () => carBrandsRepo.deleteBrand(id, cancelToken),
+      onSuccess: (_, __) => getBrands(1, cancelToken),
     );
   }
 
-  Future<void> refresh(
-    int limit,
-  ) =>
-      getBrands(1, limit: limit);
-  Future<void> loadNextPage() => getBrands(currentPage + 1);
+  Future<void> refresh(int limit, CancelToken cancelToken) =>
+      getBrands(1, limit: limit, cancelToken);
+  Future<void> loadNextPage(CancelToken cancelToken) =>
+      getBrands(currentPage + 1, cancelToken);
 
-  Future<void> saveBrand(CarBrand carBrand, File imageFile) async {
+  Future<void> saveBrand(
+      CarBrand carBrand, File imageFile, CancelToken cancelToken) async {
     await handleBaseCubit<void>(
       emit,
-      () => carBrandsRepo.saveBrand(carBrand, imageFile),
+      () => carBrandsRepo.saveBrand(carBrand, imageFile, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        getBrands(1),
+        getBrands(1, cancelToken),
       },
     );
   }
 
-  Future<void> saveManyBrands(
-      List<CarBrand> carBrands, List<File> imageFiles) async {
+  Future<void> saveManyBrands(List<CarBrand> carBrands, List<File> imageFiles,
+      CancelToken cancelToken) async {
     await handleBaseCubit<void>(
       emit,
-      () => carBrandsRepo.saveManyBrands(carBrands, imageFiles),
+      () => carBrandsRepo.saveManyBrands(carBrands, imageFiles, cancelToken),
       onSuccess: (data, message) {
         emit(const BaseActionSuccessState());
-        getBrands(1); // Refresh list brands
+        getBrands(1, cancelToken); // Refresh list brands
       },
     );
   }
 
-  Future<void> updateBrand(CarBrand carBrand, File? imageFile) async {
+  Future<void> updateBrand(
+      CarBrand carBrand, File? imageFile, CancelToken cancelToken) async {
     await handleBaseCubit<void>(
       emit,
-      () => carBrandsRepo.updateBrand(carBrand, imageFile),
+      () => carBrandsRepo.updateBrand(carBrand, imageFile, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        getBrands(1),
+        getBrands(1, cancelToken),
       },
     );
   }

@@ -9,6 +9,7 @@ import 'package:paint_car/data/models/car_workshop.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_workshops_cubit.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
@@ -30,6 +31,8 @@ class UpsertCarWorkshopsPage extends StatefulWidget {
 }
 
 class _UpsertCarWorkshopsPageState extends State<UpsertCarWorkshopsPage> {
+  late final CancelToken _cancelToken;
+
   static const double zoomLevel = 5;
   final nameController = TextEditingController();
   final emailController = TextEditingController();
@@ -51,6 +54,7 @@ class _UpsertCarWorkshopsPageState extends State<UpsertCarWorkshopsPage> {
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
     // Inisialisasi MapUtils
     mapUtils = MapUtils(zoomLevel: zoomLevel);
     getBrands();
@@ -154,7 +158,7 @@ class _UpsertCarWorkshopsPageState extends State<UpsertCarWorkshopsPage> {
   }
 
   void getBrands() {
-    context.read<CarBrandsCubit>().refresh(limit);
+    context.read<CarBrandsCubit>().refresh(limit, _cancelToken);
   }
 
   @override

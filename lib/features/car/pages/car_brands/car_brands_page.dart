@@ -11,6 +11,7 @@ import 'package:paint_car/features/car/pages/car_brands/insert_many_car_brands_p
 import 'package:paint_car/features/car/pages/car_brands/upsert_car_brands_page.dart';
 import 'package:paint_car/features/car/widgets/car_brands/car_brands_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
@@ -27,13 +28,15 @@ class CarBrandsPage extends StatefulWidget {
 class _CarBrandsPageState extends State<CarBrandsPage> {
   static const limit = ApiConstant.limit;
   late final ScrollController _scrollController;
+  late final CancelToken _cancelToken;
 
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<CarBrandsCubit>().refresh(limit);
+    context.read<CarBrandsCubit>().refresh(limit, _cancelToken);
   }
 
   // void evictCachedImages() {
@@ -46,6 +49,7 @@ class _CarBrandsPageState extends State<CarBrandsPage> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _cancelToken.cancel();
     // evictCachedImages();
 
     super.dispose();
@@ -66,19 +70,21 @@ class _CarBrandsPageState extends State<CarBrandsPage> {
     if (currentScroll >= maxScroll - 200 &&
         !data.isLoadingMore &&
         data.pagination.hasNextPage) {
-      cubit.loadNextPage();
+      cubit.loadNextPage(
+        _cancelToken,
+      );
     }
   }
 
   void _delete(
     String id,
   ) async {
-    context.read<CarBrandsCubit>().deleteBrand(id);
+    context.read<CarBrandsCubit>().deleteBrand(id, _cancelToken);
   }
 
   void _onRefresh() {
     LogService.i("ON RETRY");
-    context.read<CarBrandsCubit>().refresh(limit);
+    context.read<CarBrandsCubit>().refresh(limit, _cancelToken);
   }
 
   @override

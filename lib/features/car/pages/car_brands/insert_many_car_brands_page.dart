@@ -8,6 +8,7 @@ import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/car/widgets/image_car_action.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
@@ -28,8 +29,15 @@ class InsertManyCarBrandsPage extends StatefulWidget {
 }
 
 class _InsertManyCarBrandsPageState extends State<InsertManyCarBrandsPage> {
+  late final CancelToken _cancelToken;
   final List<BrandFormData> _brands = [BrandFormData()];
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _cancelToken = CancelToken();
+  }
 
   void _addBrand() => setState(() => _brands.add(BrandFormData()));
 
@@ -53,6 +61,7 @@ class _InsertManyCarBrandsPageState extends State<InsertManyCarBrandsPage> {
     context.read<CarBrandsCubit>().saveManyBrands(
           validBrands.map((b) => b.toCarBrand()).toList(),
           validBrands.map((b) => b.image!).toList(),
+          _cancelToken,
         );
   }
 

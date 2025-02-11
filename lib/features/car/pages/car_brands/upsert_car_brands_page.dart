@@ -8,6 +8,7 @@ import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/car/widgets/image_car_action.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
@@ -29,6 +30,7 @@ class UpsertCarBrandsPage extends StatefulWidget {
 }
 
 class _UpsertCarBrandsPageState extends State<UpsertCarBrandsPage> {
+  late final CancelToken _cancelToken;
   final nameController = TextEditingController();
   final countryController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -38,6 +40,8 @@ class _UpsertCarBrandsPageState extends State<UpsertCarBrandsPage> {
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
+
     setState(
       () {
         isUpdate = widget.carBrand != null;
@@ -76,15 +80,15 @@ class _UpsertCarBrandsPageState extends State<UpsertCarBrandsPage> {
   void _performAction() {
     if (isUpdate) {
       context.read<CarBrandsCubit>().updateBrand(
-            CarBrand(
-              id: widget.carBrand!.id,
-              name: nameController.text,
-              country: countryController.text,
-              createdAt: widget.carBrand!.createdAt,
-              updatedAt: widget.carBrand!.updatedAt,
-            ),
-            _selectedImage,
-          );
+          CarBrand(
+            id: widget.carBrand!.id,
+            name: nameController.text,
+            country: countryController.text,
+            createdAt: widget.carBrand!.createdAt,
+            updatedAt: widget.carBrand!.updatedAt,
+          ),
+          _selectedImage,
+          _cancelToken);
     } else {
       context.read<CarBrandsCubit>().saveBrand(
             CarBrand(
@@ -92,6 +96,7 @@ class _UpsertCarBrandsPageState extends State<UpsertCarBrandsPage> {
               country: countryController.text,
             ),
             _selectedImage!,
+            _cancelToken,
           );
     }
   }

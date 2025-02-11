@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:paint_car/ui/shared/image_network.dart';
 import 'package:paint_car/ui/utils/url_to_file.dart';
 
 class ImageCarAction extends StatelessWidget {
@@ -41,25 +42,10 @@ class ImageCarAction extends StatelessWidget {
   }
 
   Widget _buildImageFromUrl() {
-    return FutureBuilder<File>(
-      future: urlToFile(logoUrl!),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        }
-        if (snapshot.hasError || !snapshot.hasData) {
-          return _buildPickImageButton();
-        }
-        return GestureDetector(
-          onTap: onPickImage,
-          child: Image.file(
-            snapshot.data!,
-            fit: BoxFit.contain,
-            height: 400,
-            cacheHeight: 400,
-          ),
-        );
-      },
+    return ImageNetwork(
+      src: logoUrl!,
+      width: 400,
+      height: 400,
     );
   }
 

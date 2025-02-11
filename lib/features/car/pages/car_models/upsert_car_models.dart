@@ -6,6 +6,7 @@ import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_models_cubit.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/image_network.dart';
@@ -27,6 +28,8 @@ class UpsertCarModelsPage extends StatefulWidget {
 }
 
 class _UpsertCarModelsPageState extends State<UpsertCarModelsPage> {
+  late final CancelToken _cancelToken;
+
   final nameController = TextEditingController();
   final carBrandIdController = TextEditingController();
   var selectedCarBrandId;
@@ -37,6 +40,8 @@ class _UpsertCarModelsPageState extends State<UpsertCarModelsPage> {
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
+
     getBrands();
     setState(
       () {
@@ -84,7 +89,7 @@ class _UpsertCarModelsPageState extends State<UpsertCarModelsPage> {
   }
 
   void getBrands() {
-    context.read<CarBrandsCubit>().refresh(limit);
+    context.read<CarBrandsCubit>().refresh(limit, _cancelToken);
   }
 
   @override

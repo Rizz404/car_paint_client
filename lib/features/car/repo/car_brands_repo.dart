@@ -7,6 +7,7 @@ import 'package:paint_car/core/types/paginated_data.dart';
 import 'package:paint_car/data/models/car_brand.dart';
 import 'package:paint_car/data/network/api_client.dart';
 import 'package:paint_car/features/shared/utils/build_pagination_params.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/from_json_pagination.dart';
 import 'package:paint_car/features/shared/utils/handle_api_response.dart';
 
@@ -19,6 +20,7 @@ class CarBrandsRepo {
   Future<ApiResponse<PaginatedData<CarBrand>>> getBrands(
     int page,
     int limit,
+    CancelToken cancelToken,
   ) async {
     final result = await apiClient.get<PaginatedData<CarBrand>>(
       ApiConstant.brandsPath,
@@ -27,6 +29,7 @@ class CarBrandsRepo {
         json,
         (json) => CarBrand.fromMap(json),
       ),
+      cancelToken: cancelToken,
     );
     return await handleApiResponse(result);
   }
@@ -34,6 +37,7 @@ class CarBrandsRepo {
   Future<ApiResponse<CarBrand>> saveBrand(
     CarBrand carBrand,
     File imageFile,
+    CancelToken cancelToken,
   ) async {
     final result = await apiClient.post<CarBrand>(
       ApiConstant.brandsPath,
@@ -45,6 +49,7 @@ class CarBrandsRepo {
       imageFile: imageFile,
       keyImageFile: keyImageFile,
       fromJson: (json) => CarBrand.fromMap(json),
+      cancelToken: cancelToken,
     );
     return await handleApiResponse(result, isGet: false);
   }
@@ -52,6 +57,7 @@ class CarBrandsRepo {
   Future<ApiResponse<List<CarBrand>>> saveManyBrands(
     List<CarBrand> carBrands,
     List<File> imageFiles,
+    CancelToken cancelToken,
   ) async {
     final result = await apiClient.post<List<CarBrand>>(
       ApiConstant.multipleBrandsPath,
@@ -63,6 +69,7 @@ class CarBrandsRepo {
       keyImageFile: keyImageFile,
       fromJson: (json) =>
           (json as List).map((e) => CarBrand.fromMap(e)).toList(),
+      cancelToken: cancelToken,
     );
     return await handleApiResponse(result, isGet: false);
   }
@@ -70,6 +77,7 @@ class CarBrandsRepo {
   Future<ApiResponse<CarBrand>> updateBrand(
     CarBrand carBrand,
     File? imageFile,
+    CancelToken cancelToken,
   ) async {
     final result = await apiClient.patch<CarBrand>(
       '${ApiConstant.brandsPath}/${carBrand.id}',
@@ -81,13 +89,18 @@ class CarBrandsRepo {
       imageFile: imageFile,
       keyImageFile: keyImageFile,
       fromJson: (json) => CarBrand.fromMap(json),
+      cancelToken: cancelToken,
     );
     return await handleApiResponse(result, isGet: false);
   }
 
-  Future<ApiResponse<void>> deleteBrand(String id) async {
+  Future<ApiResponse<void>> deleteBrand(
+    String id,
+    CancelToken cancelToken,
+  ) async {
     final result = await apiClient.delete<void>(
       '${ApiConstant.brandsPath}/$id',
+      cancelToken: cancelToken,
     );
     return await handleApiResponse(result, isGet: false);
   }
