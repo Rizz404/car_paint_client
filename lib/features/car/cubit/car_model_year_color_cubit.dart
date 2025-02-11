@@ -93,22 +93,28 @@ class CarModelYearColorCubit extends Cubit<BaseState> with Cancelable {
       null,
     ));
 
-    await handleBaseCubit<void>(
-      emit,
-      () => carModelYearColorRepo.deleteModel(id, cancelToken),
-      onSuccess: (_, __) => {
-        modelYearColor.removeAt(index),
-        emit(BaseSuccessState(
-          PaginationState<CarModelYearColor>(
-            data: modelYearColor,
-            pagination: pagination!,
-            currentPage: currentPage,
-            isLoadingMore: isLoadingMore,
-          ),
-          null,
-        )),
-      },
-    );
+    try {
+      await handleBaseCubit<void>(
+        emit,
+        () => carModelYearColorRepo.deleteModel(id, cancelToken),
+        onSuccess: (_, __) => {
+          modelYearColor.removeAt(index),
+          emit(BaseSuccessState(
+            PaginationState<CarModelYearColor>(
+              data: modelYearColor,
+              pagination: pagination!,
+              currentPage: currentPage,
+              isLoadingMore: isLoadingMore,
+            ),
+            null,
+          )),
+        },
+      );
+    } catch (e) {
+      emit(BaseErrorState(message: e.toString()));
+    } finally {
+      isLoadingMore = false;
+    }
   }
 
   Future<void> refresh(

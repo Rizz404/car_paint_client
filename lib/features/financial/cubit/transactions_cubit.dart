@@ -52,28 +52,34 @@ class TransactionsCubit extends Cubit<BaseState> with Cancelable {
       }
     }
 
-    await handleBaseCubit<PaginatedData<Transactions>>(
-      emit,
-      () => transactionsRepo.getModels(page, limit, cancelToken),
-      onSuccess: (data, message) {
-        if (page == 1) modelYearColor.clear();
+    try {
+      await handleBaseCubit<PaginatedData<Transactions>>(
+        emit,
+        () => transactionsRepo.getModels(page, limit, cancelToken),
+        onSuccess: (data, message) {
+          if (page == 1) modelYearColor.clear();
 
-        modelYearColor.addAll(data.items);
-        pagination = data.pagination;
-        currentPage = page;
-        isLoadingMore = false;
+          modelYearColor.addAll(data.items);
+          pagination = data.pagination;
+          currentPage = page;
+          isLoadingMore = false;
 
-        emit(BaseSuccessState(
-            PaginationState<Transactions>(
-              data: modelYearColor,
-              pagination: pagination!,
-              currentPage: currentPage,
-              isLoadingMore: isLoadingMore,
-            ),
-            null));
-      },
-      withLoading: false,
-    );
+          emit(BaseSuccessState(
+              PaginationState<Transactions>(
+                data: modelYearColor,
+                pagination: pagination!,
+                currentPage: currentPage,
+                isLoadingMore: isLoadingMore,
+              ),
+              null));
+        },
+        withLoading: false,
+      );
+    } catch (e) {
+      emit(BaseErrorState(message: e.toString()));
+    } finally {
+      isLoadingMore = false;
+    }
   }
 
   Future<void> loadNextPage(

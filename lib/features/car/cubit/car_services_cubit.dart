@@ -56,28 +56,34 @@ class CarServicesCubit extends Cubit<BaseState> with Cancelable {
       }
     }
 
-    await handleBaseCubit<PaginatedData<CarService>>(
-      emit,
-      () => carServicesRepo.getServices(page, _limit, cancelToken),
-      onSuccess: (data, message) {
-        if (page == 1) services.clear();
+    try {
+      await handleBaseCubit<PaginatedData<CarService>>(
+        emit,
+        () => carServicesRepo.getServices(page, _limit, cancelToken),
+        onSuccess: (data, message) {
+          if (page == 1) services.clear();
 
-        services.addAll(data.items);
-        pagination = data.pagination;
-        currentPage = page;
-        isLoadingMore = false;
+          services.addAll(data.items);
+          pagination = data.pagination;
+          currentPage = page;
+          isLoadingMore = false;
 
-        emit(BaseSuccessState(
-            PaginationState<CarService>(
-              data: services,
-              pagination: pagination!,
-              currentPage: currentPage,
-              isLoadingMore: isLoadingMore,
-            ),
-            null));
-      },
-      withLoading: false,
-    );
+          emit(BaseSuccessState(
+              PaginationState<CarService>(
+                data: services,
+                pagination: pagination!,
+                currentPage: currentPage,
+                isLoadingMore: isLoadingMore,
+              ),
+              null));
+        },
+        withLoading: false,
+      );
+    } catch (e) {
+      emit(BaseErrorState(message: e.toString()));
+    } finally {
+      isLoadingMore = false;
+    }
   }
 
   Future<void> deleteService(

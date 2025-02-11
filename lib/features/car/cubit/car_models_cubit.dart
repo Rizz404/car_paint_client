@@ -52,28 +52,34 @@ class CarModelsCubit extends Cubit<BaseState> with Cancelable {
       }
     }
 
-    await handleBaseCubit<PaginatedData<CarModel>>(
-      emit,
-      () => carModelsRepo.getModels(page, limit, cancelToken),
-      onSuccess: (data, message) {
-        if (page == 1) models.clear();
+    try {
+      await handleBaseCubit<PaginatedData<CarModel>>(
+        emit,
+        () => carModelsRepo.getModels(page, limit, cancelToken),
+        onSuccess: (data, message) {
+          if (page == 1) models.clear();
 
-        models.addAll(data.items);
-        pagination = data.pagination;
-        currentPage = page;
-        isLoadingMore = false;
+          models.addAll(data.items);
+          pagination = data.pagination;
+          currentPage = page;
+          isLoadingMore = false;
 
-        emit(BaseSuccessState(
-            PaginationState<CarModel>(
-              data: models,
-              pagination: pagination!,
-              currentPage: currentPage,
-              isLoadingMore: isLoadingMore,
-            ),
-            null));
-      },
-      withLoading: false,
-    );
+          emit(BaseSuccessState(
+              PaginationState<CarModel>(
+                data: models,
+                pagination: pagination!,
+                currentPage: currentPage,
+                isLoadingMore: isLoadingMore,
+              ),
+              null));
+        },
+        withLoading: false,
+      );
+    } catch (e) {
+      emit(BaseErrorState(message: e.toString()));
+    } finally {
+      isLoadingMore = false;
+    }
   }
 
   Future<void> deleteModel(

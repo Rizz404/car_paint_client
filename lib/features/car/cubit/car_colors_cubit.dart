@@ -52,28 +52,34 @@ class CarColorsCubit extends Cubit<BaseState> with Cancelable {
       }
     }
 
-    await handleBaseCubit<PaginatedData<CarColor>>(
-      emit,
-      () => carColorsRepo.getColors(page, limit, cancelToken),
-      onSuccess: (data, message) {
-        if (page == 1) colors.clear();
+    try {
+      await handleBaseCubit<PaginatedData<CarColor>>(
+        emit,
+        () => carColorsRepo.getColors(page, limit, cancelToken),
+        onSuccess: (data, message) {
+          if (page == 1) colors.clear();
 
-        colors.addAll(data.items);
-        pagination = data.pagination;
-        currentPage = page;
-        isLoadingMore = false;
+          colors.addAll(data.items);
+          pagination = data.pagination;
+          currentPage = page;
+          isLoadingMore = false;
 
-        emit(BaseSuccessState(
-            PaginationState<CarColor>(
-              data: colors,
-              pagination: pagination!,
-              currentPage: currentPage,
-              isLoadingMore: isLoadingMore,
-            ),
-            null));
-      },
-      withLoading: false,
-    );
+          emit(BaseSuccessState(
+              PaginationState<CarColor>(
+                data: colors,
+                pagination: pagination!,
+                currentPage: currentPage,
+                isLoadingMore: isLoadingMore,
+              ),
+              null));
+        },
+        withLoading: false,
+      );
+    } catch (e) {
+      emit(BaseErrorState(message: e.toString()));
+    } finally {
+      isLoadingMore = false;
+    }
   }
 
   Future<void> deleteColor(String id, CancelToken cancelToken) async {

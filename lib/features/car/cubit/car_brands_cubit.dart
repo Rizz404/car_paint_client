@@ -54,28 +54,34 @@ class CarBrandsCubit extends Cubit<BaseState> with Cancelable {
       }
     }
 
-    await handleBaseCubit<PaginatedData<CarBrand>>(
-      emit,
-      () => carBrandsRepo.getBrands(page, limit, cancelToken),
-      onSuccess: (data, message) {
-        if (page == 1) brands.clear();
+    try {
+      await handleBaseCubit<PaginatedData<CarBrand>>(
+        emit,
+        () => carBrandsRepo.getBrands(page, limit, cancelToken),
+        onSuccess: (data, message) {
+          if (page == 1) brands.clear();
 
-        brands.addAll(data.items);
-        pagination = data.pagination;
-        currentPage = page;
-        isLoadingMore = false;
+          brands.addAll(data.items);
+          pagination = data.pagination;
+          currentPage = page;
+          isLoadingMore = false;
 
-        emit(BaseSuccessState(
-            PaginationState<CarBrand>(
-              data: brands,
-              pagination: pagination!,
-              currentPage: currentPage,
-              isLoadingMore: isLoadingMore,
-            ),
-            null));
-      },
-      withLoading: false,
-    );
+          emit(BaseSuccessState(
+              PaginationState<CarBrand>(
+                data: brands,
+                pagination: pagination!,
+                currentPage: currentPage,
+                isLoadingMore: isLoadingMore,
+              ),
+              null));
+        },
+        withLoading: false,
+      );
+    } catch (e) {
+      emit(BaseErrorState(message: 'Unexpected error: $e'));
+    } finally {
+      isLoadingMore = false;
+    }
   }
 
   Future<void> deleteBrand(String id, CancelToken cancelToken) async {

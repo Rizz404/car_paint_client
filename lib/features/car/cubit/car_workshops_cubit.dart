@@ -97,22 +97,28 @@ class CarWorkshopsCubit extends Cubit<BaseState> with Cancelable {
       null,
     ));
 
-    await handleBaseCubit<void>(
-      emit,
-      () => carWorkshopsRepo.deleteWorkshop(id, cancelToken),
-      onSuccess: (_, __) => {
-        workshops.removeAt(index),
-        emit(BaseSuccessState(
-          PaginationState<CarWorkshop>(
-            data: workshops,
-            pagination: pagination!,
-            currentPage: currentPage,
-            isLoadingMore: isLoadingMore,
-          ),
-          null,
-        )),
-      },
-    );
+    try {
+      await handleBaseCubit<void>(
+        emit,
+        () => carWorkshopsRepo.deleteWorkshop(id, cancelToken),
+        onSuccess: (_, __) => {
+          workshops.removeAt(index),
+          emit(BaseSuccessState(
+            PaginationState<CarWorkshop>(
+              data: workshops,
+              pagination: pagination!,
+              currentPage: currentPage,
+              isLoadingMore: isLoadingMore,
+            ),
+            null,
+          )),
+        },
+      );
+    } catch (e) {
+      emit(BaseErrorState(message: e.toString()));
+    } finally {
+      isLoadingMore = false;
+    }
   }
 
   Future<void> refresh(
