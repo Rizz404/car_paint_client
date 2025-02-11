@@ -1,13 +1,11 @@
 // ignore_for_file: require_trailing_commas
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/data/models/car_brand.dart';
-import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/car/pages/car_brands/upsert_car_brands_page.dart';
-import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
+import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/image_network.dart';
+import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 
 class CarBrandsItem extends StatefulWidget {
@@ -20,63 +18,87 @@ class CarBrandsItem extends StatefulWidget {
       required this.onDelete,
       required this.onRefresh});
 
+  void _confirmDelete(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const MainText(
+          text: "Delete Brand",
+          extent: Medium(),
+        ),
+        content:
+            const MainText(text: "Are you sure you want to delete this brand?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const MainText(text: "Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              onDelete();
+              SnackBarUtil.showSnackBar(
+                  context: context,
+                  message: "Successfully deleted",
+                  type: SnackBarType.success);
+            },
+            child: MainText(
+              text: "Delete",
+              color: Theme.of(context).colorScheme.error,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   State<CarBrandsItem> createState() => _CarBrandsItemState();
 }
 
 class _CarBrandsItemState extends State<CarBrandsItem> {
+  late final CarBrand brand;
+  @override
+  void initState() {
+    super.initState();
+    brand = widget.brand;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: GestureDetector(
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: ListTile(
         onTap: () => Navigator.of(context)
-            .push(UpsertCarBrandsPage.route(
-          carBrand: widget.brand,
-        ))
-            .then(
-          (_) {
-            widget.onRefresh();
-          },
-        ),
-        child: BlocConsumer<CarBrandsCubit, BaseState>(
-          listener: (context, state) {
-            handleFormListenerState(
-              context: context,
-              state: state,
-              onRetry: () {
-                widget.onDelete();
-              },
-              onSuccess: () {
-                SnackBarUtil.showSnackBar(
-                  context: context,
-                  message: "Car brand deleted successfully",
-                  type: SnackBarType.success,
-                );
-                Navigator.pop(context);
-              },
-            );
-          },
-          builder: (context, state) {
-            return Column(
-              children: [
-                Row(
-                  children: [
-                    Text(widget.brand.name),
-                    IconButton(
-                        onPressed: () {
-                          widget.onDelete();
-                        },
-                        icon: const Icon(Icons.delete))
-                  ],
+            .push(UpsertCarBrandsPage.route(carBrand: brand))
+            .then((_) => widget.onRefresh()),
+        leading: brand.logo != null
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: ImageNetwork(
+                  src: brand.logo!,
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
                 ),
-                ImageNetwork(
-                  src: widget.brand.logo!,
-                  width: 100,
-                  height: 100,
-                )
-              ],
-            );
-          },
+              )
+            : Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(Icons.image),
+              ),
+        title: MainText(
+          text: brand.name,
+        ),
+        subtitle: brand.country != null ? Text(brand.country!) : null,
+        trailing: IconButton(
+          icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
+          onPressed: () => widget._confirmDelete(context),
         ),
       ),
     );

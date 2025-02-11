@@ -90,6 +90,12 @@ class OrdersCubit extends Cubit<BaseState> with Cancelable {
   Future<void> refresh(
     int limit,
     CancelToken cancelToken,
-  ) =>
-      getOrders(1, limit: limit, cancelToken);
+  ) async {
+    modelYearColor.clear();
+    pagination = null;
+    currentPage = 1;
+    isLoadingMore = false;
+    emit(const BaseLoadingState());
+    await getOrders(currentPage, cancelToken, limit: limit);
+  }
 }

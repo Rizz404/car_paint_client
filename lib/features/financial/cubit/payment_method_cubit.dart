@@ -90,6 +90,12 @@ class PaymentMethodCubit extends Cubit<BaseState> with Cancelable {
   Future<void> refresh(
     int limit,
     CancelToken cancelToken,
-  ) =>
-      getPaymentMethod(1, limit: limit, cancelToken);
+  ) async {
+    modelYearColor.clear();
+    pagination = null;
+    currentPage = 1;
+    isLoadingMore = false;
+    emit(const BaseLoadingState());
+    await getPaymentMethod(currentPage, cancelToken, limit: limit);
+  }
 }

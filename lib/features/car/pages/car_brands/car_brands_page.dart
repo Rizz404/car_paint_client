@@ -17,6 +17,7 @@ import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 
+// ! design example
 class CarBrandsPage extends StatefulWidget {
   static route() => MaterialPageRoute(builder: (_) => const CarBrandsPage());
   const CarBrandsPage({super.key});
@@ -117,14 +118,15 @@ class _CarBrandsPageState extends State<CarBrandsPage> {
                 physics:
                     const AlwaysScrollableScrollPhysics(), // buat RefreshIndicator
                 slivers: [
-                  SliverToBoxAdapter(
-                      child: MainElevatedButton(
-                          text: "Create Many",
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              InsertManyCarBrandsPage.route(),
-                            );
-                          })),
+                  // TO
+                  // SliverToBoxAdapter(
+                  //     child: MainElevatedButton(
+                  //         text: "Create Many",
+                  //         onPressed: () {
+                  //           Navigator.of(context).push(
+                  //             InsertManyCarBrandsPage.route(),
+                  //           );
+                  //         })),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => CarBrandsItem(

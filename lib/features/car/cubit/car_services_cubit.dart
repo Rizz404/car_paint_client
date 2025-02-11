@@ -123,8 +123,15 @@ class CarServicesCubit extends Cubit<BaseState> with Cancelable {
 
   Future<void> refresh(
     CancelToken cancelToken,
-  ) =>
-      getServices(1, cancelToken);
+  ) async {
+    services.clear();
+    pagination = null;
+    currentPage = 1;
+    isLoadingMore = false;
+    emit(const BaseLoadingState());
+    await getServices(1, cancelToken);
+  }
+
   Future<void> loadNextPage(
     CancelToken cancelToken,
   ) =>

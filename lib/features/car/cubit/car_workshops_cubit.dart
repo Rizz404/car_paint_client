@@ -123,8 +123,15 @@ class CarWorkshopsCubit extends Cubit<BaseState> with Cancelable {
 
   Future<void> refresh(
     CancelToken cancelToken,
-  ) =>
-      getWorkshops(1, cancelToken);
+  ) async {
+    workshops.clear();
+    pagination = null;
+    currentPage = 1;
+    isLoadingMore = false;
+    emit(const BaseLoadingState());
+    await getWorkshops(currentPage, cancelToken);
+  }
+
   Future<void> loadNextPage(
     CancelToken cancelToken,
   ) =>

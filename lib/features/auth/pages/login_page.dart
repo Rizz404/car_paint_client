@@ -34,8 +34,8 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     _cancelToken = CancelToken();
     setState(() {
-      emailController.text = "test@gmail.com";
-      passwordController.text = "test123";
+      emailController.text = "admin@gmail.com";
+      passwordController.text = "12345789";
     });
   }
 

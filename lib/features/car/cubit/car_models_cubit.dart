@@ -122,8 +122,15 @@ class CarModelsCubit extends Cubit<BaseState> with Cancelable {
   Future<void> refresh(
     int limit,
     CancelToken cancelToken,
-  ) =>
-      getModels(1, limit: limit, cancelToken);
+  ) async {
+    models.clear();
+    pagination = null;
+    currentPage = 1;
+    isLoadingMore = false;
+    emit(const BaseLoadingState());
+    await getModels(1, cancelToken, limit: limit);
+  }
+
   Future<void> loadNextPage() => getModels(currentPage + 1, cancelToken);
 
   Future<void> saveModel(CarModel carModel) async {

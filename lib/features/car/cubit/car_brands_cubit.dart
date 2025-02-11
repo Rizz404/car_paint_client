@@ -106,8 +106,15 @@ class CarBrandsCubit extends Cubit<BaseState> with Cancelable {
     );
   }
 
-  Future<void> refresh(int limit, CancelToken cancelToken) =>
-      getBrands(1, limit: limit, cancelToken);
+  Future<void> refresh(int limit, CancelToken cancelToken) async {
+    brands.clear();
+    pagination = null;
+    currentPage = 1;
+    isLoadingMore = false;
+    emit(const BaseLoadingState());
+    await getBrands(1, cancelToken, limit: limit);
+  }
+
   Future<void> loadNextPage(CancelToken cancelToken) =>
       getBrands(currentPage + 1, cancelToken);
 
