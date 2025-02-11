@@ -66,7 +66,7 @@ class _UpsertCarModelYearsPageState extends State<UpsertCarModelYearsPage> {
 
   void _performAction() {
     if (isUpdate) {
-      context.read<CarModelYearsCubit>().updateModel(
+      context.read<CarModelYearsCubit>().updateModelYear(
             CarModelYears(
               id: widget.carModelYears?.id,
               carModelId: selectedCarModelId,
@@ -75,7 +75,7 @@ class _UpsertCarModelYearsPageState extends State<UpsertCarModelYearsPage> {
             _cancelToken,
           );
     } else {
-      context.read<CarModelYearsCubit>().saveModel(
+      context.read<CarModelYearsCubit>().saveModelYear(
             CarModelYears(
               carModelId: selectedCarModelId,
               year: int.parse(yearController.text),

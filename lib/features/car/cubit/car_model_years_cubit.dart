@@ -16,22 +16,21 @@ class CarModelYearsCubit extends Cubit<BaseState> with Cancelable {
     required this.carModelYearsRepo,
   }) : super(const BaseInitialState());
 
+  List<CarModelYears> modelYears = [];
+  Pagination? pagination;
+  int currentPage = 1;
+  bool isLoadingMore = false;
+
   @override
   Future<void> close() {
     cancelRequests();
     return super.close();
   }
 
-  List<CarModelYears> modelYear = [];
-  Pagination? pagination;
-  int currentPage = 1;
-  bool isLoadingMore = false;
-
-  Future<void> getModelYear(int page, CancelToken cancelToken,
+  Future<void> getModelYears(int page, CancelToken cancelToken,
       {int limit = 10}) async {
-    cancelRequests();
-
     if (isLoadingMore) return;
+    cancelRequests();
 
     isLoadingMore = page != 1;
 
@@ -59,16 +58,16 @@ class CarModelYearsCubit extends Cubit<BaseState> with Cancelable {
         emit,
         () => carModelYearsRepo.getModelYears(page, limit, cancelToken),
         onSuccess: (data, message) {
-          if (page == 1) modelYear.clear();
+          if (page == 1) modelYears.clear();
 
-          modelYear.addAll(data.items);
+          modelYears.addAll(data.items);
           pagination = data.pagination;
           currentPage = page;
           isLoadingMore = false;
 
           emit(BaseSuccessState(
               PaginationState<CarModelYears>(
-                data: modelYear,
+                data: modelYears,
                 pagination: pagination!,
                 currentPage: currentPage,
                 isLoadingMore: isLoadingMore,
@@ -84,16 +83,13 @@ class CarModelYearsCubit extends Cubit<BaseState> with Cancelable {
     }
   }
 
-  Future<void> deleteModel(
-    String id,
-    CancelToken cancelToken,
-  ) async {
-    final index = modelYear.indexWhere((model) => model.id == id);
+  Future<void> deleteModelYear(String id, CancelToken cancelToken) async {
+    final index = modelYears.indexWhere((modelYear) => modelYear.id == id);
     if (index == -1) return;
 
     emit(BaseSuccessState(
       PaginationState<CarModelYears>(
-        data: modelYear,
+        data: modelYears,
         pagination: pagination!,
         currentPage: currentPage,
         isLoadingMore: isLoadingMore,
@@ -105,10 +101,10 @@ class CarModelYearsCubit extends Cubit<BaseState> with Cancelable {
       emit,
       () => carModelYearsRepo.deleteModel(id, cancelToken),
       onSuccess: (_, __) => {
-        modelYear.removeAt(index),
+        modelYears.removeAt(index),
         emit(BaseSuccessState(
           PaginationState<CarModelYears>(
-            data: modelYear,
+            data: modelYears,
             pagination: pagination!,
             currentPage: currentPage,
             isLoadingMore: isLoadingMore,
@@ -119,44 +115,42 @@ class CarModelYearsCubit extends Cubit<BaseState> with Cancelable {
     );
   }
 
-  Future<void> refresh(
-    int limit,
-    CancelToken cancelToken,
-  ) async {
-    modelYear.clear();
+  // ! implementasiin di semuanya
+  Future<void> refresh(int limit, CancelToken cancelToken) async {
+    modelYears.clear();
     pagination = null;
     currentPage = 1;
     isLoadingMore = false;
     emit(const BaseLoadingState());
-    await getModelYear(1, cancelToken);
+
+    await getModelYears(1, cancelToken, limit: limit);
   }
 
-  Future<void> loadNextPage() => getModelYear(currentPage + 1, cancelToken);
+  Future<void> loadNextPage(CancelToken cancelToken) =>
+      getModelYears(currentPage + 1, cancelToken);
 
-  Future<void> saveModel(
-    CarModelYears carModelYears,
-    CancelToken cancelToken,
-  ) async {
+  Future<void> saveModelYear(
+      CarModelYears carModelYearsCarModelYears, CancelToken cancelToken) async {
     await handleBaseCubit<void>(
       emit,
-      () => carModelYearsRepo.saveModel(carModelYears, cancelToken),
+      () =>
+          carModelYearsRepo.saveModel(carModelYearsCarModelYears, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        getModelYear(1, cancelToken),
+        getModelYears(1, cancelToken),
       },
     );
   }
 
-  Future<void> updateModel(
-    CarModelYears carModelYears,
-    CancelToken cancelToken,
-  ) async {
+  Future<void> updateModelYear(
+      CarModelYears carModelYearsCarModelYears, CancelToken cancelToken) async {
     await handleBaseCubit<void>(
       emit,
-      () => carModelYearsRepo.updateModel(carModelYears, cancelToken),
+      () => carModelYearsRepo.updateModel(
+          carModelYearsCarModelYears, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        getModelYear(1, cancelToken),
+        getModelYears(1, cancelToken),
       },
     );
   }

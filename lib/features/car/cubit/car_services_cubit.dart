@@ -34,6 +34,7 @@ class CarServicesCubit extends Cubit<BaseState> with Cancelable {
     CancelToken cancelToken,
   ) async {
     if (isLoadingMore) return;
+    cancelRequests();
 
     isLoadingMore = page != 1;
 

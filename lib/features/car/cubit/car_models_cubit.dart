@@ -29,9 +29,8 @@ class CarModelsCubit extends Cubit<BaseState> with Cancelable {
 
   Future<void> getModels(int page, CancelToken cancelToken,
       {int limit = 10}) async {
-    cancelRequests();
-
     if (isLoadingMore) return;
+    cancelRequests();
 
     isLoadingMore = page != 1;
 
@@ -78,16 +77,13 @@ class CarModelsCubit extends Cubit<BaseState> with Cancelable {
         withLoading: false,
       );
     } catch (e) {
-      emit(BaseErrorState(message: e.toString()));
+      emit(BaseErrorState(message: 'Unexpected error: $e'));
     } finally {
       isLoadingMore = false;
     }
   }
 
-  Future<void> deleteModel(
-    String id,
-    CancelToken cancelToken,
-  ) async {
+  Future<void> deleteModel(String id, CancelToken cancelToken) async {
     final index = models.indexWhere((model) => model.id == id);
     if (index == -1) return;
 
@@ -104,25 +100,11 @@ class CarModelsCubit extends Cubit<BaseState> with Cancelable {
     await handleBaseCubit<void>(
       emit,
       () => carModelsRepo.deleteModel(id, cancelToken),
-      onSuccess: (_, __) => {
-        models.removeAt(index),
-        emit(BaseSuccessState(
-          PaginationState<CarModel>(
-            data: models,
-            pagination: pagination!,
-            currentPage: currentPage,
-            isLoadingMore: isLoadingMore,
-          ),
-          null,
-        )),
-      },
+      onSuccess: (_, __) => getModels(1, cancelToken),
     );
   }
 
-  Future<void> refresh(
-    int limit,
-    CancelToken cancelToken,
-  ) async {
+  Future<void> refresh(int limit, CancelToken cancelToken) async {
     models.clear();
     pagination = null;
     currentPage = 1;
@@ -131,9 +113,10 @@ class CarModelsCubit extends Cubit<BaseState> with Cancelable {
     await getModels(1, cancelToken, limit: limit);
   }
 
-  Future<void> loadNextPage() => getModels(currentPage + 1, cancelToken);
+  Future<void> loadNextPage(CancelToken cancelToken) =>
+      getModels(currentPage + 1, cancelToken);
 
-  Future<void> saveModel(CarModel carModel) async {
+  Future<void> saveModel(CarModel carModel, CancelToken cancelToken) async {
     await handleBaseCubit<void>(
       emit,
       () => carModelsRepo.saveModel(carModel, cancelToken),
@@ -145,23 +128,18 @@ class CarModelsCubit extends Cubit<BaseState> with Cancelable {
   }
 
   Future<void> saveManyModels(
-    List<CarModel> carModels,
-    CancelToken cancelToken,
-  ) async {
+      List<CarModel> carModels, CancelToken cancelToken) async {
     await handleBaseCubit<void>(
       emit,
       () => carModelsRepo.saveManyModels(carModels, cancelToken),
       onSuccess: (data, message) {
         emit(const BaseActionSuccessState());
-        getModels(1, cancelToken);
+        getModels(1, cancelToken); // Refresh list models
       },
     );
   }
 
-  Future<void> updateModel(
-    CarModel carModel,
-    CancelToken cancelToken,
-  ) async {
+  Future<void> updateModel(CarModel carModel, CancelToken cancelToken) async {
     await handleBaseCubit<void>(
       emit,
       () => carModelsRepo.updateModel(carModel, cancelToken),

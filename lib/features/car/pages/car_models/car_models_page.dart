@@ -61,7 +61,9 @@ class _CarModelsPageState extends State<CarModelsPage> {
     if (currentScroll >= maxScroll - 200 &&
         !data.isLoadingMore &&
         data.pagination.hasNextPage) {
-      cubit.loadNextPage();
+      cubit.loadNextPage(
+        _cancelToken,
+      );
     }
   }
 
@@ -71,8 +73,8 @@ class _CarModelsPageState extends State<CarModelsPage> {
     context.read<CarModelsCubit>().deleteModel(id, _cancelToken);
   }
 
-  void _onRefresh() {
-    context.read<CarModelsCubit>().refresh(limit, _cancelToken);
+  void _onRefresh() async {
+    await context.read<CarModelsCubit>().refresh(limit, _cancelToken);
   }
 
   @override

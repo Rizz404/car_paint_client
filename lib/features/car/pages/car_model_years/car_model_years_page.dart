@@ -60,14 +60,16 @@ class _CarModelYearsPageState extends State<CarModelYearsPage> {
     if (currentScroll >= maxScroll - 200 &&
         !data.isLoadingMore &&
         data.pagination.hasNextPage) {
-      cubit.loadNextPage();
+      cubit.loadNextPage(
+        _cancelToken,
+      );
     }
   }
 
   void _delete(
     String id,
   ) async {
-    context.read<CarModelYearsCubit>().deleteModel(id, _cancelToken);
+    context.read<CarModelYearsCubit>().deleteModelYear(id, _cancelToken);
   }
 
   void _onRefresh() {

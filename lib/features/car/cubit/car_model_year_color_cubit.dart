@@ -30,6 +30,7 @@ class CarModelYearColorCubit extends Cubit<BaseState> with Cancelable {
   Future<void> getModelYearColor(int page, CancelToken cancelToken,
       {int limit = 10}) async {
     if (isLoadingMore) return;
+    cancelRequests();
 
     isLoadingMore = page != 1;
 

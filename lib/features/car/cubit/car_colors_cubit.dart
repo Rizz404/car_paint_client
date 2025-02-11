@@ -29,9 +29,8 @@ class CarColorsCubit extends Cubit<BaseState> with Cancelable {
 
   Future<void> getColors(int page, CancelToken cancelToken,
       {int limit = 10}) async {
-    cancelRequests();
-
     if (isLoadingMore) return;
+    cancelRequests();
 
     isLoadingMore = page != 1;
 
