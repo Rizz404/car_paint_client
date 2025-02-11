@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:paint_car/ui/shared/image_network.dart';
-import 'package:paint_car/ui/utils/url_to_file.dart';
 
 class ImageCarAction extends StatelessWidget {
   final File? selectedImage;

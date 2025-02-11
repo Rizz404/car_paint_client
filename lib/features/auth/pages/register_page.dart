@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_car/core/constants/mock.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
@@ -36,10 +37,10 @@ class _RegisterPageState extends State<RegisterPage> {
     super.initState();
     _cancelToken = CancelToken();
     setState(() {
-      usernameController.text = "test";
-      emailController.text = "test@gmail.com";
-      passwordController.text = "test123";
-      confirmPasswordController.text = "test123";
+      usernameController.text = Mock.user["username"];
+      emailController.text = Mock.user["email"];
+      passwordController.text = Mock.user["password"];
+      confirmPasswordController.text = Mock.user["password"];
     });
   }
 
