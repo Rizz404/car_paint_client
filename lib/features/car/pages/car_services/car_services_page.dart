@@ -9,6 +9,7 @@ import 'package:paint_car/features/car/pages/car_services/insert_many_car_servic
 import 'package:paint_car/features/car/pages/car_services/upsert_car_services.dart';
 import 'package:paint_car/features/car/widgets/car_services/car_services_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
@@ -23,18 +24,21 @@ class CarServicesPage extends StatefulWidget {
 }
 
 class _CarServicesPageState extends State<CarServicesPage> {
+  late final CancelToken _cancelToken;
   late final ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<CarServicesCubit>().refresh();
+    context.read<CarServicesCubit>().refresh(_cancelToken);
   }
 
   @override
   void dispose() {
+    _cancelToken.cancel();
     _scrollController.dispose();
 
     super.dispose();
@@ -55,18 +59,18 @@ class _CarServicesPageState extends State<CarServicesPage> {
     if (currentScroll >= maxScroll - 200 &&
         !data.isLoadingMore &&
         data.pagination.hasNextPage) {
-      cubit.loadNextPage();
+      cubit.loadNextPage(_cancelToken);
     }
   }
 
   void _delete(
     String id,
   ) async {
-    context.read<CarServicesCubit>().deleteService(id);
+    context.read<CarServicesCubit>().deleteService(id, _cancelToken);
   }
 
   void _onRefresh() {
-    context.read<CarServicesCubit>().refresh();
+    context.read<CarServicesCubit>().refresh(_cancelToken);
   }
 
   @override

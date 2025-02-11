@@ -8,6 +8,7 @@ import 'package:paint_car/features/car/cubit/car_workshops_cubit.dart';
 import 'package:paint_car/features/car/pages/car_workshops/upsert_car_workshops.dart';
 import 'package:paint_car/features/car/widgets/car_workshops/car_workshops_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
@@ -21,18 +22,21 @@ class CarWorkshopsPage extends StatefulWidget {
 }
 
 class _CarWorkshopsPageState extends State<CarWorkshopsPage> {
+  late final CancelToken _cancelToken;
   late final ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<CarWorkshopsCubit>().refresh();
+    context.read<CarWorkshopsCubit>().refresh(_cancelToken);
   }
 
   @override
   void dispose() {
+    _cancelToken.cancel();
     _scrollController.dispose();
 
     super.dispose();
@@ -53,18 +57,18 @@ class _CarWorkshopsPageState extends State<CarWorkshopsPage> {
     if (currentScroll >= maxScroll - 200 &&
         !data.isLoadingMore &&
         data.pagination.hasNextPage) {
-      cubit.loadNextPage();
+      cubit.loadNextPage(_cancelToken);
     }
   }
 
   void _delete(
     String id,
   ) async {
-    context.read<CarWorkshopsCubit>().deleteWorkshop(id);
+    context.read<CarWorkshopsCubit>().deleteWorkshop(id, _cancelToken);
   }
 
   void _onRefresh() {
-    context.read<CarWorkshopsCubit>().refresh();
+    context.read<CarWorkshopsCubit>().refresh(_cancelToken);
   }
 
   @override

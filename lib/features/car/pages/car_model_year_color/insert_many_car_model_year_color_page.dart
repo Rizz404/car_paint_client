@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/data/models/car_model.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/cubit/car_models_cubit.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
@@ -23,12 +24,26 @@ class InsertManyCarModelsPage extends StatefulWidget {
 }
 
 class _InsertManyCarModelsPageState extends State<InsertManyCarModelsPage> {
+  late final CancelToken _cancelToken;
   final List<ModelFormData> _models = [ModelFormData()];
   final _formKey = GlobalKey<FormState>();
 
   void _addModel() => setState(() => _models.add(ModelFormData()));
 
   void _removeModel(int index) => setState(() => _models.removeAt(index));
+
+  @override
+  void initState() {
+    super.initState();
+    _cancelToken = CancelToken();
+  }
+
+  @override
+  dispose() {
+    _cancelToken.cancel();
+    _models.forEach((b) => b.dispose());
+    super.dispose();
+  }
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
@@ -47,6 +62,7 @@ class _InsertManyCarModelsPageState extends State<InsertManyCarModelsPage> {
 
     context.read<CarModelsCubit>().saveManyModels(
           validModels.map((b) => b.toCarModel()).toList(),
+          _cancelToken,
         );
   }
 

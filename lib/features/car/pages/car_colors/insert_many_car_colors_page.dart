@@ -116,6 +116,7 @@ class ColorFormData {
 
   void dispose() {
     nameController.dispose();
+    priceController.dispose();
   }
 }
 

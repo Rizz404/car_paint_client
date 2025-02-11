@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
@@ -20,6 +21,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late final CancelToken _cancelToken;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -30,16 +32,16 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
     setState(() {
       emailController.text = "test@gmail.com";
-    });
-    setState(() {
       passwordController.text = "test123";
     });
   }
 
   @override
   void dispose() {
+    _cancelToken.cancel();
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
@@ -51,6 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       context.read<AuthCubit>().login(
             emailController.text,
             passwordController.text,
+            _cancelToken,
           );
     }
   }

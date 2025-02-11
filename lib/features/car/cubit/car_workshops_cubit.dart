@@ -8,12 +8,19 @@ import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/repo/car_workshops_repo.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 
-class CarWorkshopsCubit extends Cubit<BaseState> {
+class CarWorkshopsCubit extends Cubit<BaseState> with Cancelable {
   final CarWorkshopsRepo carWorkshopsRepo;
   CarWorkshopsCubit({
     required this.carWorkshopsRepo,
   }) : super(const BaseInitialState());
+
+  @override
+  Future<void> close() {
+    cancelRequests();
+    return super.close();
+  }
 
   final int _limit = 10;
 
@@ -22,7 +29,10 @@ class CarWorkshopsCubit extends Cubit<BaseState> {
   int currentPage = 1;
   bool isLoadingMore = false;
 
-  Future<void> getWorkshops(int page) async {
+  Future<void> getWorkshops(
+    int page,
+    CancelToken cancelToken,
+  ) async {
     if (isLoadingMore) return;
 
     isLoadingMore = page != 1;
@@ -48,7 +58,7 @@ class CarWorkshopsCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<PaginatedData<CarWorkshop>>(
       emit,
-      () => carWorkshopsRepo.getWorkshops(page, _limit),
+      () => carWorkshopsRepo.getWorkshops(page, _limit, cancelToken),
       onSuccess: (data, message) {
         if (page == 1) workshops.clear();
 
@@ -70,7 +80,10 @@ class CarWorkshopsCubit extends Cubit<BaseState> {
     );
   }
 
-  Future<void> deleteWorkshop(String id) async {
+  Future<void> deleteWorkshop(
+    String id,
+    CancelToken cancelToken,
+  ) async {
     final index = workshops.indexWhere((workshop) => workshop.id == id);
     if (index == -1) return;
 
@@ -86,7 +99,7 @@ class CarWorkshopsCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<void>(
       emit,
-      () => carWorkshopsRepo.deleteWorkshop(id),
+      () => carWorkshopsRepo.deleteWorkshop(id, cancelToken),
       onSuccess: (_, __) => {
         workshops.removeAt(index),
         emit(BaseSuccessState(
@@ -102,27 +115,39 @@ class CarWorkshopsCubit extends Cubit<BaseState> {
     );
   }
 
-  Future<void> refresh() => getWorkshops(1);
-  Future<void> loadNextPage() => getWorkshops(currentPage + 1);
+  Future<void> refresh(
+    CancelToken cancelToken,
+  ) =>
+      getWorkshops(1, cancelToken);
+  Future<void> loadNextPage(
+    CancelToken cancelToken,
+  ) =>
+      getWorkshops(currentPage + 1, cancelToken);
 
-  Future<void> saveWorkshop(CarWorkshop carWorkshop) async {
+  Future<void> saveWorkshop(
+    CarWorkshop carWorkshop,
+    CancelToken cancelToken,
+  ) async {
     await handleBaseCubit<void>(
       emit,
-      () => carWorkshopsRepo.saveWorkshop(carWorkshop),
+      () => carWorkshopsRepo.saveWorkshop(carWorkshop, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        refresh(),
+        refresh(cancelToken),
       },
     );
   }
 
-  Future<void> updateWorkshop(CarWorkshop carWorkshop) async {
+  Future<void> updateWorkshop(
+    CarWorkshop carWorkshop,
+    CancelToken cancelToken,
+  ) async {
     await handleBaseCubit<void>(
       emit,
-      () => carWorkshopsRepo.updateWorkshop(carWorkshop),
+      () => carWorkshopsRepo.updateWorkshop(carWorkshop, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        refresh(),
+        refresh(cancelToken),
       },
     );
   }

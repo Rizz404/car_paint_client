@@ -58,6 +58,7 @@ class _UpsertCarModelYearsPageState extends State<UpsertCarModelYearsPage> {
 
   @override
   void dispose() {
+    _cancelToken.cancel();
     yearController.dispose();
 
     super.dispose();
@@ -91,7 +92,7 @@ class _UpsertCarModelYearsPageState extends State<UpsertCarModelYearsPage> {
   }
 
   void getModel() {
-    context.read<CarModelsCubit>().refresh(limit);
+    context.read<CarModelsCubit>().refresh(limit, _cancelToken);
   }
 
   @override

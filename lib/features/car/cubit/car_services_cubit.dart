@@ -8,8 +8,9 @@ import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/repo/car_services_repo.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 
-class CarServicesCubit extends Cubit<BaseState> {
+class CarServicesCubit extends Cubit<BaseState> with Cancelable {
   final CarServicesRepo carServicesRepo;
   CarServicesCubit({
     required this.carServicesRepo,
@@ -22,7 +23,16 @@ class CarServicesCubit extends Cubit<BaseState> {
   int currentPage = 1;
   bool isLoadingMore = false;
 
-  Future<void> getServices(int page) async {
+  @override
+  Future<void> close() {
+    cancelRequests();
+    return super.close();
+  }
+
+  Future<void> getServices(
+    int page,
+    CancelToken cancelToken,
+  ) async {
     if (isLoadingMore) return;
 
     isLoadingMore = page != 1;
@@ -48,7 +58,7 @@ class CarServicesCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<PaginatedData<CarService>>(
       emit,
-      () => carServicesRepo.getServices(page, _limit),
+      () => carServicesRepo.getServices(page, _limit, cancelToken),
       onSuccess: (data, message) {
         if (page == 1) services.clear();
 
@@ -70,7 +80,10 @@ class CarServicesCubit extends Cubit<BaseState> {
     );
   }
 
-  Future<void> deleteService(String id) async {
+  Future<void> deleteService(
+    String id,
+    CancelToken cancelToken,
+  ) async {
     final index = services.indexWhere((service) => service.id == id);
     if (index == -1) return;
 
@@ -86,7 +99,7 @@ class CarServicesCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<void>(
       emit,
-      () => carServicesRepo.deleteService(id),
+      () => carServicesRepo.deleteService(id, cancelToken),
       onSuccess: (_, __) => {
         services.removeAt(index),
         emit(BaseSuccessState(
@@ -102,38 +115,53 @@ class CarServicesCubit extends Cubit<BaseState> {
     );
   }
 
-  Future<void> refresh() => getServices(1);
-  Future<void> loadNextPage() => getServices(currentPage + 1);
+  Future<void> refresh(
+    CancelToken cancelToken,
+  ) =>
+      getServices(1, cancelToken);
+  Future<void> loadNextPage(
+    CancelToken cancelToken,
+  ) =>
+      getServices(currentPage + 1, cancelToken);
 
-  Future<void> saveService(CarService carService) async {
+  Future<void> saveService(
+    CarService carService,
+    CancelToken cancelToken,
+  ) async {
     await handleBaseCubit<void>(
       emit,
-      () => carServicesRepo.saveService(carService),
+      () => carServicesRepo.saveService(carService, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        refresh(),
+        refresh(cancelToken),
       },
     );
   }
 
-  Future<void> saveManyServices(List<CarService> carServices) async {
+  Future<void> saveManyServices(
+    List<CarService> carServices,
+    CancelToken cancelToken,
+  ) async {
     await handleBaseCubit<void>(
       emit,
-      () => carServicesRepo.saveManyServices(carServices),
+      () => carServicesRepo.saveManyServices(carServices, cancelToken),
       onSuccess: (data, message) {
         emit(const BaseActionSuccessState());
-        refresh();
+        refresh(cancelToken);
       },
     );
   }
 
-  Future<void> updateService(CarService carService) async {
+  Future<void> updateService(
+    CarService carService,
+    CancelToken cancelToken,
+  ) async {
     await handleBaseCubit<void>(
       emit,
-      () => carServicesRepo.updateService(carService),
+      () => carServicesRepo.updateService(carService, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        refresh(),
+        refresh(cancelToken),
       },
     );
   }

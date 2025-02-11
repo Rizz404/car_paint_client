@@ -10,6 +10,7 @@ import 'package:paint_car/features/car/pages/car_models/insert_many_car_models_p
 import 'package:paint_car/features/car/pages/car_models/upsert_car_models.dart';
 import 'package:paint_car/features/car/widgets/car_models/car_models_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
@@ -24,20 +25,23 @@ class CarModelsPage extends StatefulWidget {
 }
 
 class _CarModelsPageState extends State<CarModelsPage> {
+  late final CancelToken _cancelToken;
   late final ScrollController _scrollController;
   static const limit = ApiConstant.limit;
 
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<CarModelsCubit>().refresh(limit);
+    context.read<CarModelsCubit>().refresh(limit, _cancelToken);
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _cancelToken.cancel();
 
     super.dispose();
   }
@@ -64,11 +68,11 @@ class _CarModelsPageState extends State<CarModelsPage> {
   void _delete(
     String id,
   ) async {
-    context.read<CarModelsCubit>().deleteModel(id);
+    context.read<CarModelsCubit>().deleteModel(id, _cancelToken);
   }
 
   void _onRefresh() {
-    context.read<CarModelsCubit>().refresh(limit);
+    context.read<CarModelsCubit>().refresh(limit, _cancelToken);
   }
 
   @override

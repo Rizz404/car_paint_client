@@ -39,6 +39,7 @@ class _CarModelYearsPageState extends State<CarModelYearsPage> {
 
   @override
   void dispose() {
+    _cancelToken.cancel();
     _scrollController.dispose();
 
     super.dispose();

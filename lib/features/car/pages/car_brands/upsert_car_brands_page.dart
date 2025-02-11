@@ -58,6 +58,10 @@ class _UpsertCarBrandsPageState extends State<UpsertCarBrandsPage> {
 
   @override
   void dispose() {
+    _cancelToken.cancel();
+    _selectedImage?.delete();
+    _selectedImage = null;
+
     nameController.dispose();
     countryController.dispose();
 

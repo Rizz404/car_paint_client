@@ -85,6 +85,7 @@ class _UpsertCarWorkshopsPageState extends State<UpsertCarWorkshopsPage> {
 
   @override
   void dispose() {
+    _cancelToken.cancel();
     nameController.dispose();
     emailController.dispose();
     phoneController.dispose();
@@ -127,16 +128,16 @@ class _UpsertCarWorkshopsPageState extends State<UpsertCarWorkshopsPage> {
   void _performAction() {
     if (isUpdate) {
       context.read<CarWorkshopsCubit>().updateWorkshop(
-            CarWorkshop(
-              id: widget.carWorkshop?.id,
-              name: nameController.text,
-              address: addressController.text,
-              phoneNumber: phoneController.text,
-              email: emailController.text,
-              latitude: latitude!,
-              longitude: longitude!,
-            ),
-          );
+          CarWorkshop(
+            id: widget.carWorkshop?.id,
+            name: nameController.text,
+            address: addressController.text,
+            phoneNumber: phoneController.text,
+            email: emailController.text,
+            latitude: latitude!,
+            longitude: longitude!,
+          ),
+          _cancelToken);
     } else {
       context.read<CarWorkshopsCubit>().saveWorkshop(
             CarWorkshop(
@@ -147,6 +148,7 @@ class _UpsertCarWorkshopsPageState extends State<UpsertCarWorkshopsPage> {
               latitude: latitude!,
               longitude: longitude!,
             ),
+            _cancelToken,
           );
     }
   }

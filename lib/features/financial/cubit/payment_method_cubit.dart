@@ -8,8 +8,9 @@ import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/financial/repo/payment_method_repo.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 
-class PaymentMethodCubit extends Cubit<BaseState> {
+class PaymentMethodCubit extends Cubit<BaseState> with Cancelable {
   final PaymentMethodRepo paymentMethodRepo;
   PaymentMethodCubit({
     required this.paymentMethodRepo,
@@ -19,8 +20,14 @@ class PaymentMethodCubit extends Cubit<BaseState> {
   Pagination? pagination;
   int currentPage = 1;
   bool isLoadingMore = false;
+  @override
+  Future<void> close() {
+    cancelRequests();
+    return super.close();
+  }
 
-  Future<void> getPaymentMethod(int page, {int limit = 10}) async {
+  Future<void> getPaymentMethod(int page, CancelToken cancelToken,
+      {int limit = 10}) async {
     if (isLoadingMore) return;
 
     isLoadingMore = page != 1;
@@ -46,7 +53,7 @@ class PaymentMethodCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<PaginatedData<PaymentMethod>>(
       emit,
-      () => paymentMethodRepo.getModels(page, limit),
+      () => paymentMethodRepo.getModels(page, limit, cancelToken),
       onSuccess: (data, message) {
         if (page == 1) modelYearColor.clear();
 
@@ -68,9 +75,13 @@ class PaymentMethodCubit extends Cubit<BaseState> {
     );
   }
 
-  Future<void> loadNextPage() => getPaymentMethod(currentPage + 1);
+  Future<void> loadNextPage(
+    CancelToken cancelToken,
+  ) =>
+      getPaymentMethod(currentPage + 1, cancelToken);
   Future<void> refresh(
     int limit,
+    CancelToken cancelToken,
   ) =>
-      getPaymentMethod(1, limit: limit);
+      getPaymentMethod(1, limit: limit, cancelToken);
 }

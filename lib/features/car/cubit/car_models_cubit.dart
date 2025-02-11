@@ -8,8 +8,9 @@ import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/repo/car_models_repo.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 
-class CarModelsCubit extends Cubit<BaseState> {
+class CarModelsCubit extends Cubit<BaseState> with Cancelable {
   final CarModelsRepo carModelsRepo;
   CarModelsCubit({
     required this.carModelsRepo,
@@ -20,7 +21,14 @@ class CarModelsCubit extends Cubit<BaseState> {
   int currentPage = 1;
   bool isLoadingMore = false;
 
-  Future<void> getModels(int page, {int limit = 10}) async {
+  @override
+  Future<void> close() {
+    cancelRequests();
+    return super.close();
+  }
+
+  Future<void> getModels(int page, CancelToken cancelToken,
+      {int limit = 10}) async {
     if (isLoadingMore) return;
 
     isLoadingMore = page != 1;
@@ -46,7 +54,7 @@ class CarModelsCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<PaginatedData<CarModel>>(
       emit,
-      () => carModelsRepo.getModels(page, limit),
+      () => carModelsRepo.getModels(page, limit, cancelToken),
       onSuccess: (data, message) {
         if (page == 1) models.clear();
 
@@ -68,7 +76,10 @@ class CarModelsCubit extends Cubit<BaseState> {
     );
   }
 
-  Future<void> deleteModel(String id) async {
+  Future<void> deleteModel(
+    String id,
+    CancelToken cancelToken,
+  ) async {
     final index = models.indexWhere((model) => model.id == id);
     if (index == -1) return;
 
@@ -84,7 +95,7 @@ class CarModelsCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<void>(
       emit,
-      () => carModelsRepo.deleteModel(id),
+      () => carModelsRepo.deleteModel(id, cancelToken),
       onSuccess: (_, __) => {
         models.removeAt(index),
         emit(BaseSuccessState(
@@ -102,39 +113,46 @@ class CarModelsCubit extends Cubit<BaseState> {
 
   Future<void> refresh(
     int limit,
+    CancelToken cancelToken,
   ) =>
-      getModels(1, limit: limit);
-  Future<void> loadNextPage() => getModels(currentPage + 1);
+      getModels(1, limit: limit, cancelToken);
+  Future<void> loadNextPage() => getModels(currentPage + 1, cancelToken);
 
   Future<void> saveModel(CarModel carModel) async {
     await handleBaseCubit<void>(
       emit,
-      () => carModelsRepo.saveModel(carModel),
+      () => carModelsRepo.saveModel(carModel, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        getModels(1),
+        getModels(1, cancelToken),
       },
     );
   }
 
-  Future<void> saveManyModels(List<CarModel> carModels) async {
+  Future<void> saveManyModels(
+    List<CarModel> carModels,
+    CancelToken cancelToken,
+  ) async {
     await handleBaseCubit<void>(
       emit,
-      () => carModelsRepo.saveManyModels(carModels),
+      () => carModelsRepo.saveManyModels(carModels, cancelToken),
       onSuccess: (data, message) {
         emit(const BaseActionSuccessState());
-        getModels(1);
+        getModels(1, cancelToken);
       },
     );
   }
 
-  Future<void> updateModel(CarModel carModel) async {
+  Future<void> updateModel(
+    CarModel carModel,
+    CancelToken cancelToken,
+  ) async {
     await handleBaseCubit<void>(
       emit,
-      () => carModelsRepo.updateModel(carModel),
+      () => carModelsRepo.updateModel(carModel, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        getModels(1),
+        getModels(1, cancelToken),
       },
     );
   }

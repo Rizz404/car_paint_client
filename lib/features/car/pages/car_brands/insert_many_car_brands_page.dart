@@ -39,6 +39,13 @@ class _InsertManyCarBrandsPageState extends State<InsertManyCarBrandsPage> {
     _cancelToken = CancelToken();
   }
 
+  @override
+  void dispose() {
+    _cancelToken.cancel();
+    _brands.forEach((b) => b.dispose());
+    super.dispose();
+  }
+
   void _addBrand() => setState(() => _brands.add(BrandFormData()));
 
   void _removeBrand(int index) => setState(() => _brands.removeAt(index));

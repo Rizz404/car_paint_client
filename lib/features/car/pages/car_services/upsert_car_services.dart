@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/cubit/car_services_cubit.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
@@ -23,6 +24,7 @@ class UpsertCarServicesPage extends StatefulWidget {
 }
 
 class _UpsertCarServicesPageState extends State<UpsertCarServicesPage> {
+  late final CancelToken _cancelToken;
   final nameController = TextEditingController();
   final priceController = TextEditingController();
   var selectedCarServiceId;
@@ -32,6 +34,7 @@ class _UpsertCarServicesPageState extends State<UpsertCarServicesPage> {
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
     setState(
       () {
         isUpdate = widget.carService != null;
@@ -47,6 +50,7 @@ class _UpsertCarServicesPageState extends State<UpsertCarServicesPage> {
 
   @override
   void dispose() {
+    _cancelToken.cancel();
     nameController.dispose();
     priceController.dispose();
 
@@ -61,6 +65,7 @@ class _UpsertCarServicesPageState extends State<UpsertCarServicesPage> {
               name: nameController.text,
               price: priceController.text,
             ),
+            _cancelToken,
           );
     } else {
       context.read<CarServicesCubit>().saveService(
@@ -68,6 +73,7 @@ class _UpsertCarServicesPageState extends State<UpsertCarServicesPage> {
               name: nameController.text,
               price: priceController.text,
             ),
+            _cancelToken,
           );
     }
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
@@ -20,6 +21,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  late final CancelToken _cancelToken;
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -32,12 +34,22 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
     setState(() {
       usernameController.text = "test";
       emailController.text = "test@gmail.com";
       passwordController.text = "test123";
       confirmPasswordController.text = "test123";
     });
+  }
+
+  @override
+  void dispose() {
+    _cancelToken.cancel();
+    usernameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   void signUp() async {
@@ -47,6 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
             usernameController.text,
             emailController.text,
             passwordController.text,
+            _cancelToken,
           );
     }
   }

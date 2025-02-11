@@ -12,6 +12,7 @@ import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/financial/cubit/transactions_cubit.dart';
 import 'package:paint_car/features/financial/widgets/transactions_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
@@ -26,18 +27,22 @@ class TransactionsPage extends StatefulWidget {
 
 class _TransactionsPageState extends State<TransactionsPage> {
   late final ScrollController _scrollController;
+  late final CancelToken _cancelToken;
+
   static const int limit = ApiConstant.limit;
 
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<TransactionsCubit>().refresh(limit);
+    context.read<TransactionsCubit>().refresh(limit, _cancelToken);
   }
 
   @override
   void dispose() {
+    _cancelToken.cancel();
     _scrollController.dispose();
 
     super.dispose();
@@ -58,12 +63,12 @@ class _TransactionsPageState extends State<TransactionsPage> {
     if (currentScroll >= maxScroll - 200 &&
         !data.isLoadingMore &&
         data.pagination.hasNextPage) {
-      cubit.loadNextPage();
+      cubit.loadNextPage(_cancelToken);
     }
   }
 
   void _onRefresh() {
-    context.read<TransactionsCubit>().refresh(limit);
+    context.read<TransactionsCubit>().refresh(limit, _cancelToken);
   }
 
   @override

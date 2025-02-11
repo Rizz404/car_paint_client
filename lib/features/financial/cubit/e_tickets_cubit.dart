@@ -8,8 +8,9 @@ import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/financial/repo/e_tickets_repo.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 
-class ETicketCubit extends Cubit<BaseState> {
+class ETicketCubit extends Cubit<BaseState> with Cancelable {
   final ETicketRepo eTicketRepo;
   ETicketCubit({
     required this.eTicketRepo,
@@ -20,7 +21,14 @@ class ETicketCubit extends Cubit<BaseState> {
   int currentPage = 1;
   bool isLoadingMore = false;
 
-  Future<void> getETicket(int page, {int limit = 10}) async {
+  @override
+  Future<void> close() {
+    cancelRequests();
+    return super.close();
+  }
+
+  Future<void> getETicket(int page, CancelToken cancelToken,
+      {int limit = 10}) async {
     if (isLoadingMore) return;
 
     isLoadingMore = page != 1;
@@ -46,7 +54,7 @@ class ETicketCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<PaginatedData<ETicket>>(
       emit,
-      () => eTicketRepo.getModels(page, limit),
+      () => eTicketRepo.getModels(page, limit, cancelToken),
       onSuccess: (data, message) {
         if (page == 1) modelYearColor.clear();
 
@@ -68,9 +76,13 @@ class ETicketCubit extends Cubit<BaseState> {
     );
   }
 
-  Future<void> loadNextPage() => getETicket(currentPage + 1);
+  Future<void> loadNextPage(
+    CancelToken cancelToken,
+  ) =>
+      getETicket(currentPage + 1, cancelToken);
   Future<void> refresh(
     int limit,
+    CancelToken cancelToken,
   ) =>
-      getETicket(1, limit: limit);
+      getETicket(1, limit: limit, cancelToken);
 }

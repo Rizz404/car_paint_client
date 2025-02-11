@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/cubit/car_services_cubit.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
@@ -23,12 +24,26 @@ class InsertManyCarServicesPage extends StatefulWidget {
 }
 
 class _InsertManyCarServicesPageState extends State<InsertManyCarServicesPage> {
+  late final CancelToken _cancelToken;
   final List<ServiceFormData> _services = [ServiceFormData()];
   final _formKey = GlobalKey<FormState>();
 
   void _addService() => setState(() => _services.add(ServiceFormData()));
 
   void _removeService(int index) => setState(() => _services.removeAt(index));
+
+  @override
+  void initState() {
+    super.initState();
+    _cancelToken = CancelToken();
+  }
+
+  @override
+  dispose() {
+    _cancelToken.cancel();
+    _services.forEach((b) => b.dispose());
+    super.dispose();
+  }
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
@@ -47,6 +62,7 @@ class _InsertManyCarServicesPageState extends State<InsertManyCarServicesPage> {
 
     context.read<CarServicesCubit>().saveManyServices(
           validServices.map((b) => b.toCarService()).toList(),
+          _cancelToken,
         );
   }
 

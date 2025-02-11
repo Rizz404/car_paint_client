@@ -58,6 +58,7 @@ class _UpsertCarModelsPageState extends State<UpsertCarModelsPage> {
 
   @override
   void dispose() {
+    _cancelToken.cancel();
     nameController.dispose();
 
     super.dispose();
@@ -71,6 +72,7 @@ class _UpsertCarModelsPageState extends State<UpsertCarModelsPage> {
               name: nameController.text,
               carBrandId: selectedCarBrandId,
             ),
+            _cancelToken,
           );
     } else {
       context.read<CarModelsCubit>().saveModel(

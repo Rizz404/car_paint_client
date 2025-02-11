@@ -6,6 +6,7 @@ import 'package:paint_car/core/types/paginated_data.dart';
 import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/data/network/api_client.dart';
 import 'package:paint_car/features/shared/utils/build_pagination_params.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/from_json_pagination.dart';
 import 'package:paint_car/features/shared/utils/handle_api_response.dart';
 
@@ -16,6 +17,7 @@ class CarServicesRepo {
   Future<ApiResponse<PaginatedData<CarService>>> getServices(
     int page,
     int limit,
+    CancelToken cancelToken,
   ) async {
     final result = await apiClient.get<PaginatedData<CarService>>(
       ApiConstant.servicesPath,
@@ -24,12 +26,14 @@ class CarServicesRepo {
         json,
         (json) => CarService.fromMap(json),
       ),
+      cancelToken: cancelToken,
     );
     return await handleApiResponse(result);
   }
 
   Future<ApiResponse<CarService>> saveService(
     CarService carService,
+    CancelToken cancelToken,
   ) async {
     final result = await apiClient.post<CarService>(
       ApiConstant.servicesPath,
@@ -38,12 +42,14 @@ class CarServicesRepo {
         'price': int.parse(carService.price),
       },
       fromJson: (json) => CarService.fromMap(json),
+      cancelToken: cancelToken,
     );
     return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<List<CarService>>> saveManyServices(
     List<CarService> carServices,
+    CancelToken cancelToken,
   ) async {
     final result = await apiClient.post<List<CarService>>(
       ApiConstant.multipleServicesPath,
@@ -52,12 +58,14 @@ class CarServicesRepo {
       },
       fromJson: (json) =>
           (json as List).map((e) => CarService.fromMap(e)).toList(),
+      cancelToken: cancelToken,
     );
     return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<CarService>> updateService(
     CarService carService,
+    CancelToken cancelToken,
   ) async {
     final result = await apiClient.patch<CarService>(
       '${ApiConstant.servicesPath}/${carService.id}',
@@ -67,13 +75,18 @@ class CarServicesRepo {
         'name': carService.name,
       },
       fromJson: (json) => CarService.fromMap(json),
+      cancelToken: cancelToken,
     );
     return await handleApiResponse(result, isGet: false);
   }
 
-  Future<ApiResponse<void>> deleteService(String id) async {
+  Future<ApiResponse<void>> deleteService(
+    String id,
+    CancelToken cancelToken,
+  ) async {
     final result = await apiClient.delete<void>(
       '${ApiConstant.servicesPath}/$id',
+      cancelToken: cancelToken,
     );
     return await handleApiResponse(result, isGet: false);
   }

@@ -8,6 +8,7 @@ import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/financial/cubit/e_tickets_cubit.dart';
 import 'package:paint_car/features/financial/widgets/e_tickets_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
@@ -21,19 +22,22 @@ class ETicketsPage extends StatefulWidget {
 }
 
 class _ETicketsPageState extends State<ETicketsPage> {
+  late final CancelToken _cancelToken;
   late final ScrollController _scrollController;
   static const int limit = ApiConstant.limit;
 
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<ETicketCubit>().refresh(limit);
+    context.read<ETicketCubit>().refresh(limit, _cancelToken);
   }
 
   @override
   void dispose() {
+    _cancelToken.cancel();
     _scrollController.dispose();
 
     super.dispose();
@@ -54,12 +58,12 @@ class _ETicketsPageState extends State<ETicketsPage> {
     if (currentScroll >= maxScroll - 200 &&
         !data.isLoadingMore &&
         data.pagination.hasNextPage) {
-      cubit.loadNextPage();
+      cubit.loadNextPage(_cancelToken);
     }
   }
 
   void _onRefresh() {
-    context.read<ETicketCubit>().refresh(limit);
+    context.read<ETicketCubit>().refresh(limit, _cancelToken);
   }
 
   @override

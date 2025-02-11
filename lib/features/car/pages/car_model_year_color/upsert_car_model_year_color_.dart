@@ -60,6 +60,7 @@ class UpsertCarModelYearColorState extends State<UpsertCarModelYearColor> {
 
   @override
   void dispose() {
+    _cancelToken.cancel();
     carModelYearIdController.dispose();
     colorIdController.dispose();
     super.dispose();

@@ -39,8 +39,8 @@ class _CarModelYearColorPageState extends State<CarModelYearColorPage> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
     _cancelToken.cancel();
+    _scrollController.dispose();
 
     super.dispose();
   }

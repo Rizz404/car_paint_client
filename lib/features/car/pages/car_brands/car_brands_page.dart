@@ -36,7 +36,10 @@ class _CarBrandsPageState extends State<CarBrandsPage> {
     _cancelToken = CancelToken();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<CarBrandsCubit>().refresh(limit, _cancelToken);
+    context.read<CarBrandsCubit>().getBrands(
+          1,
+          _cancelToken,
+        );
   }
 
   // void evictCachedImages() {
@@ -79,12 +82,12 @@ class _CarBrandsPageState extends State<CarBrandsPage> {
   void _delete(
     String id,
   ) async {
-    context.read<CarBrandsCubit>().deleteBrand(id, _cancelToken);
+    await context.read<CarBrandsCubit>().deleteBrand(id, _cancelToken);
   }
 
-  void _onRefresh() {
+  void _onRefresh() async {
     LogService.i("ON RETRY");
-    context.read<CarBrandsCubit>().refresh(limit, _cancelToken);
+    await context.read<CarBrandsCubit>().refresh(limit, _cancelToken);
   }
 
   @override

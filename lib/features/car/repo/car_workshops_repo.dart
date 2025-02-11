@@ -4,6 +4,7 @@ import 'package:paint_car/core/types/paginated_data.dart';
 import 'package:paint_car/data/models/car_workshop.dart';
 import 'package:paint_car/data/network/api_client.dart';
 import 'package:paint_car/features/shared/utils/build_pagination_params.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/from_json_pagination.dart';
 import 'package:paint_car/features/shared/utils/handle_api_response.dart';
 
@@ -14,6 +15,7 @@ class CarWorkshopsRepo {
   Future<ApiResponse<PaginatedData<CarWorkshop>>> getWorkshops(
     int page,
     int limit,
+    CancelToken cancelToken,
   ) async {
     final result = await apiClient.get<PaginatedData<CarWorkshop>>(
       ApiConstant.workshopsPath,
@@ -22,12 +24,14 @@ class CarWorkshopsRepo {
         json,
         (json) => CarWorkshop.fromMap(json),
       ),
+      cancelToken: cancelToken,
     );
     return await handleApiResponse(result);
   }
 
   Future<ApiResponse<CarWorkshop>> saveWorkshop(
     CarWorkshop carWorkshopCarWorkshop,
+    CancelToken cancelToken,
   ) async {
     final result = await apiClient.post<CarWorkshop>(
       ApiConstant.workshopsPath,
@@ -40,12 +44,14 @@ class CarWorkshopsRepo {
         "longitude": carWorkshopCarWorkshop.longitude,
       },
       fromJson: (json) => CarWorkshop.fromMap(json),
+      cancelToken: cancelToken,
     );
     return await handleApiResponse(result, isGet: false);
   }
 
   Future<ApiResponse<CarWorkshop>> updateWorkshop(
     CarWorkshop carWorkshopCarWorkshop,
+    CancelToken cancelToken,
   ) async {
     final result = await apiClient.patch<CarWorkshop>(
       '${ApiConstant.workshopsPath}/${carWorkshopCarWorkshop.id}',
@@ -59,13 +65,18 @@ class CarWorkshopsRepo {
         "longitude": carWorkshopCarWorkshop.longitude,
       },
       fromJson: (json) => CarWorkshop.fromMap(json),
+      cancelToken: cancelToken,
     );
     return await handleApiResponse(result, isGet: false);
   }
 
-  Future<ApiResponse<void>> deleteWorkshop(String id) async {
+  Future<ApiResponse<void>> deleteWorkshop(
+    String id,
+    CancelToken cancelToken,
+  ) async {
     final result = await apiClient.delete<void>(
       '${ApiConstant.workshopsPath}/$id',
+      cancelToken: cancelToken,
     );
     return await handleApiResponse(result, isGet: false);
   }
