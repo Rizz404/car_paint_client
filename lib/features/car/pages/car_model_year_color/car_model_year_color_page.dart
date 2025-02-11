@@ -9,6 +9,7 @@ import 'package:paint_car/features/car/cubit/car_model_year_color_cubit.dart';
 import 'package:paint_car/features/car/pages/car_model_year_color/upsert_car_model_year_color_.dart';
 import 'package:paint_car/features/car/widgets/car_model_year_color/car_model_year_color_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
@@ -23,20 +24,23 @@ class CarModelYearColorPage extends StatefulWidget {
 }
 
 class _CarModelYearColorPageState extends State<CarModelYearColorPage> {
+  late final CancelToken _cancelToken;
   late final ScrollController _scrollController;
   static const limit = ApiConstant.limit;
 
   @override
   void initState() {
     super.initState();
+    _cancelToken = CancelToken();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<CarModelYearColorCubit>().refresh(limit);
+    context.read<CarModelYearColorCubit>().refresh(limit, _cancelToken);
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _cancelToken.cancel();
 
     super.dispose();
   }
@@ -57,18 +61,18 @@ class _CarModelYearColorPageState extends State<CarModelYearColorPage> {
     if (currentScroll >= maxScroll - 200 &&
         !data.isLoadingMore &&
         data.pagination.hasNextPage) {
-      cubit.loadNextPage();
+      cubit.loadNextPage(_cancelToken);
     }
   }
 
   void _delete(
     String id,
   ) async {
-    context.read<CarModelYearColorCubit>().deleteModel(id);
+    context.read<CarModelYearColorCubit>().deleteModel(id, _cancelToken);
   }
 
   void _onRefresh() {
-    context.read<CarModelYearColorCubit>().refresh(limit);
+    context.read<CarModelYearColorCubit>().refresh(limit, _cancelToken);
   }
 
   @override

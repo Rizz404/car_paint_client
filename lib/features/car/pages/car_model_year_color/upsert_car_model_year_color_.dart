@@ -41,10 +41,11 @@ class UpsertCarModelYearColorState extends State<UpsertCarModelYearColor> {
   final formKey = GlobalKey<FormState>();
   bool isUpdate = false;
   static const int limit = 50;
-  final CancelToken _cancelToken = CancelToken();
+  late final CancelToken _cancelToken;
 
   @override
   void initState() {
+    _cancelToken = CancelToken();
     super.initState();
     getCarModelYears();
     getColors();
@@ -72,6 +73,7 @@ class UpsertCarModelYearColorState extends State<UpsertCarModelYearColor> {
               carModelYearId: selectedCarModelYearId,
               colorId: selectedColorId,
             ),
+            _cancelToken,
           );
     } else {
       context.read<CarModelYearColorCubit>().saveModel(
@@ -79,6 +81,7 @@ class UpsertCarModelYearColorState extends State<UpsertCarModelYearColor> {
               carModelYearId: selectedCarModelYearId,
               colorId: selectedColorId,
             ),
+            _cancelToken,
           );
     }
   }

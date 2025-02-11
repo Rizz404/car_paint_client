@@ -8,19 +8,27 @@ import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/car/repo/car_model_year_color_repo.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 
-class CarModelYearColorCubit extends Cubit<BaseState> {
+class CarModelYearColorCubit extends Cubit<BaseState> with Cancelable {
   final CarModelYearColorRepo carModelYearColorRepo;
   CarModelYearColorCubit({
     required this.carModelYearColorRepo,
   }) : super(const BaseInitialState());
+
+  @override
+  Future<void> close() {
+    cancelRequests();
+    return super.close();
+  }
 
   List<CarModelYearColor> modelYearColor = [];
   Pagination? pagination;
   int currentPage = 1;
   bool isLoadingMore = false;
 
-  Future<void> getModelYearColor(int page, {int limit = 10}) async {
+  Future<void> getModelYearColor(int page, CancelToken cancelToken,
+      {int limit = 10}) async {
     if (isLoadingMore) return;
 
     isLoadingMore = page != 1;
@@ -46,7 +54,7 @@ class CarModelYearColorCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<PaginatedData<CarModelYearColor>>(
       emit,
-      () => carModelYearColorRepo.getModels(page, limit),
+      () => carModelYearColorRepo.getModels(page, limit, cancelToken),
       onSuccess: (data, message) {
         if (page == 1) modelYearColor.clear();
 
@@ -68,7 +76,10 @@ class CarModelYearColorCubit extends Cubit<BaseState> {
     );
   }
 
-  Future<void> deleteModel(String id) async {
+  Future<void> deleteModel(
+    String id,
+    CancelToken cancelToken,
+  ) async {
     final index = modelYearColor.indexWhere((model) => model.id == id);
     if (index == -1) return;
 
@@ -84,7 +95,7 @@ class CarModelYearColorCubit extends Cubit<BaseState> {
 
     await handleBaseCubit<void>(
       emit,
-      () => carModelYearColorRepo.deleteModel(id),
+      () => carModelYearColorRepo.deleteModel(id, cancelToken),
       onSuccess: (_, __) => {
         modelYearColor.removeAt(index),
         emit(BaseSuccessState(
@@ -102,28 +113,38 @@ class CarModelYearColorCubit extends Cubit<BaseState> {
 
   Future<void> refresh(
     int limit,
+    CancelToken cancelToken,
   ) =>
-      getModelYearColor(1, limit: limit);
-  Future<void> loadNextPage() => getModelYearColor(currentPage + 1);
+      getModelYearColor(1, limit: limit, cancelToken);
+  Future<void> loadNextPage(
+    CancelToken cancelToken,
+  ) =>
+      getModelYearColor(currentPage + 1, cancelToken);
 
-  Future<void> saveModel(CarModelYearColor carModelYearColor) async {
+  Future<void> saveModel(
+    CarModelYearColor carModelYearColor,
+    CancelToken cancelToken,
+  ) async {
     await handleBaseCubit<void>(
       emit,
-      () => carModelYearColorRepo.saveModel(carModelYearColor),
+      () => carModelYearColorRepo.saveModel(carModelYearColor, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        getModelYearColor(1),
+        getModelYearColor(1, cancelToken),
       },
     );
   }
 
-  Future<void> updateModel(CarModelYearColor carModelYearColor) async {
+  Future<void> updateModel(
+    CarModelYearColor carModelYearColor,
+    CancelToken cancelToken,
+  ) async {
     await handleBaseCubit<void>(
       emit,
-      () => carModelYearColorRepo.updateModel(carModelYearColor),
+      () => carModelYearColorRepo.updateModel(carModelYearColor, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
-        getModelYearColor(1),
+        getModelYearColor(1, cancelToken),
       },
     );
   }
