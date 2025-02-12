@@ -25,4 +25,17 @@ class UserCubit extends Cubit<BaseState> {
   Future<void> logout() async {
     await userRepo.logout();
   }
+
+  Future<void> getToken() async {
+    final token = await userRepo.getToken();
+    if (token != null) {
+      emit(BaseSuccessState<String?>(token, null));
+    } else {
+      emit(
+        const BaseErrorState(
+          message: "Token not found",
+        ),
+      );
+    }
+  }
 }

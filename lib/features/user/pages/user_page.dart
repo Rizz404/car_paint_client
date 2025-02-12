@@ -35,6 +35,7 @@ class _UserPageState extends State<UserPage> {
             return Column(
               children: [
                 MainText(text: data?.username ?? "No Token"),
+                MainText(text: data?.role.name ?? "No Token"),
                 ElevatedButton(
                   onPressed: () {
                     context.read<UserCubit>().logout();

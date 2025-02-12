@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:paint_car/data/models/enums/user_role.dart';
 import 'package:paint_car/data/models/user_profile_model.dart';
 
 class User {
@@ -11,6 +12,7 @@ class User {
   final DateTime createdAt;
   final DateTime updatedAt;
   final String? newAccessToken;
+  final UserRole role;
 
   User({
     required this.id,
@@ -20,6 +22,7 @@ class User {
     required this.createdAt,
     required this.updatedAt,
     this.newAccessToken,
+    required this.role,
   });
 
   @override
@@ -32,7 +35,8 @@ class User {
         other.profileImage == profileImage &&
         other.createdAt == createdAt &&
         other.updatedAt == updatedAt &&
-        other.newAccessToken == newAccessToken;
+        other.newAccessToken == newAccessToken &&
+        other.role == role;
   }
 
   @override
@@ -43,7 +47,8 @@ class User {
         profileImage.hashCode ^
         createdAt.hashCode ^
         updatedAt.hashCode ^
-        newAccessToken.hashCode;
+        newAccessToken.hashCode ^
+        role.hashCode;
   }
 
   User copyWith({
@@ -54,6 +59,7 @@ class User {
     DateTime? createdAt,
     DateTime? updatedAt,
     String? newAccessToken,
+    UserRole? role,
   }) {
     return User(
       id: id ?? this.id,
@@ -63,6 +69,7 @@ class User {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       newAccessToken: newAccessToken ?? this.newAccessToken,
+      role: role ?? this.role,
     );
   }
 
@@ -75,6 +82,7 @@ class User {
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
       'newAccessToken': newAccessToken,
+      'role': role.toMap(),
     };
   }
 
@@ -89,6 +97,7 @@ class User {
       newAccessToken: map['newAccessToken'] != null
           ? map['newAccessToken'] as String
           : null,
+      role: UserRoleExtension.fromMap(map['role'] as String),
     );
   }
 
@@ -99,7 +108,7 @@ class User {
 
   @override
   String toString() {
-    return 'User(id: $id, username: $username, email: $email, profileImage: $profileImage, createdAt: $createdAt, updatedAt: $updatedAt, newAccessToken: $newAccessToken)';
+    return 'User(id: $id, username: $username, email: $email, profileImage: $profileImage, createdAt: $createdAt, updatedAt: $updatedAt, newAccessToken: $newAccessToken, role: $role)';
   }
 }
 
@@ -111,6 +120,7 @@ class UserWithProfile extends User {
     required String username,
     required String email,
     String profileImage = "",
+    required UserRole role,
     required DateTime createdAt,
     required DateTime updatedAt,
     String? newAccessToken,
@@ -123,6 +133,7 @@ class UserWithProfile extends User {
           createdAt: createdAt,
           updatedAt: updatedAt,
           newAccessToken: newAccessToken,
+          role: role,
         );
 
   @override
@@ -145,11 +156,13 @@ class UserWithProfile extends User {
     DateTime? updatedAt,
     String? newAccessToken,
     UserProfile? userProfile,
+    UserRole? role,
   }) {
     return UserWithProfile(
       id: id ?? this.id,
       username: username ?? this.username,
       email: email ?? this.email,
+      role: role ?? this.role,
       profileImage: profileImage ?? this.profileImage,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -179,6 +192,7 @@ class UserWithProfile extends User {
       userProfile: map['userProfile'] != null
           ? UserProfile.fromMap(map['userProfile'] as Map<String, dynamic>)
           : null,
+      role: UserRoleExtension.fromMap(map['role'] as String),
     );
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/data/models/car_model_year_color.dart';
 import 'package:paint_car/features/auth/cubit/auth_cubit.dart';
 import 'package:paint_car/features/auth/pages/login_page.dart';
+import 'package:paint_car/features/auth/wrapper/auth_wrapper.dart';
 import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_colors_cubit.dart';
 import 'package:paint_car/features/car/cubit/car_model_year_color_cubit.dart';
@@ -96,7 +97,7 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ConfigurationTheme.elevatedButtonTheme,
         fontFamilyFallback: ['Poppins'],
       ),
-      home: const LoginPage(),
+      home: const AuthWrapper(),
       debugShowCheckedModeBanner: false,
     );
   }

@@ -32,4 +32,13 @@ class UserRepo {
       LogService.e("Error dari repo: $e");
     }
   }
+
+  Future<String?> getToken() async {
+    try {
+      return tokenSp.getToken();
+    } catch (e) {
+      LogService.e("Error dari repo: $e");
+      return null;
+    }
+  }
 }
