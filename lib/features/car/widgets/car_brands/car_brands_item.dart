@@ -1,9 +1,14 @@
 // ignore_for_file: require_trailing_commas
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/data/models/car_brand.dart';
+import 'package:paint_car/dependencies/helper/base_state.dart';
+import 'package:paint_car/features/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/car/pages/car_brands/upsert_car_brands_page.dart';
+import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
+import 'package:paint_car/ui/shared/delete_confirm_dialog.dart';
 import 'package:paint_car/ui/shared/image_network.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
@@ -21,33 +26,28 @@ class CarBrandsItem extends StatefulWidget {
   void _confirmDelete(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const MainText(
-          text: "Delete Brand",
-          extent: Medium(),
-        ),
-        content:
-            const MainText(text: "Are you sure you want to delete this brand?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const MainText(text: "Cancel"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
+      builder: (context) => BlocConsumer<CarBrandsCubit, BaseState>(
+        listener: (context, state) {
+          handleFormListenerState(
+            context: context,
+            state: state,
+            onRetry: () {
               onDelete();
-              SnackBarUtil.showSnackBar(
-                  context: context,
-                  message: "Successfully deleted",
-                  type: SnackBarType.success);
             },
-            child: MainText(
-              text: "Delete",
-              color: Theme.of(context).colorScheme.error,
-            ),
-          ),
-        ],
+            onSuccess: () {
+              Navigator.pop(context);
+            },
+          );
+        },
+        builder: (context, state) {
+          return DeleteConfirmDialog(
+            title: "Delete ${brand.name}?",
+            description: "Are you sure you want to delete this brand?",
+            onDelete: () async {
+              await onDelete();
+            },
+          );
+        },
       ),
     );
   }
@@ -67,8 +67,8 @@ class _CarBrandsItemState extends State<CarBrandsItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      elevation: 2,
+      margin: const EdgeInsets.symmetric(
+          horizontal: 16.0, vertical: 8.0), // TODO: DELETE NNTI
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: ListTile(
         onTap: () => Navigator.of(context)

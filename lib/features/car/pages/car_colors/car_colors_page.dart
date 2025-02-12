@@ -104,14 +104,14 @@ class _CarColorsPageState extends State<CarColorsPage> {
                 physics:
                     const AlwaysScrollableScrollPhysics(), // buat RefreshIndicator
                 slivers: [
-                  SliverToBoxAdapter(
-                      child: MainElevatedButton(
-                          text: "Create Many",
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              InsertManyCarColorsPage.route(),
-                            );
-                          })),
+                  // SliverToBoxAdapter(
+                  //     child: MainElevatedButton(
+                  //         text: "Create Many",
+                  //         onPressed: () {
+                  //           Navigator.of(context).push(
+                  //             InsertManyCarColorsPage.route(),
+                  //           );
+                  //         })),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => CarColorsItem(
