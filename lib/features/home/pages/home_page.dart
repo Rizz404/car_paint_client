@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:paint_car/data/models/enums/user_role.dart';
+import 'package:paint_car/data/models/user_model.dart';
 import 'package:paint_car/features/home/pages/settings_page.dart';
 import 'package:paint_car/features/home/widgets/bottom_nav_bar.dart';
 import 'package:paint_car/features/home/widgets/left_drawer.dart';
 import 'package:paint_car/features/user/pages/user_page.dart';
+import 'package:paint_car/ui/shared/get_user.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
+import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,10 +26,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildHomePage() {
-    return const SingleChildScrollView(
-      child: const Column(
+    return SingleChildScrollView(
+      child: Column(
         children: [
-          MainText(text: "Home Page"),
+          const MainText(text: "Home Page"),
+          GetUser(
+            onSuccess: (user, role) {
+              switch (role) {
+                case UserRole.ADMIN:
+                  return const MainText(text: "Welcome Admin");
+                case UserRole.USER:
+                  return const MainText(text: "Welcome user");
+                case UserRole.SUPER_ADMIN:
+                  return const MainText(text: "Welcome Super Admin");
+              }
+            },
+          ),
         ],
       ),
     );

@@ -18,7 +18,6 @@ class _AuthWrapperState extends State<AuthWrapper> {
   @override
   void initState() {
     getUser();
-    LogService.i("Init State");
     super.initState();
   }
 
