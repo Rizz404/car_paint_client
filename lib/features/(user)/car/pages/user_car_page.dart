@@ -102,6 +102,11 @@ class _UserCarPageState extends State<UserCarPage> {
         onSuccess: (context, data, message) {
           final userCars = data.data;
 
+          if (userCars.isEmpty) {
+            return const Center(
+              child: Text("Empty"),
+            );
+          }
           return RefreshIndicator(
             onRefresh: () async {
               _onRefresh();

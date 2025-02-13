@@ -23,6 +23,7 @@ import 'package:paint_car/ui/shared/state_handler.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 import 'package:paint_car/ui/utils/url_to_file.dart';
 import 'package:paint_car/ui/validator/file_validator.dart';
+import 'package:paint_car/ui/validator/file_validator.dart';
 
 class UpsertUserCarPage extends StatefulWidget {
   final UserCar? userCar;
@@ -41,13 +42,14 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
   final carModelYearColorIdController = TextEditingController();
   final licensePlateController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  File? _selectedImage;
+  List<File> _selectedImages = [];
   bool isUpdate = false;
 
   @override
   void initState() {
     super.initState();
     _cancelToken = CancelToken();
+    getCarModelYearColor();
 
     setState(
       () {
@@ -66,8 +68,8 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
   @override
   void dispose() {
     _cancelToken.cancel();
-    _selectedImage?.delete();
-    _selectedImage = null;
+    _selectedImages.clear();
+    carModelYearColorIdController.dispose();
 
     licensePlateController.dispose();
 
@@ -79,7 +81,7 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
     try {
       final file = await urlToFile(widget.userCar!.carImages!.first!);
       setState(() {
-        _selectedImage = file;
+        _selectedImages.add(file);
       });
     } catch (e) {
       // TODO: DELETE LATERR
@@ -99,7 +101,7 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
               carModelYearColorId: selectedCarModelYearColorId,
             ),
             // TODO: REPLACE
-            List.from([_selectedImage!]),
+            _selectedImages,
             _cancelToken,
           );
     } else {
@@ -107,52 +109,66 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
             UserCar(
               userId: context.currentUser!.id,
               licensePlate: licensePlateController.text,
-              carModelYearColorId: selectedCarModelYearColorId,
+              carModelYearColorId: "cm73072iz008bvb004a9iuo7f",
               createdAt: DateTime.now(),
               updatedAt: DateTime.now(),
             ),
             // TODO: REPLACE
-            List.from([_selectedImage!]),
+            _selectedImages,
             _cancelToken,
           );
     }
   }
 
   void submitForm() {
-    if (formKey.currentState!.validate() && _selectedImage != null) {
+    if (formKey.currentState!.validate()) {
+      if (_selectedImages.isEmpty) {
+        SnackBarUtil.showSnackBar(
+          context: context,
+          message: "Harap pilih minimal 1 gambar",
+          type: SnackBarType.error,
+        );
+        return;
+      }
       _performAction();
-    } else if (_selectedImage == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please select an image")),
-      );
-      SnackBarUtil.showSnackBar(
-        context: context,
-        message: "Please select an image",
-        type: SnackBarType.error,
-      );
     }
   }
 
   Future<void> _pickImage() async {
     try {
-      final pickedFile = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
+      final pickedFiles = await ImagePicker().pickMultiImage(
         maxWidth: 1024,
         maxHeight: 1024,
       );
 
-      if (pickedFile != null) {
-        final fileSize = await File(pickedFile.path).length();
-        fileValidatorSize(context, fileSize);
-        setState(() => _selectedImage = File(pickedFile.path));
+      if (pickedFiles != null && pickedFiles.isNotEmpty) {
+        // Validasi maksimal 5 gambar
+        if (_selectedImages.length + pickedFiles.length > 5) {
+          SnackBarUtil.showSnackBar(
+            context: context,
+            message: "Maksimal 5 gambar yang diizinkan",
+            type: SnackBarType.error,
+          );
+          return;
+        }
+
+        // Validasi ukuran file
+        final validFiles = <File>[];
+        for (final pickedFile in pickedFiles) {
+          final file = File(pickedFile.path);
+          final fileSize = await file.length();
+          fileValidatorSize(context, fileSize);
+          validFiles.add(file);
+        }
+
+        setState(() {
+          _selectedImages.addAll(validFiles);
+        });
       }
     } on PlatformException catch (e) {
-      // TODO: DELETE LATERR
-
-      LogService.e("Error picking image: $e");
       SnackBarUtil.showSnackBar(
         context: context,
-        message: "Something went wrong picking image",
+        message: "Gagal memilih gambar",
         type: SnackBarType.error,
       );
     }
@@ -200,10 +216,51 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
                           : "Create Car UserCar",
                       extent: const Large(),
                     ),
-                    ImageCarAction(
-                      selectedImage: _selectedImage,
-                      logoUrl: widget.userCar?.carImages?.first,
-                      onPickImage: _pickImage,
+                    GridView.builder(
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                      ),
+                      itemCount: _selectedImages.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index < _selectedImages.length) {
+                          return Stack(
+                            children: [
+                              Image.file(
+                                _selectedImages[index],
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              ),
+                              Positioned(
+                                right: 0,
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _selectedImages.removeAt(index);
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return GestureDetector(
+                            onTap: _pickImage,
+                            child: Container(
+                              color: Colors.grey[200],
+                              child: const Icon(Icons.add_a_photo, size: 40),
+                            ),
+                          );
+                        }
+                      },
                     ),
                     MainTextField(
                       controller: licensePlateController,
