@@ -54,6 +54,7 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
     setState(
       () {
         isUpdate = widget.userCar != null;
+
         selectedCarModelYearColorId = widget.userCar?.carModelYearColorId;
       },
     );
@@ -77,15 +78,23 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
   }
 
   Future<void> _loadImage() async {
-    if (widget.userCar!.carImages?.first == null) return;
+    if (widget.userCar?.carImages == null ||
+        widget.userCar!.carImages!.isEmpty) {
+      return;
+    }
+
     try {
-      final file = await urlToFile(widget.userCar!.carImages!.first!);
+      final futures = widget.userCar!.carImages!
+          .where((url) => url != null)
+          .map((url) => urlToFile(url!));
+
+      final files = await Future.wait(futures);
+
       setState(() {
-        _selectedImages.add(file);
+        _selectedImages = files;
       });
     } catch (e) {
-      // TODO: DELETE LATERR
-      LogService.e("Error loading image: $e");
+      LogService.e("Error loading images: $e");
     }
   }
 
@@ -100,7 +109,6 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
               updatedAt: widget.userCar!.updatedAt,
               carModelYearColorId: selectedCarModelYearColorId,
             ),
-            // TODO: REPLACE
             _selectedImages,
             _cancelToken,
           );
@@ -109,11 +117,10 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
             UserCar(
               userId: context.currentUser!.id,
               licensePlate: licensePlateController.text,
-              carModelYearColorId: "cm73072iz008bvb004a9iuo7f",
+              carModelYearColorId: selectedCarModelYearColorId,
               createdAt: DateTime.now(),
               updatedAt: DateTime.now(),
             ),
-            // TODO: REPLACE
             _selectedImages,
             _cancelToken,
           );
@@ -141,7 +148,7 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
         maxHeight: 1024,
       );
 
-      if (pickedFiles != null && pickedFiles.isNotEmpty) {
+      if (pickedFiles.isNotEmpty) {
         // Validasi maksimal 5 gambar
         if (_selectedImages.length + pickedFiles.length > 5) {
           SnackBarUtil.showSnackBar(
@@ -165,7 +172,7 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
           _selectedImages.addAll(validFiles);
         });
       }
-    } on PlatformException catch (e) {
+    } on PlatformException {
       SnackBarUtil.showSnackBar(
         context: context,
         message: "Gagal memilih gambar",

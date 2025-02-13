@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:paint_car/data/models/user_car.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
@@ -29,13 +27,20 @@ class UserCarItem extends StatefulWidget {
 
 class _UserCarItemState extends State<UserCarItem> {
   late final UserCar userCar;
-  final _carouselController = CarouselSliderController();
+  late final PageController _pageController;
   int _currentImageIndex = 0;
 
   @override
   void initState() {
     super.initState();
     userCar = widget.userCar;
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   void _confirmDelete(BuildContext context) {
@@ -74,51 +79,57 @@ class _UserCarItemState extends State<UserCarItem> {
       );
     }
 
-    return Stack(
-      children: [
-        CarouselSlider.builder(
-          carouselController: _carouselController,
-          itemCount: userCar.carImages!.length,
-          options: CarouselOptions(
-            height: 120,
-            viewportFraction: 1.0,
-            enableInfiniteScroll: userCar.carImages!.length > 1,
-            onPageChanged: (index, reason) {
+    return SizedBox(
+      width: 120,
+      height: 120,
+      child: Stack(
+        children: [
+          PageView.builder(
+            controller: _pageController,
+            itemCount: userCar.carImages!.length,
+            onPageChanged: (index) {
               setState(() => _currentImageIndex = index);
             },
+            itemBuilder: (context, index) {
+              return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: ImageNetwork(
+                    src: userCar.carImages![index]!,
+                    width: 120,
+                    height: 120,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+            },
           ),
-          itemBuilder: (context, index, realIndex) {
-            return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: ImageNetwork(
-                  src: userCar.carImages![index]!,
-                  width: 120,
-                  height: 120,
-                  fit: BoxFit.cover,
+          if (userCar.carImages!.length > 1)
+            Positioned(
+              bottom: 8,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  userCar.carImages!.length,
+                  (index) => Container(
+                    width: 6,
+                    height: 6,
+                    margin: const EdgeInsets.symmetric(horizontal: 2),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _currentImageIndex == index
+                          ? Colors.white
+                          : Colors.white.withOpacity(0.5),
+                    ),
+                  ),
                 ),
               ),
-            );
-          },
-        ),
-        if (userCar.carImages!.length > 1)
-          Positioned(
-            bottom: 8,
-            left: 0,
-            right: 0,
-            child: DotsIndicator(
-              dotsCount: userCar.carImages!.length,
-              position: _currentImageIndex.toDouble(),
-              decorator: DotsDecorator(
-                color: Colors.white.withOpacity(0.5),
-                activeColor: Colors.white,
-                size: const Size(6, 6),
-                activeSize: const Size(8, 8),
-              ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 
