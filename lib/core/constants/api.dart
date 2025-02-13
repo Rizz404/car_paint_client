@@ -7,6 +7,11 @@ class ApiConstant {
   static const String baseUrl =
       'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
   // ! PATH
+
+  // ! USER
+  static const String userCarsPath = "/user-cars";
+
+  // ! SUPER ADMIN
   // ! CAR
   // * brands
   static const String brandsPath = "/car-brands";

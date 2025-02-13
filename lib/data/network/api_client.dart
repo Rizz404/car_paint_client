@@ -98,6 +98,7 @@ class ApiClient {
     bool isMultiPart = false,
     String? keyImageFile,
     File? imageFile,
+    List<File>? imageFiles,
     CancelToken? cancelToken,
     int retryMax = 3,
   }) async {
@@ -105,6 +106,18 @@ class ApiClient {
       final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
       final headers = await _getHeaders(isMultiPart);
       LogService.i('PATCH request to $uri');
+
+      if (isMultiPart && imageFiles != null) {
+        return _sendMultipartRequest<T>(
+          'PATCH',
+          uri,
+          headers,
+          body as Map<String, dynamic>,
+          keyImageFile,
+          imageFiles: imageFiles,
+          fromJson: fromJson,
+        );
+      }
 
       if (isMultiPart && imageFile != null) {
         return _sendMultipartRequest<T>(

@@ -19,6 +19,7 @@ import 'package:paint_car/features/(superadmin)/financial/cubit/e_tickets_cubit.
 import 'package:paint_car/features/(superadmin)/financial/cubit/orders_cubit.dart';
 import 'package:paint_car/features/(superadmin)/financial/cubit/payment_method_cubit.dart';
 import 'package:paint_car/features/(superadmin)/financial/cubit/transactions_cubit.dart';
+import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
 import 'package:paint_car/features/home/pages/home_page.dart';
 import 'package:paint_car/features/shared/cubit/user_cubit.dart';
 import 'package:paint_car/ui/config/configuration_theme.dart';
@@ -71,6 +72,9 @@ Future<void> main() async {
         ),
         BlocProvider(
           create: (context) => getIt<TransactionsCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<UserCarCubit>(),
         ),
       ],
       child: const MyApp(),

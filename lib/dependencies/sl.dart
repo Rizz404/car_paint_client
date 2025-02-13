@@ -27,6 +27,8 @@ import "package:paint_car/features/(superadmin)/financial/repo/e_tickets_repo.da
 import "package:paint_car/features/(superadmin)/financial/repo/orders_repo.dart";
 import "package:paint_car/features/(superadmin)/financial/repo/payment_method_repo.dart";
 import "package:paint_car/features/(superadmin)/financial/repo/transactions_repo.dart";
+import "package:paint_car/features/(user)/car/cubit/user_car_cubit.dart";
+import "package:paint_car/features/(user)/car/repo/user_car_repo.dart";
 import "package:paint_car/features/shared/cubit/user_cubit.dart";
 import "package:paint_car/features/shared/repo/user_repo.dart";
 import "package:shared_preferences/shared_preferences.dart";
@@ -47,6 +49,9 @@ initializeSL() async {
   getIt.registerLazySingleton<ApiClient>(
     () => ApiClient(client: getIt(), tokenSp: getIt()),
   );
+
+  // ! GUEST
+
   // ! user
   getIt.registerLazySingleton<UserRepo>(
     () => UserRepo(
@@ -68,6 +73,20 @@ initializeSL() async {
     ),
   );
   getIt.registerFactory<AuthCubit>(() => AuthCubit(authRepo: getIt()));
+  // ! USER
+  getIt.registerLazySingleton<UserCarRepo>(
+    () => UserCarRepo(
+      apiClient: getIt(),
+    ),
+  );
+  getIt.registerFactory<UserCarCubit>(
+    () => UserCarCubit(
+      userCarRepo: getIt(),
+    ),
+  );
+
+  // ! SUPERADMIN
+
   // ! brands
   getIt.registerLazySingleton<CarBrandsRepo>(
     () => CarBrandsRepo(
