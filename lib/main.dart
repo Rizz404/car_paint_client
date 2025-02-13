@@ -21,7 +21,6 @@ import 'package:paint_car/features/(superadmin)/financial/cubit/payment_method_c
 import 'package:paint_car/features/(superadmin)/financial/cubit/transactions_cubit.dart';
 import 'package:paint_car/features/home/pages/home_page.dart';
 import 'package:paint_car/features/shared/cubit/user_cubit.dart';
-import 'package:paint_car/features/template/cubit/template_cubit.dart';
 import 'package:paint_car/ui/config/configuration_theme.dart';
 import 'package:paint_car/dependencies/sl.dart';
 
@@ -32,13 +31,10 @@ Future<void> main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => getIt<TemplateCubit>(),
-        ),
-        BlocProvider(
           create: (context) => getIt<AuthCubit>(),
         ),
         BlocProvider(
-          create: (context) => getIt<UserCubit>(),
+          create: (context) => getIt<UserCubit>()..getUserLocal(),
         ),
         BlocProvider(
           create: (context) => getIt<CarBrandsCubit>(),

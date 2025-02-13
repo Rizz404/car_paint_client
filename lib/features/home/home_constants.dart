@@ -10,8 +10,6 @@ import 'package:paint_car/features/(superadmin)/financial/pages/e_tickets_page.d
 import 'package:paint_car/features/(superadmin)/financial/pages/orders_page.dart';
 import 'package:paint_car/features/(superadmin)/financial/pages/payment_method_page.dart';
 import 'package:paint_car/features/(superadmin)/financial/pages/transactions_page.dart';
-import 'package:paint_car/features/users/pages/profile_page.dart';
-import 'package:paint_car/features/users/pages/users_page.dart';
 
 class HomeConstants {
   static const List<Map<String, dynamic>> carItems = const [
@@ -26,10 +24,6 @@ class HomeConstants {
     {'name': 'Car Model Years Color', 'route': CarModelYearColorPage.route},
   ];
 
-  static const List<Map<String, dynamic>> userItems = const [
-    {'name': 'Users', 'route': UsersPage.route},
-    {'name': 'Profile', 'route': ProfilePage.route},
-  ];
   static const List<Map<String, dynamic>> financialItems = const [
     // TODO: HANYA GET UNTUK ADMIN
     {'name': 'Orders', 'route': OrdersPage.route},

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/core/constants/mock.dart';
+import 'package:paint_car/features/shared/cubit/user_cubit.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
@@ -35,8 +36,8 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     _cancelToken = CancelToken();
     setState(() {
-      emailController.text = Mock.superadmin["email"];
-      passwordController.text = Mock.superadmin["password"];
+      emailController.text = Mock.admin["email"];
+      passwordController.text = Mock.admin["password"];
     });
   }
 
@@ -75,8 +76,12 @@ class _LoginPageState extends State<LoginPage> {
           context: context,
           state: state,
           onRetry: signIn,
-          onSuccess: () {
-            Navigator.of(context).push(HomePage.route());
+          onSuccess: () async {
+            await context.read<UserCubit>().getUserLocal();
+            if (context.mounted) {
+              Navigator.of(context)
+                  .pushAndRemoveUntil(HomePage.route(), (_) => false);
+            }
           },
         );
       },

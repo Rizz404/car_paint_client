@@ -25,6 +25,7 @@ class UserCubit extends Cubit<BaseState> {
 
   Future<void> logout() async {
     await userRepo.logout();
+    emit(const BaseInitialState());
   }
 
   Future<void> getToken() async {

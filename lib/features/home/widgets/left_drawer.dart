@@ -20,17 +20,9 @@ class LeftDrawer extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
             ),
             child: MainText(
-              text: 'Drawer Header',
+              text: 'Admin Drawer Header',
               extent: const Large(),
               color: Theme.of(context).colorScheme.onPrimary,
-            ),
-          ),
-          MainDropdown(
-            state: DropdownState(
-              title: 'Users Menu',
-              items: HomeConstants.userItems,
-              subtitle: 'User',
-              leadingIcon: Icons.person,
             ),
           ),
           MainDropdown(

@@ -29,8 +29,6 @@ import "package:paint_car/features/(superadmin)/financial/repo/payment_method_re
 import "package:paint_car/features/(superadmin)/financial/repo/transactions_repo.dart";
 import "package:paint_car/features/shared/cubit/user_cubit.dart";
 import "package:paint_car/features/shared/repo/user_repo.dart";
-import "package:paint_car/features/template/cubit/template_cubit.dart";
-import "package:paint_car/features/template/repo/template_repo.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:http/http.dart" as http;
 
@@ -48,18 +46,6 @@ initializeSL() async {
   getIt.registerLazySingleton<http.Client>(() => http.Client());
   getIt.registerLazySingleton<ApiClient>(
     () => ApiClient(client: getIt(), tokenSp: getIt()),
-  );
-  // ! template
-  getIt.registerLazySingleton<TemplateRepo>(
-    () => TemplateRepo(
-      apiClient: getIt(),
-      tokenSp: getIt(),
-    ),
-  );
-  getIt.registerFactory<TemplateCubit>(
-    () => TemplateCubit(
-      templateRepo: getIt(),
-    ),
   );
   // ! user
   getIt.registerLazySingleton<UserRepo>(
