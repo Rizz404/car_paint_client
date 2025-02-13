@@ -130,11 +130,11 @@ class UserCarCubit extends Cubit<BaseState> with Cancelable {
     );
   }
 
-  Future<void> updateUserCar(UserCar userCarUserCar, List<File>? imageFile,
+  Future<void> updateUserCar(UserCar userCarUserCar, List<File>? imageFiles,
       CancelToken cancelToken) async {
     await handleBaseCubit<void>(
       emit,
-      () => userCarRepo.updateUserCar(userCarUserCar, imageFile, cancelToken),
+      () => userCarRepo.updateUserCar(userCarUserCar, imageFiles, cancelToken),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
         getUserCars(1, cancelToken),

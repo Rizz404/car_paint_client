@@ -55,14 +55,14 @@ class UserCarRepo {
     return await handleApiResponse(result, isGet: false);
   }
 
+  // ! gatau kenapa ini gabisa, padahal sukses
   Future<ApiResponse<UserCar>> updateUserCar(
     UserCar userCar,
     List<File>? imageFiles,
     CancelToken cancelToken,
   ) async {
-    LogService.i('updateUserCar: $userCar');
     final result = await apiClient.patch<UserCar>(
-      '${ApiConstant.userCarsPath}/${userCar.id}',
+      "${ApiConstant.userCarsPath}/${userCar.id}",
       {
         'id': userCar.id,
         'carModelYearColorId': userCar.carModelYearColorId,

@@ -106,6 +106,7 @@ class ApiClient {
       final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
       final headers = await _getHeaders(isMultiPart);
       LogService.i('PATCH request to $uri');
+      LogService.i('body: $body');
 
       if (isMultiPart && imageFiles != null) {
         return _sendMultipartRequest<T>(
@@ -176,10 +177,10 @@ class ApiClient {
     final request = http.MultipartRequest(method, uri);
     request.headers.addAll(headers);
 
+    LogService.i('bodyMap: $bodyMap');
+
     bodyMap.forEach((key, value) {
-      if (key != keyImageFile) {
-        request.fields[key] = value.toString();
-      }
+      request.fields[key] = value.toString();
     });
 
     if (imageFiles != null) {
