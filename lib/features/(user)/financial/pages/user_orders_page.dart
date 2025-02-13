@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class UserOrdersPage extends StatefulWidget {
+  static route() => MaterialPageRoute(builder: (_) => const UserOrdersPage());
   const UserOrdersPage({super.key});
 
   @override

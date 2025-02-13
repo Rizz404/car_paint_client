@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class UserPaymentMethodPage extends StatefulWidget {
+  static route() =>
+      MaterialPageRoute(builder: (_) => const UserPaymentMethodPage());
+
   const UserPaymentMethodPage({super.key});
 
   @override

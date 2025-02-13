@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class HubungiKamiPage extends StatefulWidget {
+  static route() => MaterialPageRoute(builder: (_) => const HubungiKamiPage());
+
   const HubungiKamiPage({super.key});
 
   @override

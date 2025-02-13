@@ -10,21 +10,39 @@ import 'package:paint_car/features/(superadmin)/financial/pages/e_tickets_page.d
 import 'package:paint_car/features/(superadmin)/financial/pages/orders_page.dart';
 import 'package:paint_car/features/(superadmin)/financial/pages/payment_method_page.dart';
 import 'package:paint_car/features/(superadmin)/financial/pages/transactions_page.dart';
+import 'package:paint_car/features/(user)/financial/pages/user_e_tickets_page.dart';
+import 'package:paint_car/features/(user)/financial/pages/user_orders_page.dart';
+import 'package:paint_car/features/(user)/financial/pages/user_transactions_page.dart';
+import 'package:paint_car/features/(user)/other/pages/hubungi_kami_page.dart';
+import 'package:paint_car/features/(user)/other/pages/syarat_dan_ketentuan_page.dart';
+import 'package:paint_car/features/(user)/other/pages/tentang_aplikasi_page.dart';
 
 class HomeConstants {
-  static const List<Map<String, dynamic>> carItems = const [
+  static const List<Map<String, dynamic>> carItemsUser = const [
+    {'name': 'Orders', 'route': UserOrdersPage.route},
+  ];
+  static const List<Map<String, dynamic>> financialItemsUser = const [
+    {'name': 'Orders', 'route': UserOrdersPage.route},
+    {'name': 'E-Tickets', 'route': UserETicketsPage.route},
+    {'name': 'Transactions', 'route': UserTransactionsPage.route},
+  ];
+  static const List<Map<String, dynamic>> otherItemsUser = const [
+    {'name': 'Hubungi Kami', 'route': HubungiKamiPage.route},
+    {'name': 'Syarat Dan Ketentuan', 'route': SyaratDanKetentuanPage.route},
+    {'name': 'Tentang Aplikasi', 'route': TentangAplikasiPage.route},
+  ];
+  static const List<Map<String, dynamic>> carItemsSuperAdmin = const [
     {'name': 'Cars', 'route': CarsPage.route},
     {'name': 'Car Brands', 'route': CarBrandsPage.route},
     {'name': 'Car Models', 'route': CarModelsPage.route},
     {'name': 'Car Services', 'route': CarServicesPage.route},
-    // TODO: SEMUA YANG ROUTE NYA MASIH GAJELAS LAKUIN
     {'name': 'Car Workshops', 'route': CarWorkshopsPage.route},
     {'name': 'Car Colors', 'route': CarColorsPage.route},
     {'name': 'Car Model Years', 'route': CarModelYearsPage.route},
     {'name': 'Car Model Years Color', 'route': CarModelYearColorPage.route},
   ];
 
-  static const List<Map<String, dynamic>> financialItems = const [
+  static const List<Map<String, dynamic>> financialItemsSuperAdmin = const [
     // TODO: HANYA GET UNTUK ADMIN
     {'name': 'Orders', 'route': OrdersPage.route},
     {'name': 'Transactions', 'route': TransactionsPage.route},

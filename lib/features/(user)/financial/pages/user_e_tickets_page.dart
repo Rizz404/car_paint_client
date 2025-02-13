@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class UserETicketsPage extends StatefulWidget {
+  static route() => MaterialPageRoute(builder: (_) => const UserETicketsPage());
+
   const UserETicketsPage({super.key});
 
   @override

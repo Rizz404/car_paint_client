@@ -36,19 +36,6 @@ class _HomePageState extends State<HomePage> {
             const MainText(text: "Welcome User"),
           if (context.userRole == UserRole.SUPER_ADMIN)
             const MainText(text: "Welcome Super Admin"),
-
-          // GetUser(
-          //   onSuccess: (user, role) {
-          //     switch (role) {
-          //       case UserRole.ADMIN:
-          //         return const MainText(text: "Welcome Admin");
-          //       case UserRole.USER:
-          //         return const MainText(text: "Welcome user");
-          //       case UserRole.SUPER_ADMIN:
-          //         return const MainText(text: "Welcome Super Admin");
-          //     }
-          //   },
-          // ),
         ],
       ),
     );
@@ -76,13 +63,22 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    drawerBasedOnRole() {
+      if (context.userRole == UserRole.SUPER_ADMIN ||
+          context.userRole == UserRole.USER) {
+        return LeftDrawer();
+      } else {
+        null;
+      }
+    }
+
     return Scaffold(
       appBar: mainAppBar(_title()),
       bottomNavigationBar: BottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
       ),
-      drawer: LeftDrawer(),
+      drawer: drawerBasedOnRole(),
       body: [
         _buildHomePage(),
         const SettingsPage(),

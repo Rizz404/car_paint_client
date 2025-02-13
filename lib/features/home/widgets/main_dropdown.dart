@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/ui/common/dropdown_state.dart';
+import 'package:paint_car/ui/shared/main_text.dart';
 
 class MainDropdown extends StatelessWidget {
   final DropdownState state;
@@ -11,9 +12,13 @@ class MainDropdown extends StatelessWidget {
     return ExpansionTile(
       tilePadding: const EdgeInsets.only(left: 12),
       leading: Icon(state.leadingIcon),
-      subtitle: Text(state.subtitle),
+      subtitle: MainText(
+        text: state.subtitle,
+      ),
       childrenPadding: const EdgeInsets.only(left: 32),
-      title: Text(state.title),
+      title: MainText(
+        text: state.title,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class UserCreateOrderPage extends StatefulWidget {
+  static route() =>
+      MaterialPageRoute(builder: (_) => const UserCreateOrderPage());
+
   const UserCreateOrderPage({super.key});
 
   @override

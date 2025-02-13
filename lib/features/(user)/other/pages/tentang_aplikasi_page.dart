@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TentangAplikasiPage extends StatefulWidget {
+  static route() =>
+      MaterialPageRoute(builder: (_) => const TentangAplikasiPage());
+
   const TentangAplikasiPage({super.key});
 
   @override

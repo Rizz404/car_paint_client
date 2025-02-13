@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class UserCarPage extends StatefulWidget {
+  static route() =>
+      MaterialPageRoute(builder: (context) => const UserCarPage());
   const UserCarPage({super.key});
 
   @override

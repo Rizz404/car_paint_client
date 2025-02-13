@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SyaratDanKetentuanPage extends StatefulWidget {
+  static route() =>
+      MaterialPageRoute(builder: (_) => const SyaratDanKetentuanPage());
+
   const SyaratDanKetentuanPage({super.key});
 
   @override
