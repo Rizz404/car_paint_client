@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 
 class UserCar {
   final String? id;
-  final String userId;
+  final String? userId;
   final String carModelYearColorId;
   final String licensePlate;
   final List<String?>? carImages;
@@ -14,7 +14,7 @@ class UserCar {
 
   UserCar({
     this.id,
-    required this.userId,
+    this.userId,
     required this.carModelYearColorId,
     required this.licensePlate,
     this.carImages,

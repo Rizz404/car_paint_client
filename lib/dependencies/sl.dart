@@ -29,6 +29,8 @@ import "package:paint_car/features/(superadmin)/financial/repo/payment_method_re
 import "package:paint_car/features/(superadmin)/financial/repo/transactions_repo.dart";
 import "package:paint_car/features/(user)/car/cubit/user_car_cubit.dart";
 import "package:paint_car/features/(user)/car/repo/user_car_repo.dart";
+import "package:paint_car/features/(user)/workshop/cubit/user_workshops_cubit.dart";
+import "package:paint_car/features/(user)/workshop/repo/user_workshops_repo.dart";
 import "package:paint_car/features/shared/cubit/user_cubit.dart";
 import "package:paint_car/features/shared/repo/user_repo.dart";
 import "package:shared_preferences/shared_preferences.dart";
@@ -82,6 +84,16 @@ initializeSL() async {
   getIt.registerFactory<UserCarCubit>(
     () => UserCarCubit(
       userCarRepo: getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<UserWorkshopsRepo>(
+    () => UserWorkshopsRepo(
+      apiClient: getIt(),
+    ),
+  );
+  getIt.registerFactory<UserWorkshopCubit>(
+    () => UserWorkshopCubit(
+      userWorkshopRepo: getIt(),
     ),
   );
 

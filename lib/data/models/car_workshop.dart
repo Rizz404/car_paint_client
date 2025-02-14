@@ -7,6 +7,7 @@ class CarWorkshop {
   final String email;
   final String phoneNumber;
   final String address;
+  final String? distance;
   final double latitude;
   final double longitude;
   final DateTime? createdAt;
@@ -19,6 +20,7 @@ class CarWorkshop {
     required this.address,
     required this.latitude,
     required this.longitude,
+    this.distance,
     this.createdAt,
     this.updatedAt,
   });
@@ -29,6 +31,7 @@ class CarWorkshop {
     String? email,
     String? phoneNumber,
     String? address,
+    String? distance,
     double? latitude,
     double? longitude,
     DateTime? createdAt,
@@ -40,6 +43,7 @@ class CarWorkshop {
       email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       address: address ?? this.address,
+      distance: distance ?? this.distance,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
       createdAt: createdAt ?? this.createdAt,
@@ -54,6 +58,7 @@ class CarWorkshop {
       'email': email,
       'phoneNumber': phoneNumber,
       'address': address,
+      'distance': distance,
       'latitude': latitude.toString(),
       'longitude': longitude.toString(),
       'createdAt': createdAt?.toIso8601String(),
@@ -66,8 +71,9 @@ class CarWorkshop {
       id: map['id'] != null ? map['id'] as String : null,
       name: map['name'] as String,
       email: map['email'] as String,
-      phoneNumber: map['phoneNumber'] as String,
+      phoneNumber: map['phone_number'] as String, // gunakan key yang sesuai
       address: map['address'] as String,
+      distance: map['distance'] != null ? map['distance'] as String : null,
       latitude: double.parse(map['latitude'] as String),
       longitude: double.parse(map['longitude'] as String),
       createdAt: map['createdAt'] != null
@@ -86,7 +92,7 @@ class CarWorkshop {
 
   @override
   String toString() {
-    return 'CarWorkshop(id: $id, name: $name, email: $email, phoneNumber: $phoneNumber, address: $address, latitude: $latitude, longitude: $longitude, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'CarWorkshop(id: $id, name: $name, email: $email, phoneNumber: $phoneNumber, address: $address, latitude: $latitude, distance: $distance, longitude: $longitude, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -101,7 +107,8 @@ class CarWorkshop {
         other.latitude == latitude &&
         other.longitude == longitude &&
         other.createdAt == createdAt &&
-        other.updatedAt == updatedAt;
+        other.updatedAt == updatedAt &&
+        other.distance == distance;
   }
 
   @override
@@ -114,6 +121,7 @@ class CarWorkshop {
         latitude.hashCode ^
         longitude.hashCode ^
         createdAt.hashCode ^
-        updatedAt.hashCode;
+        updatedAt.hashCode ^
+        distance.hashCode;
   }
 }

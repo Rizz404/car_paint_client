@@ -45,6 +45,7 @@ class ApiClient {
   Future<ApiResponse<T>> post<T>(
     String endpoint,
     dynamic body, {
+    Map<String, dynamic>? queryParameters,
     T Function(Map<String, dynamic>)? fromJson,
     bool isMultiPart = false,
     File? imageFile,
@@ -54,7 +55,10 @@ class ApiClient {
     int retryMax = 3,
   }) async {
     return _executeRequestWithRetry(() async {
-      final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
+      Uri uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
+      if (queryParameters != null) {
+        uri = uri.replace(queryParameters: queryParameters);
+      }
       final headers = await _getHeaders(isMultiPart);
       LogService.i('POST request to $uri');
 
@@ -197,9 +201,7 @@ class ApiClient {
 
     final streamedResponse = await request.send();
     final response = await http.Response.fromStream(streamedResponse);
-    LogService.i(
-        'Response multipart request: method: $method: ${response.body}');
-    LogService.i('status code: ${response.statusCode}');
+
     return _handleResponse<T>(response, fromJson);
   }
 

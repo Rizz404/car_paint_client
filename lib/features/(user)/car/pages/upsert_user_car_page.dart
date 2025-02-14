@@ -103,13 +103,12 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
       context.read<UserCarCubit>().updateUserCar(
             UserCar(
               id: widget.userCar!.id,
-              userId: widget.userCar!.userId,
               licensePlate: licensePlateController.text,
               createdAt: widget.userCar!.createdAt,
               updatedAt: widget.userCar!.updatedAt,
               carModelYearColorId: selectedCarModelYearColorId,
             ),
-            _selectedImages,
+            _selectedImages.isNotEmpty ? _selectedImages : null,
             _cancelToken,
           );
     } else {
