@@ -89,8 +89,6 @@ class ApiClient {
       final response = await client
           .post(uri, headers: headers, body: jsonEncode(body))
           .timeout(timeout);
-      LogService.i('Response POST: ${response.body}');
-      LogService.i('status code POST: ${response.statusCode}');
       return _handleResponse<T>(response, fromJson);
     }, cancelToken: cancelToken, maxRetries: retryMax);
   }
@@ -110,7 +108,6 @@ class ApiClient {
       final uri = Uri.parse('${ApiConstant.baseUrl}$endpoint');
       final headers = await _getHeaders(isMultiPart);
       LogService.i('PATCH request to $uri');
-      LogService.i('body: $body');
 
       if (isMultiPart && imageFiles != null) {
         return _sendMultipartRequest<T>(
@@ -139,8 +136,6 @@ class ApiClient {
       final response = await client
           .patch(uri, headers: headers, body: jsonEncode(body))
           .timeout(timeout);
-      LogService.i('Response PATCH: ${response.body}');
-      LogService.i('status code: patch ${response.statusCode}');
       return _handleResponse<T>(response, fromJson);
     }, cancelToken: cancelToken, maxRetries: retryMax);
   }
@@ -157,8 +152,6 @@ class ApiClient {
       LogService.i('DELETE request to $uri');
       final response =
           await client.delete(uri, headers: headers).timeout(timeout);
-      LogService.i('Response DELETE: ${response.body}');
-      LogService.i('status code DELETE: ${response.statusCode}');
       return _handleResponse<T>(response, fromJson);
     }, cancelToken: cancelToken, maxRetries: retryMax);
   }
