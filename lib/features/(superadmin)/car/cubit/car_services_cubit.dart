@@ -16,8 +16,6 @@ class CarServicesCubit extends Cubit<BaseState> with Cancelable {
     required this.carServicesRepo,
   }) : super(const BaseInitialState());
 
-  final int _limit = 10;
-
   List<CarService> services = [];
   Pagination? pagination;
   int currentPage = 1;
@@ -31,8 +29,9 @@ class CarServicesCubit extends Cubit<BaseState> with Cancelable {
 
   Future<void> getServices(
     int page,
-    CancelToken cancelToken,
-  ) async {
+    CancelToken cancelToken, {
+    int limit = 10,
+  }) async {
     if (isLoadingMore) return;
     cancelRequests();
 
@@ -60,7 +59,7 @@ class CarServicesCubit extends Cubit<BaseState> with Cancelable {
     try {
       await handleBaseCubit<PaginatedData<CarService>>(
         emit,
-        () => carServicesRepo.getServices(page, _limit, cancelToken),
+        () => carServicesRepo.getServices(page, limit, cancelToken),
         onSuccess: (data, message) {
           if (page == 1) services.clear();
 
