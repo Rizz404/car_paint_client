@@ -39,11 +39,7 @@ extension OrderStatusExtension on OrderStatus {
   }
 }
 
-enum PaymentStatus {
-  PENDING,
-  SUCCESS,
-  CANCELLED,
-}
+enum PaymentStatus { PENDING, SUCCESS, EXPIRED, FAILED, REFUNDED }
 
 extension PaymentStatusExtension on PaymentStatus {
   String toMap() {

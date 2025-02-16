@@ -7,10 +7,13 @@ import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_model_year_color_cubit.dart';
 import 'package:paint_car/features/(superadmin)/financial/cubit/payment_method_cubit.dart';
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
+import 'package:paint_car/features/(user)/financial/cubit/user_orders_cubit.dart';
+import 'package:paint_car/features/(user)/financial/pages/user_transactions_page.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
+import 'package:paint_car/ui/shared/image_network.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
@@ -85,13 +88,14 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
       "userCarId: $selectedUserCarId, paymentMethodId: $selectedPaymentMethodId, note: ${noteController.text}, workshopId: ${widget.workshopId}, carServices: ${widget.carServices}",
     );
     // TODO: create order
-    // context.read<CarModelYearColorCubit>().saveModel(
-    //       CarModelYearColor(
-    //         carModelYearId: selectedCarModelYearId,
-    //         colorId: selectedColorId,
-    //       ),
-    //       _cancelToken,
-    //     );
+    context.read<UserOrdersCubit>().createOrder(
+          selectedUserCarId,
+          selectedPaymentMethodId,
+          widget.workshopId,
+          noteController.text.isEmpty ? null : noteController.text,
+          widget.carServices,
+          _cancelToken,
+        );
   }
 
   void submitForm() {
@@ -114,7 +118,10 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
               message: "Order created successfully",
               type: SnackBarType.success,
             );
-            Navigator.pop(context);
+            Navigator.of(context).pushAndRemoveUntil(
+              UserTransactionsPage.route(),
+              (_) => false,
+            );
           },
         );
       },
@@ -155,6 +162,11 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
                             return DropdownMenuEntry(
                               labelWidget: MainText(
                                 text: userCar.licensePlate,
+                              ),
+                              leadingIcon: ImageNetwork(
+                                src: userCar.carImages!.first!,
+                                width: 50,
+                                height: 50,
                               ),
                               value: userCar.id,
                               label: userCar.licensePlate,

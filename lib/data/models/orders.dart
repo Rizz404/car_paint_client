@@ -1,17 +1,23 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
+import 'package:paint_car/data/models/car_service.dart';
+import 'package:paint_car/data/models/e_ticket.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 
 class Orders {
   final String? id;
-  final String userId;
-  final String userCarId;
-  final String workshopId;
-  final WorkStatus workStatus;
-  final OrderStatus orderStatus;
-  final String note;
-  final String totalPrice;
+  final String? userId;
+  final String? userCarId;
+  final String? workshopId;
+  final WorkStatus? workStatus;
+  final OrderStatus? orderStatus;
+  final String? note;
+  final List<CarService?>? carServices;
+  final List<ETicket?>? eTicket;
+  final String? totalPrice;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   Orders({
@@ -22,6 +28,8 @@ class Orders {
     required this.workStatus,
     required this.orderStatus,
     required this.note,
+    this.carServices,
+    this.eTicket,
     required this.totalPrice,
     this.createdAt,
     this.updatedAt,
@@ -35,6 +43,8 @@ class Orders {
     WorkStatus? workStatus,
     OrderStatus? orderStatus,
     String? note,
+    List<CarService?>? carServices,
+    List<ETicket?>? eTicket,
     String? totalPrice,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -47,6 +57,8 @@ class Orders {
       workStatus: workStatus ?? this.workStatus,
       orderStatus: orderStatus ?? this.orderStatus,
       note: note ?? this.note,
+      carServices: carServices ?? this.carServices,
+      eTicket: eTicket ?? this.eTicket,
       totalPrice: totalPrice ?? this.totalPrice,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -59,9 +71,11 @@ class Orders {
       'userId': userId,
       'userCarId': userCarId,
       'workshopId': workshopId,
-      'workStatus': workStatus.toMap(),
-      'orderStatus': orderStatus.toMap(),
+      'workStatus': workStatus?.toMap(),
+      'orderStatus': orderStatus?.toMap(),
       'note': note,
+      'carServices': carServices?.map((x) => x?.toMap()).toList(),
+      'eTicket': eTicket?.map((x) => x?.toMap()).toList(),
       'totalPrice': totalPrice,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
@@ -71,13 +85,33 @@ class Orders {
   factory Orders.fromMap(Map<String, dynamic> map) {
     return Orders(
       id: map['id'] != null ? map['id'] as String : null,
-      userId: map['userId'] as String,
-      userCarId: map['userCarId'] as String,
-      workshopId: map['workshopId'] as String,
-      workStatus: WorkStatusExtension.fromMap(map['workStatus'] as String),
-      orderStatus: OrderStatusExtension.fromMap(map['orderStatus'] as String),
-      note: map['note'] as String,
-      totalPrice: map['totalPrice'] as String,
+      userId: map['userId'] != null ? map['userId'] as String : null,
+      userCarId: map['userCarId'] != null ? map['userCarId'] as String : null,
+      workshopId:
+          map['workshopId'] != null ? map['workshopId'] as String : null,
+      workStatus: map['workStatus'] != null
+          ? WorkStatusExtension.fromMap(map['workStatus'] as String)
+          : null,
+      orderStatus: map['orderStatus'] != null
+          ? OrderStatusExtension.fromMap(map['orderStatus'] as String)
+          : null,
+      note: map['note'] != null ? map['note'] as String : null,
+      carServices: map['carServices'] != null
+          ? List<CarService?>.from(
+              (map['carServices'] as List<dynamic>).map<CarService?>(
+                (x) => CarService?.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
+      eTicket: map['eTicket'] != null
+          ? List<ETicket?>.from(
+              (map['eTicket'] as List<dynamic>).map<ETicket>(
+                (x) => ETicket?.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
+      totalPrice:
+          map['totalPrice'] != null ? map['totalPrice'] as String : null,
       createdAt: map['createdAt'] != null
           ? DateTime.parse(map['createdAt'] as String)
           : null,
@@ -94,7 +128,7 @@ class Orders {
 
   @override
   String toString() {
-    return 'Orders(id: $id, userId: $userId, userCarId: $userCarId, workshopId: $workshopId, workStatus: $workStatus, orderStatus: $orderStatus, note: $note, totalPrice: $totalPrice, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Orders(id: $id, userId: $userId, userCarId: $userCarId, workshopId: $workshopId, workStatus: $workStatus, orderStatus: $orderStatus, note: $note, carServices: $carServices, eTicket: $eTicket, totalPrice: $totalPrice, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -108,6 +142,8 @@ class Orders {
         other.workStatus == workStatus &&
         other.orderStatus == orderStatus &&
         other.note == note &&
+        listEquals(other.carServices, carServices) &&
+        listEquals(other.eTicket, eTicket) &&
         other.totalPrice == totalPrice &&
         other.createdAt == createdAt &&
         other.updatedAt == updatedAt;
@@ -122,6 +158,8 @@ class Orders {
         workStatus.hashCode ^
         orderStatus.hashCode ^
         note.hashCode ^
+        carServices.hashCode ^
+        eTicket.hashCode ^
         totalPrice.hashCode ^
         createdAt.hashCode ^
         updatedAt.hashCode;

@@ -71,7 +71,7 @@ class CarWorkshop {
       id: map['id'] != null ? map['id'] as String : null,
       name: map['name'] as String,
       email: map['email'] as String,
-      phoneNumber: map['phone_number'] as String, // gunakan key yang sesuai
+      phoneNumber: map['phoneNumber'] as String, // gunakan key yang sesuai
       address: map['address'] as String,
       distance: map['distance'] != null ? map['distance'] as String : null,
       latitude: double.parse(map['latitude'] as String),

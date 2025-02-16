@@ -3,8 +3,8 @@ import 'dart:convert';
 
 class ETicket {
   final String? id;
-  final String userId;
-  final String orderId;
+  final String? userId;
+  final String? orderId;
   final int ticketNumber;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -49,8 +49,8 @@ class ETicket {
   factory ETicket.fromMap(Map<String, dynamic> map) {
     return ETicket(
       id: map['id'] != null ? map['id'] as String : null,
-      userId: map['userId'] as String,
-      orderId: map['orderId'] as String,
+      userId: map['userId'] != null ? map['userId'] as String : null,
+      orderId: map['orderId'] != null ? map['orderId'] as String : null,
       ticketNumber: map['ticketNumber'] as int,
       createdAt: map['createdAt'] != null
           ? DateTime.parse(map['createdAt'] as String)

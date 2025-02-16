@@ -29,6 +29,10 @@ import "package:paint_car/features/(superadmin)/financial/repo/payment_method_re
 import "package:paint_car/features/(superadmin)/financial/repo/transactions_repo.dart";
 import "package:paint_car/features/(user)/car/cubit/user_car_cubit.dart";
 import "package:paint_car/features/(user)/car/repo/user_car_repo.dart";
+import "package:paint_car/features/(user)/financial/cubit/user_orders_cubit.dart";
+import "package:paint_car/features/(user)/financial/cubit/user_transactions_cubit.dart";
+import "package:paint_car/features/(user)/financial/repo/user_orders_repo.dart";
+import "package:paint_car/features/(user)/financial/repo/user_transactions_repo.dart";
 import "package:paint_car/features/(user)/workshop/cubit/user_workshops_cubit.dart";
 import "package:paint_car/features/(user)/workshop/repo/user_workshops_repo.dart";
 import "package:paint_car/features/shared/cubit/user_cubit.dart";
@@ -94,6 +98,26 @@ initializeSL() async {
   getIt.registerFactory<UserWorkshopCubit>(
     () => UserWorkshopCubit(
       userWorkshopRepo: getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<UserOrdersRepo>(
+    () => UserOrdersRepo(
+      apiClient: getIt(),
+    ),
+  );
+  getIt.registerFactory<UserOrdersCubit>(
+    () => UserOrdersCubit(
+      userOrdersRepo: getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<UserTransactionsRepo>(
+    () => UserTransactionsRepo(
+      apiClient: getIt(),
+    ),
+  );
+  getIt.registerFactory<UserTransactionsCubit>(
+    () => UserTransactionsCubit(
+      userTransactionsRepo: getIt(),
     ),
   );
 

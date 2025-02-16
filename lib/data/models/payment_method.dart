@@ -4,7 +4,7 @@ import 'dart:convert';
 class PaymentMethod {
   final String? id;
   final String name;
-  final String fee;
+  final String? fee;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   PaymentMethod({
@@ -45,7 +45,7 @@ class PaymentMethod {
     return PaymentMethod(
       id: map['id'] != null ? map['id'] as String : null,
       name: map['name'] as String,
-      fee: map['fee'] as String,
+      fee: map['fee'] != null ? map['fee'] as String : '',
       createdAt: map['createdAt'] != null
           ? DateTime.parse(map['createdAt'] as String)
           : null,

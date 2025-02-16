@@ -44,8 +44,10 @@ class ApiConstant {
   static const String paymentMethodPath = "/payment-methods";
   // * orders
   static const String ordersPath = "/orders";
+  static const String ordersUserPath = "$ordersPath/user";
   // * transactions
   static const String transactionsPath = "/transactions";
+  static const String transactionsUserPath = "$transactionsPath/user";
   // * eTicket
   static const String eTicketPath = "/e-tickets";
 

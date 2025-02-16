@@ -6,12 +6,14 @@ class ImageNetwork extends StatefulWidget {
   final double width;
   final double height;
   final BoxFit fit;
+  final double borderRadius;
 
   const ImageNetwork({
     Key? key,
     required this.src,
     required this.width,
     required this.height,
+    this.borderRadius = 8,
     this.fit = BoxFit.contain,
   }) : super(key: key);
 
@@ -49,7 +51,9 @@ class _ImageNetworkState extends State<ImageNetwork> {
           height: widget.height,
           decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(
+              widget.borderRadius,
+            ),
             border: Border.all(
               color: Theme.of(context).disabledColor,
             ),
