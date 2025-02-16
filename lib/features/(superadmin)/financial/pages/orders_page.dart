@@ -70,7 +70,7 @@ class _OrdersPageState extends State<OrdersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: mainAppBar("Car Models"),
+      appBar: mainAppBar("Orders"),
       body: StateHandler<OrdersCubit, PaginationState<Orders>>(
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {

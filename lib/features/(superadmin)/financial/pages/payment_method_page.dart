@@ -71,7 +71,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: mainAppBar("Car Models"),
+      appBar: mainAppBar("Payment Method"),
       body: StateHandler<PaymentMethodCubit, PaginationState<PaymentMethod>>(
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {

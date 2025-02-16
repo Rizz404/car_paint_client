@@ -16,6 +16,7 @@ import 'package:paint_car/features/(superadmin)/car/cubit/car_workshops_cubit.da
 import 'package:paint_car/features/(superadmin)/car/pages/car_services/car_services_page.dart';
 import 'package:paint_car/features/(superadmin)/car/pages/car_workshops/car_workshops_page.dart';
 import 'package:paint_car/features/(superadmin)/financial/cubit/e_tickets_cubit.dart';
+import 'package:paint_car/features/(superadmin)/financial/cubit/history_cubit.dart';
 import 'package:paint_car/features/(superadmin)/financial/cubit/orders_cubit.dart';
 import 'package:paint_car/features/(superadmin)/financial/cubit/payment_method_cubit.dart';
 import 'package:paint_car/features/(superadmin)/financial/cubit/transactions_cubit.dart';
@@ -34,6 +35,7 @@ Future<void> main() async {
   runApp(
     MultiBlocProvider(
       providers: [
+        // ! SUPERADMIN
         BlocProvider(
           create: (context) => getIt<AuthCubit>(),
         ),
@@ -76,6 +78,10 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => getIt<TransactionsCubit>(),
         ),
+        BlocProvider(
+          create: (context) => getIt<HistoryCubit>(),
+        ),
+        // ! USER
         BlocProvider(
           create: (context) => getIt<UserCarCubit>(),
         ),

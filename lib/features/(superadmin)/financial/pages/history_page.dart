@@ -9,7 +9,9 @@ import 'package:paint_car/data/models/e_ticket.dart';
 import 'package:paint_car/data/models/payment_method.dart';
 import 'package:paint_car/data/models/transactions.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
+import 'package:paint_car/features/(superadmin)/financial/cubit/history_cubit.dart';
 import 'package:paint_car/features/(superadmin)/financial/cubit/transactions_cubit.dart';
+import 'package:paint_car/features/(superadmin)/financial/widgets/history_item.dart';
 import 'package:paint_car/features/(superadmin)/financial/widgets/transactions_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
@@ -17,15 +19,15 @@ import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 
-class TransactionsPage extends StatefulWidget {
-  static route() => MaterialPageRoute(builder: (_) => const TransactionsPage());
-  const TransactionsPage({super.key});
+class HistoryPage extends StatefulWidget {
+  static route() => MaterialPageRoute(builder: (_) => const HistoryPage());
+  const HistoryPage({super.key});
 
   @override
-  State<TransactionsPage> createState() => _TransactionsPageState();
+  State<HistoryPage> createState() => _HistoryPageState();
 }
 
-class _TransactionsPageState extends State<TransactionsPage> {
+class _HistoryPageState extends State<HistoryPage> {
   late final ScrollController _scrollController;
   late final CancelToken _cancelToken;
 
@@ -37,7 +39,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
     _cancelToken = CancelToken();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<TransactionsCubit>().refresh(limit, _cancelToken);
+    context.read<HistoryCubit>().refresh(limit, _cancelToken);
   }
 
   @override
@@ -49,7 +51,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
   }
 
   void _onScroll() {
-    final cubit = context.read<TransactionsCubit>();
+    final cubit = context.read<HistoryCubit>();
     if (!_scrollController.hasClients ||
         cubit.state is! BaseSuccessState<PaginationState<Transactions>>) {
       return;
@@ -68,14 +70,14 @@ class _TransactionsPageState extends State<TransactionsPage> {
   }
 
   void _onRefresh() {
-    context.read<TransactionsCubit>().refresh(limit, _cancelToken);
+    context.read<HistoryCubit>().refresh(limit, _cancelToken);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: mainAppBar("Transactions"),
-      body: StateHandler<TransactionsCubit, PaginationState<Transactions>>(
+      appBar: mainAppBar("History"),
+      body: StateHandler<HistoryCubit, PaginationState<Transactions>>(
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
           final models = data.data;
@@ -96,7 +98,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) =>
-                          TransactionsItem(transactions: models[index]),
+                          HistoryItem(transactions: models[index]),
                       childCount: models.length,
                     ),
                   ),

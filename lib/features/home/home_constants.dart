@@ -7,6 +7,7 @@ import 'package:paint_car/features/(superadmin)/car/pages/car_workshops/car_work
 import 'package:paint_car/features/(superadmin)/car/pages/cars_page.dart';
 import 'package:paint_car/features/(superadmin)/car/pages/car_services/car_services_page.dart';
 import 'package:paint_car/features/(superadmin)/financial/pages/e_tickets_page.dart';
+import 'package:paint_car/features/(superadmin)/financial/pages/history_page.dart';
 import 'package:paint_car/features/(superadmin)/financial/pages/orders_page.dart';
 import 'package:paint_car/features/(superadmin)/financial/pages/payment_method_page.dart';
 import 'package:paint_car/features/(superadmin)/financial/pages/transactions_page.dart';
@@ -48,5 +49,6 @@ class HomeConstants {
     {'name': 'Transactions', 'route': TransactionsPage.route},
     {'name': 'E-Tickets', 'route': ETicketsPage.route},
     {'name': 'Payment Methods', 'route': PaymentMethodPage.route},
+    {'name': 'History', 'route': HistoryPage.route},
   ];
 }
