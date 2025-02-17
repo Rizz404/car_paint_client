@@ -12,6 +12,7 @@ import 'package:paint_car/features/(superadmin)/financial/pages/orders_page.dart
 import 'package:paint_car/features/(superadmin)/financial/pages/payment_method_page.dart';
 import 'package:paint_car/features/(superadmin)/financial/pages/transactions_page.dart';
 import 'package:paint_car/features/(user)/financial/pages/user_e_tickets_page.dart';
+import 'package:paint_car/features/(user)/financial/pages/user_history_page.dart';
 import 'package:paint_car/features/(user)/financial/pages/user_orders_page.dart';
 import 'package:paint_car/features/(user)/financial/pages/user_transactions_page.dart';
 import 'package:paint_car/features/(user)/other/pages/hubungi_kami_page.dart';
@@ -26,7 +27,7 @@ class HomeConstants {
     {'name': 'Orders', 'route': UserOrdersPage.route},
     {'name': 'E-Tickets', 'route': UserETicketsPage.route},
     {'name': 'Transactions', 'route': UserTransactionsPage.route},
-    {'name': 'History', 'route': HistoryPage.route},
+    {'name': 'History', 'route': UserHistoryPage.route},
   ];
   static const List<Map<String, dynamic>> otherItemsUser = const [
     {'name': 'Hubungi Kami', 'route': HubungiKamiPage.route},

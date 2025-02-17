@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/core/constants/mock.dart';
+import 'package:paint_car/features/shared/cubit/user_cubit.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
@@ -73,8 +74,12 @@ class _RegisterPageState extends State<RegisterPage> {
           context: context,
           state: state,
           onRetry: signUp,
-          onSuccess: () {
-            Navigator.of(context).push(LoginPage.route());
+          onSuccess: () async {
+            await context.read<UserCubit>().getUserLocal();
+            if (context.mounted) {
+              Navigator.of(context)
+                  .pushAndRemoveUntil(LoginPage.route(), (_) => false);
+            }
           },
         );
       },

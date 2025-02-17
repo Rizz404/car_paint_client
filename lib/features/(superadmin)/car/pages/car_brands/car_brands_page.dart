@@ -85,7 +85,6 @@ class _CarBrandsPageState extends State<CarBrandsPage> {
   }
 
   void _onRefresh() async {
-    LogService.i("ON RETRY");
     await context.read<CarBrandsCubit>().refresh(limit, _cancelToken);
   }
 

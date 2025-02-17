@@ -3,7 +3,6 @@ import 'package:paint_car/data/models/enums/user_role.dart';
 import 'package:paint_car/data/utils/user_extension.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(user)/car/pages/user_car_page.dart';
-import 'package:paint_car/features/(user)/history/pages/user_history_page.dart';
 import 'package:paint_car/features/home/home_constants.dart';
 
 import 'package:paint_car/features/home/widgets/main_dropdown.dart';
@@ -69,7 +68,6 @@ class LeftDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final role = context.userRole;
-    LogService.i("ROLE: $role");
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,

@@ -83,14 +83,9 @@ class UserTransactionsItem extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const MainText(
-                      text: 'Order Details:',
+                    MainText(
+                      text: "Note: ${transactions.order?.first?.note}",
                     ),
-                    // if (transactions.order!.first!.note != null &&
-                    //     transactions.order!.first!.note!.isNotEmpty)
-                    //   MainText(
-                    //     text: 'Note: ${transactions.order!.first!.note}',
-                    //   ),
                   ],
                 ),
             ],

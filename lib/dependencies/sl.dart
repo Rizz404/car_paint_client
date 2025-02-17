@@ -33,8 +33,10 @@ import "package:paint_car/features/(superadmin)/financial/repo/payment_method_re
 import "package:paint_car/features/(superadmin)/financial/repo/transactions_repo.dart";
 import "package:paint_car/features/(user)/car/cubit/user_car_cubit.dart";
 import "package:paint_car/features/(user)/car/repo/user_car_repo.dart";
+import "package:paint_car/features/(user)/financial/cubit/user_history_cubit.dart";
 import "package:paint_car/features/(user)/financial/cubit/user_orders_cubit.dart";
 import "package:paint_car/features/(user)/financial/cubit/user_transactions_cubit.dart";
+import "package:paint_car/features/(user)/financial/repo/user_history_repo.dart";
 import "package:paint_car/features/(user)/financial/repo/user_orders_repo.dart";
 import "package:paint_car/features/(user)/financial/repo/user_transactions_repo.dart";
 import "package:paint_car/features/(user)/workshop/cubit/user_workshops_cubit.dart";
@@ -124,6 +126,16 @@ initializeSL() async {
       userTransactionsRepo: getIt(),
     ),
   );
+  getIt.registerLazySingleton<UserHistoryRepo>(
+    () => UserHistoryRepo(
+      apiClient: getIt(),
+    ),
+  );
+  getIt.registerFactory<UserHistoryCubit>(
+    () => UserHistoryCubit(
+      historyRepo: getIt(),
+    ),
+  );
 
   // ! SUPERADMIN
 
@@ -203,6 +215,18 @@ initializeSL() async {
       carModelYearColorRepo: getIt(),
     ),
   );
+  // ! history
+  // ! history
+  getIt.registerLazySingleton<HistoryRepo>(
+    () => HistoryRepo(
+      apiClient: getIt(),
+    ),
+  );
+  getIt.registerFactory<HistoryCubit>(
+    () => HistoryCubit(
+      historyRepo: getIt(),
+    ),
+  );
   // ! e ticket
   getIt.registerLazySingleton<ETicketRepo>(
     () => ETicketRepo(
@@ -247,17 +271,7 @@ initializeSL() async {
       transactionsRepo: getIt(),
     ),
   );
-  // ! transactions
-  getIt.registerLazySingleton<HistoryRepo>(
-    () => HistoryRepo(
-      apiClient: getIt(),
-    ),
-  );
-  getIt.registerFactory<HistoryCubit>(
-    () => HistoryCubit(
-      historyRepo: getIt(),
-    ),
-  );
+
   // ! ADMIN
   getIt.registerLazySingleton<AdminOrdersRepo>(
     () => AdminOrdersRepo(

@@ -9,25 +9,25 @@ import 'package:paint_car/data/models/e_ticket.dart';
 import 'package:paint_car/data/models/payment_method.dart';
 import 'package:paint_car/data/models/transactions.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
-import 'package:paint_car/features/(user)/financial/cubit/user_transactions_cubit.dart';
-import 'package:paint_car/features/(user)/financial/widgets/user_transactions_item.dart';
+import 'package:paint_car/features/(superadmin)/financial/cubit/history_cubit.dart';
+import 'package:paint_car/features/(superadmin)/financial/widgets/history_item.dart';
+import 'package:paint_car/features/(user)/financial/cubit/user_history_cubit.dart';
+import 'package:paint_car/features/(user)/financial/widgets/user_history_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 
-class UserTransactionsPage extends StatefulWidget {
-  static route() =>
-      MaterialPageRoute(builder: (_) => const UserTransactionsPage());
-  const UserTransactionsPage({super.key});
+class UserHistoryPage extends StatefulWidget {
+  static route() => MaterialPageRoute(builder: (_) => const UserHistoryPage());
+  const UserHistoryPage({super.key});
 
   @override
-  State<UserTransactionsPage> createState() => _UserTransactionsPageState();
+  State<UserHistoryPage> createState() => _UserHistoryPageState();
 }
 
-class _UserTransactionsPageState extends State<UserTransactionsPage> {
+class _UserHistoryPageState extends State<UserHistoryPage> {
   late final ScrollController _scrollController;
   late final CancelToken _cancelToken;
 
@@ -39,7 +39,7 @@ class _UserTransactionsPageState extends State<UserTransactionsPage> {
     _cancelToken = CancelToken();
     _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<UserTransactionsCubit>().refresh(limit, _cancelToken);
+    context.read<UserHistoryCubit>().refresh(limit, _cancelToken);
   }
 
   @override
@@ -51,7 +51,7 @@ class _UserTransactionsPageState extends State<UserTransactionsPage> {
   }
 
   void _onScroll() {
-    final cubit = context.read<UserTransactionsCubit>();
+    final cubit = context.read<UserHistoryCubit>();
     if (!_scrollController.hasClients ||
         cubit.state is! BaseSuccessState<PaginationState<Transactions>>) {
       return;
@@ -70,18 +70,17 @@ class _UserTransactionsPageState extends State<UserTransactionsPage> {
   }
 
   void _onRefresh() {
-    context.read<UserTransactionsCubit>().refresh(limit, _cancelToken);
+    context.read<UserHistoryCubit>().refresh(limit, _cancelToken);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: mainAppBar("Transactions"),
-      body: StateHandler<UserTransactionsCubit, PaginationState<Transactions>>(
+      appBar: mainAppBar("History"),
+      body: StateHandler<UserHistoryCubit, PaginationState<Transactions>>(
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
           final models = data.data;
-          LogService.i("Models: $models");
 
           return RefreshIndicator(
             onRefresh: () async {
@@ -98,10 +97,8 @@ class _UserTransactionsPageState extends State<UserTransactionsPage> {
                 slivers: [
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) => UserTransactionsItem(
-                        transactions: models[index],
-                        onReturnFromWebView: _onRefresh,
-                      ),
+                      (context, index) =>
+                          UserHistoryItem(transactions: models[index]),
                       childCount: models.length,
                     ),
                   ),

@@ -22,6 +22,7 @@ import 'package:paint_car/features/(superadmin)/financial/cubit/orders_cubit.dar
 import 'package:paint_car/features/(superadmin)/financial/cubit/payment_method_cubit.dart';
 import 'package:paint_car/features/(superadmin)/financial/cubit/transactions_cubit.dart';
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
+import 'package:paint_car/features/(user)/financial/cubit/user_history_cubit.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_orders_cubit.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_transactions_cubit.dart';
 import 'package:paint_car/features/(user)/workshop/cubit/user_workshops_cubit.dart';
@@ -94,6 +95,9 @@ Future<void> main() async {
         ),
         BlocProvider(
           create: (context) => getIt<UserTransactionsCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<UserHistoryCubit>(),
         ),
         // ! ADMIN
         BlocProvider(

@@ -57,6 +57,7 @@ class ApiConstant {
   static const String eTicketPath = "/e-tickets";
   // * history
   static const String historyPath = "/histories";
+  static const String historyUserPath = "$historyPath/user";
 
   // ! key
   static const String logoKey = 'logo';

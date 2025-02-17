@@ -9,6 +9,7 @@ import 'package:paint_car/features/(superadmin)/financial/cubit/payment_method_c
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_orders_cubit.dart';
 import 'package:paint_car/features/(user)/financial/pages/user_transactions_page.dart';
+import 'package:paint_car/features/home/pages/home_page.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
@@ -115,8 +116,9 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
               message: "Order created successfully",
               type: SnackBarType.success,
             );
-            Navigator.of(context).push(
-              UserTransactionsPage.route(),
+            Navigator.of(context).pushAndRemoveUntil(
+              HomePage.route(),
+              (_) => false,
             );
           },
         );
