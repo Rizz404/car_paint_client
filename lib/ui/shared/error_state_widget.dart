@@ -28,7 +28,11 @@ class ErrorStateWidget extends StatelessWidget {
             const CircularProgressIndicator()
           else
             ElevatedButton(
-              onPressed: onRetry,
+              onPressed: () {
+                if (!isRetrying) {
+                  onRetry();
+                }
+              },
               child: const Text('Retry'),
             ),
         ],
