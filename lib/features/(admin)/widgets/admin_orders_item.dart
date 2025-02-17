@@ -13,20 +13,20 @@ import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart'; // pastikan sudah ada model CarService
 
-class UserOrdersItem extends StatefulWidget {
+class AdminOrdersItem extends StatefulWidget {
   final Orders order;
   final CancelToken cancelToken;
-  const UserOrdersItem({
+  const AdminOrdersItem({
     Key? key,
     required this.order,
     required this.cancelToken,
   }) : super(key: key);
 
   @override
-  State<UserOrdersItem> createState() => _UserOrdersItemState();
+  State<AdminOrdersItem> createState() => _AdminOrdersItemState();
 }
 
-class _UserOrdersItemState extends State<UserOrdersItem> {
+class _AdminOrdersItemState extends State<AdminOrdersItem> {
   String _formatDate(DateTime? date) {
     if (date == null) return '';
     return DateFormat('dd MMM yyyy').format(date);
@@ -42,7 +42,7 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
       return;
     }
     await context
-        .read<UserOrdersCubit>()
+        .read<AdminOrdersCubit>()
         .cancelOrder(widget.order.id!, widget.cancelToken);
   }
 
@@ -98,7 +98,7 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
                     ),
                   ),
                   Expanded(
-                    child: BlocConsumer<UserOrdersCubit, BaseState>(
+                    child: BlocConsumer<AdminOrdersCubit, BaseState>(
                       listener: (context, state) {
                         handleFormListenerState(
                           context: context,

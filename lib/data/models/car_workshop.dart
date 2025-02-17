@@ -5,7 +5,7 @@ class CarWorkshop {
   final String? id;
   final String name;
   final String email;
-  final String phoneNumber;
+  final String? phoneNumber;
   final String address;
   final String? distance;
   final double latitude;
@@ -71,7 +71,9 @@ class CarWorkshop {
       id: map['id'] != null ? map['id'] as String : null,
       name: map['name'] as String,
       email: map['email'] as String,
-      phoneNumber: map['phoneNumber'] as String, // gunakan key yang sesuai
+      phoneNumber: map['phone_number'] != null
+          ? map['phone_number'] as String
+          : map['phoneNumber'] as String,
       address: map['address'] as String,
       distance: map['distance'] != null ? map['distance'] as String : null,
       latitude: double.parse(map['latitude'] as String),

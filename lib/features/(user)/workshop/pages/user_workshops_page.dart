@@ -4,12 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:paint_car/core/constants/api.dart';
-import 'package:paint_car/data/models/car_brand.dart';
 import 'package:paint_car/data/models/car_workshop.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
-import 'package:paint_car/features/(superadmin)/car/cubit/car_workshops_cubit.dart';
-import 'package:paint_car/features/(superadmin)/car/widgets/car_workshops/car_workshops_item.dart';
 import 'package:paint_car/features/(user)/workshop/cubit/user_workshops_cubit.dart';
 import 'package:paint_car/features/(user)/workshop/widgets/user_workshops_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
@@ -29,6 +26,7 @@ class UserWorkshopsPage extends StatefulWidget {
 }
 
 class _UserWorkshopsPageState extends State<UserWorkshopsPage> {
+  // ignore: unused_field
   static const limit = ApiConstant.limit;
   late final ScrollController _scrollController;
   late final CancelToken _cancelToken;

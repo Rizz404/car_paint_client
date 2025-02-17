@@ -9,10 +9,12 @@ class MainElevatedButton extends StatelessWidget {
     required this.onPressed,
     required this.text,
     this.bgColor,
+    this.extent = const Medium(),
     this.width = double.infinity,
     this.height = 46.0,
     this.textColor = Colors.white,
   });
+  final Extent extent;
   final bool isLoading;
   final void Function()? onPressed;
   final String text;
@@ -33,7 +35,7 @@ class MainElevatedButton extends StatelessWidget {
               ),
         minimumSize: WidgetStateProperty.all(Size(width, height)),
       ),
-      child: MainText(text: text, extent: const Large(), color: textColor),
+      child: MainText(text: text, extent: extent, color: textColor),
     );
   }
 }

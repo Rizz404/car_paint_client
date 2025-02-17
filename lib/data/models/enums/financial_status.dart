@@ -23,8 +23,10 @@ extension WorkStatusExtension on WorkStatus {
 }
 
 enum OrderStatus {
-  PENDING,
-  ACCEPTED,
+  DRAFT,
+  CONFIRMED,
+  PROCESSING,
+  COMPLETED,
   CANCELLED,
 }
 
@@ -34,8 +36,7 @@ extension OrderStatusExtension on OrderStatus {
   }
 
   static OrderStatus fromMap(String status) {
-    return OrderStatus.values
-        .firstWhere((e) => e.name == status, orElse: () => OrderStatus.PENDING);
+    return OrderStatus.values.firstWhere((e) => e.name == status, orElse: null);
   }
 }
 

@@ -11,6 +11,7 @@ import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/data/local/token_sp.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
+import 'package:http_parser/http_parser.dart';
 
 class ApiClient {
   final http.Client client;
@@ -182,13 +183,15 @@ class ApiClient {
 
     if (imageFiles != null) {
       for (var file in imageFiles) {
-        final multipartFile =
-            await http.MultipartFile.fromPath(keyImageFile, file.path);
+        final multipartFile = await http.MultipartFile.fromPath(
+            keyImageFile, file.path,
+            contentType: MediaType('image', 'jpeg'));
         request.files.add(multipartFile);
       }
     } else if (imageFile != null) {
-      final multipartFile =
-          await http.MultipartFile.fromPath(keyImageFile, imageFile.path);
+      final multipartFile = await http.MultipartFile.fromPath(
+          keyImageFile, imageFile.path,
+          contentType: MediaType('image', 'jpeg'));
       request.files.add(multipartFile);
     }
 

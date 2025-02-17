@@ -7,11 +7,9 @@ import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/pages/car_brands/upsert_car_brands_page.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
-import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/delete_confirm_dialog.dart';
 import 'package:paint_car/ui/shared/image_network.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
-import 'package:paint_car/ui/utils/snack_bar.dart';
 
 class CarBrandsItem extends StatefulWidget {
   final CarBrand brand;

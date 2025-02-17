@@ -54,7 +54,6 @@ class AuthRepo {
           'password': password,
         },
         fromJson: (json) {
-          LogService.i("JSON: ${json.toString()}");
           return UserWithProfile.fromMap(json);
         },
         cancelToken: cancelToken,

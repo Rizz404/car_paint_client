@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:paint_car/core/constants/api.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:paint_car/data/models/enums/user_role.dart';
 import 'package:paint_car/data/models/user_car.dart';
 import 'package:paint_car/data/utils/user_extension.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
 import 'package:paint_car/features/(user)/car/pages/user_car_page.dart';
 import 'package:paint_car/features/(user)/workshop/pages/user_workshops_page.dart';
 import 'package:paint_car/features/home/pages/settings_page.dart';
-import 'package:paint_car/features/home/widgets/bottom_nav_bar.dart';
-import 'package:paint_car/features/home/widgets/left_drawer.dart';
 import 'package:paint_car/features/home/pages/user_page.dart';
-import 'package:paint_car/features/shared/cubit/user_cubit.dart';
+import 'package:paint_car/features/home/widgets/bottom_nav_bar.dart';
+import 'package:paint_car/features/home/widgets/home_admin.dart';
+import 'package:paint_car/features/home/widgets/left_drawer.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
@@ -52,18 +51,20 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildHomePage() {
     final role = context.userRole;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const MainText(text: "Home Page"),
-          if (role == UserRole.ADMIN) const MainText(text: "Welcome Admin"),
-          if (role == UserRole.USER) const MainText(text: "Welcome User"),
-          if (role == UserRole.SUPER_ADMIN)
-            const MainText(text: "Welcome Super Admin"),
-          if (role == UserRole.USER) buttonOrder(),
-        ],
-      ),
-    );
+    switch (role) {
+      case UserRole.ADMIN:
+        return const HomeAdmin();
+      case UserRole.USER:
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const MainText(text: "Welcome User"),
+            buttonOrder(),
+          ],
+        );
+      case UserRole.SUPER_ADMIN:
+        return const MainText(text: "Welcome Super Admin");
+    }
   }
 
   buttonOrder() {

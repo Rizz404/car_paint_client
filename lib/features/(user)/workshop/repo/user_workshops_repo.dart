@@ -7,7 +7,6 @@ import 'package:paint_car/core/common/api_response.dart';
 import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/core/types/paginated_data.dart';
 import 'package:paint_car/data/models/car_workshop.dart';
-import 'package:paint_car/data/models/car_workshop.dart';
 import 'package:paint_car/data/network/api_client.dart';
 import 'package:paint_car/features/shared/utils/build_pagination_params.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';

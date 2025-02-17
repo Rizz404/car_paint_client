@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/data/models/car_workshop.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_services_cubit.dart';
 import 'package:paint_car/features/(user)/financial/pages/user_create_order_page.dart';
 import 'package:paint_car/features/(user)/workshop/widgets/checkbox_services.dart';
@@ -34,6 +33,7 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
   late final CancelToken _cancelToken;
   static const double _zoomLevel = 14;
 
+  // ignore: unused_field
   late final GoogleMapController? _mapController;
   List<String> carServices = [];
   List<String> selectedServices = [];
@@ -214,7 +214,7 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
           _buildDetailItem(
             icon: Icons.phone,
             label: 'Telepon',
-            value: widget.workshop.phoneNumber,
+            value: widget.workshop.phoneNumber ?? '-',
           ),
           if (widget.workshop.distance != null)
             _buildDetailItem(

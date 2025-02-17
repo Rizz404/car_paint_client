@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/data/models/orders.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/features/(superadmin)/financial/cubit/orders_cubit.dart';
-import 'package:paint_car/features/(superadmin)/financial/widgets/orders_item.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_orders_cubit.dart';
 import 'package:paint_car/features/(user)/financial/widgets/user_orders_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
@@ -93,7 +91,8 @@ class _UserOrdersPageState extends State<UserOrdersPage> {
                 slivers: [
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) => UserOrdersItem(order: models[index]),
+                      (context, index) => UserOrdersItem(
+                          order: models[index], cancelToken: _cancelToken),
                       childCount: models.length,
                     ),
                   ),

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/data/models/payment_method.dart';
 import 'package:paint_car/data/models/user_car.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
+
 import 'package:paint_car/features/(superadmin)/car/cubit/car_model_year_color_cubit.dart';
 import 'package:paint_car/features/(superadmin)/financial/cubit/payment_method_cubit.dart';
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
@@ -83,12 +83,9 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
     super.dispose();
   }
 
-  void _performAction() {
-    LogService.i(
-      "userCarId: $selectedUserCarId, paymentMethodId: $selectedPaymentMethodId, note: ${noteController.text}, workshopId: ${widget.workshopId}, carServices: ${widget.carServices}",
-    );
+  void _performAction() async {
     // TODO: create order
-    context.read<UserOrdersCubit>().createOrder(
+    await context.read<UserOrdersCubit>().createOrder(
           selectedUserCarId,
           selectedPaymentMethodId,
           widget.workshopId,
@@ -106,7 +103,7 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CarModelYearColorCubit, BaseState>(
+    return BlocConsumer<UserOrdersCubit, BaseState>(
       listener: (context, state) {
         handleFormListenerState(
           context: context,
@@ -118,9 +115,8 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
               message: "Order created successfully",
               type: SnackBarType.success,
             );
-            Navigator.of(context).pushAndRemoveUntil(
+            Navigator.of(context).push(
               UserTransactionsPage.route(),
-              (_) => false,
             );
           },
         );

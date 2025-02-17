@@ -10,9 +10,9 @@ import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/from_json_pagination.dart';
 import 'package:paint_car/features/shared/utils/handle_api_response.dart';
 
-class UserOrdersRepo {
+class AdminOrdersRepo {
   final ApiClient apiClient;
-  const UserOrdersRepo({required this.apiClient});
+  const AdminOrdersRepo({required this.apiClient});
 
   Future<ApiResponse<PaginatedData<Orders>>> getOrders(
     int page,
@@ -20,7 +20,7 @@ class UserOrdersRepo {
     CancelToken cancelToken,
   ) async {
     final result = await apiClient.get<PaginatedData<Orders>>(
-      ApiConstant.ordersUserPath,
+      ApiConstant.ordersPath,
       queryParameters: buildPaginationParams(page, limit),
       fromJson: (json) => fromJsonPagination<Orders>(
         json,
@@ -31,39 +31,12 @@ class UserOrdersRepo {
     return await handleApiResponse(result);
   }
 
-  Future<ApiResponse<Transactions>> createOrder(
-    CancelToken cancelToken,
-    String userCarId,
-    String paymentMethodId,
-    String workshopId,
-    String? note,
-    List<String> carServices,
-  ) async {
-    LogService.i(
-        "userCarId: $userCarId, paymentMethodId: $paymentMethodId, workshopId: $workshopId, note: $note, carServices: ${carServices.map(
-              (id) => {'carServiceId': id},
-            ).toList()}");
-    final result = await apiClient.post<Transactions>(
-      ApiConstant.ordersPath,
-      fromJson: (json) => Transactions.fromMap(json),
-      {
-        'userCarId': userCarId,
-        'paymentMethodId': paymentMethodId,
-        'workshopId': workshopId,
-        'note': note,
-        'carServices': carServices.map((id) => {'carServiceId': id}).toList(),
-      },
-      cancelToken: cancelToken,
-    );
-    return await handleApiResponse(result);
-  }
-
-  Future<ApiResponse<void>> cancelOrder(
+  Future<ApiResponse<Orders>> cancelOrder(
     CancelToken cancelToken,
     String orderId,
   ) async {
-    final result = await apiClient.patch<void>(
-      "${ApiConstant.ordersUserCancelPath}/$orderId",
+    final result = await apiClient.patch<Orders>(
+      "${ApiConstant.ordersCancel}/$orderId",
       {},
       cancelToken: cancelToken,
     );

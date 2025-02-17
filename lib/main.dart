@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/data/models/car_model_year_color.dart';
+import 'package:paint_car/features/(admin)/cubit/admin_orders_cubit.dart';
 import 'package:paint_car/features/(guest)/auth/cubit/auth_cubit.dart';
 import 'package:paint_car/features/(guest)/auth/pages/login_page.dart';
 import 'package:paint_car/features/(guest)/auth/wrapper/auth_wrapper.dart';
@@ -93,6 +94,10 @@ Future<void> main() async {
         ),
         BlocProvider(
           create: (context) => getIt<UserTransactionsCubit>(),
+        ),
+        // ! ADMIN
+        BlocProvider(
+          create: (context) => getIt<AdminOrdersCubit>(),
         ),
       ],
       child: const MyApp(),

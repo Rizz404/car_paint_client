@@ -57,21 +57,22 @@ class Transactions {
     List<Orders>? order,
   }) {
     return Transactions(
-        id: id ?? this.id,
-        userId: userId ?? this.userId,
-        paymentMethodId: paymentMethodId ?? this.paymentMethodId,
-        invoiceId: invoiceId ?? this.invoiceId,
-        adminFee: adminFee ?? this.adminFee,
-        paymentMethodFee: paymentMethodFee ?? this.paymentMethodFee,
-        totalPrice: totalPrice ?? this.totalPrice,
-        refundAmount: refundAmount ?? this.refundAmount,
-        paymentStatus: paymentStatus ?? this.paymentStatus,
-        paymentInvoiceUrl: paymentInvoiceUrl ?? this.paymentInvoiceUrl,
-        refundedAt: refundedAt ?? this.refundedAt,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-        paymentMethod: paymentMethod ?? this.paymentMethod,
-        order: order ?? this.order);
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      paymentMethodId: paymentMethodId ?? this.paymentMethodId,
+      invoiceId: invoiceId ?? this.invoiceId,
+      adminFee: adminFee ?? this.adminFee,
+      paymentMethodFee: paymentMethodFee ?? this.paymentMethodFee,
+      totalPrice: totalPrice ?? this.totalPrice,
+      refundAmount: refundAmount ?? this.refundAmount,
+      paymentStatus: paymentStatus ?? this.paymentStatus,
+      paymentInvoiceUrl: paymentInvoiceUrl ?? this.paymentInvoiceUrl,
+      refundedAt: refundedAt ?? this.refundedAt,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      paymentMethod: paymentMethod ?? this.paymentMethod,
+      order: order ?? this.order,
+    );
   }
 
   Map<String, dynamic> toMap() {

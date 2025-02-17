@@ -3,6 +3,8 @@ import "package:paint_car/data/local/user_sp.dart";
 import "package:paint_car/data/network/api_client.dart";
 import "package:paint_car/data/local/token_sp.dart";
 import "package:paint_car/dependencies/services/log_service.dart";
+import "package:paint_car/features/(admin)/cubit/admin_orders_cubit.dart";
+import "package:paint_car/features/(admin)/repo/admin_orders_repo.dart";
 import "package:paint_car/features/(guest)/auth/cubit/auth_cubit.dart";
 import "package:paint_car/features/(guest)/auth/repo/auth_repo.dart";
 import "package:paint_car/features/(superadmin)/car/cubit/car_brands_cubit.dart";
@@ -254,6 +256,17 @@ initializeSL() async {
   getIt.registerFactory<HistoryCubit>(
     () => HistoryCubit(
       historyRepo: getIt(),
+    ),
+  );
+  // ! ADMIN
+  getIt.registerLazySingleton<AdminOrdersRepo>(
+    () => AdminOrdersRepo(
+      apiClient: getIt(),
+    ),
+  );
+  getIt.registerFactory<AdminOrdersCubit>(
+    () => AdminOrdersCubit(
+      adminOrdersCubit: getIt(),
     ),
   );
 }

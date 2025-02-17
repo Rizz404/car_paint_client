@@ -1,14 +1,11 @@
 // ignore_for_file: require_trailing_commas
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:paint_car/core/types/paginated_data.dart';
 import 'package:paint_car/core/types/pagination.dart';
 import 'package:paint_car/data/models/car_workshop.dart';
-import 'package:paint_car/data/models/car_workshop.dart';
 import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/features/(superadmin)/car/repo/car_workshops_repo.dart';
 import 'package:paint_car/features/(user)/workshop/repo/user_workshops_repo.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';

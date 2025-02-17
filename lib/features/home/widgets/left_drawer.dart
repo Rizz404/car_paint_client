@@ -26,14 +26,6 @@ class LeftDrawer extends StatelessWidget {
           Navigator.of(context).push(UserCarPage.route());
         },
       ),
-      ListTile(
-        leading: const Icon(Icons.monetization_on),
-        subtitle: const MainText(text: "History"),
-        title: const MainText(text: "Your History"),
-        onTap: () {
-          Navigator.of(context).push(UserHistoryPage.route());
-        },
-      ),
       MainDropdown(
         state: DropdownState(
           title: 'Financial',

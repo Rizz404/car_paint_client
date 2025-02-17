@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/data/models/car_service.dart';
-import 'package:flutter/material.dart';
-import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/features/shared/utils/currency_formatter.dart';
-import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/expandable_card.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 

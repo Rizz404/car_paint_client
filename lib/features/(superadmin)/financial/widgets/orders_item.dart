@@ -33,7 +33,7 @@ class _OrdersItemState extends State<OrdersItem> {
                     child: SizedBox(
                       height: 100,
                       child: MainText(
-                        text: widget.order.totalPrice!,
+                        text: widget.order.totalPrice ?? 'default value',
                       ),
                     ),
                   ),

@@ -7,8 +7,8 @@ class UserProfile {
   final String? fullname;
   final String? phoneNumber;
   final String? address;
-  final double? latitude;
-  final double? longitude;
+  final String? latitude;
+  final String? longitude;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -30,8 +30,8 @@ class UserProfile {
     String? fullname,
     String? phoneNumber,
     String? address,
-    double? latitude,
-    double? longitude,
+    String? latitude,
+    String? longitude,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -70,8 +70,8 @@ class UserProfile {
       phoneNumber:
           map['phoneNumber'] != null ? map['phoneNumber'] as String : null,
       address: map['address'] != null ? map['address'] as String : null,
-      latitude: map['latitude'] != null ? map['latitude'] as double : null,
-      longitude: map['longitude'] != null ? map['longitude'] as double : null,
+      latitude: map['latitude'] != null ? map['latitude'] as String : null,
+      longitude: map['longitude'] != null ? map['longitude'] as String : null,
       createdAt: DateTime.parse(map['createdAt'] as String),
       updatedAt: DateTime.parse(map['updatedAt'] as String),
     );

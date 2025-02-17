@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 class ApiConstant {
   // ! GENERAL
   static const String applicationJson = 'application/json';
@@ -44,7 +46,10 @@ class ApiConstant {
   static const String paymentMethodPath = "/payment-methods";
   // * orders
   static const String ordersPath = "/orders";
+  static const String ordersCancel = "$ordersPath/cancel";
+  static const String ordersUpdate = "$ordersPath";
   static const String ordersUserPath = "$ordersPath/user";
+  static const String ordersUserCancelPath = "$ordersPath/user/cancel";
   // * transactions
   static const String transactionsPath = "/transactions";
   static const String transactionsUserPath = "$transactionsPath/user";

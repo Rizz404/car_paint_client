@@ -67,7 +67,9 @@ class _UpsertCarWorkshopsPageState extends State<UpsertCarWorkshopsPage> {
         });
         nameController.text = widget.carWorkshop!.name;
         emailController.text = widget.carWorkshop!.email;
-        phoneController.text = widget.carWorkshop!.phoneNumber;
+        if (widget.carWorkshop!.phoneNumber != null) {
+          phoneController.text = widget.carWorkshop!.phoneNumber!;
+        }
         addressController.text = widget.carWorkshop!.address;
       } else {
         // Ambil lokasi saat ini menggunakan MapUtils

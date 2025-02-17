@@ -6,14 +6,15 @@ import 'package:paint_car/core/types/pagination.dart';
 import 'package:paint_car/data/models/orders.dart';
 import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
+import 'package:paint_car/features/(admin)/repo/admin_orders_repo.dart';
 import 'package:paint_car/features/(user)/financial/repo/user_orders_repo.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 
-class UserOrdersCubit extends Cubit<BaseState> with Cancelable {
-  final UserOrdersRepo userOrdersRepo;
-  UserOrdersCubit({
-    required this.userOrdersRepo,
+class AdminOrdersCubit extends Cubit<BaseState> with Cancelable {
+  final AdminOrdersRepo adminOrdersCubit;
+  AdminOrdersCubit({
+    required this.adminOrdersCubit,
   }) : super(const BaseInitialState());
 
   List<Orders> orders = [];
@@ -56,7 +57,7 @@ class UserOrdersCubit extends Cubit<BaseState> with Cancelable {
     try {
       await handleBaseCubit<PaginatedData<Orders>>(
         emit,
-        () => userOrdersRepo.getOrders(page, limit, cancelToken),
+        () => adminOrdersCubit.getOrders(page, limit, cancelToken),
         onSuccess: (data, message) {
           if (page == 1) orders.clear();
 
@@ -98,37 +99,16 @@ class UserOrdersCubit extends Cubit<BaseState> with Cancelable {
     await getOrders(currentPage, cancelToken, limit: limit);
   }
 
-  Future<void> createOrder(
-      String userCarId,
-      String paymentMethodId,
-      String workshopId,
-      String? note,
-      List<String> carServices,
-      CancelToken cancelToken) async {
-    await handleBaseCubit<void>(
-      emit,
-      () => userOrdersRepo.createOrder(
-        cancelToken,
-        userCarId,
-        paymentMethodId,
-        workshopId,
-        note,
-        carServices,
-      ),
-      onSuccess: (data, message) => {
-        emit(const BaseActionSuccessState()),
-        getOrders(1, cancelToken),
-      },
-    );
-  }
-
   Future<void> cancelOrder(
     String orderId,
     CancelToken cancelToken,
   ) async {
     await handleBaseCubit<void>(
       emit,
-      () => userOrdersRepo.cancelOrder(cancelToken, orderId),
+      () => adminOrdersCubit.cancelOrder(
+        cancelToken,
+        orderId,
+      ),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
         getOrders(1, cancelToken),
