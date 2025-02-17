@@ -1,8 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paint_car/core/constants/user_constant.dart';
 import 'package:paint_car/data/models/user_model.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/shared/repo/user_repo.dart';
 
 class UserCubit extends Cubit<BaseState> {
@@ -13,7 +11,6 @@ class UserCubit extends Cubit<BaseState> {
 
   Future<void> getUserLocal() async {
     final user = await userRepo.getUserLocal();
-    LogService.i("USER: $user");
     if (user != null) {
       emit(BaseSuccessState<UserWithProfile?>(user, null));
     } else {

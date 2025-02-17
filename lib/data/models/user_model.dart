@@ -121,8 +121,8 @@ class UserWithProfile extends User {
     required String email,
     String profileImage = "",
     required UserRole role,
-    required DateTime createdAt,
-    required DateTime updatedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
     String? newAccessToken,
     this.userProfile,
   }) : super(
@@ -130,8 +130,8 @@ class UserWithProfile extends User {
           username: username,
           email: email,
           profileImage: profileImage,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
+          createdAt: createdAt ?? DateTime.now(),
+          updatedAt: updatedAt ?? DateTime.now(),
           newAccessToken: newAccessToken,
           role: role,
         );

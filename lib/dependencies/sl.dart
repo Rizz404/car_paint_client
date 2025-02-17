@@ -39,6 +39,10 @@ import "package:paint_car/features/(user)/financial/cubit/user_transactions_cubi
 import "package:paint_car/features/(user)/financial/repo/user_history_repo.dart";
 import "package:paint_car/features/(user)/financial/repo/user_orders_repo.dart";
 import "package:paint_car/features/(user)/financial/repo/user_transactions_repo.dart";
+import "package:paint_car/features/(user)/financial/user_e_tickets_cubit.dart";
+import "package:paint_car/features/(user)/financial/user_e_tickets_repo.dart";
+import "package:paint_car/features/(user)/profile/cubit/profile_cubit.dart";
+import "package:paint_car/features/(user)/profile/repo/profile_repo.dart";
 import "package:paint_car/features/(user)/workshop/cubit/user_workshops_cubit.dart";
 import "package:paint_car/features/(user)/workshop/repo/user_workshops_repo.dart";
 import "package:paint_car/features/shared/cubit/user_cubit.dart";
@@ -134,6 +138,26 @@ initializeSL() async {
   getIt.registerFactory<UserHistoryCubit>(
     () => UserHistoryCubit(
       historyRepo: getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<UserETicketsRepo>(
+    () => UserETicketsRepo(
+      apiClient: getIt(),
+    ),
+  );
+  getIt.registerFactory<UserETicketsCubit>(
+    () => UserETicketsCubit(
+      userEticketsRepo: getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<ProfileRepo>(
+    () => ProfileRepo(
+      apiClient: getIt(),
+    ),
+  );
+  getIt.registerFactory<ProfileCubit>(
+    () => ProfileCubit(
+      userRepo: getIt(),
     ),
   );
 

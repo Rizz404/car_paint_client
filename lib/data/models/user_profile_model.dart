@@ -9,8 +9,8 @@ class UserProfile {
   final String? address;
   final String? latitude;
   final String? longitude;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   UserProfile({
     required this.id,
@@ -20,8 +20,8 @@ class UserProfile {
     this.address,
     this.latitude,
     this.longitude,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   UserProfile copyWith({
@@ -57,8 +57,8 @@ class UserProfile {
       'address': address,
       'latitude': latitude,
       'longitude': longitude,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
     };
   }
 

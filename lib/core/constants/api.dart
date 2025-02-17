@@ -12,6 +12,7 @@ class ApiConstant {
 
   // ! USER
   static const String userCarsPath = "/user-cars";
+  static const String updateCurrentUserPath = "/users/current";
 
   // ! SUPER ADMIN
   // ! CAR
@@ -55,6 +56,7 @@ class ApiConstant {
   static const String transactionsUserPath = "$transactionsPath/user";
   // * eTicket
   static const String eTicketPath = "/e-tickets";
+  static const String eTicketUserPath = "$eTicketPath/user";
   // * history
   static const String historyPath = "/histories";
   static const String historyUserPath = "$historyPath/user";

@@ -25,6 +25,8 @@ import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_history_cubit.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_orders_cubit.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_transactions_cubit.dart';
+import 'package:paint_car/features/(user)/financial/user_e_tickets_cubit.dart';
+import 'package:paint_car/features/(user)/profile/cubit/profile_cubit.dart';
 import 'package:paint_car/features/(user)/workshop/cubit/user_workshops_cubit.dart';
 import 'package:paint_car/features/home/pages/home_page.dart';
 import 'package:paint_car/features/shared/cubit/user_cubit.dart';
@@ -98,6 +100,12 @@ Future<void> main() async {
         ),
         BlocProvider(
           create: (context) => getIt<UserHistoryCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<UserETicketsCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<ProfileCubit>(),
         ),
         // ! ADMIN
         BlocProvider(
