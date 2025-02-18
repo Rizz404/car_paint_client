@@ -81,7 +81,6 @@ class _UserTransactionsPageState extends State<UserTransactionsPage> {
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
           final models = data.data;
-          LogService.i("Models: $models");
 
           return RefreshIndicator(
             onRefresh: () async {

@@ -31,7 +31,6 @@ class _UserPageState extends State<UserPage> {
       builder: (context, state) {
         if (state is BaseSuccessState<UserWithProfile?>) {
           final data = state.data;
-          LogService.i("data: $data");
           return Column(
             children: [
               MainText(text: data?.username ?? "No Token"),

@@ -29,7 +29,6 @@ class CarModelYearColorItem extends StatefulWidget {
 class _CarModelYearColorItemState extends State<CarModelYearColorItem> {
   @override
   Widget build(BuildContext context) {
-    LogService.i("MODEL: ${widget.model}");
     return SizedBox(
       child: GestureDetector(
         onTap: () => Navigator.of(context)

@@ -2,23 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:paint_car/data/models/enums/user_role.dart';
-import 'package:paint_car/data/models/user_car.dart';
 import 'package:paint_car/data/utils/user_extension.dart';
-import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
-import 'package:paint_car/features/(user)/car/pages/user_car_page.dart';
-import 'package:paint_car/features/(user)/workshop/pages/user_workshops_page.dart';
+import 'package:paint_car/features/(user)/widgets/home/home_user.dart';
 import 'package:paint_car/features/home/pages/settings_page.dart';
 import 'package:paint_car/features/home/pages/user_page.dart';
 import 'package:paint_car/features/home/widgets/bottom_nav_bar.dart';
 import 'package:paint_car/features/home/widgets/home_admin.dart';
 import 'package:paint_car/features/home/widgets/left_drawer.dart';
-import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
-import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
-import 'package:paint_car/ui/utils/snack_bar.dart';
 
 class HomePage extends StatefulWidget {
   static route() => MaterialPageRoute(builder: (context) => const HomePage());
@@ -35,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     _cancelToken = CancelToken();
-    navigateBasedOnUserCar();
+    getUserCars();
     super.initState();
   }
 
@@ -45,8 +39,8 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  navigateBasedOnUserCar() async {
-    await context.read<UserCarCubit>().getUserCars(1, _cancelToken);
+  Future<void> getUserCars() async {
+    context.read<UserCarCubit>().getUserCars(1, _cancelToken);
   }
 
   Widget _buildHomePage() {
@@ -55,41 +49,12 @@ class _HomePageState extends State<HomePage> {
       case UserRole.ADMIN:
         return const HomeAdmin();
       case UserRole.USER:
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const MainText(text: "Welcome User"),
-            buttonOrder(),
-          ],
+        return HomeUser(
+          onRetry: getUserCars,
         );
       case UserRole.SUPER_ADMIN:
         return const MainText(text: "Welcome Super Admin");
     }
-  }
-
-  buttonOrder() {
-    return BlocBuilder<UserCarCubit, BaseState>(
-      builder: (context, state) {
-        if (state is BaseSuccessState<PaginationState<UserCar>>) {
-          return MainElevatedButton(
-            onPressed: () {
-              if (state.data.data.isEmpty) {
-                SnackBarUtil.showSnackBar(
-                  context: context,
-                  message: "Harus input mobil dulu untuk order",
-                  type: SnackBarType.warning,
-                );
-                Navigator.of(context).push(UserCarPage.route());
-                return;
-              }
-              Navigator.of(context).push(UserWorkshopsPage.route());
-            },
-            text: "Order Disini",
-          );
-        }
-        return const MainText(text: "Loading...");
-      },
-    );
   }
 
   int _selectedIndex = 0;

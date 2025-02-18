@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/ui/shared/error_state_widget.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/no_internet.dart';

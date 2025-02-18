@@ -39,8 +39,6 @@ class UserCarRepo {
     List<File> imageFiles,
     CancelToken cancelToken,
   ) async {
-    LogService.i('ImageFiles: $imageFiles files');
-
     final result = await apiClient.post<UserCar>(
       ApiConstant.userCarsPath,
       {
