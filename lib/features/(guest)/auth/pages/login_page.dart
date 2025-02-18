@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/core/constants/mock.dart';
+import 'package:paint_car/features/(guest)/auth/widgets/gradient_bg_auth.dart';
 import 'package:paint_car/features/shared/cubit/user_cubit.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
@@ -36,8 +37,8 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     _cancelToken = CancelToken();
     setState(() {
-      emailController.text = Mock.user["email"];
-      passwordController.text = Mock.user["password"];
+      emailController.text = Mock.superadmin["email"];
+      passwordController.text = Mock.superadmin["password"];
     });
   }
 
@@ -87,80 +88,93 @@ class _LoginPageState extends State<LoginPage> {
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            title: const MainText(text: "LoginPage Page"),
-          ),
-          body: Center(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const MainText(text: "Sign In", extent: ExtraLarge()),
-                    const SizedBox(height: 16),
-                    Form(
-                      key: formKey,
-                      child: Column(
-                        spacing: 16,
-                        children: [
-                          MainTextField(
-                            controller: emailController,
-                            hintText: "Email",
-                            leadingIcon: const Icon(Icons.email),
-                            validator: EmailValidator.validate,
-                            isEnabled: state is! BaseLoadingState,
-                          ),
-                          MainTextField(
-                            controller: passwordController,
-                            hintText: "Password",
-                            leadingIcon: const Icon(Icons.lock),
-                            trailingIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  obscurePassword = !obscurePassword;
-                                });
-                              },
-                              icon: Icon(
-                                obscurePassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
+          body: GradientBgAuth(
+            padding: const EdgeInsets.all(16),
+            child: Center(
+              child: SingleChildScrollView(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const MainText(text: "Sign In", extent: ExtraLarge()),
+                        const SizedBox(height: 16),
+                        Form(
+                          key: formKey,
+                          child: Column(
+                            spacing: 16,
+                            children: [
+                              MainTextField(
+                                controller: emailController,
+                                hintText: "Email",
+                                leadingIcon: const Icon(Icons.email),
+                                validator: EmailValidator.validate,
+                                isEnabled: state is! BaseLoadingState,
                               ),
-                            ),
-                            obscureText: !obscurePassword,
-                            isEnabled: state is! BaseLoadingState,
-                          ),
-                          MainElevatedButton(
-                            onPressed: signIn,
-                            text: "Sign In",
-                            isLoading: state is BaseLoadingState,
-                            bgColor: getButtonColor(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(RegisterPage.route());
-                      },
-                      child: RichText(
-                        text: TextSpan(
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          text: "Does'nt have an account? ",
-                          children: const [
-                            TextSpan(
-                              text: "Sign Up",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                decoration: TextDecoration.underline,
+                              MainTextField(
+                                controller: passwordController,
+                                hintText: "Password",
+                                leadingIcon: const Icon(Icons.lock),
+                                trailingIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      obscurePassword = !obscurePassword;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    obscurePassword
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                  ),
+                                ),
+                                obscureText: !obscurePassword,
+                                isEnabled: state is! BaseLoadingState,
                               ),
-                            ),
-                          ],
+                              MainElevatedButton(
+                                onPressed: signIn,
+                                text: "Sign In",
+                                isLoading: state is BaseLoadingState,
+                                bgColor: getButtonColor(),
+                                height: 52,
+                                borderRadius: 32,
+                                extent: const Large(),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
+                        const SizedBox(height: 16),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(RegisterPage.route());
+                          },
+                          child: RichText(
+                            text: TextSpan(
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              text: "Does'nt have an account? ",
+                              children: [
+                                TextSpan(
+                                  text: "Sign Up",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    decoration: TextDecoration.underline,
+                                    decorationColor:
+                                        Theme.of(context).colorScheme.primary,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),

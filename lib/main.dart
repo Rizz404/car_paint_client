@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/data/models/car_model_year_color.dart';
 import 'package:paint_car/features/(admin)/cubit/admin_orders_cubit.dart';
@@ -35,6 +36,12 @@ import 'package:paint_car/dependencies/sl.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+    ),
+  );
+
   await initializeSL();
   runApp(
     MultiBlocProvider(

@@ -4,7 +4,6 @@ import 'package:paint_car/data/local/token_sp.dart';
 import 'package:paint_car/data/local/user_sp.dart';
 import 'package:paint_car/data/models/user_model.dart';
 import 'package:paint_car/data/network/api_client.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_api_response.dart';
 

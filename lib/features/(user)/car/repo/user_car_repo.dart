@@ -56,18 +56,11 @@ class UserCarRepo {
     return await handleApiResponse(result, isGet: false);
   }
 
-  // ! gatau kenapa ini gabisa, padahal sukses
   Future<ApiResponse<UserCar>> updateUserCar(
     UserCar userCar,
     List<File>? imageFiles,
     CancelToken cancelToken,
   ) async {
-    LogService.i('Updating UserCar:');
-    LogService.i('ID: ${userCar.id}');
-    LogService.i('ModelYearColorId: ${userCar.carModelYearColorId}');
-    LogService.i('LicensePlate: ${userCar.licensePlate}');
-    LogService.i('ImageFiles: ${imageFiles?.length ?? 0} files');
-
     final result = await apiClient.patch<UserCar>(
       "${ApiConstant.userCarsPath}/${userCar.id}",
       {
@@ -80,8 +73,6 @@ class UserCarRepo {
       fromJson: (json) => UserCar.fromMap(json),
       cancelToken: cancelToken,
     );
-
-    LogService.i('Update response: ${result.toString()}');
     return await handleApiResponse(result, isGet: false);
   }
 

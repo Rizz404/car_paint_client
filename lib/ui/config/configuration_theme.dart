@@ -12,42 +12,49 @@ class ConfigurationTheme {
 
   static ColorScheme get colorScheme {
     return ColorScheme.fromSeed(
-      seedColor: Colors.deepPurple,
+      seedColor: const Color(0xFFE63B2A),
+      primary: const Color(0xFFE63B2A),
+      onPrimary: const Color(0xFFFFFFFF),
     );
   }
 
   static InputDecorationTheme get inputDecorationTheme {
     return InputDecorationTheme(
-        contentPadding: const EdgeInsets.all(16),
-        errorBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              width: 1.5,
-              color: Colors.red,
-            ),
-            borderRadius: BorderRadius.circular(10),),
-        errorMaxLines: 1,
-        focusedErrorBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              width: 1.5,
-              color: Colors.red,
-            ),
-            borderRadius: BorderRadius.circular(10),),
-        errorStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
+      contentPadding: const EdgeInsets.all(16),
+      errorBorder: OutlineInputBorder(
+        borderSide: const BorderSide(
+          width: 1.5,
           color: Colors.red,
         ),
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              width: 1.5,
-              color: Colors.grey.shade300,
-            ),
-            borderRadius: BorderRadius.circular(10),),
-        focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              width: 1.5,
-            ),
-            borderRadius: BorderRadius.circular(10),),);
+        borderRadius: BorderRadius.circular(10),
+      ),
+      errorMaxLines: 1,
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: const BorderSide(
+          width: 1.5,
+          color: Colors.red,
+        ),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      errorStyle: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: Colors.red,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          width: 1.5,
+          color: Colors.grey.shade300,
+        ),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(
+          width: 1.5,
+        ),
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
   }
 
   static TextTheme get textTheme {
@@ -123,9 +130,12 @@ class ConfigurationTheme {
 
   static ElevatedButtonThemeData get elevatedButtonTheme {
     return ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-            minimumSize: const Size(double.infinity, 56),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),),),);
+      style: ElevatedButton.styleFrom(
+        minimumSize: const Size(double.infinity, 56),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+    );
   }
 }

@@ -106,7 +106,7 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
               updatedAt: widget.userCar!.updatedAt,
               carModelYearColorId: selectedCarModelYearColorId,
             ),
-            _selectedImages.isNotEmpty ? _selectedImages : null,
+            _selectedImages,
             _cancelToken,
           );
     } else {

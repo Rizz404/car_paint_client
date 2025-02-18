@@ -13,6 +13,7 @@ class MainElevatedButton extends StatelessWidget {
     this.width = double.infinity,
     this.height = 46.0,
     this.textColor = Colors.white,
+    this.borderRadius = 16.0,
   });
   final Extent extent;
   final bool isLoading;
@@ -22,6 +23,7 @@ class MainElevatedButton extends StatelessWidget {
   final Color? bgColor;
   final double width;
   final double height;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,13 @@ class MainElevatedButton extends StatelessWidget {
             : WidgetStateProperty.all(
                 bgColor ?? Theme.of(context).colorScheme.primary,
               ),
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              borderRadius,
+            ),
+          ),
+        ),
         minimumSize: WidgetStateProperty.all(Size(width, height)),
       ),
       child: MainText(text: text, extent: extent, color: textColor),

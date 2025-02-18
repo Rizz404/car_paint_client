@@ -6,12 +6,14 @@ import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
+// ignore: depend_on_referenced_packages
+import 'package:http_parser/http_parser.dart';
+
 import 'package:paint_car/core/common/api_response.dart';
 import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/data/local/token_sp.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
-import 'package:http_parser/http_parser.dart';
 
 class ApiClient {
   final http.Client client;
