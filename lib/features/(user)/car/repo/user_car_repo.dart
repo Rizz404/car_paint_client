@@ -59,13 +59,14 @@ class UserCarRepo {
     List<File>? imageFiles,
     CancelToken cancelToken,
   ) async {
+    LogService.i("USERCAR: $userCar");
+    LogService.i("imageFiles: $imageFiles");
     final result = await apiClient.patch<UserCar>(
       "${ApiConstant.userCarsPath}/${userCar.id}",
       {
         'carModelYearColorId': userCar.carModelYearColorId,
         'licensePlate': userCar.licensePlate,
       },
-      isMultiPart: imageFiles != null && imageFiles.isNotEmpty,
       imageFiles: imageFiles,
       keyImageFile: keyImageFile,
       fromJson: (json) => UserCar.fromMap(json),
