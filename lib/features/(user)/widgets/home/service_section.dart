@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:paint_car/data/models/user_car.dart';
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
 import 'package:paint_car/features/(user)/car/pages/user_car_page.dart';
+import 'package:paint_car/features/(user)/financial/pages/user_history_page.dart';
+import 'package:paint_car/features/(user)/financial/pages/user_orders_page.dart';
 import 'package:paint_car/features/(user)/widgets/home/card_link_section.dart';
+import 'package:paint_car/features/(user)/widgets/home/card_mini_link_section.dart';
 import 'package:paint_car/features/(user)/workshop/pages/user_workshops_page.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
@@ -49,6 +52,25 @@ class ServiceSection extends StatelessWidget {
           extent: Large(),
         ),
         firstService(),
+        Row(
+          spacing: 16,
+          children: [
+            CardMiniLinkSection(
+              image: "assets/images/user_car_orders.png",
+              text: "Processed Orders",
+              onTap: () {
+                Navigator.of(context).push(UserOrdersPage.route());
+              },
+            ),
+            CardMiniLinkSection(
+              image: "assets/images/history.png",
+              text: "History Orders",
+              onTap: () {
+                Navigator.of(context).push(UserOrdersPage.route());
+              },
+            ),
+          ],
+        ),
       ],
     );
   }

@@ -37,11 +37,10 @@ class CardLinkSection extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     color: Theme.of(context).colorScheme.onPrimary,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8),
                     child: Icon(
                       Icons.add,
-                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                 ),

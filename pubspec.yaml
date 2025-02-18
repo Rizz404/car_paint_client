@@ -97,6 +97,8 @@ flutter:
     - assets/images/konosuba.jpg
     - assets/images/test.jpg
     - assets/images/placeholder-image-general.webp
+    - assets/images/user_car_orders.png
+    - assets/images/history.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
