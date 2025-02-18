@@ -83,6 +83,68 @@ class CarModelsCubit extends Cubit<BaseState> with Cancelable {
     }
   }
 
+  Future<void> getModelsByBrandId(
+      String brandId, int page, CancelToken cancelToken,
+      {int limit = 10}) async {
+    if (isLoadingMore) return;
+    cancelRequests();
+
+    isLoadingMore = page != 1;
+
+    if (page == 1) {
+      emit(const BaseLoadingState());
+    } else {
+      // kalo dah ada data, update state buat tampilin loading di bagian bawah
+      if (state is BaseSuccessState<PaginationState<CarModel>>) {
+        final currentState =
+            state as BaseSuccessState<PaginationState<CarModel>>;
+        final data = currentState.data;
+        emit(BaseSuccessState<PaginationState<CarModel>>(
+            PaginationState<CarModel>(
+              data: data.data,
+              pagination: data.pagination,
+              currentPage: data.currentPage,
+              isLoadingMore: true,
+            ),
+            null));
+      }
+    }
+
+    try {
+      await handleBaseCubit<PaginatedData<CarModel>>(
+        emit,
+        () => carModelsRepo.getModelsByBrandId(
+          page,
+          limit,
+          brandId,
+          cancelToken,
+        ),
+        onSuccess: (data, message) {
+          if (page == 1) models.clear();
+
+          models.addAll(data.items);
+          pagination = data.pagination;
+          currentPage = page;
+          isLoadingMore = false;
+
+          emit(BaseSuccessState(
+              PaginationState<CarModel>(
+                data: models,
+                pagination: pagination!,
+                currentPage: currentPage,
+                isLoadingMore: isLoadingMore,
+              ),
+              null));
+        },
+        withLoading: false,
+      );
+    } catch (e) {
+      emit(BaseErrorState(message: 'Unexpected error: $e'));
+    } finally {
+      isLoadingMore = false;
+    }
+  }
+
   Future<void> deleteModel(String id, CancelToken cancelToken) async {
     final index = models.indexWhere((model) => model.id == id);
     if (index == -1) return;

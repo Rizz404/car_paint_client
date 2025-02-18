@@ -31,6 +31,24 @@ class CarModelsRepo {
     return await handleApiResponse(result);
   }
 
+  Future<ApiResponse<PaginatedData<CarModel>>> getModelsByBrandId(
+    int page,
+    int limit,
+    String brandId,
+    CancelToken cancelToken,
+  ) async {
+    final result = await apiClient.get<PaginatedData<CarModel>>(
+      "${ApiConstant.modelsByBrandPath}/$brandId",
+      queryParameters: buildPaginationParams(page, limit),
+      fromJson: (json) => fromJsonPagination<CarModel>(
+        json,
+        (json) => CarModel.fromMap(json),
+      ),
+      cancelToken: cancelToken,
+    );
+    return await handleApiResponse(result);
+  }
+
   Future<ApiResponse<CarModel>> saveModel(
     CarModel carModelCarModel,
     CancelToken cancelToken,

@@ -29,6 +29,24 @@ class CarModelYearsRepo {
     return await handleApiResponse(result);
   }
 
+  Future<ApiResponse<PaginatedData<CarModelYears>>> getModelsYearsByModel(
+    int page,
+    int limit,
+    CancelToken cancelToken,
+    String modelId,
+  ) async {
+    final result = await apiClient.get<PaginatedData<CarModelYears>>(
+      "${ApiConstant.carModelYearsByCarModelPath}/$modelId",
+      queryParameters: buildPaginationParams(page, limit),
+      fromJson: (json) => fromJsonPagination<CarModelYears>(
+        json,
+        (json) => CarModelYears.fromMap(json),
+      ),
+      cancelToken: cancelToken,
+    );
+    return await handleApiResponse(result);
+  }
+
   Future<ApiResponse<CarModelYears>> saveModel(
     CarModelYears carModelYears,
     CancelToken cancelToken,

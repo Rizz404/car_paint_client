@@ -21,6 +21,7 @@ class ApiConstant {
   static const String multipleBrandsPath = "$brandsPath/multiple";
   // * models
   static const String modelsPath = "/car-models";
+  static const String modelsByBrandPath = "$modelsPath/car-brand";
   static const String multipleModelsPath = "$modelsPath/multiple";
   // * services
   static const String servicesPath = "/car-services";
@@ -31,8 +32,11 @@ class ApiConstant {
   static const String colorsPath = "/colors";
   // * model years
   static const String carModelYearsPath = "/car-model-years";
+  static const String carModelYearsByCarModelPath =
+      "/car-model-years/car-model";
   // * model year colors
   static const String carModelYearColorsPath = "/car-model-year-colors";
+
   // * AUTH
   static const String authPath = "/auth";
   static const String registerPath = "$authPath/register";

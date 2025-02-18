@@ -83,6 +83,68 @@ class CarModelYearsCubit extends Cubit<BaseState> with Cancelable {
     }
   }
 
+  Future<void> getModelYearsByCarModel(
+      String modelId, int page, CancelToken cancelToken,
+      {int limit = 10}) async {
+    if (isLoadingMore) return;
+    cancelRequests();
+
+    isLoadingMore = page != 1;
+
+    if (page == 1) {
+      emit(const BaseLoadingState());
+    } else {
+      // kalo dah ada data, update state buat tampilin loading di bagian bawah
+      if (state is BaseSuccessState<PaginationState<CarModelYears>>) {
+        final currentState =
+            state as BaseSuccessState<PaginationState<CarModelYears>>;
+        final data = currentState.data;
+        emit(BaseSuccessState<PaginationState<CarModelYears>>(
+            PaginationState<CarModelYears>(
+              data: data.data,
+              pagination: data.pagination,
+              currentPage: data.currentPage,
+              isLoadingMore: true,
+            ),
+            null));
+      }
+    }
+
+    try {
+      await handleBaseCubit<PaginatedData<CarModelYears>>(
+        emit,
+        () => carModelYearsRepo.getModelsYearsByModel(
+          page,
+          limit,
+          cancelToken,
+          modelId,
+        ),
+        onSuccess: (data, message) {
+          if (page == 1) modelYears.clear();
+
+          modelYears.addAll(data.items);
+          pagination = data.pagination;
+          currentPage = page;
+          isLoadingMore = false;
+
+          emit(BaseSuccessState(
+              PaginationState<CarModelYears>(
+                data: modelYears,
+                pagination: pagination!,
+                currentPage: currentPage,
+                isLoadingMore: isLoadingMore,
+              ),
+              null));
+        },
+        withLoading: false,
+      );
+    } catch (e) {
+      emit(BaseErrorState(message: e.toString()));
+    } finally {
+      isLoadingMore = false;
+    }
+  }
+
   Future<void> deleteModelYear(String id, CancelToken cancelToken) async {
     final index = modelYears.indexWhere((modelYear) => modelYear.id == id);
     if (index == -1) return;

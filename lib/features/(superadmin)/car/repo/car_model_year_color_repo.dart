@@ -29,6 +29,26 @@ class CarModelYearColorRepo {
     return await handleApiResponse(result);
   }
 
+  Future<ApiResponse<PaginatedData<CarModelYearColor>>>
+      getModelYearColorsByModelYearAndColor(
+    int page,
+    int limit,
+    CancelToken cancelToken,
+    String modelYearId,
+    String colorId,
+  ) async {
+    final result = await apiClient.get<PaginatedData<CarModelYearColor>>(
+      "/car-model-year-colors/car-model-year/$modelYearId/color/$colorId",
+      queryParameters: buildPaginationParams(page, limit),
+      fromJson: (json) => fromJsonPagination<CarModelYearColor>(
+        json,
+        (json) => CarModelYearColor.fromMap(json),
+      ),
+      cancelToken: cancelToken,
+    );
+    return await handleApiResponse(result);
+  }
+
   Future<ApiResponse<CarModelYearColor>> saveModel(
     CarModelYearColor carModelYearColor,
     CancelToken cancelToken,
