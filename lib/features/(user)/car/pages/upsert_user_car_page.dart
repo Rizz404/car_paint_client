@@ -20,27 +20,33 @@ import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/main_text_field.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
-import 'package:paint_car/ui/utils/url_to_file.dart';
-import 'package:paint_car/ui/validator/file_validator.dart';
 
 class UpsertUserCarPage extends StatefulWidget {
   final UserCar? userCar;
   const UpsertUserCarPage({super.key, this.userCar});
+
   static route({UserCar? userCar}) => MaterialPageRoute(
         builder: (context) => UpsertUserCarPage(userCar: userCar),
       );
+
   @override
   State<UpsertUserCarPage> createState() => _UpsertUserCarPageState();
 }
 
 class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
-  static const limit = 200;
   late final CancelToken _cancelToken;
+  final formKey = GlobalKey<FormState>();
+
+  // Controllers for your form fields
+  final licensePlateController = TextEditingController();
   var selectedCarModelYearColorId;
   final carModelYearColorIdController = TextEditingController();
-  final licensePlateController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
-  List<File> _selectedImages = [];
+
+  // Add other controllers based on your UserCar model
+
+  final List<File> _selectedImages = [];
+  List<String> _existingImages = [];
+  final List<String> _imagesToDelete = [];
   bool isUpdate = false;
 
   @override
@@ -49,17 +55,15 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
     _cancelToken = CancelToken();
     getCarModelYearColor();
 
-    setState(
-      () {
-        isUpdate = widget.userCar != null;
+    setState(() {
+      isUpdate = widget.userCar != null;
+    });
 
-        selectedCarModelYearColorId = widget.userCar?.carModelYearColorId;
-      },
-    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (isUpdate) {
         licensePlateController.text = widget.userCar!.licensePlate;
-        _loadImage();
+        selectedCarModelYearColorId = widget.userCar!.carModelYearColorId;
+        _loadExistingImages();
       }
     });
   }
@@ -67,32 +71,25 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
   @override
   void dispose() {
     _cancelToken.cancel();
+    for (var image in _selectedImages) {
+      image.delete();
+    }
     _selectedImages.clear();
-    carModelYearColorIdController.dispose();
 
     licensePlateController.dispose();
+    // Dispose other controllers
 
     super.dispose();
   }
 
-  Future<void> _loadImage() async {
-    if (widget.userCar?.carImages == null ||
-        widget.userCar!.carImages!.isEmpty) {
-      return;
-    }
-
+  Future<void> _loadExistingImages() async {
+    if (widget.userCar?.carImages == null) return;
     try {
-      final futures = widget.userCar!.carImages!
-          .where((url) => url != null)
-          .map((url) => urlToFile(url!));
-
-      final files = await Future.wait(futures);
-
       setState(() {
-        _selectedImages = files;
+        _existingImages = List<String>.from(widget.userCar!.carImages!);
       });
     } catch (e) {
-      LogService.e("Error loading images: $e");
+      LogService.e("Error loading existing images: $e");
     }
   }
 
@@ -100,13 +97,16 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
     if (isUpdate) {
       context.read<UserCarCubit>().updateUserCar(
             UserCar(
-              id: widget.userCar!.id,
-              licensePlate: licensePlateController.text,
               createdAt: widget.userCar!.createdAt,
               updatedAt: widget.userCar!.updatedAt,
+              id: widget.userCar!.id,
+              licensePlate: licensePlateController.text,
+              // Add other fields from your UserCar model
+              carImages: _existingImages,
               carModelYearColorId: selectedCarModelYearColorId,
             ),
             _selectedImages,
+            _imagesToDelete,
             _cancelToken,
           );
     } else {
@@ -126,10 +126,10 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
 
   void submitForm() {
     if (formKey.currentState!.validate()) {
-      if (_selectedImages.isEmpty) {
+      if (!isUpdate && _selectedImages.isEmpty) {
         SnackBarUtil.showSnackBar(
           context: context,
-          message: "Harap pilih minimal 1 gambar",
+          message: "Please select at least one image",
           type: SnackBarType.error,
         );
         return;
@@ -138,48 +138,52 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
     }
   }
 
-  Future<void> _pickImage() async {
+  Future<void> _pickImages() async {
     try {
       final pickedFiles = await ImagePicker().pickMultiImage(
         maxWidth: 1024,
         maxHeight: 1024,
       );
 
-      if (pickedFiles.isNotEmpty) {
-        // Validasi maksimal 5 gambar
-        if (_selectedImages.length + pickedFiles.length > 5) {
-          SnackBarUtil.showSnackBar(
-            context: context,
-            message: "Maksimal 5 gambar yang diizinkan",
-            type: SnackBarType.error,
-          );
-          return;
-        }
-
-        // Validasi ukuran file
-        final validFiles = <File>[];
-        for (final pickedFile in pickedFiles) {
-          final file = File(pickedFile.path);
-          final fileSize = await file.length();
-          fileValidatorSize(context, fileSize);
-          validFiles.add(file);
-        }
-
+      for (var pickedFile in pickedFiles) {
         setState(() {
-          _selectedImages.addAll(validFiles);
+          _selectedImages.add(File(pickedFile.path));
         });
+        // if (fileValidatorSize(context, fileSize, showMessage: false)) {
+        // } else {
+        //   SnackBarUtil.showSnackBar(
+        //     context: context,
+        //     message: "Some images exceeded size limit",
+        //     type: SnackBarType.warning,
+        //   );
+        // }
       }
-    } on PlatformException {
+    } on PlatformException catch (e) {
+      LogService.e("Error picking images: $e");
       SnackBarUtil.showSnackBar(
         context: context,
-        message: "Gagal memilih gambar",
+        message: "Something went wrong picking images",
         type: SnackBarType.error,
       );
     }
   }
 
+  void _removeExistingImage(String imageUrl) {
+    setState(() {
+      _existingImages.remove(imageUrl);
+      _imagesToDelete.add(imageUrl);
+    });
+  }
+
+  void _removeSelectedImage(int index) {
+    setState(() {
+      _selectedImages[index].delete();
+      _selectedImages.removeAt(index);
+    });
+  }
+
   Future<void> getCarModelYearColor() async {
-    await context.read<CarModelYearColorCubit>().refresh(limit, _cancelToken);
+    await context.read<CarModelYearColorCubit>().refresh(100, _cancelToken);
   }
 
   @override
@@ -193,8 +197,7 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
           onSuccess: () {
             SnackBarUtil.showSnackBar(
               context: context,
-              message:
-                  "Car userCar ${isUpdate ? 'Updated' : 'Created'} successfully",
+              message: "Car ${isUpdate ? 'Updated' : 'Created'} successfully",
               type: SnackBarType.success,
             );
             Navigator.pop(context);
@@ -204,7 +207,7 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
       builder: (context, state) {
         return Scaffold(
           appBar: mainAppBar(
-            isUpdate ? "Update Car UserCars" : "Create Car UserCars",
+            isUpdate ? "Update Car" : "Create Car",
           ),
           body: Center(
             child: SingleChildScrollView(
@@ -215,65 +218,24 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
                   spacing: 16,
                   children: [
                     MainText(
-                      text: isUpdate
-                          ? "Update Car UserCar"
-                          : "Create Car UserCar",
+                      text: isUpdate ? "Update Car" : "Create Car",
                       extent: const Large(),
                     ),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 8,
-                        mainAxisSpacing: 8,
-                      ),
-                      itemCount: _selectedImages.length + 1,
-                      itemBuilder: (context, index) {
-                        if (index < _selectedImages.length) {
-                          return Stack(
-                            children: [
-                              Image.file(
-                                _selectedImages[index],
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                              ),
-                              Positioned(
-                                right: 0,
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _selectedImages.removeAt(index);
-                                    });
-                                  },
-                                ),
-                              ),
-                            ],
-                          );
-                        } else {
-                          return GestureDetector(
-                            onTap: _pickImage,
-                            child: Container(
-                              color: Colors.grey[200],
-                              child: const Icon(Icons.add_a_photo, size: 40),
-                            ),
-                          );
-                        }
-                      },
+                    MultiImageCarAction(
+                      selectedImages: _selectedImages,
+                      existingImages: _existingImages,
+                      onPickImages: _pickImages,
+                      onRemoveExisting: _removeExistingImage,
+                      onRemoveSelected: _removeSelectedImage,
                     ),
                     MainTextField(
                       controller: licensePlateController,
-                      hintText: "Enter License Plate",
-                      leadingIcon: const Icon(Icons.car_rental),
+                      hintText: "Enter car licensePlate",
+                      leadingIcon: const Icon(Icons.drive_eta),
                       isEnabled: state is! BaseLoadingState,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "License Plate cannot be empty";
+                          return "Car licensePlate cannot be empty";
                         }
                         return null;
                       },
@@ -309,6 +271,8 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
                         );
                       },
                     ),
+
+                    // Add other form fields based on your UserCar model
                     MainElevatedButton(
                       onPressed: submitForm,
                       text: isUpdate ? "Update" : "Create",
@@ -321,6 +285,105 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
           ),
         );
       },
+    );
+  }
+}
+
+// MultiImageCarAction widget
+class MultiImageCarAction extends StatelessWidget {
+  final List<File> selectedImages;
+  final List<String> existingImages;
+  final VoidCallback onPickImages;
+  final Function(String) onRemoveExisting;
+  final Function(int) onRemoveSelected;
+
+  const MultiImageCarAction({
+    super.key,
+    required this.selectedImages,
+    required this.existingImages,
+    required this.onPickImages,
+    required this.onRemoveExisting,
+    required this.onRemoveSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ElevatedButton.icon(
+          onPressed: onPickImages,
+          icon: const Icon(Icons.add_photo_alternate),
+          label: const Text('Add Images'),
+        ),
+        const SizedBox(height: 16),
+        if (existingImages.isNotEmpty) ...[
+          const Text('Existing Images'),
+          SizedBox(
+            height: 100,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: existingImages.length,
+              itemBuilder: (context, index) {
+                return Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Image.network(
+                        existingImages[index],
+                        height: 80,
+                        width: 80,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: IconButton(
+                        icon: const Icon(Icons.close, color: Colors.red),
+                        onPressed: () =>
+                            onRemoveExisting(existingImages[index]),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
+        if (selectedImages.isNotEmpty) ...[
+          const Text('New Images'),
+          SizedBox(
+            height: 100,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: selectedImages.length,
+              itemBuilder: (context, index) {
+                return Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Image.file(
+                        selectedImages[index],
+                        height: 80,
+                        width: 80,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: IconButton(
+                        icon: const Icon(Icons.close, color: Colors.red),
+                        onPressed: () => onRemoveSelected(index),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

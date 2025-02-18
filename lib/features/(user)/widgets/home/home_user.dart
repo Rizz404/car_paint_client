@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/data/models/user_car.dart';
 import 'package:paint_car/data/utils/user_extension.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
 import 'package:paint_car/features/(user)/car/pages/user_car_page.dart';
 import 'package:paint_car/features/(user)/widgets/home/banner_slider.dart';

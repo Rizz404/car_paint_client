@@ -65,7 +65,7 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   MainText(
-                    text: 'Total: ${widget.order.totalPrice ?? "-"}',
+                    text: 'Total: ${widget.order.subtotalPrice ?? "-"}',
                   ),
                   MainText(
                     text: _formatDate(widget.order.createdAt),

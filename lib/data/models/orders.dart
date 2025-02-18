@@ -17,7 +17,7 @@ class Orders {
   final String? note;
   final List<CarService?>? carServices;
   final List<ETicket?>? eTicket;
-  final String? totalPrice;
+  final String? subtotalPrice;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   Orders({
@@ -30,7 +30,7 @@ class Orders {
     required this.note,
     this.carServices,
     this.eTicket,
-    required this.totalPrice,
+    required this.subtotalPrice,
     this.createdAt,
     this.updatedAt,
   });
@@ -45,7 +45,7 @@ class Orders {
     String? note,
     List<CarService?>? carServices,
     List<ETicket?>? eTicket,
-    String? totalPrice,
+    String? subtotalPrice,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -59,7 +59,7 @@ class Orders {
       note: note ?? this.note,
       carServices: carServices ?? this.carServices,
       eTicket: eTicket ?? this.eTicket,
-      totalPrice: totalPrice ?? this.totalPrice,
+      subtotalPrice: subtotalPrice ?? this.subtotalPrice,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -76,7 +76,7 @@ class Orders {
       'note': note,
       'carServices': carServices?.map((x) => x?.toMap()).toList(),
       'eTicket': eTicket?.map((x) => x?.toMap()).toList(),
-      'totalPrice': totalPrice,
+      'subtotalPrice': subtotalPrice,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
     };
@@ -110,8 +110,8 @@ class Orders {
               ),
             )
           : null,
-      totalPrice:
-          map['totalPrice'] != null ? map['totalPrice'] as String : null,
+      subtotalPrice:
+          map['subtotalPrice'] != null ? map['subtotalPrice'] as String : null,
       createdAt: map['createdAt'] != null
           ? DateTime.parse(map['createdAt'] as String)
           : null,
@@ -128,7 +128,7 @@ class Orders {
 
   @override
   String toString() {
-    return 'Orders(id: $id, userId: $userId, userCarId: $userCarId, workshopId: $workshopId, workStatus: $workStatus, orderStatus: $orderStatus, note: $note, carServices: $carServices, eTicket: $eTicket, totalPrice: $totalPrice, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Orders(id: $id, userId: $userId, userCarId: $userCarId, workshopId: $workshopId, workStatus: $workStatus, orderStatus: $orderStatus, note: $note, carServices: $carServices, eTicket: $eTicket, subtotalPrice: $subtotalPrice, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -144,7 +144,7 @@ class Orders {
         other.note == note &&
         listEquals(other.carServices, carServices) &&
         listEquals(other.eTicket, eTicket) &&
-        other.totalPrice == totalPrice &&
+        other.subtotalPrice == subtotalPrice &&
         other.createdAt == createdAt &&
         other.updatedAt == updatedAt;
   }
@@ -160,7 +160,7 @@ class Orders {
         note.hashCode ^
         carServices.hashCode ^
         eTicket.hashCode ^
-        totalPrice.hashCode ^
+        subtotalPrice.hashCode ^
         createdAt.hashCode ^
         updatedAt.hashCode;
   }

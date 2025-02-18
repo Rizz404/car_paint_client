@@ -4,7 +4,6 @@ import 'package:paint_car/core/types/paginated_data.dart';
 import 'package:paint_car/data/models/orders.dart';
 import 'package:paint_car/data/models/transactions.dart';
 import 'package:paint_car/data/network/api_client.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/shared/utils/build_pagination_params.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/from_json_pagination.dart';

@@ -28,7 +28,7 @@ class CardLinkSection extends StatelessWidget {
           child: Column(
             spacing: 8,
             children: [
-              MainText(text: text, extent: Medium()),
+              MainText(text: text, extent: const Medium()),
               GestureDetector(
                 onTap: onTap,
                 child: Container(
