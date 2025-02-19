@@ -95,15 +95,15 @@ class _UserPageState extends State<UserPage> {
                       Navigator.of(context)
                           .pushAndRemoveUntil(LoginPage.route(), (_) => false);
                     },
-                    child: ListTile(
-                      title: const MainText(text: "Logout"),
-                      leading: const Icon(Icons.logout),
+                    child: const ListTile(
+                      title: MainText(text: "Logout"),
+                      leading: Icon(Icons.logout),
                     ),
                   ),
-                )
+                ),
               ],
             ),
-          );
+          ).paddingSymmetric(vertical: 16);
         } else {
           return ElevatedButton(
             onPressed: () {

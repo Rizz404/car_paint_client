@@ -14,6 +14,7 @@ import 'package:paint_car/features/shared/cubit/user_cubit.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
+import 'package:paint_car/ui/shared/image_circle_action.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
@@ -187,14 +188,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   spacing: 16,
                   children: [
-                    const MainText(
-                      text: "Update User PRofile",
-                      extent: const Large(),
-                    ),
-                    ImageCarAction(
+                    ImageCircleAction(
                       selectedImage: _selectedImage,
                       logoUrl: widget.user.profileImage,
                       onPickImage: _pickImage,
+                      radius: 120,
                     ),
                     MainTextField(
                       controller: usernameController,

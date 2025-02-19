@@ -18,8 +18,6 @@ class CircleImageNetwork extends StatelessWidget {
         imageUrl ??
             "https://banner2.cleanpng.com/20190329/tul/kisspng-clip-art-vector-graphics-openclipart-download-port-user-configuration-svg-png-icon-free-download-35-1713899737483.webp",
       ),
-      backgroundColor: Colors.blue,
-      foregroundColor: Colors.green,
       foregroundImage: NetworkImage(
         imageUrl ??
             "https://banner2.cleanpng.com/20190329/tul/kisspng-clip-art-vector-graphics-openclipart-download-port-user-configuration-svg-png-icon-free-download-35-1713899737483.webp",
