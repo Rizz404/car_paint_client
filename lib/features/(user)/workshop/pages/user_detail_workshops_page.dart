@@ -8,6 +8,8 @@ import 'package:paint_car/features/(user)/workshop/widgets/checkbox_services.dar
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/common/extent.dart';
+import 'package:paint_car/ui/extension/padding.dart';
+import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
@@ -28,7 +30,11 @@ class UserDetailWorkshopsPage extends StatefulWidget {
       _UserDetailWorkshopsPageState();
 }
 
-class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
+class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   static const int limit = 100;
   late final CancelToken _cancelToken;
   static const double _zoomLevel = 14;
@@ -70,14 +76,17 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
   }
 
   @override
+  void dispose() {
+    _cancelToken.cancel();
+    _mapController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: MainText(
-          text: widget.workshop.name,
-          extent: const Large(),
-        ),
-      ),
+      appBar: mainAppBar(widget.workshop.name),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(
         children: [
           Expanded(
@@ -92,7 +101,10 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                       child: SizedBox(
                         height: 200,
                         child: GoogleMap(
+                          liteModeEnabled: true,
                           onMapCreated: _onMapCreated,
+                          mapToolbarEnabled: false,
+                          zoomControlsEnabled: false,
                           initialCameraPosition: CameraPosition(
                             target: LatLng(
                               widget.workshop.latitude,
@@ -113,12 +125,10 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                                 onTap: _launchGoogleMaps,
                               ),
                               icon: BitmapDescriptor.defaultMarkerWithHue(
-                                BitmapDescriptor.hueViolet,
+                                BitmapDescriptor.hueRed,
                               ),
                             ),
                           },
-                          mapToolbarEnabled: false,
-                          zoomControlsEnabled: false,
                         ),
                       ),
                     ),
@@ -128,13 +138,21 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                   StateHandler<CarServicesCubit, PaginationState<CarService>>(
                     onRetry: () => getCarServices(),
                     onSuccess: (context, data, _) {
-                      final carServices = data.data;
-                      return CheckboxServices(
-                        carServices: carServices,
-                        selectedServices: selectedServices,
-                        isSelectAll: isSelectAll,
-                        toggleAllServices: _toggleAllServices,
-                        toggleService: _toggleService,
+                      final services = data.data;
+                      // Update langsung tanpa post-frame callback
+                      // Pindah ke initState jika memungkinkan
+                      if (carServices.isEmpty && services.isNotEmpty) {
+                        carServices = services.map((e) => e.id!).toList();
+                      }
+
+                      return RepaintBoundary(
+                        child: CheckboxServices(
+                          carServices: services,
+                          selectedServices: selectedServices,
+                          isSelectAll: isSelectAll,
+                          toggleAllServices: _toggleAllServices,
+                          toggleService: _toggleService,
+                        ),
                       );
                     },
                   ),
@@ -169,7 +187,10 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
   }
 
   void _onMapCreated(GoogleMapController controller) {
-    _mapController = controller;
+    if (!mounted) return;
+    setState(() {
+      _mapController = controller;
+    });
   }
 
   Future<void> _launchGoogleMaps() async {
@@ -190,41 +211,54 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
   }
 
   Widget _buildDetailSection() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MainText(
-            text: widget.workshop.name,
-            extent: const Large(),
-            color: Theme.of(context).primaryColor,
-          ),
-          const SizedBox(height: 24),
-          _buildDetailItem(
-            icon: Icons.location_on,
-            label: 'Alamat',
-            value: widget.workshop.address,
-          ),
-          _buildDetailItem(
-            icon: Icons.email,
-            label: 'Email',
-            value: widget.workshop.email,
-          ),
-          _buildDetailItem(
-            icon: Icons.phone,
-            label: 'Telepon',
-            value: widget.workshop.phoneNumber ?? '-',
-          ),
-          if (widget.workshop.distance != null)
-            _buildDetailItem(
-              icon: Icons.directions_car,
-              label: 'Jarak',
-              value: '${widget.workshop.distance} km',
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Divider(
+              thickness: 1,
+              color: Theme.of(context).colorScheme.secondary,
             ),
-        ],
-      ),
-    );
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                MainText(
+                  text: widget.workshop.name,
+                  extent: const Large(),
+                ),
+                MainText(
+                  text: widget.workshop.distance ?? "N/A",
+                  color: Theme.of(context).colorScheme.primary,
+                  extent: const Medium(),
+                ),
+              ],
+            ),
+            Divider(
+              thickness: 1,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        _buildDetailItem(
+          icon: Icons.location_on,
+          label: 'Alamat',
+          value: widget.workshop.address,
+        ),
+        _buildDetailItem(
+          icon: Icons.email,
+          label: 'Email',
+          value: widget.workshop.email,
+        ),
+        _buildDetailItem(
+          icon: Icons.phone,
+          label: 'Telepon',
+          value: widget.workshop.phoneNumber ?? '-',
+        ),
+      ],
+    ).paddingSymmetric(horizontal: 16);
   }
 
   Widget _buildDetailItem({
@@ -235,10 +269,9 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 16,
         children: [
-          Icon(icon, color: Colors.grey.shade600, size: 20),
-          const SizedBox(width: 12),
+          Icon(icon, color: Colors.grey.shade600, size: 26),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

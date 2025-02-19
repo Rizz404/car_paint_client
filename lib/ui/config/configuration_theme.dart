@@ -15,6 +15,7 @@ class ConfigurationTheme {
       seedColor: const Color(0xFFE63B2A),
       primary: const Color(0xFFE63B2A),
       onPrimary: const Color(0xFFFFFFFF),
+      surface: const Color(0xFFFFFFFF),
       secondary: const Color(0xF2F2F2F2),
     );
   }

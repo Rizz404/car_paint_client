@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/features/shared/utils/currency_formatter.dart';
+import 'package:paint_car/ui/extension/padding.dart';
 import 'package:paint_car/ui/shared/expandable_card.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
@@ -31,8 +32,8 @@ class CheckboxServices extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExpandableCard(
       headerBuilder: (isExpanded) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        return Material(
+          color: Theme.of(context).colorScheme.secondary,
           child: Row(
             children: [
               Checkbox(
@@ -54,16 +55,17 @@ class CheckboxServices extends StatelessWidget {
                 child: const Icon(Icons.keyboard_arrow_down),
               ),
             ],
-          ),
+          ).paddingAll(8),
         );
       },
-      expandedContent: Column(
-        children: [
-          if (selectedServices.isNotEmpty) ...[
-            const Divider(height: 1),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
+      expandedContent: Material(
+        color: Theme.of(context).colorScheme.secondary,
+        child: Column(
+          children: [
+            if (selectedServices.isNotEmpty) ...[
+              Divider(
+                  height: 1, color: Theme.of(context).colorScheme.secondary),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const MainText(
@@ -74,36 +76,39 @@ class CheckboxServices extends StatelessWidget {
                     color: Theme.of(context).primaryColor,
                   ),
                 ],
+              ).paddingAll(),
+            ],
+            Divider(height: 1, color: Theme.of(context).colorScheme.secondary),
+            SizedBox(
+              height: 200, // Sesuaikan dengan kebutuhan tinggi list
+              child: ListView.builder(
+                physics: const ClampingScrollPhysics(),
+                itemCount: carServices.length,
+                itemBuilder: (context, index) {
+                  final service = carServices[index];
+                  return CheckboxListTile(
+                    key: ValueKey(service.id),
+                    title: MainText(
+                      text: service.name,
+                    ),
+                    subtitle: MainText(
+                      text: CurrencyFormatter.toRupiah(
+                        int.parse(service.price),
+                      ),
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    value: selectedServices.contains(service.id),
+                    onChanged: (value) => toggleService(service.id!),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 4,
+                    ),
+                  );
+                },
               ),
             ),
           ],
-          const Divider(height: 1),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: carServices.length,
-            itemBuilder: (context, index) {
-              final service = carServices[index];
-              return CheckboxListTile(
-                title: MainText(
-                  text: service.name,
-                ),
-                subtitle: MainText(
-                  text: CurrencyFormatter.toRupiah(
-                    int.parse(service.price),
-                  ),
-                  color: Theme.of(context).primaryColor,
-                ),
-                value: selectedServices.contains(service.id),
-                onChanged: (value) => toggleService(service.id!),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 4,
-                ),
-              );
-            },
-          ),
-        ],
+        ),
       ),
     );
   }
