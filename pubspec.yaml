@@ -99,6 +99,10 @@ flutter:
     - assets/images/placeholder-image-general.webp
     - assets/images/user_car_orders.png
     - assets/images/history.png
+    - assets/images/empty_ticket.png
+    - assets/images/history.png
+    - assets/images/no_internet_connection.png
+    - assets/images/something_went_wrong.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

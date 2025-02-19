@@ -10,6 +10,7 @@ import 'package:paint_car/features/(superadmin)/financial/widgets/e_tickets_item
 import 'package:paint_car/features/(user)/financial/user_e_tickets_cubit.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
+import 'package:paint_car/ui/shared/common_state.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
@@ -75,7 +76,13 @@ class _UserETicketsPageState extends State<UserETicketsPage> {
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
           final models = data.data;
-
+          // final models = [];
+          if (models.isEmpty) {
+            return const CommonState(
+              title: 'E-Ticket anda masih kosong',
+              imgPath: "assets/images/empty_ticket.png",
+            );
+          }
           return RefreshIndicator(
             onRefresh: () async {
               _onRefresh();

@@ -10,6 +10,7 @@ import 'package:paint_car/features/(user)/car/pages/upsert_user_car_page.dart';
 import 'package:paint_car/features/(user)/car/widgets/user_car_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
+import 'package:paint_car/ui/shared/common_state.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
@@ -101,8 +102,9 @@ class _UserCarPageState extends State<UserCarPage> {
           final userCars = data.data;
 
           if (userCars.isEmpty) {
-            return const Center(
-              child: Text("Empty"),
+            return const CommonState(
+              title: 'Mobil anda kosong, silahkan tambahkan mobil',
+              description: 'Klik tombol + untuk menambahkan mobil',
             );
           }
           return RefreshIndicator(
@@ -118,15 +120,6 @@ class _UserCarPageState extends State<UserCarPage> {
                 physics:
                     const AlwaysScrollableScrollPhysics(), // buat RefreshIndicator
                 slivers: [
-                  // TO
-                  // SliverToBoxAdapter(
-                  //     child: MainElevatedButton(
-                  //         text: "Create Many",
-                  //         onPressed: () {
-                  //           Navigator.of(context).push(
-                  //             InsertManyUserCarPage.route(),
-                  //           );
-                  //         })),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => UserCarItem(

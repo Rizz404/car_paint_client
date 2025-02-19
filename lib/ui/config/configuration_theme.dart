@@ -17,6 +17,7 @@ class ConfigurationTheme {
       onPrimary: const Color(0xFFFFFFFF),
       surface: const Color(0xFFFFFFFF),
       secondary: const Color(0xF2F2F2F2),
+      surfaceDim: const Color(0x4A4A4A4A),
     );
   }
 

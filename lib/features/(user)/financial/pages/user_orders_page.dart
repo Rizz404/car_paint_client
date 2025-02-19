@@ -9,6 +9,7 @@ import 'package:paint_car/features/(user)/financial/cubit/user_orders_cubit.dart
 import 'package:paint_car/features/(user)/financial/widgets/user_orders_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
+import 'package:paint_car/ui/shared/common_state.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
@@ -75,6 +76,13 @@ class _UserOrdersPageState extends State<UserOrdersPage> {
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
           final models = data.data;
+          // final models = [];
+
+          if (models.isEmpty) {
+            return const CommonState(
+              title: 'Order anda masih kosong',
+            );
+          }
 
           return RefreshIndicator(
             onRefresh: () async {

@@ -79,7 +79,7 @@ class LeftDrawer extends StatelessWidget {
       ActualLink(
         text: "Your Car",
         onTap: () {
-          LogService.i("est");
+          Navigator.of(context).push(UserCarPage.route());
         },
         leading: Icons.car_rental,
       ),
