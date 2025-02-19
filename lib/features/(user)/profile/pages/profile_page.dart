@@ -178,7 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (context, state) {
         return Scaffold(
           appBar: mainAppBar(
-            "User Profile",
+            "Update Profile",
           ),
           body: Center(
             child: SingleChildScrollView(
@@ -188,11 +188,20 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   spacing: 16,
                   children: [
-                    ImageCircleAction(
-                      selectedImage: _selectedImage,
-                      logoUrl: widget.user.profileImage,
-                      onPickImage: _pickImage,
-                      radius: 120,
+                    Column(
+                      spacing: 8,
+                      children: [
+                        ImageCircleAction(
+                          selectedImage: _selectedImage,
+                          logoUrl: widget.user.profileImage,
+                          onPickImage: _pickImage,
+                          radius: 120,
+                        ),
+                        Divider(
+                          thickness: 1,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ],
                     ),
                     MainTextField(
                       controller: usernameController,

@@ -105,7 +105,8 @@ class _UserWorkshopsPageState extends State<UserWorkshopsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: mainAppBar("Car Workshops"),
+      appBar: mainAppBar("Workshops"),
+      backgroundColor: Theme.of(context).colorScheme.onPrimary,
       body: StateHandler<UserWorkshopCubit, PaginationState<CarWorkshop>>(
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
@@ -124,14 +125,6 @@ class _UserWorkshopsPageState extends State<UserWorkshopsPage> {
                 physics:
                     const AlwaysScrollableScrollPhysics(), // buat RefreshIndicator
                 slivers: [
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Showing ${workshops.length} workshops",
-                      ),
-                    ),
-                  ),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => UserWorkshopsItem(

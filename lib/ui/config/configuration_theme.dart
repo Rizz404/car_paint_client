@@ -89,7 +89,7 @@ class ConfigurationTheme {
         fontWeight: FontWeight.w500,
       ),
       titleMedium: const TextStyle(
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: FontWeight.w500,
       ),
       titleSmall: const TextStyle(
