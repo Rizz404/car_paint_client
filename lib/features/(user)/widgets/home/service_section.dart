@@ -66,7 +66,7 @@ class ServiceSection extends StatelessWidget {
               image: "assets/images/history.png",
               text: "History Orders",
               onTap: () {
-                Navigator.of(context).push(UserOrdersPage.route());
+                Navigator.of(context).push(UserHistoryPage.route());
               },
             ),
           ],
