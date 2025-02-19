@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/data/models/enums/user_role.dart';
 import 'package:paint_car/data/utils/user_extension.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(user)/car/pages/user_car_page.dart';
 import 'package:paint_car/features/home/home_constants.dart';
+import 'package:paint_car/features/home/widgets/actual_link.dart';
 
 import 'package:paint_car/features/home/widgets/main_dropdown.dart';
+import 'package:paint_car/features/home/widgets/title_link.dart';
 import 'package:paint_car/ui/common/dropdown_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
+import 'package:paint_car/ui/shared/circle_image_network.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
+import 'package:paint_car/ui/utils/snack_bar.dart';
 
 class LeftDrawer extends StatelessWidget {
   LeftDrawer({super.key});
@@ -64,6 +69,86 @@ class LeftDrawer extends StatelessWidget {
     ];
   }
 
+  List<Widget> dropdownUser2(
+    BuildContext context,
+  ) {
+    return [
+      TitleLink(
+        text: "Menu Car",
+      ),
+      ActualLink(
+        text: "Your Car",
+        onTap: () {
+          LogService.i("est");
+        },
+        leading: Icons.car_rental,
+      ),
+      const TitleLink(
+        text: "Menu Financial",
+      ),
+      ...HomeConstants.financialItemsUser
+          .map(
+            (item) => ActualLink(
+              text: item['name'],
+              onTap: () {
+                Navigator.push(context, item['route']());
+              },
+              leading: Icons.monetization_on,
+            ),
+          )
+          .toList(),
+      const TitleLink(
+        text: "Menu Other",
+      ),
+      ...HomeConstants.otherItemsUser
+          .map(
+            (item) => ActualLink(
+              text: item['name'],
+              onTap: () {
+                Navigator.push(context, item['route']());
+              },
+              leading: Icons.help,
+            ),
+          )
+          .toList(),
+    ];
+  }
+
+  List<Widget> dropdownSuperAdmin2(
+    BuildContext context,
+  ) {
+    return [
+      const TitleLink(
+        text: "Menu Car",
+      ),
+      ...HomeConstants.carItemsSuperAdmin
+          .map(
+            (item) => ActualLink(
+              text: item['name'],
+              onTap: () {
+                Navigator.push(context, item['route']());
+              },
+              leading: Icons.car_rental,
+            ),
+          )
+          .toList(),
+      const TitleLink(
+        text: "Menu Financial",
+      ),
+      ...HomeConstants.financialItemsSuperAdmin
+          .map(
+            (item) => ActualLink(
+              text: item['name'],
+              onTap: () {
+                Navigator.push(context, item['route']());
+              },
+              leading: Icons.monetization_on,
+            ),
+          )
+          .toList(),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final role = context.userRole;
@@ -75,14 +160,37 @@ class LeftDrawer extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
             ),
-            child: MainText(
-              text: role == UserRole.USER ? 'User' : "Admin",
-              extent: const Large(),
-              color: Theme.of(context).colorScheme.onPrimary,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  spacing: 8,
+                  children: [
+                    CircleImageNetwork(
+                      imageUrl: context.currentUser?.profileImage,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        MainText(
+                          text: " ${context.currentUser?.username}",
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                        MainText(
+                          text: " ${context.currentUser?.email}",
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          if (role == UserRole.USER) ...dropdownUser(context),
-          if (role == UserRole.SUPER_ADMIN) ...dropdownSuperAdmin(),
+          if (role == UserRole.USER) ...dropdownUser2(context),
+          if (role == UserRole.SUPER_ADMIN) ...dropdownSuperAdmin2(context),
+          // if (role == UserRole.USER) ...dropdownUser(context),
+          // if (role == UserRole.SUPER_ADMIN) ...dropdownSuperAdmin(),
         ],
       ),
     );
