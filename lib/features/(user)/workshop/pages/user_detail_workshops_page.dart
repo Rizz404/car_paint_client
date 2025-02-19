@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/data/models/car_workshop.dart';
+import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_services_cubit.dart';
 import 'package:paint_car/features/(user)/financial/pages/user_create_order_page.dart';
 import 'package:paint_car/features/(user)/workshop/widgets/checkbox_services.dart';
@@ -30,16 +31,11 @@ class UserDetailWorkshopsPage extends StatefulWidget {
       _UserDetailWorkshopsPageState();
 }
 
-class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
+class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
   static const int limit = 100;
   late final CancelToken _cancelToken;
   static const double _zoomLevel = 14;
 
-  // ignore: unused_field
   late final GoogleMapController? _mapController;
   List<String> carServices = [];
   List<String> selectedServices = [];
@@ -52,7 +48,6 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage>
       } else {
         selectedServices.add(serviceId);
       }
-      // Update status select all
       isSelectAll = selectedServices.length == carServices.length;
     });
   }
@@ -93,7 +88,6 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage>
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // Map Section
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: ClipRRect(
@@ -133,14 +127,11 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage>
                       ),
                     ),
                   ),
-
                   _buildDetailSection(),
                   StateHandler<CarServicesCubit, PaginationState<CarService>>(
                     onRetry: () => getCarServices(),
                     onSuccess: (context, data, _) {
                       final services = data.data;
-                      // Update langsung tanpa post-frame callback
-                      // Pindah ke initState jika memungkinkan
                       if (carServices.isEmpty && services.isNotEmpty) {
                         carServices = services.map((e) => e.id!).toList();
                       }
@@ -166,11 +157,23 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage>
                         );
                         return;
                       }
+                      final totalPrice = (context.read<CarServicesCubit>().state
+                              as BaseSuccessState<PaginationState<CarService>>)
+                          .data
+                          .data
+                          .where(
+                            (service) => selectedServices.contains(service.id),
+                          )
+                          .fold(
+                            0,
+                            (sum, service) => sum + int.parse(service.price),
+                          );
 
                       Navigator.of(context).push(
                         UserCreateOrderPage.route(
                           workshopId: widget.workshop.id!,
                           carServices: selectedServices,
+                          totalPrice: totalPrice,
                         ),
                       );
                     },
@@ -180,7 +183,6 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage>
               ),
             ),
           ),
-          // Bottom Action Button
         ],
       ),
     );

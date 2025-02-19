@@ -7,6 +7,7 @@ import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/(superadmin)/financial/cubit/payment_method_cubit.dart';
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_orders_cubit.dart';
+import 'package:paint_car/features/(user)/financial/pages/final_user_create_order_page.dart';
 import 'package:paint_car/features/home/pages/home_page.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
@@ -23,14 +24,17 @@ import 'package:paint_car/ui/utils/snack_bar.dart';
 class UserCreateOrderPage extends StatefulWidget {
   final String workshopId;
   final List<String> carServices;
+  final int totalPrice;
   static route({
     required String workshopId,
     required List<String> carServices,
+    required int totalPrice,
   }) =>
       MaterialPageRoute(
         builder: (_) => UserCreateOrderPage(
           workshopId: workshopId,
           carServices: carServices,
+          totalPrice: totalPrice,
         ),
       );
 
@@ -38,6 +42,7 @@ class UserCreateOrderPage extends StatefulWidget {
     super.key,
     required this.workshopId,
     required this.carServices,
+    required this.totalPrice,
   });
 
   @override
@@ -57,10 +62,6 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
 
   final formKey = GlobalKey<FormState>();
 
-  void getPaymentMethods() {
-    context.read<PaymentMethodCubit>().refresh(limit, _cancelToken);
-  }
-
   void getUserCars() {
     context.read<UserCarCubit>().refresh(limit, _cancelToken);
   }
@@ -68,7 +69,6 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
   @override
   void initState() {
     _cancelToken = CancelToken();
-    getPaymentMethods();
     getUserCars();
     super.initState();
   }
@@ -83,17 +83,26 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
   }
 
   void _performAction() async {
-    await context.read<UserOrdersCubit>().createOrder(
-          selectedUserCarId,
-          selectedPaymentMethodId,
-          widget.workshopId,
-          noteController.text.isEmpty ? null : noteController.text,
-          widget.carServices,
-          _cancelToken,
-        );
+    Navigator.of(context).push(
+      FinalUserCreateOrderPage.route(
+        workshopId: widget.workshopId,
+        carServices: widget.carServices,
+        selectedUserCarId: selectedUserCarId!,
+        note: noteController.text,
+        totalPrice: widget.totalPrice,
+      ),
+    );
   }
 
   void submitForm() {
+    if (selectedUserCarId == null) {
+      SnackBarUtil.showSnackBar(
+        context: context,
+        message: "Please select user car",
+        type: SnackBarType.error,
+      );
+      return;
+    }
     if (formKey.currentState!.validate()) {
       _performAction();
     }
@@ -165,36 +174,6 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
                               ),
                               value: userCar.id,
                               label: userCar.licensePlate,
-                            );
-                          }).toList(),
-                        );
-                      },
-                    ),
-                    StateHandler<PaymentMethodCubit,
-                        PaginationState<PaymentMethod>>(
-                      onRetry: () => getPaymentMethods(),
-                      onSuccess: (context, data, _) {
-                        final paymentMethods = data.data;
-                        return DropdownMenu(
-                          width: double.infinity,
-                          controller: paymentMethodController,
-                          enableFilter: true,
-                          requestFocusOnTap: true,
-                          initialSelection: selectedPaymentMethodId ?? "",
-                          onSelected: (value) {
-                            setState(() {
-                              selectedPaymentMethodId = value;
-                            });
-                          },
-                          label: const MainText(text: "Select Payment Method"),
-                          dropdownMenuEntries:
-                              paymentMethods.map((paymentMethod) {
-                            return DropdownMenuEntry(
-                              labelWidget: MainText(
-                                text: paymentMethod.name,
-                              ),
-                              value: paymentMethod.id,
-                              label: paymentMethod.name,
                             );
                           }).toList(),
                         );

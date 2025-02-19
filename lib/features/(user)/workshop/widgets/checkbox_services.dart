@@ -21,7 +21,7 @@ class CheckboxServices extends StatelessWidget {
     required this.toggleAllServices,
   }) : super(key: key);
 
-  // Menghitung total harga dari layanan yang terpilih
+  // Hanya untuk keperluan tampilan
   double getTotalPrice() {
     return carServices
         .where((service) => selectedServices.contains(service.id))
@@ -44,12 +44,10 @@ class CheckboxServices extends StatelessWidget {
                 text: 'Full Body (Select All)',
               ),
               const Spacer(),
-              // Menampilkan jumlah layanan terpilih
               MainText(
                 text: '${selectedServices.length}/${carServices.length}',
               ),
               const SizedBox(width: 8),
-              // Icon arrow yang berotasi sesuai status expand
               RotatedBox(
                 quarterTurns: isExpanded ? 2 : 0,
                 child: const Icon(Icons.keyboard_arrow_down),
@@ -64,7 +62,9 @@ class CheckboxServices extends StatelessWidget {
           children: [
             if (selectedServices.isNotEmpty) ...[
               Divider(
-                  height: 1, color: Theme.of(context).colorScheme.secondary),
+                height: 1,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -80,7 +80,7 @@ class CheckboxServices extends StatelessWidget {
             ],
             Divider(height: 1, color: Theme.of(context).colorScheme.secondary),
             SizedBox(
-              height: 200, // Sesuaikan dengan kebutuhan tinggi list
+              height: 200,
               child: ListView.builder(
                 physics: const ClampingScrollPhysics(),
                 itemCount: carServices.length,

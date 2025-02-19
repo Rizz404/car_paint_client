@@ -54,3 +54,24 @@ extension PaymentStatusExtension on PaymentStatus {
     );
   }
 }
+
+enum PaymentMethodType {
+  EWALLET,
+  BANK_TRANSFER,
+  CREDIT_CARD,
+  RETAIL_OUTLET,
+  QRIS,
+}
+
+extension PaymentMethodTypeExtension on PaymentMethodType {
+  String toMap() {
+    return name;
+  }
+
+  static PaymentMethodType fromMap(String type) {
+    return PaymentMethodType.values.firstWhere(
+      (e) => e.name == type,
+      orElse: () => PaymentMethodType.EWALLET,
+    );
+  }
+}
