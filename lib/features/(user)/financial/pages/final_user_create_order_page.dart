@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 import 'package:paint_car/data/models/payment_method.dart';
-import 'package:paint_car/data/models/user_car.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 
 import 'package:paint_car/features/(superadmin)/financial/cubit/payment_method_cubit.dart';
-import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_orders_cubit.dart';
 import 'package:paint_car/features/home/pages/home_page.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
@@ -20,7 +17,6 @@ import 'package:paint_car/ui/shared/image_network.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
-import 'package:paint_car/ui/shared/main_text_field.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 
@@ -134,7 +130,8 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
   }
 
   Map<PaymentMethodType, List<PaymentMethod>> _groupPaymentMethods(
-      List<PaymentMethod> methods) {
+    List<PaymentMethod> methods,
+  ) {
     final map = <PaymentMethodType, List<PaymentMethod>>{};
     for (var method in methods) {
       if (method.type != null) {
@@ -147,34 +144,15 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
     return Map.fromEntries(orderedKeys.map((key) => MapEntry(key, map[key]!)));
   }
 
-  void _showPaymentMethodModal(
-      BuildContext context, List<PaymentMethod> methods) {
-    final grouped = _groupPaymentMethods(methods);
-
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: MainText(text: 'Select Payment Method', extent: Large()),
-            ),
-            ...grouped.entries.map((entry) => _buildPaymentMethodGroup(entry)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPaymentMethodGroup(
-      MapEntry<PaymentMethodType, List<PaymentMethod>> entry) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  List<DropdownMenuItem<PaymentMethod>> _buildDropdownItemGroup(
+    MapEntry<PaymentMethodType, List<PaymentMethod>> entry,
+  ) {
+    return [
+      // Header section
+      DropdownMenuItem<PaymentMethod>(
+        enabled: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             entry.key.toString().split('.').last.replaceAll('_', ' '),
             style: TextStyle(
@@ -183,9 +161,15 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
             ),
           ),
         ),
-        ...entry.value.map((pm) => ListTile(
-              title: Text(pm.name),
-              subtitle: Text('Fee: ${pm.fee}'),
+      ),
+      // Items
+      ...entry.value.map(
+        (pm) => DropdownMenuItem<PaymentMethod>(
+          value: pm,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
               leading: pm.logoUrl != null
                   ? ImageNetwork(
                       src: pm.logoUrl!,
@@ -193,16 +177,55 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                       height: 40,
                     )
                   : null,
-              onTap: () {
-                setState(() {
-                  selectedPaymentMethod = pm;
-                  paymentMethodController.text =
-                      pm.name; // Update controller text
-                });
-                Navigator.pop(context);
-              },
-            )),
+              title: Text(pm.name),
+              subtitle: Text(
+                'Fee: ${CurrencyFormatter.toRupiah(_parseFee(pm.fee!).toDouble())}',
+              ),
+            ),
+          ),
+        ),
+      ),
+    ];
+  }
+
+  Widget _buildDropdownSelectedItem(PaymentMethod pm) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Text(
+        pm.name,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+
+  Widget _buildPaymentMethodDropdown(List<PaymentMethod> methods) {
+    final grouped = _groupPaymentMethods(methods);
+
+    return DropdownButtonFormField<PaymentMethod>(
+      value: selectedPaymentMethod,
+      decoration: const InputDecoration(
+        labelText: 'Payment Method',
+        hintText: 'Select payment method',
+        suffixIcon: Icon(Icons.arrow_drop_down),
+      ),
+      items: [
+        for (var entry in grouped.entries) ..._buildDropdownItemGroup(entry),
       ],
+      onChanged: (PaymentMethod? value) {
+        setState(() {
+          selectedPaymentMethod = value;
+        });
+      },
+      validator: (value) {
+        if (value == null) {
+          return 'Please select payment method';
+        }
+        return null;
+      },
+      selectedItemBuilder: (context) {
+        return methods.map((pm) => _buildDropdownSelectedItem(pm)).toList();
+      },
+      isExpanded: true,
     );
   }
 
@@ -212,6 +235,62 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
     } catch (e) {
       return 0;
     }
+  }
+
+  Widget _buildPaymentMethodSections(List<PaymentMethod> methods) {
+    final grouped = _groupPaymentMethods(methods);
+
+    return Column(
+      children: grouped.entries.map((entry) {
+        return ExpansionTile(
+          title: Text(
+            entry.key.toString().split('.').last.replaceAll('_', ' '),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          // Jika ingin setiap grup awalnya terbuka, tambahkan properti ini:
+          // initiallyExpanded: true,
+          children:
+              entry.value.map((pm) => _buildPaymentMethodTile(pm)).toList(),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildPaymentMethodTile(PaymentMethod pm) {
+    final isSelected = selectedPaymentMethod?.id == pm.id;
+
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      color: isSelected
+          ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+          : null,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: pm.logoUrl != null
+            ? ImageNetwork(
+                src: pm.logoUrl!,
+                width: 40,
+                height: 40,
+              )
+            : null,
+        title: Text(pm.name),
+        subtitle: Text(
+            'Fee: ${CurrencyFormatter.toRupiah(_parseFee(pm.fee!).toDouble())}'),
+        trailing: isSelected
+            ? Icon(Icons.check_circle,
+                color: Theme.of(context).colorScheme.primary)
+            : null,
+        onTap: () {
+          setState(() {
+            selectedPaymentMethod = pm;
+          });
+        },
+      ),
+    );
   }
 
   @override
@@ -258,22 +337,28 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                         rowKeyValue(
                           "Sub Total",
                           CurrencyFormatter.toRupiah(
-                              widget.totalPrice.toDouble()),
+                            widget.totalPrice.toDouble(),
+                          ),
                         ),
                         rowKeyValue(
                           "Fee",
                           selectedPaymentMethod != null
                               ? CurrencyFormatter.toRupiah(
                                   _parseFee(selectedPaymentMethod!.fee!)
-                                      .toDouble())
+                                      .toDouble(),
+                                )
                               : "-",
                         ),
                         rowKeyValue(
                           "Total Price",
                           selectedPaymentMethod != null
-                              ? CurrencyFormatter.toRupiah((widget.totalPrice +
-                                      _parseFee(selectedPaymentMethod!.fee!))
-                                  .toDouble())
+                              ? CurrencyFormatter.toRupiah(
+                                  (widget.totalPrice +
+                                          _parseFee(
+                                            selectedPaymentMethod!.fee!,
+                                          ))
+                                      .toDouble(),
+                                )
                               : "-",
                         ),
                       ],
@@ -284,28 +369,17 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                     onRetry: () => getPaymentMethods(),
                     onSuccess: (context, data, _) {
                       final paymentMethods = data.data;
-
-                      return GestureDetector(
-                        onTap: () =>
-                            _showPaymentMethodModal(context, paymentMethods),
-                        child: AbsorbPointer(
-                          child: TextFormField(
-                            controller: paymentMethodController,
-                            decoration: InputDecoration(
-                              labelText: 'Payment Method',
-                              hintText: selectedPaymentMethod != null
-                                  ? '${selectedPaymentMethod!.name} (${CurrencyFormatter.toRupiah(_parseFee(selectedPaymentMethod!.fee!).toDouble())})'
-                                  : 'Select payment method',
-                              suffixIcon: const Icon(Icons.arrow_drop_down),
-                            ),
-                            validator: (value) {
-                              if (selectedPaymentMethod == null) {
-                                return 'Please select payment method';
-                              }
-                              return null;
-                            },
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: MainText(
+                                text: "Payment Methods", extent: Large()),
                           ),
-                        ),
+                          const SizedBox(height: 8),
+                          _buildPaymentMethodSections(paymentMethods),
+                        ],
                       );
                     },
                   ),
