@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 import 'package:paint_car/data/models/transactions.dart';
+import 'package:paint_car/ui/common/extent.dart';
+import 'package:paint_car/ui/extension/padding.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -41,56 +43,82 @@ class UserTransactionsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      elevation: 3,
+      elevation: 1,
+      color: Theme.of(context).colorScheme.secondary,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         onTap: () => _handleTap(context),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Baris atas: Payment Status (dengan warna) dan Tanggal Transaksi
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  buildPaymentStatusWidget(transactions.paymentStatus),
-                  MainText(
-                    text: _formatDate(transactions.createdAt),
+        child: Column(
+          spacing: 8,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                MainText(
+                  text: _formatDate(transactions.createdAt),
+                  extent: const Medium(),
+                  customTextStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
                   ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              MainText(
-                text: 'Invoice: ${transactions.invoiceId}',
-              ),
-              const SizedBox(height: 8),
-              // Baris: Metode Pembayaran dan Total Harga
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MainText(
-                    text: 'Method: ${transactions.paymentMethod?.name ?? "-"}',
-                  ),
-                  MainText(
-                    text: 'Total: ${transactions.totalPrice}',
-                  ),
-                ],
-              ),
-              const Divider(height: 20, thickness: 1),
-              // Ringkasan order jika ada
-              if (transactions.order != null && transactions.order!.isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    MainText(
-                      text: "Note: ${transactions.order?.first?.note}",
-                    ),
-                  ],
+                  color: Theme.of(context).colorScheme.primary,
                 ),
-            ],
-          ),
-        ),
+                buildPaymentStatusWidget(transactions.paymentStatus),
+              ],
+            ),
+            Divider(
+              height: 1,
+              thickness: 1,
+              color: Theme.of(context).colorScheme.surfaceDim,
+            ),
+            MainText(
+              text: 'Invoice: ${transactions.invoiceId}',
+            ),
+            MainText(
+              text: 'Method: ${transactions.paymentMethod?.name ?? "-"}',
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            Divider(
+              thickness: 1,
+              height: 1,
+              color: Theme.of(context).colorScheme.surfaceDim,
+            ),
+            Row(
+              children: [
+                const Expanded(
+                  child: MainText(
+                    text: 'Total:',
+                    extent: Medium(),
+                  ),
+                ),
+                Expanded(
+                  child: MainText(
+                    text: transactions.totalPrice,
+                    textAlign: TextAlign.end,
+                    extent: const Medium(),
+                    customTextStyle: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ],
+            )
+            // const Divider(height: 20, thickness: 1),
+            // if (transactions.order != null ||
+            //     transactions.order?.first!.note!.isNotEmpty == true)
+            //   Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       MainText(
+            //         text: "Note: ${transactions.order?.first?.note}",
+            //       ),
+            //     ],
+            //   ),
+          ],
+        ).paddingSymmetric(horizontal: 16, vertical: 16),
       ),
     );
   }
@@ -121,11 +149,11 @@ class UserTransactionsItem extends StatelessWidget {
         border: Border.all(color: statusColor),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Text(
-        status.name,
-        style: TextStyle(
+      child: MainText(
+        text: status.name,
+        customTextStyle: TextStyle(
           color: statusColor,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -151,25 +179,13 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
-          onProgress: (int progress) {
-            // Update loading bar jika diperlukan
-          },
-          onPageStarted: (String url) {
-            // Logika ketika halaman mulai dimuat
-          },
-          onPageFinished: (String url) {
-            // Logika ketika halaman selesai dimuat
-          },
+          onProgress: (int progress) {},
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
           onNavigationRequest: (NavigationRequest request) {
-            // Contoh: mencegah navigasi ke URL tertentu
-            // if (request.url.startsWith('https://www.youtube.com/')) {
-            //   return NavigationDecision.prevent;
-            // }
             return NavigationDecision.navigate;
           },
-          onWebResourceError: (WebResourceError error) {
-            // Tangani error di sini jika diperlukan
-          },
+          onWebResourceError: (WebResourceError error) {},
         ),
       )
       ..loadRequest(Uri.parse(widget.paymentUrl));
