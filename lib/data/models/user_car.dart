@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:paint_car/data/models/car_model_year_color.dart';
 
 class UserCar {
   final String? id;
@@ -11,6 +12,7 @@ class UserCar {
   final List<String?>? carImages;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final CarModelYearColor? carModelYearColor;
 
   UserCar({
     this.id,
@@ -20,6 +22,7 @@ class UserCar {
     this.carImages,
     required this.createdAt,
     required this.updatedAt,
+    this.carModelYearColor,
   });
 
   UserCar copyWith({
@@ -30,6 +33,7 @@ class UserCar {
     List<String>? carImages,
     DateTime? createdAt,
     DateTime? updatedAt,
+    CarModelYearColor? carModelYearColor,
   }) {
     return UserCar(
       id: id ?? this.id,
@@ -39,6 +43,7 @@ class UserCar {
       carImages: carImages ?? this.carImages,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      carModelYearColor: carModelYearColor ?? this.carModelYearColor,
     );
   }
 
@@ -51,18 +56,27 @@ class UserCar {
       'carImages': carImages,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
+      'carModelYearColor': carModelYearColor?.toMap(),
     };
   }
 
   factory UserCar.fromMap(Map<String, dynamic> map) {
     return UserCar(
-      id: map['id'] as String,
-      userId: map['userId'] as String,
-      carModelYearColorId: map['carModelYearColorId'] as String,
-      licensePlate: map['licensePlate'] as String,
-      carImages: (map['carImages'] as List).map((e) => e as String).toList(),
-      createdAt: DateTime.parse(map['createdAt'] as String),
-      updatedAt: DateTime.parse(map['updatedAt'] as String),
+      id: map['id'] as String?,
+      userId: map['userId'] as String?,
+      carModelYearColorId: map['carModelYearColorId'] as String? ?? '',
+      licensePlate: map['licensePlate'] as String? ?? '',
+      carImages:
+          (map['carImages'] as List?)?.map((e) => e as String).toList() ?? [],
+      createdAt: DateTime.tryParse(map['createdAt'] as String? ?? '') ??
+          DateTime.now(),
+      updatedAt: DateTime.tryParse(map['updatedAt'] as String? ?? '') ??
+          DateTime.now(),
+      carModelYearColor: map['carModelYearColor'] == null
+          ? null
+          : CarModelYearColor.fromMap(
+              map['carModelYearColor'] as Map<String, dynamic>,
+            ),
     );
   }
 
@@ -73,7 +87,7 @@ class UserCar {
 
   @override
   String toString() {
-    return 'UserCar(id: $id, userId: $userId, carModelYearColorId: $carModelYearColorId, licensePlate: $licensePlate, carImages: $carImages, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'UserCar(id: $id, userId: $userId, carModelYearColorId: $carModelYearColorId, licensePlate: $licensePlate, carImages: $carImages, createdAt: $createdAt, updatedAt: $updatedAt, carModelYearColor: $carModelYearColor)';
   }
 
   @override
@@ -86,7 +100,8 @@ class UserCar {
         other.licensePlate == licensePlate &&
         listEquals(other.carImages, carImages) &&
         other.createdAt == createdAt &&
-        other.updatedAt == updatedAt;
+        other.updatedAt == updatedAt &&
+        other.carModelYearColor == carModelYearColor;
   }
 
   @override
@@ -97,6 +112,7 @@ class UserCar {
         licensePlate.hashCode ^
         carImages.hashCode ^
         createdAt.hashCode ^
-        updatedAt.hashCode;
+        updatedAt.hashCode ^
+        carModelYearColor.hashCode;
   }
 }

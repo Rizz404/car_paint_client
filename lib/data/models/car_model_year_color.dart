@@ -6,8 +6,8 @@ import 'package:paint_car/data/models/car_model_years.dart';
 
 class CarModelYearColor {
   final String? id;
-  final String carModelYearId;
-  final String colorId;
+  final String? carModelYearId;
+  final String? colorId;
   final CarModelYears? carModelYear;
   final CarColor? color;
   final DateTime? createdAt;
@@ -57,8 +57,10 @@ class CarModelYearColor {
   factory CarModelYearColor.fromMap(Map<String, dynamic> map) {
     return CarModelYearColor(
       id: map['id'] != null ? map['id'] as String : null,
-      carModelYearId: map['carModelYearId'] as String,
-      colorId: map['colorId'] as String,
+      carModelYearId: map['carModelYearId'] != null
+          ? map['carModelYearId'] as String
+          : null,
+      colorId: map['colorId'] != null ? map['colorId'] as String : null,
       carModelYear: map['carModelYear'] != null
           ? CarModelYears.fromMap(map['carModelYear'] as Map<String, dynamic>)
           : null,

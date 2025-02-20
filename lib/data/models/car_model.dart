@@ -1,10 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:paint_car/data/models/car_brand.dart';
+
 class CarModel {
   final String? id;
   final String? carBrandId;
   final String name;
+  final CarBrand? carBrand;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -14,6 +17,7 @@ class CarModel {
     required this.name,
     this.createdAt,
     this.updatedAt,
+    this.carBrand,
   });
 
   CarModel copyWith({
@@ -22,6 +26,7 @@ class CarModel {
     String? name,
     DateTime? createdAt,
     DateTime? updatedAt,
+    CarBrand? carBrand,
   }) {
     return CarModel(
       id: id ?? this.id,
@@ -29,6 +34,7 @@ class CarModel {
       name: name ?? this.name,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      carBrand: carBrand ?? this.carBrand,
     );
   }
 
@@ -39,6 +45,7 @@ class CarModel {
       'name': name,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
+      'carBrand': carBrand?.toMap(),
     };
   }
 
@@ -54,6 +61,9 @@ class CarModel {
       updatedAt: map['updatedAt'] != null
           ? DateTime.parse(map['updatedAt'] as String)
           : null,
+      carBrand: map['carBrand'] != null
+          ? CarBrand.fromMap(map['carBrand'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -64,7 +74,7 @@ class CarModel {
 
   @override
   String toString() {
-    return 'CarModel(id: $id, carBrandId: $carBrandId, name: $name, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'CarModel(id: $id, carBrandId: $carBrandId, name: $name, createdAt: $createdAt, updatedAt: $updatedAt, carBrand: $carBrand)';
   }
 
   @override
@@ -75,7 +85,8 @@ class CarModel {
         other.carBrandId == carBrandId &&
         other.name == name &&
         other.createdAt == createdAt &&
-        other.updatedAt == updatedAt;
+        other.updatedAt == updatedAt &&
+        other.carBrand == carBrand;
   }
 
   @override
@@ -84,6 +95,7 @@ class CarModel {
         carBrandId.hashCode ^
         name.hashCode ^
         createdAt.hashCode ^
-        updatedAt.hashCode;
+        updatedAt.hashCode ^
+        carBrand.hashCode;
   }
 }

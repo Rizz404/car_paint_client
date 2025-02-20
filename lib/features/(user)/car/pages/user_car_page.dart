@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/data/models/user_car.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
 import 'package:paint_car/features/(user)/car/pages/upsert_user_car_page.dart';
 import 'package:paint_car/features/(user)/car/widgets/user_car_item.dart';
@@ -100,6 +101,8 @@ class _UserCarPageState extends State<UserCarPage> {
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
           final userCars = data.data;
+
+          LogService.i("USERCARS: ${userCars.first}");
 
           if (userCars.isEmpty) {
             return const CommonState(

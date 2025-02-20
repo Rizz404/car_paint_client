@@ -142,7 +142,11 @@ class _UserCarItemState extends State<UserCarItem> {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () => Navigator.of(context)
-            .push(UpsertUserCarPage.route(userCar: userCar))
+            .push(
+              UpsertUserCarPage.route(
+                userCar: userCar,
+              ),
+            )
             .then((_) => widget.onRefresh()),
         child: Padding(
           padding: const EdgeInsets.all(12.0),

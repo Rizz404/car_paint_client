@@ -6,7 +6,7 @@ import 'package:paint_car/data/models/car_model.dart';
 class CarModelYears {
   final String? id;
   final String? carModelId;
-  final int year;
+  final int? year;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final CarModel? carModel;
@@ -53,7 +53,7 @@ class CarModelYears {
       id: map['id'] != null ? map['id'] as String : null,
       carModelId:
           map['carModelId'] != null ? map['carModelId'] as String : null,
-      year: map['year'] as int,
+      year: (map['year'] as int?) ?? 0,
       createdAt: map['createdAt'] != null
           ? DateTime.parse(map['createdAt'] as String)
           : null,

@@ -18,7 +18,7 @@ import 'package:paint_car/features/shared/utils/cancel_token.dart';
 class ApiClient {
   final http.Client client;
   final TokenLocal tokenSp;
-  static const Duration timeout = Duration(seconds: 5);
+  static const Duration timeout = Duration(seconds: 30);
 
   const ApiClient({
     required this.client,
