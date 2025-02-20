@@ -174,6 +174,7 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                           workshopId: widget.workshop.id!,
                           carServices: selectedServices,
                           totalPrice: totalPrice,
+                          totalAllServices: carServices.length,
                         ),
                       );
                     },

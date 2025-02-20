@@ -42,6 +42,9 @@ class CheckboxServices extends StatelessWidget {
               ),
               const MainText(
                 text: 'Full Body (Select All)',
+                customTextStyle: TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const Spacer(),
               MainText(
@@ -63,13 +66,16 @@ class CheckboxServices extends StatelessWidget {
             if (selectedServices.isNotEmpty) ...[
               Divider(
                 height: 1,
-                color: Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.surfaceDim,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const MainText(
                     text: 'Total Price:',
+                    customTextStyle: TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   MainText(
                     text: CurrencyFormatter.toRupiah(getTotalPrice()),
@@ -78,7 +84,7 @@ class CheckboxServices extends StatelessWidget {
                 ],
               ).paddingAll(),
             ],
-            Divider(height: 1, color: Theme.of(context).colorScheme.secondary),
+            Divider(height: 1, color: Theme.of(context).colorScheme.surfaceDim),
             SizedBox(
               height: 200,
               child: ListView.builder(

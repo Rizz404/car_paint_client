@@ -26,6 +26,7 @@ class FinalUserCreateOrderPage extends StatefulWidget {
   final String? note;
   final List<String> carServices;
   final int totalPrice;
+  final int totalAllServices;
 
   static route({
     required String workshopId,
@@ -33,6 +34,7 @@ class FinalUserCreateOrderPage extends StatefulWidget {
     required String selectedUserCarId,
     String? note,
     required int totalPrice,
+    required int totalAllServices,
   }) =>
       MaterialPageRoute(
         builder: (_) => FinalUserCreateOrderPage(
@@ -41,6 +43,7 @@ class FinalUserCreateOrderPage extends StatefulWidget {
           selectedUserCarId: selectedUserCarId,
           note: note,
           totalPrice: totalPrice,
+          totalAllServices: totalAllServices,
         ),
       );
 
@@ -51,6 +54,7 @@ class FinalUserCreateOrderPage extends StatefulWidget {
     required this.selectedUserCarId,
     this.note,
     required this.totalPrice,
+    required this.totalAllServices,
   });
 
   @override
@@ -110,16 +114,16 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
     }
   }
 
-  Widget rowKeyValue(
-    String key,
-    String value,
-  ) {
+  Widget rowKeyValue(String key, String value, {bool isBold = false}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         MainText(
           text: key,
           extent: const Medium(),
+          customTextStyle: TextStyle(
+            fontWeight: isBold ? FontWeight.w600 : FontWeight.normal,
+          ),
         ),
         MainText(
           text: value,
@@ -144,91 +148,6 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
     return Map.fromEntries(orderedKeys.map((key) => MapEntry(key, map[key]!)));
   }
 
-  List<DropdownMenuItem<PaymentMethod>> _buildDropdownItemGroup(
-    MapEntry<PaymentMethodType, List<PaymentMethod>> entry,
-  ) {
-    return [
-      // Header section
-      DropdownMenuItem<PaymentMethod>(
-        enabled: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            entry.key.toString().split('.').last.replaceAll('_', ' '),
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-        ),
-      ),
-      // Items
-      ...entry.value.map(
-        (pm) => DropdownMenuItem<PaymentMethod>(
-          value: pm,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: pm.logoUrl != null
-                  ? ImageNetwork(
-                      src: pm.logoUrl!,
-                      width: 40,
-                      height: 40,
-                    )
-                  : null,
-              title: Text(pm.name),
-              subtitle: Text(
-                'Fee: ${CurrencyFormatter.toRupiah(_parseFee(pm.fee!).toDouble())}',
-              ),
-            ),
-          ),
-        ),
-      ),
-    ];
-  }
-
-  Widget _buildDropdownSelectedItem(PaymentMethod pm) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Text(
-        pm.name,
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
-  }
-
-  Widget _buildPaymentMethodDropdown(List<PaymentMethod> methods) {
-    final grouped = _groupPaymentMethods(methods);
-
-    return DropdownButtonFormField<PaymentMethod>(
-      value: selectedPaymentMethod,
-      decoration: const InputDecoration(
-        labelText: 'Payment Method',
-        hintText: 'Select payment method',
-        suffixIcon: Icon(Icons.arrow_drop_down),
-      ),
-      items: [
-        for (var entry in grouped.entries) ..._buildDropdownItemGroup(entry),
-      ],
-      onChanged: (PaymentMethod? value) {
-        setState(() {
-          selectedPaymentMethod = value;
-        });
-      },
-      validator: (value) {
-        if (value == null) {
-          return 'Please select payment method';
-        }
-        return null;
-      },
-      selectedItemBuilder: (context) {
-        return methods.map((pm) => _buildDropdownSelectedItem(pm)).toList();
-      },
-      isExpanded: true,
-    );
-  }
-
   int _parseFee(String fee) {
     try {
       return int.parse(fee.replaceAll(RegExp(r'[^0-9]'), ''));
@@ -243,16 +162,14 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
     return Column(
       children: grouped.entries.map((entry) {
         return ExpansionTile(
-          title: Text(
-            entry.key.toString().split('.').last.replaceAll('_', ' '),
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+          title: MainText(
+            text: entry.key.toString().split('.').last.replaceAll('_', ' '),
+            customTextStyle: TextStyle(
+              fontWeight: FontWeight.w600,
               color: Theme.of(context).colorScheme.primary,
             ),
+            extent: const Medium(),
           ),
-          // Jika ingin setiap grup awalnya terbuka, tambahkan properti ini:
-          // initiallyExpanded: true,
           children:
               entry.value.map((pm) => _buildPaymentMethodTile(pm)).toList(),
         );
@@ -264,25 +181,41 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
     final isSelected = selectedPaymentMethod?.id == pm.id;
 
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       color: isSelected
-          ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
-          : null,
+          ? Theme.of(context).colorScheme.secondary
+          : Theme.of(context).colorScheme.secondary.withValues(
+                alpha: 0.7,
+              ),
+      borderOnForeground: false,
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         leading: pm.logoUrl != null
             ? ImageNetwork(
                 src: pm.logoUrl!,
-                width: 40,
-                height: 40,
+                width: 60,
+                height: 60,
               )
-            : null,
-        title: Text(pm.name),
-        subtitle: Text(
-            'Fee: ${CurrencyFormatter.toRupiah(_parseFee(pm.fee!).toDouble())}'),
+            : const ImageNetwork(
+                src:
+                    "https://i.pinimg.com/736x/b6/53/c1/b653c128eb1017e5983388c6fc3e9bf1.jpg",
+                width: 60,
+                height: 60,
+              ),
+        title: MainText(
+          text: pm.name,
+          maxLines: 2,
+          extent: const Medium(),
+        ),
+        subtitle: MainText(
+          text:
+              'Fee: ${CurrencyFormatter.toRupiah(_parseFee(pm.fee!).toDouble())}',
+          color: Theme.of(context).colorScheme.primary,
+        ),
         trailing: isSelected
-            ? Icon(Icons.check_circle,
-                color: Theme.of(context).colorScheme.primary)
+            ? Icon(
+                Icons.check_circle,
+                color: Theme.of(context).colorScheme.primary,
+              )
             : null,
         onTap: () {
           setState(() {
@@ -332,7 +265,12 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                       children: [
                         rowKeyValue(
                           "Total Panel",
-                          widget.carServices.length.toString(),
+                          "${widget.carServices.length.toString()}/${widget.totalAllServices.toString()}",
+                          isBold: true,
+                        ),
+                        Divider(
+                          color: Theme.of(context).colorScheme.surfaceDim,
+                          thickness: 1,
                         ),
                         rowKeyValue(
                           "Sub Total",
@@ -349,6 +287,10 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                                 )
                               : "-",
                         ),
+                        Divider(
+                          color: Theme.of(context).colorScheme.surfaceDim,
+                          thickness: 1,
+                        ),
                         rowKeyValue(
                           "Total Price",
                           selectedPaymentMethod != null
@@ -360,6 +302,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                                       .toDouble(),
                                 )
                               : "-",
+                          isBold: true,
                         ),
                       ],
                     ).paddingAll(),
@@ -371,13 +314,15 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                       final paymentMethods = data.data;
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 8,
                         children: [
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16),
                             child: MainText(
-                                text: "Payment Methods", extent: Large()),
+                              text: "Payment Methods",
+                              extent: Large(),
+                            ),
                           ),
-                          const SizedBox(height: 8),
                           _buildPaymentMethodSections(paymentMethods),
                         ],
                       );

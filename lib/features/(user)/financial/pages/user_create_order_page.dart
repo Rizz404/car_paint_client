@@ -25,16 +25,19 @@ class UserCreateOrderPage extends StatefulWidget {
   final String workshopId;
   final List<String> carServices;
   final int totalPrice;
+  final int totalAllServices;
   static route({
     required String workshopId,
     required List<String> carServices,
     required int totalPrice,
+    required int totalAllServices,
   }) =>
       MaterialPageRoute(
         builder: (_) => UserCreateOrderPage(
           workshopId: workshopId,
           carServices: carServices,
           totalPrice: totalPrice,
+          totalAllServices: totalAllServices,
         ),
       );
 
@@ -43,6 +46,7 @@ class UserCreateOrderPage extends StatefulWidget {
     required this.workshopId,
     required this.carServices,
     required this.totalPrice,
+    required this.totalAllServices,
   });
 
   @override
@@ -57,13 +61,12 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
   final userCarController = TextEditingController();
   final noteController = TextEditingController();
 
-  var selectedPaymentMethodId;
   var selectedUserCarId;
 
   final formKey = GlobalKey<FormState>();
 
-  void getUserCars() {
-    context.read<UserCarCubit>().refresh(limit, _cancelToken);
+  void getUserCars() async {
+    await context.read<UserCarCubit>().refresh(limit, _cancelToken);
   }
 
   @override
@@ -90,6 +93,7 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
         selectedUserCarId: selectedUserCarId!,
         note: noteController.text,
         totalPrice: widget.totalPrice,
+        totalAllServices: widget.totalAllServices,
       ),
     );
   }
@@ -150,32 +154,52 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
                       onRetry: () => getUserCars(),
                       onSuccess: (context, data, _) {
                         final userCars = data.data;
-                        return DropdownMenu(
-                          width: double.infinity,
-                          controller: userCarController,
-                          enableFilter: true,
-                          requestFocusOnTap: true,
-                          initialSelection: selectedUserCarId ?? "",
-                          onSelected: (value) {
-                            setState(() {
-                              selectedUserCarId = value;
-                            });
-                          },
-                          label: const MainText(text: "Select User Car"),
-                          dropdownMenuEntries: userCars.map((userCar) {
-                            return DropdownMenuEntry(
-                              labelWidget: MainText(
-                                text: userCar.licensePlate,
+                        return Container(
+                          child: DropdownMenu(
+                            menuStyle: MenuStyle(
+                              backgroundColor: WidgetStateProperty.all(
+                                Theme.of(context).colorScheme.secondary,
                               ),
-                              leadingIcon: ImageNetwork(
-                                src: userCar.carImages!.first!,
-                                width: 50,
-                                height: 50,
-                              ),
-                              value: userCar.id,
-                              label: userCar.licensePlate,
-                            );
-                          }).toList(),
+                            ),
+                            width: double.infinity,
+                            controller: userCarController,
+                            enableFilter: true,
+                            requestFocusOnTap: true,
+                            initialSelection: selectedUserCarId ?? "",
+                            onSelected: (value) {
+                              setState(() {
+                                selectedUserCarId = value;
+                              });
+                            },
+                            label: const MainText(text: "Select User Car"),
+                            dropdownMenuEntries: userCars.map((userCar) {
+                              return DropdownMenuEntry(
+                                labelWidget: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                  ), // gap di bawah tiap item
+                                  child: Row(
+                                    spacing: 16,
+                                    children: [
+                                      ImageNetwork(
+                                        src: userCar.carImages!.first!,
+                                        width: 50,
+                                        height: 50,
+                                      ),
+                                      MainText(
+                                        text: userCar.licensePlate,
+                                        customTextStyle: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                value: userCar.id,
+                                label: userCar.licensePlate,
+                              );
+                            }).toList(),
+                          ),
                         );
                       },
                     ),
