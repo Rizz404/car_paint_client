@@ -5,9 +5,11 @@ import 'package:paint_car/data/models/enums/financial_status.dart';
 import 'package:paint_car/data/models/orders.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_orders_cubit.dart';
+import 'package:paint_car/features/(user)/financial/widgets/status_timeline.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
+import 'package:paint_car/ui/extension/padding.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart'; // pastikan sudah ada model CarService
@@ -47,92 +49,114 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      elevation: 3,
+      elevation: 1,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      color: Theme.of(context).colorScheme.secondary,
       child: InkWell(
-        onTap: () {
-          // aksi ketika item di-tap, misalnya navigasi ke detail order
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header: Total Harga dan Tanggal Order
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MainText(
-                    text: 'Total: ${widget.order.subtotalPrice ?? "-"}',
-                  ),
-                  MainText(
-                    text: _formatDate(widget.order.createdAt),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              // Catatan order (jika ada)
-              if (widget.order.note != null && widget.order.note!.isNotEmpty)
-                MainText(
-                  text: widget.order.note!,
+        onTap: () {},
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              spacing: 4,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    MainText(
+                      text: 'Total: ${widget.order.subtotalPrice ?? "-"}',
+                      extent: const Medium(),
+                      customTextStyle: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    MainText(
+                      text: _formatDate(widget.order.createdAt),
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ],
                 ),
-              const SizedBox(height: 8),
-              // Status order
-              Row(
+                Divider(
+                  color: Theme.of(context).colorScheme.surfaceDim,
+                ),
+              ],
+            ).paddingSymmetric(horizontal: 16),
+            if (widget.order.note != null && widget.order.note!.isNotEmpty)
+              MainText(
+                text: widget.order.note!,
+              ),
+            Row(
+              spacing: 4,
+              children: [
+                MainText(
+                  text:
+                      "Order Status: ${widget.order.orderStatus?.name ?? '-'}",
+                ),
+              ],
+            ).paddingSymmetric(horizontal: 16),
+            Theme(
+              data: theme,
+              child: ExpansionTile(
+                title: const MainText(text: "Work Status"),
                 children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.info_outline,
-                          size: 16,
-                        ),
-                        const SizedBox(width: 4),
-                        MainText(
-                          text: widget.order.orderStatus?.name ?? '-',
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: BlocConsumer<UserOrdersCubit, BaseState>(
-                      listener: (context, state) {
-                        handleFormListenerState(
-                          context: context,
-                          state: state,
-                          onRetry: cancelOrder,
-                          onSuccess: () {},
-                        );
-                      },
-                      builder: (context, state) {
-                        final status = widget.order.orderStatus;
-
-                        return status == OrderStatus.COMPLETED ||
-                                status == OrderStatus.CANCELLED
-                            ? const SizedBox()
-                            : MainElevatedButton(
-                                onPressed: () {
-                                  cancelOrder();
-                                },
-                                text: "Cancel Order",
-                                isLoading: state is BaseLoadingState,
-                                bgColor: widget.order.orderStatus ==
-                                        OrderStatus.CANCELLED
-                                    ? Theme.of(context)
-                                        .colorScheme
-                                        .errorContainer
-                                    : Theme.of(context).colorScheme.error,
-                                extent: const Small(),
-                              );
-                      },
-                    ),
+                  Divider(
+                    color: Theme.of(context).colorScheme.surfaceDim,
+                    thickness: 1,
+                  ).paddingSymmetric(horizontal: 16),
+                  StatusTimeline(
+                    currentStatus: WorkStatus.FINAL_QC,
+                    activeColor: Theme.of(context).colorScheme.primary,
+                  ).paddingSymmetric(horizontal: 16),
+                  const SizedBox(
+                    height: 16,
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+            BlocConsumer<UserOrdersCubit, BaseState>(
+              listener: (context, state) {
+                handleFormListenerState(
+                  context: context,
+                  state: state,
+                  onRetry: cancelOrder,
+                  onSuccess: () {
+                    SnackBarUtil.showSnackBar(
+                      context: context,
+                      message: "Order cancelled",
+                      type: SnackBarType.success,
+                    );
+                  },
+                );
+              },
+              builder: (context, state) {
+                final status = widget.order.orderStatus;
+
+                return status == OrderStatus.COMPLETED ||
+                        status == OrderStatus.CANCELLED
+                    ? const SizedBox()
+                    : MainElevatedButton(
+                        height: 40,
+                        borderRadius: 4,
+                        onPressed: () {
+                          cancelOrder();
+                        },
+                        text: "Cancel Order",
+                        isLoading: state is BaseLoadingState,
+                        bgColor:
+                            widget.order.orderStatus == OrderStatus.CANCELLED
+                                ? Theme.of(context).colorScheme.errorContainer
+                                : Theme.of(context).colorScheme.error,
+                        extent: const Small(),
+                      ).paddingSymmetric(horizontal: 16);
+              },
+            ),
+          ],
+        ).paddingSymmetric(
+          vertical: 16,
         ),
       ),
     );

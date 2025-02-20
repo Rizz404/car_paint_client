@@ -1,12 +1,14 @@
 enum WorkStatus {
+  QUEUED,
   INSPECTION,
   PUTTY,
   SURFACER,
   APPLICATION_COLOR_BASE,
   APPLICATION_CLEAR_COAT,
   POLISHING,
-  FINALQC,
-  DONE,
+  FINAL_QC,
+  COMPLETED,
+  CANCELLED,
 }
 
 extension WorkStatusExtension on WorkStatus {

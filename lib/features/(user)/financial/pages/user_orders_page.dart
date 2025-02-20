@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/data/models/orders.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_orders_cubit.dart';
 import 'package:paint_car/features/(user)/financial/widgets/user_orders_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
@@ -77,6 +78,7 @@ class _UserOrdersPageState extends State<UserOrdersPage> {
         onSuccess: (context, data, message) {
           final models = data.data;
           // final models = [];
+          LogService.d('models: ${models.first}');
 
           if (models.isEmpty) {
             return const CommonState(
