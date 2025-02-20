@@ -102,8 +102,6 @@ class _UserCarPageState extends State<UserCarPage> {
         onSuccess: (context, data, message) {
           final userCars = data.data;
 
-          LogService.i("USERCARS: ${userCars.first}");
-
           if (userCars.isEmpty) {
             return const CommonState(
               title: 'Mobil anda kosong, silahkan tambahkan mobil',

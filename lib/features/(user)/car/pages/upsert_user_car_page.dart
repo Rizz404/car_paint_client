@@ -486,9 +486,13 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
                           label: const MainText(text: "Select Model Year"),
                           dropdownMenuEntries: modelYears.isNotEmpty
                               ? modelYears.map((modelYear) {
+                                  LogService.d("modelYear: $modelYear");
+                                  final label = modelYear.carModel!.name +
+                                      " " +
+                                      modelYear.year.toString();
                                   return DropdownMenuEntry(
                                     value: modelYear.id,
-                                    label: modelYear.year.toString(),
+                                    label: label,
                                   );
                                 }).toList()
                               : [
@@ -554,14 +558,13 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
                           extent: Medium(),
                           maxLines: 2,
                           text:
-                              "saat ini curang untuk sementara karena ga selalu ada data yang paling bawah",
+                              "saat ini curang untuk sementara karena datanya ga selalu ada based on other fields",
                         ),
                         StateHandler<CarModelYearColorCubit,
                             PaginationState<CarModelYearColor>>(
                           onRetry: () => getCarModelYearColor(),
                           onSuccess: (context, data, _) {
                             final modelYears = data.data;
-                            LogService.d("modelYears: $modelYears");
                             return DropdownMenu(
                               width: double.infinity,
                               controller: curangCarModelYearColorIdController,
