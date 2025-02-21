@@ -52,6 +52,8 @@ dependencies:
   webview_flutter: ^4.10.0
   loading_indicator: ^3.1.1
   flutter_svg: ^2.0.17
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.4
 
 dev_dependencies:
   flutter_test:
@@ -105,6 +107,8 @@ flutter:
     - assets/images/no_internet_connection.png
     - assets/images/something_went_wrong.png
     - assets/images/whatsapp.svg
+    - assets/images/white_bg.jpg
+    - assets/images/logo_nikken_red.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
