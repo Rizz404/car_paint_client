@@ -124,6 +124,11 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
         _existingImages = List<String>.from(widget.userCar!.carImages!);
       });
     } catch (e) {
+      SnackBarUtil.showSnackBar(
+        context: context,
+        message: "Error loading image",
+        type: SnackBarType.error,
+      );
       LogService.e("Error loading existing images: $e");
     }
   }
@@ -271,9 +276,6 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
 
   @override
   Widget build(BuildContext context) {
-    LogService.i("selectedCarModelId: $selectedCarModelId");
-    LogService.i("selectedCarColorId: $selectedCarColorId");
-
     return BlocConsumer<UserCarCubit, BaseState>(
       listener: (context, state) {
         handleFormListenerState(
@@ -486,7 +488,6 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
                           label: const MainText(text: "Select Model Year"),
                           dropdownMenuEntries: modelYears.isNotEmpty
                               ? modelYears.map((modelYear) {
-                                  LogService.d("modelYear: $modelYear");
                                   final label = modelYear.carModel!.name +
                                       " " +
                                       modelYear.year.toString();

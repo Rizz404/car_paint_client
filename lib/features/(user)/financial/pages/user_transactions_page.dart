@@ -83,7 +83,6 @@ class _UserTransactionsPageState extends State<UserTransactionsPage> {
         onSuccess: (context, data, message) {
           final models = data.data;
           // final models = [];
-          LogService.i("DATA: ${models.first}");
           if (models.isEmpty) {
             return const CommonState(
               title: 'Transaksi anda masih kosong',

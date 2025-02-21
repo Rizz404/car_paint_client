@@ -76,7 +76,12 @@ class _UpsertCarBrandsPageState extends State<UpsertCarBrandsPage> {
         _selectedImage = file;
       });
     } catch (e) {
-      // TODO: DELETE LATERR
+      SnackBarUtil.showSnackBar(
+        context: context,
+        message: "Error loading image",
+        type: SnackBarType.error,
+      );
+      // TODO: DELETE LATER
       LogService.e("Error loading image: $e");
     }
   }

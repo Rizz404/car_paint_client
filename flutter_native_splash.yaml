@@ -1,8 +1,8 @@
 flutter_native_splash:
   color: "#FFFFFF"
   image: assets/images/logo_nikken_red.png
-  android_gravity: fill_horizontal|center_vertical
-  ios_content_mode: scaleAspectFit
+  android_gravity: center
+  ios_content_mode: center
   web_image_mode: contain
   android_12:
     color: "#FFFFFF"

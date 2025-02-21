@@ -78,7 +78,6 @@ class _UserOrdersPageState extends State<UserOrdersPage> {
         onSuccess: (context, data, message) {
           final models = data.data;
           // final models = [];
-          LogService.d('models: ${models.first}');
 
           if (models.isEmpty) {
             return const CommonState(

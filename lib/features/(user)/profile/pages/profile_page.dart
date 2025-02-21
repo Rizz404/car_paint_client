@@ -90,6 +90,11 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     } catch (e) {
       // TODO: DELETE LATERR
+      SnackBarUtil.showSnackBar(
+        context: context,
+        message: "Error loading image",
+        type: SnackBarType.error,
+      );
       LogService.e("Error loading image: $e");
     }
   }

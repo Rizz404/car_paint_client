@@ -14,6 +14,7 @@ import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
+import 'package:paint_car/ui/utils/snack_bar.dart';
 
 // ! design example
 class UserWorkshopsPage extends StatefulWidget {
@@ -58,6 +59,11 @@ class _UserWorkshopsPageState extends State<UserWorkshopsPage> {
         }
         _onRefresh();
       } catch (e) {
+        SnackBarUtil.showSnackBar(
+          context: context,
+          message: "Error getting current location",
+          type: SnackBarType.error,
+        );
         LogService.e("Error getting current location ${e.toString()}");
       }
     });

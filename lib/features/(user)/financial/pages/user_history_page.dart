@@ -81,7 +81,6 @@ class _UserHistoryPageState extends State<UserHistoryPage> {
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
           final models = data.data;
-          LogService.i("MODELS: ${models.first}");
           // final models = [];
           if (models.isEmpty) {
             return const CommonState(
