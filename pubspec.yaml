@@ -51,6 +51,7 @@ dependencies:
   url_launcher: ^6.3.1
   webview_flutter: ^4.10.0
   loading_indicator: ^3.1.1
+  flutter_svg: ^2.0.17
 
 dev_dependencies:
   flutter_test:
@@ -103,6 +104,7 @@ flutter:
     - assets/images/history.png
     - assets/images/no_internet_connection.png
     - assets/images/something_went_wrong.png
+    - assets/images/whatsapp.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

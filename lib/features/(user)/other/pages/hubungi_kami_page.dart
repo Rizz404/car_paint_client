@@ -1,3 +1,5 @@
+import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:flutter/material.dart';
 
 class HubungiKamiPage extends StatefulWidget {
@@ -45,7 +47,11 @@ class _HubungiKamiPageState extends State<HubungiKamiPage> {
             const Divider(),
             // Kontak WhatsApp PT
             ListTile(
-              leading: const Icon(Icons.facebook, color: Colors.green),
+              leading: SvgPicture.asset(
+                'assets/images/whatsapp.svg',
+                width: 24,
+                height: 24,
+              ),
               title: const Text('WhatsApp'),
               subtitle: const Text('+62 812-3456-7890'),
               onTap: () {
