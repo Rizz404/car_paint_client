@@ -137,7 +137,10 @@ class MyApp extends StatelessWidget {
         appBarTheme: ConfigurationTheme.appBarTheme(context),
         textTheme: ConfigurationTheme.textTheme,
         elevatedButtonTheme: ConfigurationTheme.elevatedButtonTheme,
-        fontFamilyFallback: ['Poppins'],
+        dropdownMenuTheme: ConfigurationTheme.dropdownMenuTheme(context),
+        drawerTheme: DrawerThemeData(
+          backgroundColor: Theme.of(context).colorScheme.surfaceDim,
+        ),
       ),
       home: const AuthWrapper(),
       debugShowCheckedModeBanner: false,

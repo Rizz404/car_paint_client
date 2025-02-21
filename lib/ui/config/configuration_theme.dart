@@ -10,6 +10,19 @@ class ConfigurationTheme {
     );
   }
 
+  static DropdownMenuThemeData dropdownMenuTheme(BuildContext context) {
+    return DropdownMenuThemeData(
+      menuStyle: MenuStyle(
+        backgroundColor: WidgetStatePropertyAll(
+          Theme.of(context).colorScheme.surfaceDim,
+        ),
+      ),
+      textStyle: const TextStyle(
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+
   static ColorScheme get colorScheme {
     return ColorScheme.fromSeed(
       seedColor: const Color(0xFFE63B2A),
