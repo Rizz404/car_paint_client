@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 import 'package:paint_car/data/models/transactions.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/shared/utils/currency_formatter.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/extension/padding.dart';
@@ -42,6 +43,7 @@ class UserTransactionsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LogService.i("TRANSACTIONS: ${transactions}");
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       elevation: 1,

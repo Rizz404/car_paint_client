@@ -8,6 +8,7 @@ import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(superadmin)/financial/widgets/e_tickets_item.dart';
 import 'package:paint_car/features/(user)/financial/user_e_tickets_cubit.dart';
+import 'package:paint_car/features/(user)/financial/user_e_tickets_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/shared/common_state.dart';
@@ -98,7 +99,8 @@ class _UserETicketsPageState extends State<UserETicketsPage> {
                 slivers: [
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) => ETicketsItem(ticket: models[index]),
+                      (context, index) =>
+                          UserETicketsItem(ticket: models[index]),
                       childCount: models.length,
                     ),
                   ),

@@ -90,18 +90,17 @@ class Orders {
 
   factory Orders.fromMap(Map<String, dynamic> map) {
     return Orders(
-      id: map['id'] != null ? map['id'] as String : null,
-      userId: map['userId'] != null ? map['userId'] as String : null,
-      userCarId: map['userCarId'] != null ? map['userCarId'] as String : null,
-      workshopId:
-          map['workshopId'] != null ? map['workshopId'] as String : null,
+      id: map['id'] != null ? map['id'] as String? : '',
+      userId: map['userId'] != null ? map['userId'] as String? : '',
+      userCarId: map['userCarId'] != null ? map['userCarId'] as String? : '',
+      workshopId: map['workshopId'] != null ? map['workshopId'] as String? : '',
       workStatus: map['workStatus'] != null
           ? WorkStatusExtension.fromMap(map['workStatus'] as String)
-          : null,
+          : WorkStatus.INSPECTION,
       orderStatus: map['orderStatus'] != null
           ? OrderStatusExtension.fromMap(map['orderStatus'] as String)
-          : null,
-      note: map['note'] != null ? map['note'] as String : null,
+          : OrderStatus.DRAFT,
+      note: map['note'] != null ? map['note'] as String? : '',
       carServices: map['carServices'] != null
           ? List<CarService?>.from(
               (map['carServices'] as List<dynamic>).map<CarService?>(
@@ -120,7 +119,7 @@ class Orders {
           ? CarWorkshop.fromMap(map['workshop'] as Map<String, dynamic>)
           : null,
       subtotalPrice:
-          map['subtotalPrice'] != null ? map['subtotalPrice'] as String : null,
+          map['subtotalPrice'] != null ? map['subtotalPrice'] as String? : '',
       createdAt: map['createdAt'] != null
           ? DateTime.parse(map['createdAt'] as String)
           : null,

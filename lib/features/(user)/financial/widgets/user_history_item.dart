@@ -1,12 +1,9 @@
 // ignore_for_file: require_trailing_commas
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 import 'package:paint_car/data/models/transactions.dart';
-import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/features/(superadmin)/financial/cubit/transactions_cubit.dart';
 import 'package:paint_car/features/shared/utils/currency_formatter.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/extension/padding.dart';
@@ -67,6 +64,11 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
   Widget build(BuildContext context) {
     final Transactions transactions = widget.transactions;
     final theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
+
+    // ! kalo order nya null gausah masuk sini, soalnya ini kan history page
+    if (transactions.order == null || transactions.order!.isEmpty) {
+      return const SizedBox();
+    }
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
