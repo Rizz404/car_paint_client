@@ -63,16 +63,36 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
           children: [
             Column(
               spacing: 4,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Theme(
+                  data: theme,
+                  child: ExpansionTile(
+                    title: const MainText(
+                      text: "Work Status",
+                      customTextStyle: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    children: [
+                      Divider(
+                        color: Theme.of(context).colorScheme.surfaceDim,
+                        thickness: 1,
+                      ),
+                      StatusTimeline(
+                        currentStatus: WorkStatus.FINAL_QC,
+                        activeColor: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                    ],
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     MainText(
                       text: 'Total: ${widget.order.subtotalPrice ?? "-"}',
-                      extent: const Medium(),
-                      customTextStyle: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                      ),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     MainText(
                       text: _formatDate(widget.order.createdAt),
@@ -87,8 +107,8 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
             ).paddingSymmetric(horizontal: 16),
             if (widget.order.note != null && widget.order.note!.isNotEmpty)
               MainText(
-                text: widget.order.note!,
-              ),
+                text: "Note: ${widget.order.note!}",
+              ).paddingSymmetric(horizontal: 16),
             Row(
               spacing: 4,
               children: [
@@ -98,24 +118,8 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
                 ),
               ],
             ).paddingSymmetric(horizontal: 16),
-            Theme(
-              data: theme,
-              child: ExpansionTile(
-                title: const MainText(text: "Work Status"),
-                children: [
-                  Divider(
-                    color: Theme.of(context).colorScheme.surfaceDim,
-                    thickness: 1,
-                  ).paddingSymmetric(horizontal: 16),
-                  StatusTimeline(
-                    currentStatus: WorkStatus.FINAL_QC,
-                    activeColor: Theme.of(context).colorScheme.primary,
-                  ).paddingSymmetric(horizontal: 16),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                ],
-              ),
+            const SizedBox(
+              height: 16,
             ),
             BlocConsumer<UserOrdersCubit, BaseState>(
               listener: (context, state) {
@@ -155,9 +159,7 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
               },
             ),
           ],
-        ).paddingSymmetric(
-          vertical: 16,
-        ),
+        ).paddingOnly(bottom: 16),
       ),
     );
   }
