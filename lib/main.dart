@@ -138,6 +138,7 @@ class MyApp extends StatelessWidget {
         textTheme: ConfigurationTheme.textTheme,
         elevatedButtonTheme: ConfigurationTheme.elevatedButtonTheme,
         dropdownMenuTheme: ConfigurationTheme.dropdownMenuTheme(context),
+        inputDecorationTheme: ConfigurationTheme.inputDecorationTheme,
         drawerTheme: DrawerThemeData(
           backgroundColor: Theme.of(context).colorScheme.surfaceDim,
         ),

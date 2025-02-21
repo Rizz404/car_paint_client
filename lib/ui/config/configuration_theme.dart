@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 
 class ConfigurationTheme {
   const ConfigurationTheme();
@@ -36,6 +37,15 @@ class ConfigurationTheme {
 
   static InputDecorationTheme get inputDecorationTheme {
     return InputDecorationTheme(
+      hintStyle: const TextStyle(
+        fontWeight: FontWeight.w500,
+        color: CustomColors.textIcon,
+      ),
+      labelStyle: const TextStyle(
+        fontWeight: FontWeight.w500,
+        color: CustomColors.textIcon,
+        decorationColor: CustomColors.textIcon,
+      ),
       contentPadding: const EdgeInsets.all(16),
       errorBorder: OutlineInputBorder(
         borderSide: const BorderSide(
@@ -48,14 +58,13 @@ class ConfigurationTheme {
       focusedErrorBorder: OutlineInputBorder(
         borderSide: const BorderSide(
           width: 1.5,
-          color: Colors.red,
+          color: CustomColors.border,
         ),
         borderRadius: BorderRadius.circular(10),
       ),
       errorStyle: const TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w400,
-        color: Colors.red,
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(

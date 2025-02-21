@@ -28,7 +28,7 @@ class MainTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.maxLines = 1,
     this.isEnabled = true,
-    this.isOutlined = false,
+    this.isOutlined = true,
     this.borderRadius = 10,
   });
 
@@ -48,12 +48,12 @@ class MainTextField extends StatelessWidget {
         enabled: isEnabled,
         border: isOutlined
             ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(borderRadius),
+                borderRadius: BorderRadius.circular(
+                  borderRadius,
+                ),
               )
             : null,
-        labelStyle: const TextStyle(
-          fontWeight: FontWeight.w500,
-        ),
+
         alignLabelWithHint: true,
         // ! ganti ama label text boleh
         labelText: hintText,

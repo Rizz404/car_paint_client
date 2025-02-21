@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/core/constants/mock.dart';
 import 'package:paint_car/features/(guest)/auth/widgets/gradient_bg_auth.dart';
 import 'package:paint_car/features/shared/cubit/user_cubit.dart';
@@ -65,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
     if (context.read<AuthCubit>().state is BaseLoadingState) {
       return Theme.of(context).disabledColor;
     } else {
-      return Theme.of(context).primaryColor;
+      return CustomColors.black;
     }
   }
 
@@ -103,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const MainText(text: "Sign In", extent: ExtraLarge()),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 32),
                         Form(
                           key: formKey,
                           child: Column(
@@ -157,15 +158,13 @@ class _LoginPageState extends State<LoginPage> {
                               style: Theme.of(context).textTheme.bodyMedium,
                               text: "Does'nt have an account? ",
                               children: [
-                                TextSpan(
+                                const TextSpan(
                                   text: "Sign Up",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     decoration: TextDecoration.underline,
-                                    decorationColor:
-                                        Theme.of(context).colorScheme.primary,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    decorationColor: CustomColors.black,
+                                    color: CustomColors.black,
                                   ),
                                 ),
                               ],
