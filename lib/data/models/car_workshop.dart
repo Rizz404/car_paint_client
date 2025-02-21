@@ -70,20 +70,24 @@ class CarWorkshop {
     return CarWorkshop(
       id: map['id'] != null ? map['id'] as String : null,
       name: map['name'] as String,
-      email: map['email'] as String,
+      address: map['address'],
+      email: map['email'] != null ? map['email'] as String : '',
       phoneNumber: map['phone_number'] != null
-          ? map['phone_number'] as String
-          : map['phoneNumber'] as String,
-      address: map['address'] as String,
+          ? map['phone_number'] as String? ?? ''
+          : (map['phoneNumber'] as String? ?? ''),
       distance: map['distance'] != null ? map['distance'] as String : null,
-      latitude: double.parse(map['latitude'] as String),
-      longitude: double.parse(map['longitude'] as String),
+      latitude: map['latitude'] != null
+          ? double.parse(map['latitude'] as String)
+          : 0.0,
+      longitude: map['longitude'] != null
+          ? double.parse(map['longitude'] as String)
+          : 0.0,
       createdAt: map['createdAt'] != null
           ? DateTime.parse(map['createdAt'] as String)
-          : null,
+          : DateTime.now(),
       updatedAt: map['updatedAt'] != null
           ? DateTime.parse(map['updatedAt'] as String)
-          : null,
+          : DateTime.now(),
     );
   }
 

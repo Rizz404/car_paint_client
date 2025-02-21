@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import 'package:paint_car/data/models/car_service.dart';
+import 'package:paint_car/data/models/car_workshop.dart';
 import 'package:paint_car/data/models/e_ticket.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 
@@ -18,6 +19,7 @@ class Orders {
   final List<CarService?>? carServices;
   final List<ETicket?>? eTicket;
   final String? subtotalPrice;
+  final CarWorkshop? workshop;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   Orders({
@@ -28,6 +30,7 @@ class Orders {
     required this.workStatus,
     required this.orderStatus,
     required this.note,
+    this.workshop,
     this.carServices,
     this.eTicket,
     required this.subtotalPrice,
@@ -46,6 +49,7 @@ class Orders {
     List<CarService?>? carServices,
     List<ETicket?>? eTicket,
     String? subtotalPrice,
+    CarWorkshop? workshop,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -62,6 +66,7 @@ class Orders {
       subtotalPrice: subtotalPrice ?? this.subtotalPrice,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      workshop: workshop ?? this.workshop,
     );
   }
 
@@ -79,6 +84,7 @@ class Orders {
       'subtotalPrice': subtotalPrice,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
+      'workshop': workshop?.toMap(),
     };
   }
 
@@ -109,6 +115,9 @@ class Orders {
                 (x) => ETicket?.fromMap(x as Map<String, dynamic>),
               ),
             )
+          : null,
+      workshop: map['workshop'] != null
+          ? CarWorkshop.fromMap(map['workshop'] as Map<String, dynamic>)
           : null,
       subtotalPrice:
           map['subtotalPrice'] != null ? map['subtotalPrice'] as String : null,

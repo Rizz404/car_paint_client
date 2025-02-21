@@ -9,6 +9,7 @@ import 'package:paint_car/data/models/e_ticket.dart';
 import 'package:paint_car/data/models/payment_method.dart';
 import 'package:paint_car/data/models/transactions.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_history_cubit.dart';
 import 'package:paint_car/features/(user)/financial/widgets/user_history_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
@@ -80,6 +81,7 @@ class _UserHistoryPageState extends State<UserHistoryPage> {
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
           final models = data.data;
+          LogService.i("MODELS: ${models.first}");
           // final models = [];
           if (models.isEmpty) {
             return const CommonState(

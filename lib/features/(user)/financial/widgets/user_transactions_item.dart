@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 import 'package:paint_car/data/models/transactions.dart';
+import 'package:paint_car/features/shared/utils/currency_formatter.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/extension/padding.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
@@ -95,7 +96,11 @@ class UserTransactionsItem extends StatelessWidget {
                 ),
                 Expanded(
                   child: MainText(
-                    text: transactions.totalPrice,
+                    text: CurrencyFormatter.toRupiah(
+                      int.parse(
+                        transactions.totalPrice,
+                      ),
+                    ),
                     textAlign: TextAlign.end,
                     extent: const Medium(),
                     customTextStyle: const TextStyle(
@@ -105,7 +110,7 @@ class UserTransactionsItem extends StatelessWidget {
                   ),
                 ),
               ],
-            )
+            ),
             // const Divider(height: 20, thickness: 1),
             // if (transactions.order != null ||
             //     transactions.order?.first!.note!.isNotEmpty == true)
