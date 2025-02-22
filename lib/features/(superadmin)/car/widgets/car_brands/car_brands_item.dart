@@ -68,6 +68,7 @@ class _CarBrandsItemState extends State<CarBrandsItem> {
       margin: const EdgeInsets.symmetric(
           horizontal: 16.0, vertical: 8.0), // TODO: DELETE NNTI
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+
       child: ListTile(
         onTap: () => Navigator.of(context)
             .push(UpsertCarBrandsPage.route(carBrand: brand))

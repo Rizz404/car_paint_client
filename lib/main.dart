@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/car_model_year_color.dart';
 import 'package:paint_car/features/(admin)/cubit/admin_orders_cubit.dart';
 import 'package:paint_car/features/(guest)/auth/cubit/auth_cubit.dart';
@@ -141,6 +142,10 @@ class MyApp extends StatelessWidget {
         inputDecorationTheme: ConfigurationTheme.inputDecorationTheme,
         drawerTheme: DrawerThemeData(
           backgroundColor: Theme.of(context).colorScheme.surfaceDim,
+        ),
+        cardTheme: const CardTheme(
+          color: const Color(0xF2F2F2F2),
+          elevation: 1,
         ),
       ),
       home: const AuthWrapper(),

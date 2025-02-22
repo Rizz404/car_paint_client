@@ -293,6 +293,7 @@ class ApiClient {
           : ApiConstant.applicationJson,
       'Accept': ApiConstant.applicationJson,
       if (token != null) 'Authorization': 'Bearer $token',
+      'x-api-key': "7337dcf0-25be-515c-a9a1-b56dfa22586c",
     };
   }
 

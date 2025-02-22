@@ -22,6 +22,7 @@ class _DeleteConfirmDialogState extends State<DeleteConfirmDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       title: MainText(
         text: widget.title,
         extent: const Medium(),
@@ -35,6 +36,7 @@ class _DeleteConfirmDialogState extends State<DeleteConfirmDialog> {
           onPressed: () => Navigator.of(context).pop(),
           child: const MainText(
             text: "Cancel",
+            color: Colors.grey,
           ),
         ),
         ElevatedButton(
