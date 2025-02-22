@@ -112,25 +112,31 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
+            spacing: 8,
             children: [
-              MainText(
-                text: _formatDate(transactions.createdAt),
-                extent: const Medium(),
-                customTextStyle: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
-                color: Theme.of(context).colorScheme.primary,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  MainText(
+                    text: _formatDate(transactions.createdAt),
+                    extent: const Medium(),
+                    customTextStyle: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  buildPaymentStatusWidget(transactions.paymentStatus),
+                ],
               ),
-              buildPaymentStatusWidget(transactions.paymentStatus),
+              Divider(
+                height: 1,
+                thickness: 1,
+                color: Theme.of(context).colorScheme.surfaceDim,
+              ),
             ],
           ),
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: Theme.of(context).colorScheme.surfaceDim,
-          ),
+          const SizedBox(height: 8),
           MainText(
             text: 'Invoice: ${transactions.invoiceId}',
           ),
