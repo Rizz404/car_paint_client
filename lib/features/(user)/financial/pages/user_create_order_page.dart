@@ -136,86 +136,80 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
       builder: (context, state) {
         return Scaffold(
           appBar: mainAppBar(
-            "Create Order",
+            "Order",
           ),
-          body: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  spacing: 16,
-                  children: [
-                    const MainText(
-                      text: "Create Order",
-                      extent: const Large(),
-                    ),
-                    StateHandler<UserCarCubit, PaginationState<UserCar>>(
-                      onRetry: () => getUserCars(),
-                      onSuccess: (context, data, _) {
-                        final userCars = data.data;
-                        return Container(
-                          child: DropdownMenu(
-                            menuStyle: MenuStyle(
-                              backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).colorScheme.secondary,
-                              ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                spacing: 16,
+                children: [
+                  StateHandler<UserCarCubit, PaginationState<UserCar>>(
+                    onRetry: () => getUserCars(),
+                    onSuccess: (context, data, _) {
+                      final userCars = data.data;
+                      return Container(
+                        child: DropdownMenu(
+                          menuStyle: MenuStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                              Theme.of(context).colorScheme.secondary,
                             ),
-                            width: double.infinity,
-                            controller: userCarController,
-                            enableFilter: true,
-                            requestFocusOnTap: true,
-                            initialSelection: selectedUserCarId ?? "",
-                            onSelected: (value) {
-                              setState(() {
-                                selectedUserCarId = value;
-                              });
-                            },
-                            label: const MainText(text: "Select User Car"),
-                            dropdownMenuEntries: userCars.map((userCar) {
-                              return DropdownMenuEntry(
-                                labelWidget: Container(
-                                  margin: const EdgeInsets.symmetric(
-                                    vertical: 8,
-                                  ), // gap di bawah tiap item
-                                  child: Row(
-                                    spacing: 16,
-                                    children: [
-                                      ImageNetwork(
-                                        src: userCar.carImages!.first!,
-                                        width: 50,
-                                        height: 50,
-                                      ),
-                                      MainText(
-                                        text: userCar.licensePlate,
-                                        customTextStyle: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                value: userCar.id,
-                                label: userCar.licensePlate,
-                              );
-                            }).toList(),
                           ),
-                        );
-                      },
-                    ),
-                    MainTextField(
-                      controller: noteController,
-                      hintText: "Enter note",
-                      leadingIcon: const Icon(Icons.note),
-                      isEnabled: state is! BaseLoadingState,
-                    ),
-                    MainElevatedButton(
-                      onPressed: submitForm,
-                      text: "Create",
-                      isLoading: state is BaseLoadingState,
-                    ),
-                  ],
-                ),
+                          width: double.infinity,
+                          controller: userCarController,
+                          enableFilter: true,
+                          requestFocusOnTap: true,
+                          initialSelection: selectedUserCarId ?? "",
+                          onSelected: (value) {
+                            setState(() {
+                              selectedUserCarId = value;
+                            });
+                          },
+                          label: const MainText(text: "Select User Car"),
+                          dropdownMenuEntries: userCars.map((userCar) {
+                            return DropdownMenuEntry(
+                              labelWidget: Container(
+                                margin: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                ), // gap di bawah tiap item
+                                child: Row(
+                                  spacing: 16,
+                                  children: [
+                                    ImageNetwork(
+                                      src: userCar.carImages!.first!,
+                                      width: 50,
+                                      height: 50,
+                                    ),
+                                    MainText(
+                                      text: userCar.licensePlate,
+                                      customTextStyle: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              value: userCar.id,
+                              label: userCar.licensePlate,
+                            );
+                          }).toList(),
+                        ),
+                      );
+                    },
+                  ),
+                  MainTextField(
+                    controller: noteController,
+                    hintText: "Enter note",
+                    leadingIcon: const Icon(Icons.note),
+                    isEnabled: state is! BaseLoadingState,
+                  ),
+                  MainElevatedButton(
+                    onPressed: submitForm,
+                    text: "Order",
+                    isLoading: state is BaseLoadingState,
+                  ),
+                ],
               ),
             ),
           ),

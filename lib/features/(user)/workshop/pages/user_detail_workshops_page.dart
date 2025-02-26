@@ -179,6 +179,8 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                       );
                     },
                     text: "Cat di sini",
+                  ).paddingSymmetric(
+                    horizontal: 16,
                   ),
                 ],
               ),
@@ -233,7 +235,6 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                 ),
                 MainText(
                   text: widget.workshop.distance ?? "N/A",
-                  color: Theme.of(context).colorScheme.primary,
                   extent: const Medium(),
                 ),
               ],

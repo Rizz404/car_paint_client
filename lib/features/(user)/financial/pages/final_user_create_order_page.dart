@@ -127,7 +127,6 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
         ),
         MainText(
           text: value,
-          color: Theme.of(context).colorScheme.primary,
         ),
       ],
     );
@@ -164,9 +163,8 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
         return ExpansionTile(
           title: MainText(
             text: entry.key.toString().split('.').last.replaceAll('_', ' '),
-            customTextStyle: TextStyle(
+            customTextStyle: const TextStyle(
               fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.primary,
             ),
             extent: const Medium(),
           ),
@@ -209,7 +207,6 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
         subtitle: MainText(
           text:
               'Fee: ${CurrencyFormatter.toRupiah(_parseFee(pm.fee!).toDouble())}',
-          color: Theme.of(context).colorScheme.primary,
         ),
         trailing: isSelected
             ? Icon(
@@ -250,7 +247,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
       builder: (context, state) {
         return Scaffold(
           appBar: mainAppBar(
-            "Create Transaction",
+            "Order Confirmation",
           ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),

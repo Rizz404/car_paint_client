@@ -79,7 +79,6 @@ class CheckboxServices extends StatelessWidget {
                   ),
                   MainText(
                     text: CurrencyFormatter.toRupiah(getTotalPrice()),
-                    color: Theme.of(context).primaryColor,
                   ),
                 ],
               ).paddingAll(),
@@ -101,7 +100,6 @@ class CheckboxServices extends StatelessWidget {
                       text: CurrencyFormatter.toRupiah(
                         int.parse(service.price),
                       ),
-                      color: Theme.of(context).primaryColor,
                     ),
                     value: selectedServices.contains(service.id),
                     onChanged: (value) => toggleService(service.id!),
