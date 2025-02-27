@@ -108,13 +108,16 @@ class Orders {
               ),
             )
           : null,
-      eTicket: map['eTicket'] != null
+      eTicket: map['eTickets'] != null
           ? List<ETicket?>.from(
-              (map['eTicket'] as List<dynamic>).map<ETicket>(
-                (x) => ETicket?.fromMap(x as Map<String, dynamic>),
+              (map['eTickets'] as List<dynamic>).map<ETicket?>(
+                (x) => x != null
+                    ? ETicket.fromMap(x as Map<String, dynamic>)
+                    : null,
               ),
             )
-          : null,
+          : [], // Mengembalikan list kosong daripada null
+
       workshop: map['workshop'] != null
           ? CarWorkshop.fromMap(map['workshop'] as Map<String, dynamic>)
           : null,
