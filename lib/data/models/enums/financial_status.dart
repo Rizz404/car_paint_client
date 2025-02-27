@@ -11,6 +11,28 @@ enum WorkStatus {
   CANCELLED,
 }
 
+const Map<WorkStatus, String> workStatusDescriptions = {
+  WorkStatus.QUEUED:
+      'Pekerjaan Anda telah masuk dalam antrian dan menunggu giliran untuk diproses.',
+  WorkStatus.INSPECTION:
+      'Kendaraan Anda sedang dalam tahap inspeksi untuk menilai kondisi dan kebutuhan perbaikan.',
+  WorkStatus.PUTTY:
+      'Proses pengisian dempul pada area yang memerlukan perbaikan untuk meratakan permukaan.',
+  WorkStatus.SURFACER:
+      'Penerapan lapisan dasar untuk memastikan cat menempel dengan baik dan merata.',
+  WorkStatus.APPLICATION_COLOR_BASE:
+      'Aplikasi warna dasar sesuai dengan pilihan Anda.',
+  WorkStatus.APPLICATION_CLEAR_COAT:
+      'Penerapan lapisan pelindung bening untuk melindungi dan memberikan kilau pada cat.',
+  WorkStatus.POLISHING:
+      'Proses pemolesan untuk menghilangkan ketidaksempurnaan dan meningkatkan kilau.',
+  WorkStatus.FINAL_QC:
+      'Kontrol kualitas akhir untuk memastikan semua pekerjaan telah dilakukan dengan standar tinggi.',
+  WorkStatus.COMPLETED:
+      'Pekerjaan telah selesai dan kendaraan siap untuk diserahkan.',
+  WorkStatus.CANCELLED: 'Pekerjaan telah dibatalkan.',
+};
+
 extension WorkStatusExtension on WorkStatus {
   String toMap() {
     return name; // Konversi enum ke string

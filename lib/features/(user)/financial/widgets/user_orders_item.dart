@@ -65,38 +65,17 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
               spacing: 4,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Theme(
-                  data: theme,
-                  child: ExpansionTile(
-                    title: const MainText(
-                      text: "Work Status",
-                      customTextStyle: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    children: [
-                      Divider(
-                        color: Theme.of(context).colorScheme.surfaceDim,
-                        thickness: 1,
-                      ),
-                      StatusTimeline(
-                        currentStatus: WorkStatus.FINAL_QC,
-                        activeColor: Theme.of(context).colorScheme.primary,
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                    ],
-                  ),
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     MainText(
                       text: 'Total: ${widget.order.subtotalPrice ?? "-"}',
-                      color: Theme.of(context).colorScheme.primary,
+                      customTextStyle: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     MainText(
                       text: _formatDate(widget.order.createdAt),
-                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ],
                 ),
@@ -118,6 +97,32 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
                 ),
               ],
             ).paddingSymmetric(horizontal: 16),
+            Divider(
+              color: Theme.of(context).colorScheme.surfaceDim,
+              thickness: 1,
+            ).paddingSymmetric(horizontal: 16),
+            Theme(
+              data: theme,
+              child: ExpansionTile(
+                title: const MainText(
+                  text: "Work Status",
+                  customTextStyle: TextStyle(fontWeight: FontWeight.w600),
+                ),
+                children: [
+                  Divider(
+                    color: Theme.of(context).colorScheme.surfaceDim,
+                    thickness: 1,
+                  ).paddingSymmetric(horizontal: 16),
+                  StatusTimeline(
+                    currentStatus: WorkStatus.FINAL_QC,
+                    activeColor: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(
               height: 16,
             ),
@@ -159,7 +164,7 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
               },
             ),
           ],
-        ).paddingOnly(bottom: 16),
+        ).paddingSymmetric(vertical: 16),
       ),
     );
   }

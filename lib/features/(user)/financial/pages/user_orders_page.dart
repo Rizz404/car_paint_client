@@ -77,7 +77,6 @@ class _UserOrdersPageState extends State<UserOrdersPage> {
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
           final models = data.data;
-          // final models = [];
 
           if (models.isEmpty) {
             return const CommonState(
