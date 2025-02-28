@@ -2,16 +2,17 @@
 import 'dart:convert';
 
 import 'package:paint_car/data/models/enums/financial_status.dart';
+import 'package:paint_car/data/models/enums/payment_reusability.dart';
 
 class PaymentMethod {
   final String? id;
   final String name;
+  final PaymentMethodType? type;
+  final PaymentReusability? reusability;
   final String? fee;
   final String? logoUrl;
   final bool? isActive;
   final String? description;
-  final String? xenditPaymentMethodId;
-  final PaymentMethodType? type;
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -24,8 +25,8 @@ class PaymentMethod {
     this.logoUrl,
     this.isActive,
     this.description,
-    this.xenditPaymentMethodId,
     this.type,
+    this.reusability,
   });
 
   PaymentMethod copyWith({
@@ -37,6 +38,7 @@ class PaymentMethod {
     String? description,
     String? xenditPaymentMethodId,
     PaymentMethodType? type,
+    PaymentReusability? reusability,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -47,9 +49,8 @@ class PaymentMethod {
       logoUrl: logoUrl ?? this.logoUrl,
       isActive: isActive ?? this.isActive,
       description: description ?? this.description,
-      xenditPaymentMethodId:
-          xenditPaymentMethodId ?? this.xenditPaymentMethodId,
       type: type ?? this.type,
+      reusability: reusability ?? this.reusability,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -63,7 +64,8 @@ class PaymentMethod {
       'logoUrl': logoUrl,
       'isActive': isActive,
       'description': description,
-      'xenditPaymentMethodId': xenditPaymentMethodId,
+      'paymentMethodType': type?.toMap(),
+      'paymentReusability': reusability?.toMap(),
       'type': type?.toMap(),
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
@@ -82,11 +84,11 @@ class PaymentMethod {
       isActive: map['isActive'] != null ? map['isActive'] as bool : null,
       description:
           map['description'] != null ? map['description'] as String : null,
-      xenditPaymentMethodId: map['xenditPaymentMethodId'] != null
-          ? map['xenditPaymentMethodId'] as String
-          : null,
       type: map['type'] != null
           ? PaymentMethodTypeExtension.fromMap(map['type'] as String)
+          : null,
+      reusability: map['reusability'] != null
+          ? PaymentReusabilityExtension.fromMap(map['reusability'] as String)
           : null,
       updatedAt: map['updatedAt'] != null
           ? DateTime.parse(map['updatedAt'] as String)
@@ -101,7 +103,7 @@ class PaymentMethod {
 
   @override
   String toString() {
-    return 'PaymentMethod(id: $id, name: $name, fee: $fee, createdAt: $createdAt, updatedAt: $updatedAt, logoUrl: $logoUrl, isActive: $isActive, description: $description, xenditPaymentMethodId: $xenditPaymentMethodId, type: $type)';
+    return 'PaymentMethod(id: $id, name: $name, fee: $fee, createdAt: $createdAt, updatedAt: $updatedAt, logoUrl: $logoUrl, isActive: $isActive, description: $description, xenditPaymentMethodId: , type: $type, reusability: $reusability)';
   }
 
   @override
@@ -116,7 +118,6 @@ class PaymentMethod {
         other.logoUrl == logoUrl &&
         other.isActive == isActive &&
         other.description == description &&
-        other.xenditPaymentMethodId == xenditPaymentMethodId &&
         other.type == type;
   }
 
@@ -130,7 +131,6 @@ class PaymentMethod {
         logoUrl.hashCode ^
         isActive.hashCode ^
         description.hashCode ^
-        xenditPaymentMethodId.hashCode ^
         type.hashCode;
   }
 }

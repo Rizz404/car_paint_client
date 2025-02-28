@@ -14,7 +14,7 @@ class Mock {
     'password': "123456789",
   };
   static const Map<String, dynamic> superadmin = {
-    'email': "superadmin@gmail.com",
+    'email': "test2@gmail.com",
     'password': "123456789",
   };
 }

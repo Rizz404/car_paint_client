@@ -29,12 +29,12 @@ class AdminOrdersRepo {
     return await handleApiResponse(result);
   }
 
-  Future<ApiResponse<Orders>> cancelOrder(
+  Future<ApiResponse<void>> cancelOrder(
     CancelToken cancelToken,
     String orderId,
   ) async {
-    final result = await apiClient.patch<Orders>(
-      "${ApiConstant.ordersCancel}/$orderId",
+    final result = await apiClient.patch<void>(
+      "${ApiConstant.ordersPaymentRequestCancelPath}/$orderId",
       {},
       cancelToken: cancelToken,
     );

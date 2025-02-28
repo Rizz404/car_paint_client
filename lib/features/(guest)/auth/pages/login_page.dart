@@ -38,8 +38,8 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     _cancelToken = CancelToken();
     setState(() {
-      emailController.text = Mock.user["email"];
-      passwordController.text = Mock.user["password"];
+      emailController.text = Mock.superadmin["email"];
+      passwordController.text = Mock.superadmin["password"];
     });
   }
 

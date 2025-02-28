@@ -53,12 +53,46 @@ class UserOrdersRepo {
     return await handleApiResponse(result);
   }
 
+  Future<ApiResponse<dynamic>> createOrderPaymentRequest(
+    CancelToken cancelToken,
+    String userCarId,
+    String paymentMethodId,
+    String workshopId,
+    String? note,
+    List<String> carServices,
+  ) async {
+    final result = await apiClient.post<dynamic>(
+      ApiConstant.ordersPaymentRequestPath,
+      {
+        'userCarId': userCarId,
+        'paymentMethodId': paymentMethodId,
+        'workshopId': workshopId,
+        'note': note,
+        'carServices': carServices.map((id) => {'carServiceId': id}).toList(),
+      },
+      cancelToken: cancelToken,
+    );
+    return await handleApiResponse(result);
+  }
+
   Future<ApiResponse<void>> cancelOrder(
     CancelToken cancelToken,
     String orderId,
   ) async {
     final result = await apiClient.patch<void>(
       "${ApiConstant.ordersUserCancelPath}/$orderId",
+      {},
+      cancelToken: cancelToken,
+    );
+    return await handleApiResponse(result);
+  }
+
+  Future<ApiResponse<void>> cancelOrderPaymentRequest(
+    CancelToken cancelToken,
+    String orderId,
+  ) async {
+    final result = await apiClient.patch<void>(
+      "${ApiConstant.ordersPaymentRequestCancelPath}/$orderId",
       {},
       cancelToken: cancelToken,
     );

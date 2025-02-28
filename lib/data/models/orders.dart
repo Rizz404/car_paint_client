@@ -13,6 +13,8 @@ class Orders {
   final String? userId;
   final String? userCarId;
   final String? workshopId;
+  final String? transactionId;
+
   final WorkStatus? workStatus;
   final OrderStatus? orderStatus;
   final String? note;
@@ -29,6 +31,7 @@ class Orders {
     required this.workshopId,
     required this.workStatus,
     required this.orderStatus,
+    required this.transactionId,
     required this.note,
     this.workshop,
     this.carServices,
@@ -43,6 +46,7 @@ class Orders {
     String? userId,
     String? userCarId,
     String? workshopId,
+    String? transactionId,
     WorkStatus? workStatus,
     OrderStatus? orderStatus,
     String? note,
@@ -57,6 +61,7 @@ class Orders {
       id: id ?? this.id,
       userId: userId ?? this.userId,
       userCarId: userCarId ?? this.userCarId,
+      transactionId: transactionId ?? this.transactionId,
       workshopId: workshopId ?? this.workshopId,
       workStatus: workStatus ?? this.workStatus,
       orderStatus: orderStatus ?? this.orderStatus,
@@ -79,6 +84,7 @@ class Orders {
       'workStatus': workStatus?.toMap(),
       'orderStatus': orderStatus?.toMap(),
       'note': note,
+      'transactionId': transactionId,
       'carServices': carServices?.map((x) => x?.toMap()).toList(),
       'eTicket': eTicket?.map((x) => x?.toMap()).toList(),
       'subtotalPrice': subtotalPrice,
@@ -94,6 +100,8 @@ class Orders {
       userId: map['userId'] != null ? map['userId'] as String? : '',
       userCarId: map['userCarId'] != null ? map['userCarId'] as String? : '',
       workshopId: map['workshopId'] != null ? map['workshopId'] as String? : '',
+      transactionId:
+          map['transactionId'] != null ? map['transactionId'] as String? : '',
       workStatus: map['workStatus'] != null
           ? WorkStatusExtension.fromMap(map['workStatus'] as String)
           : WorkStatus.INSPECTION,
@@ -139,7 +147,7 @@ class Orders {
 
   @override
   String toString() {
-    return 'Orders(id: $id, userId: $userId, userCarId: $userCarId, workshopId: $workshopId, workStatus: $workStatus, orderStatus: $orderStatus, note: $note, carServices: $carServices, eTicket: $eTicket, subtotalPrice: $subtotalPrice, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Orders(id: $id, userId: $userId, userCarId: $userCarId, workshopId: $workshopId, workStatus: $workStatus, orderStatus: $orderStatus, note: $note, carServices: $carServices, eTicket: $eTicket, subtotalPrice: $subtotalPrice, createdAt: $createdAt, updatedAt: $updatedAt, )';
   }
 
   @override

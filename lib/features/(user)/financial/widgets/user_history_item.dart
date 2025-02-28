@@ -127,10 +127,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
             spacing: 8,
             children: [
               keyValue(
-                'Invoice ID: ',
-                transactions.invoiceId,
-              ),
-              keyValue(
                 'Payment: ',
                 transactions.paymentMethod?.name ?? "-",
               ),
@@ -139,13 +135,14 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                   'Note: ',
                   transactions.order!.first!.note!,
                 ),
+              if (transactions.order!.first!.eTicket!.isNotEmpty)
+                keyValue(
+                  'E-Ticket: ',
+                  transactions.order!.first!.eTicket!.first!.ticketNumber
+                      .toString(),
+                ),
             ],
           ).paddingSymmetric(horizontal: 16),
-          if (transactions.order!.first!.eTicket!.isNotEmpty)
-            MainText(
-              text:
-                  'E-Ticket: ${transactions.order!.first!.eTicket!.first!.ticketNumber}',
-            ),
           Divider(
             thickness: 1,
             height: 1,

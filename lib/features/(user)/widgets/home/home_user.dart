@@ -3,6 +3,7 @@ import 'package:paint_car/data/models/user_car.dart';
 import 'package:paint_car/data/utils/user_extension.dart';
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
 import 'package:paint_car/features/(user)/car/pages/user_car_page.dart';
+import 'package:paint_car/features/(user)/profile/pages/profile_page.dart';
 import 'package:paint_car/features/(user)/widgets/home/banner_slider.dart';
 import 'package:paint_car/features/(user)/widgets/home/list_style_welcome.dart';
 import 'package:paint_car/features/(user)/widgets/home/service_section.dart';
@@ -34,6 +35,17 @@ class _HomeUserState extends State<HomeUser> {
                 type: SnackBarType.warning,
               );
               Navigator.of(context).push(UserCarPage.route());
+              return;
+            }
+            if (context.currentUser?.userProfile?.phoneNumber == null) {
+              SnackBarUtil.showSnackBar(
+                context: context,
+                message: "Harus input nomor telepon dulu untuk order",
+                type: SnackBarType.warning,
+              );
+              Navigator.of(context).push(
+                ProfilePage.route(user: context.currentUser!),
+              );
               return;
             }
             Navigator.of(context).push(UserWorkshopsPage.route());

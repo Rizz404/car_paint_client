@@ -1,25 +1,27 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:paint_car/data/models/cancellation.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 import 'package:paint_car/data/models/orders.dart';
+import 'package:paint_car/data/models/payment_detail.dart';
 import 'package:paint_car/data/models/payment_method.dart';
+import 'package:paint_car/data/models/refund.dart';
 
 class Transactions {
   final String id;
   final String userId;
   final String paymentMethodId;
-  final String invoiceId;
   final String adminFee;
-  final String paymentMethodFee;
   final String totalPrice;
-  final String? refundAmount;
+  final String invoiceId;
   final PaymentStatus paymentStatus;
-  final String paymentInvoiceUrl;
-  final DateTime? refundedAt;
   final DateTime createdAt;
   final DateTime updatedAt;
   final PaymentMethod? paymentMethod;
+  final Cancellation? cancellation;
+  final PaymentDetail? paymentdetail;
+  final Refund? refund;
   final List<Orders?>? order;
   Transactions({
     required this.id,
@@ -27,14 +29,13 @@ class Transactions {
     required this.paymentMethodId,
     required this.invoiceId,
     required this.adminFee,
-    required this.paymentMethodFee,
     required this.totalPrice,
-    this.refundAmount,
     required this.paymentStatus,
-    required this.paymentInvoiceUrl,
-    this.refundedAt,
     required this.createdAt,
     required this.updatedAt,
+    this.cancellation,
+    this.paymentdetail,
+    this.refund,
     this.paymentMethod,
     this.order,
   });
@@ -45,16 +46,15 @@ class Transactions {
     String? paymentMethodId,
     String? invoiceId,
     String? adminFee,
-    String? paymentMethodFee,
     String? totalPrice,
-    String? refundAmount,
     PaymentStatus? paymentStatus,
-    String? paymentInvoiceUrl,
-    DateTime? refundedAt,
     DateTime? createdAt,
     DateTime? updatedAt,
     PaymentMethod? paymentMethod,
     List<Orders>? order,
+    Cancellation? cancellation,
+    PaymentDetail? paymentdetail,
+    Refund? refund,
   }) {
     return Transactions(
       id: id ?? this.id,
@@ -62,16 +62,15 @@ class Transactions {
       paymentMethodId: paymentMethodId ?? this.paymentMethodId,
       invoiceId: invoiceId ?? this.invoiceId,
       adminFee: adminFee ?? this.adminFee,
-      paymentMethodFee: paymentMethodFee ?? this.paymentMethodFee,
       totalPrice: totalPrice ?? this.totalPrice,
-      refundAmount: refundAmount ?? this.refundAmount,
       paymentStatus: paymentStatus ?? this.paymentStatus,
-      paymentInvoiceUrl: paymentInvoiceUrl ?? this.paymentInvoiceUrl,
-      refundedAt: refundedAt ?? this.refundedAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       paymentMethod: paymentMethod ?? this.paymentMethod,
       order: order ?? this.order,
+      cancellation: cancellation ?? this.cancellation,
+      paymentdetail: paymentdetail ?? this.paymentdetail,
+      refund: refund ?? this.refund,
     );
   }
 
@@ -82,51 +81,57 @@ class Transactions {
       'paymentMethodId': paymentMethodId,
       'invoiceId': invoiceId,
       'adminFee': adminFee,
-      'paymentMethodFee': paymentMethodFee,
       'totalPrice': totalPrice,
-      'refundAmount': refundAmount,
       'paymentStatus': paymentStatus.toMap(),
-      'paymentInvoiceUrl': paymentInvoiceUrl,
-      'refundedAt': refundedAt?.toIso8601String(),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
       'paymentMethod': paymentMethod?.toMap(),
       'order': order?.map((x) => x?.toMap()).toList(),
+      'cancellation': cancellation?.toMap(),
+      'paymentdetail': paymentdetail?.toMap(),
+      'refund': refund?.toMap(),
     };
   }
 
   factory Transactions.fromMap(Map<String, dynamic> map) {
     return Transactions(
-      id: map['id']?.toString() ??
-          '', // Pastikan semua field di-convert ke String
+      id: map['id']?.toString() ?? '',
       userId: map['userId']?.toString() ?? '',
       paymentMethodId: map['paymentMethodId']?.toString() ?? '',
       invoiceId: map['invoiceId']?.toString() ?? '',
-      adminFee:
-          map['adminFee']?.toString() ?? '0', // Handle null, default ke '0'
-      paymentMethodFee: map['paymentMethodFee']?.toString() ?? '0',
+      adminFee: map['adminFee']?.toString() ?? '0',
       totalPrice: map['totalPrice']?.toString() ?? '0',
-      refundAmount: map['refundAmount']?.toString(), // auto handle null
       paymentStatus: map['paymentStatus'] != null
-          ? PaymentStatusExtension.fromMap(map['paymentStatus'] as String)
+          ? PaymentStatusExtension.fromMap(map['paymentStatus'])
           : PaymentStatus.PENDING,
-      paymentInvoiceUrl: map['paymentInvoiceUrl']?.toString() ?? '',
-      refundedAt: map['refundedAt'] != null
-          ? DateTime.parse(map['refundedAt'] as String)
-          : null,
-      createdAt: DateTime.parse(map['createdAt'] as String),
-      updatedAt: DateTime.parse(map['updatedAt'] as String),
+      createdAt: map['createdAt'] != null
+          ? DateTime.parse(map['createdAt'].toString())
+          : DateTime.now(),
+      updatedAt: map['updatedAt'] != null
+          ? DateTime.parse(map['updatedAt'].toString())
+          : DateTime.now(),
       paymentMethod: map['paymentMethod'] != null
           ? PaymentMethod.fromMap(map['paymentMethod'] as Map<String, dynamic>)
           : null,
       order: map['order'] != null
-          ? List<Orders?>.from(
-              (map['order'] as List).map(
-                (x) => x != null
-                    ? Orders.fromMap(x as Map<String, dynamic>)
-                    : null,
-              ),
-            )
+          ? (map['order'] is List
+              ? List<Orders>.from(
+                  (map['order'] as List).map(
+                    (x) => x != null
+                        ? Orders.fromMap(x as Map<String, dynamic>)
+                        : null,
+                  ),
+                ).whereType<Orders>().toList()
+              : [])
+          : null,
+      cancellation: map['cancellation'] != null
+          ? Cancellation.fromMap(map['cancellation'] as Map<String, dynamic>)
+          : null,
+      paymentdetail: map['paymentdetail'] != null
+          ? PaymentDetail.fromMap(map['paymentdetail'] as Map<String, dynamic>)
+          : null,
+      refund: map['refund'] != null
+          ? Refund.fromMap(map['refund'] as Map<String, dynamic>)
           : null,
     );
   }
@@ -138,7 +143,7 @@ class Transactions {
 
   @override
   String toString() {
-    return 'Transactions(id: $id, userId: $userId, paymentMethodId: $paymentMethodId, invoiceId: $invoiceId, adminFee: $adminFee, paymentMethodFee: $paymentMethodFee, totalPrice: $totalPrice, refundAmount: $refundAmount, paymentStatus: $paymentStatus, paymentInvoiceUrl: $paymentInvoiceUrl, refundedAt: $refundedAt, createdAt: $createdAt, updatedAt: $updatedAt, paymentMethod: $paymentMethod, order: $order)';
+    return 'Transactions(id: $id, userId: $userId, paymentMethodId: $paymentMethodId, invoiceId: $invoiceId, adminFee: $adminFee, paymentMethodFee: , totalPrice: $totalPrice, refundAmount: , paymentStatus: $paymentStatus, paymentInvoiceUrl: , refundedAt: , createdAt: $createdAt, updatedAt: $updatedAt, paymentMethod: $paymentMethod, order: $order, cancellation: $cancellation, paymentdetail: $paymentdetail, refund: $refund)';
   }
 
   @override
@@ -150,12 +155,8 @@ class Transactions {
         other.paymentMethodId == paymentMethodId &&
         other.invoiceId == invoiceId &&
         other.adminFee == adminFee &&
-        other.paymentMethodFee == paymentMethodFee &&
         other.totalPrice == totalPrice &&
-        other.refundAmount == refundAmount &&
         other.paymentStatus == paymentStatus &&
-        other.paymentInvoiceUrl == paymentInvoiceUrl &&
-        other.refundedAt == refundedAt &&
         other.createdAt == createdAt &&
         other.updatedAt == updatedAt &&
         other.paymentMethod == paymentMethod &&
@@ -169,12 +170,8 @@ class Transactions {
         paymentMethodId.hashCode ^
         invoiceId.hashCode ^
         adminFee.hashCode ^
-        paymentMethodFee.hashCode ^
         totalPrice.hashCode ^
-        refundAmount.hashCode ^
         paymentStatus.hashCode ^
-        paymentInvoiceUrl.hashCode ^
-        refundedAt.hashCode ^
         createdAt.hashCode ^
         updatedAt.hashCode ^
         paymentMethod.hashCode ^

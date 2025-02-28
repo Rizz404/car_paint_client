@@ -122,13 +122,53 @@ class UserOrdersCubit extends Cubit<BaseState> with Cancelable {
     );
   }
 
+  Future<void> createOrderPaymentRequest(
+      String userCarId,
+      String paymentMethodId,
+      String workshopId,
+      String? note,
+      List<String> carServices,
+      CancelToken cancelToken) async {
+    await handleBaseCubit<void>(
+      emit,
+      () => userOrdersRepo.createOrderPaymentRequest(
+        cancelToken,
+        userCarId,
+        paymentMethodId,
+        workshopId,
+        note,
+        carServices,
+      ),
+      onSuccess: (data, message) => {
+        emit(const BaseActionSuccessState()),
+        getOrders(1, cancelToken),
+      },
+    );
+  }
+
   Future<void> cancelOrder(
     String orderId,
     CancelToken cancelToken,
   ) async {
     await handleBaseCubit<void>(
       emit,
-      () => userOrdersRepo.cancelOrder(cancelToken, orderId),
+      // TODO: REMOVE THIS OLD ONE
+      // () => userOrdersRepo.cancelOrder(cancelToken, orderId),
+      () => userOrdersRepo.cancelOrderPaymentRequest(cancelToken, orderId),
+      onSuccess: (data, message) => {
+        emit(const BaseActionSuccessState()),
+        getOrders(1, cancelToken),
+      },
+    );
+  }
+
+  Future<void> cancelOrderPaymentRequest(
+    String orderId,
+    CancelToken cancelToken,
+  ) async {
+    await handleBaseCubit<void>(
+      emit,
+      () => userOrdersRepo.cancelOrderPaymentRequest(cancelToken, orderId),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
         getOrders(1, cancelToken),

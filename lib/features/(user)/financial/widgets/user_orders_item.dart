@@ -71,7 +71,7 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
                     MainText(
                       text: 'Total: ${widget.order.subtotalPrice ?? "-"}',
                       customTextStyle: const TextStyle(
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     MainText(
@@ -114,7 +114,7 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
                     thickness: 1,
                   ).paddingSymmetric(horizontal: 16),
                   StatusTimeline(
-                    currentStatus: WorkStatus.FINAL_QC,
+                    currentStatus: widget.order.workStatus ?? WorkStatus.QUEUED,
                     activeColor: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(

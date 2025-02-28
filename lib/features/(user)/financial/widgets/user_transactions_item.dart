@@ -7,6 +7,7 @@ import 'package:paint_car/features/shared/utils/currency_formatter.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/extension/padding.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
+import 'package:paint_car/ui/utils/snack_bar.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class UserTransactionsItem extends StatelessWidget {
@@ -25,12 +26,24 @@ class UserTransactionsItem extends StatelessWidget {
   }
 
   void _handleTap(BuildContext context) {
+    final paymentDetail = transactions.paymentdetail;
+    final url = paymentDetail?.deeplinkUrl ??
+        paymentDetail?.mobileUrl ??
+        paymentDetail?.webUrl;
+
+    if (url == null) {
+      return;
+    }
+    if (transactions.paymentdetail!.virtualAccountNumber != null) {
+      return;
+    }
+
     if (transactions.paymentStatus.name.toUpperCase() == "PENDING") {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => PaymentWebViewPage(
-            paymentUrl: transactions.paymentInvoiceUrl,
+            paymentUrl: url,
           ),
         ),
       ).then((value) {
@@ -79,6 +92,29 @@ class UserTransactionsItem extends StatelessWidget {
             MainText(
               text: 'Method: ${transactions.paymentMethod?.name ?? "-"}',
             ),
+            transactions.paymentdetail?.virtualAccountNumber != null
+                ? MainText(
+                    text:
+                        'Virtual Account: ${transactions.paymentdetail?.virtualAccountNumber}',
+                  )
+                : const SizedBox.shrink(),
+            // transactions.paymentdetail?.deeplinkUrl != null
+            //     ? MainText(
+            //         text:
+            //             'Deeplink URL: ${transactions.paymentdetail?.deeplinkUrl}',
+            //       )
+            //     : const SizedBox.shrink(),
+            // transactions.paymentdetail?.mobileUrl != null
+            //     ? MainText(
+            //         text:
+            //             'Mobile URL: ${transactions.paymentdetail?.mobileUrl}',
+            //       )
+            //     : const SizedBox.shrink(),
+            // transactions.paymentdetail?.webUrl != null
+            //     ? MainText(
+            //         text: 'Web URL: ${transactions.paymentdetail?.webUrl}',
+            //       )
+            //     : const SizedBox.shrink(),
             const SizedBox(
               height: 4,
             ),

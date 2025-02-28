@@ -89,6 +89,8 @@ class _UserTransactionsPageState extends State<UserTransactionsPage> {
             );
           }
 
+          LogService.i("UserTransactionsPage: $models");
+
           return RefreshIndicator(
             onRefresh: () async {
               _onRefresh();

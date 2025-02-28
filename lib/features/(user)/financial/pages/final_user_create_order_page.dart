@@ -6,6 +6,7 @@ import 'package:paint_car/dependencies/helper/base_state.dart';
 
 import 'package:paint_car/features/(superadmin)/financial/cubit/payment_method_cubit.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_orders_cubit.dart';
+import 'package:paint_car/features/(user)/financial/pages/user_transactions_page.dart';
 import 'package:paint_car/features/home/pages/home_page.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
@@ -98,7 +99,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
       );
       return;
     }
-    await context.read<UserOrdersCubit>().createOrder(
+    await context.read<UserOrdersCubit>().createOrderPaymentRequest(
           widget.selectedUserCarId,
           selectedPaymentMethod!.id!,
           widget.workshopId,
@@ -234,8 +235,16 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
           onSuccess: () {
             SnackBarUtil.showSnackBar(
               context: context,
-              message: "Transaction created successfully",
+              message:
+                  "Transaction created successfully, go to transaction to pay",
               type: SnackBarType.success,
+              action: SnackBarAction(
+                label: "Go to Transaction",
+                onPressed: () {
+                  Navigator.of(context).push(UserTransactionsPage.route());
+                },
+              ),
+              duration: const Duration(seconds: 10),
             );
             Navigator.of(context).pushAndRemoveUntil(
               HomePage.route(),

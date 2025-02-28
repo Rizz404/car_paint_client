@@ -24,7 +24,7 @@ class SnackBarUtil {
             child: MainText(
               text: message,
               color: Colors.white,
-              maxLines: 2,
+              maxLines: 3,
             ),
           ),
         ],
