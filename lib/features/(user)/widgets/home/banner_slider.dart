@@ -11,8 +11,8 @@ class BannerSlider extends StatefulWidget {
 class _BannerSliderState extends State<BannerSlider> {
   late final PageController _pageController;
   final List<String> _images = [
-    "assets/images/konosuba.jpg",
-    "assets/images/test.jpg",
+    "assets/images/banner/banner-1.jpg",
+    "assets/images/banner/banner-2.jpg",
   ];
   int _currentPage = 0;
   Timer? _timer;

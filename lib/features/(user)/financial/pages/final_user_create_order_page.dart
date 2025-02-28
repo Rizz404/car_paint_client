@@ -236,15 +236,8 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
             SnackBarUtil.showSnackBar(
               context: context,
               message:
-                  "Transaction created successfully, go to transaction to pay",
+                  "Transaction created successfully, go to Transaction to pay",
               type: SnackBarType.success,
-              action: SnackBarAction(
-                label: "Go to Transaction",
-                onPressed: () {
-                  Navigator.of(context).push(UserTransactionsPage.route());
-                },
-              ),
-              duration: const Duration(seconds: 10),
             );
             Navigator.of(context).pushAndRemoveUntil(
               HomePage.route(),

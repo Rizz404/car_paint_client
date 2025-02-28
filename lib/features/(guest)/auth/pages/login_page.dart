@@ -13,6 +13,7 @@ import 'package:paint_car/features/home/pages/home_page.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/main_text_field.dart';
+import 'package:paint_car/ui/utils/snack_bar.dart';
 import 'package:paint_car/ui/validator/email_validator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,8 +39,8 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     _cancelToken = CancelToken();
     setState(() {
-      emailController.text = Mock.superadmin["email"];
-      passwordController.text = Mock.superadmin["password"];
+      emailController.text = Mock.user["email"];
+      passwordController.text = Mock.user["password"];
     });
   }
 
@@ -81,6 +82,11 @@ class _LoginPageState extends State<LoginPage> {
           onSuccess: () async {
             await context.read<UserCubit>().getUserLocal();
             if (context.mounted) {
+              SnackBarUtil.showSnackBar(
+                context: context,
+                message: "Login success",
+                type: SnackBarType.success,
+              );
               Navigator.of(context)
                   .pushAndRemoveUntil(HomePage.route(), (_) => false);
             }

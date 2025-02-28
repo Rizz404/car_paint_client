@@ -62,7 +62,7 @@ class UserOrdersRepo {
     List<String> carServices,
   ) async {
     final result = await apiClient.post<dynamic>(
-      ApiConstant.ordersPaymentRequestPath,
+      ApiConstant.ordersPath,
       {
         'userCarId': userCarId,
         'paymentMethodId': paymentMethodId,

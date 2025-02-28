@@ -12,6 +12,7 @@ import 'package:paint_car/features/(guest)/auth/pages/login_page.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/main_text_field.dart';
+import 'package:paint_car/ui/utils/snack_bar.dart';
 import 'package:paint_car/ui/validator/email_validator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,10 +41,10 @@ class _RegisterPageState extends State<RegisterPage> {
     super.initState();
     _cancelToken = CancelToken();
     setState(() {
-      usernameController.text = Mock.user["username"];
-      emailController.text = Mock.user["email"];
-      passwordController.text = Mock.user["password"];
-      confirmPasswordController.text = Mock.user["password"];
+      usernameController.text = "";
+      emailController.text = "";
+      passwordController.text = "";
+      confirmPasswordController.text = "";
     });
   }
 
@@ -87,6 +88,11 @@ class _RegisterPageState extends State<RegisterPage> {
           onSuccess: () async {
             await context.read<UserCubit>().getUserLocal();
             if (context.mounted) {
+              SnackBarUtil.showSnackBar(
+                context: context,
+                message: "Register success",
+                type: SnackBarType.success,
+              );
               Navigator.of(context)
                   .pushAndRemoveUntil(LoginPage.route(), (_) => false);
             }

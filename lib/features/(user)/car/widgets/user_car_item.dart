@@ -141,14 +141,14 @@ class _UserCarItemState extends State<UserCarItem> {
   void _showActionMenu(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       builder: (context) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(
+              leading: const Icon(
                 Icons.edit,
-                color: Theme.of(context).colorScheme.primary,
               ),
               title: const MainText(text: 'Edit'),
               onTap: () {
@@ -165,7 +165,10 @@ class _UserCarItemState extends State<UserCarItem> {
                 Icons.delete,
                 color: Theme.of(context).colorScheme.error,
               ),
-              title: const MainText(text: 'Hapus'),
+              title: MainText(
+                text: 'Hapus',
+                color: Theme.of(context).colorScheme.error,
+              ),
               onTap: () {
                 Navigator.pop(context);
                 _confirmDelete(context);

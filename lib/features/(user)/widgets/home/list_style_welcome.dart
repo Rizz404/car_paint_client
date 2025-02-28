@@ -32,7 +32,7 @@ class ListStyleWelcome extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        subtitle: MainText(text: "${user?.email}"),
+        subtitle: MainText(text: "${user?.username}"),
         leading: const Icon(Icons.person_outline),
         trailing: IconButton(
           icon: const Icon(Icons.notifications_outlined),

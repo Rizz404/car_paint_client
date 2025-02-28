@@ -92,9 +92,9 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
         selectedCarColorId = widget.userCar!.carModelYearColor!.color!.id;
         await _loadExistingImages();
       }
+      await getCarModelYearColor();
       await getBrands();
       await getColors();
-      await getCarModelYearColor();
     });
   }
 
@@ -305,10 +305,10 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
                 child: Column(
                   spacing: 16,
                   children: [
-                    MainText(
-                      text: isUpdate ? "Update Car" : "Create Car",
-                      extent: const Large(),
-                    ),
+                    // MainText(
+                    //   text: isUpdate ? "Update Car" : "Create Car",
+                    //   extent: const Large(),
+                    // ),
                     MultiImageCarAction(
                       selectedImages: _selectedImages,
                       existingImages: _existingImages,
@@ -318,7 +318,7 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
                     ),
                     MainTextField(
                       controller: licensePlateController,
-                      hintText: "Enter car licensePlate",
+                      hintText: "Enter Car License Plate",
                       leadingIcon: const Icon(Icons.drive_eta),
                       isEnabled: state is! BaseLoadingState,
                       validator: (value) {
@@ -329,182 +329,182 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
                       },
                     ),
 
-                    StateHandler<CarBrandsCubit, PaginationState<CarBrand>>(
-                      onRetry: () => getBrands(),
-                      onSuccess: (context, data, _) {
-                        final brands = data.data;
-                        if (brands.isEmpty) return const SizedBox();
-                        return DropdownMenu(
-                          width: double.infinity,
-                          controller: carBrandIdController,
-                          enableFilter: true,
-                          requestFocusOnTap: true,
-                          initialSelection: selectedCarBrandId,
-                          onSelected: (value) {
-                            setState(() {
-                              selectedCarBrandId = value;
-                              selectedCarModelId = null;
-                              selectedCarModelYearId = null;
-                              selectedCarModelYearColorId = null;
-                            });
-                            if (value != null) {
-                              getModelsByBrandId(value as String);
-                            }
-                          },
-                          label: const MainText(text: "Select Car Brand"),
-                          dropdownMenuEntries: brands.isNotEmpty
-                              ? brands.map((brand) {
-                                  return DropdownMenuEntry(
-                                    value: brand.id,
-                                    label: brand.name,
-                                  );
-                                }).toList()
-                              : [
-                                  const DropdownMenuEntry(
-                                    value: "",
-                                    label: "No data available",
-                                  ),
-                                ],
-                        );
-                      },
-                    ),
+                    // StateHandler<CarBrandsCubit, PaginationState<CarBrand>>(
+                    //   onRetry: () => getBrands(),
+                    //   onSuccess: (context, data, _) {
+                    //     final brands = data.data;
+                    //     if (brands.isEmpty) return const SizedBox();
+                    //     return DropdownMenu(
+                    //       width: double.infinity,
+                    //       controller: carBrandIdController,
+                    //       enableFilter: true,
+                    //       requestFocusOnTap: true,
+                    //       initialSelection: selectedCarBrandId,
+                    //       onSelected: (value) {
+                    //         setState(() {
+                    //           selectedCarBrandId = value;
+                    //           selectedCarModelId = null;
+                    //           selectedCarModelYearId = null;
+                    //           selectedCarModelYearColorId = null;
+                    //         });
+                    //         if (value != null) {
+                    //           getModelsByBrandId(value as String);
+                    //         }
+                    //       },
+                    //       label: const MainText(text: "Select Car Brand"),
+                    //       dropdownMenuEntries: brands.isNotEmpty
+                    //           ? brands.map((brand) {
+                    //               return DropdownMenuEntry(
+                    //                 value: brand.id,
+                    //                 label: brand.name,
+                    //               );
+                    //             }).toList()
+                    //           : [
+                    //               const DropdownMenuEntry(
+                    //                 value: "",
+                    //                 label: "No data available",
+                    //               ),
+                    //             ],
+                    //     );
+                    //   },
+                    // ),
 
-                    StateHandler<CarColorsCubit, PaginationState<CarColor>>(
-                      onRetry: () => getColors(),
-                      onSuccess: (context, data, _) {
-                        final colors = data.data;
-                        if (colors.isEmpty) return const SizedBox();
-                        return DropdownMenu(
-                          width: double.infinity,
-                          controller: carColorIdController,
-                          enableFilter: true,
-                          requestFocusOnTap: true,
-                          initialSelection: selectedCarColorId,
-                          onSelected: (value) {
-                            setState(() {
-                              selectedCarColorId = value;
-                              selectedCarModelYearColorId = null;
-                            });
-                            if (value != null &&
-                                selectedCarModelYearId != null) {
-                              getModelYearColors(
-                                selectedCarModelId!,
-                                value as String,
-                              );
-                            }
-                          },
-                          label: const MainText(text: "Select Car Color"),
-                          dropdownMenuEntries: colors.isNotEmpty
-                              ? colors.map((color) {
-                                  return DropdownMenuEntry(
-                                    value: color.id,
-                                    label: color.name,
-                                  );
-                                }).toList()
-                              : [
-                                  const DropdownMenuEntry(
-                                    value: "",
-                                    label: "No data available",
-                                  ),
-                                ],
-                        );
-                      },
-                    ),
+                    // StateHandler<CarColorsCubit, PaginationState<CarColor>>(
+                    //   onRetry: () => getColors(),
+                    //   onSuccess: (context, data, _) {
+                    //     final colors = data.data;
+                    //     if (colors.isEmpty) return const SizedBox();
+                    //     return DropdownMenu(
+                    //       width: double.infinity,
+                    //       controller: carColorIdController,
+                    //       enableFilter: true,
+                    //       requestFocusOnTap: true,
+                    //       initialSelection: selectedCarColorId,
+                    //       onSelected: (value) {
+                    //         setState(() {
+                    //           selectedCarColorId = value;
+                    //           selectedCarModelYearColorId = null;
+                    //         });
+                    //         if (value != null &&
+                    //             selectedCarModelYearId != null) {
+                    //           getModelYearColors(
+                    //             selectedCarModelId!,
+                    //             value as String,
+                    //           );
+                    //         }
+                    //       },
+                    //       label: const MainText(text: "Select Car Color"),
+                    //       dropdownMenuEntries: colors.isNotEmpty
+                    //           ? colors.map((color) {
+                    //               return DropdownMenuEntry(
+                    //                 value: color.id,
+                    //                 label: color.name,
+                    //               );
+                    //             }).toList()
+                    //           : [
+                    //               const DropdownMenuEntry(
+                    //                 value: "",
+                    //                 label: "No data available",
+                    //               ),
+                    //             ],
+                    //     );
+                    //   },
+                    // ),
 
-                    // Dropdown Car Models (bergantung brand)
-                    AnimatedStateHandler<CarModelsCubit,
-                        PaginationState<CarModel>>(
-                      show: selectedCarBrandId != null,
-                      onRetry: () => selectedCarBrandId != null
-                          ? getModelsByBrandId(selectedCarBrandId!)
-                          : Future.value(),
-                      onSuccess: (context, data, _) {
-                        final models = data.data;
-                        return DropdownMenu(
-                          enabled: selectedCarBrandId != null,
-                          width: double.infinity,
-                          controller: carModelIdController,
-                          enableFilter: true,
-                          requestFocusOnTap: true,
-                          initialSelection: selectedCarModelId,
-                          onSelected: (value) {
-                            setState(() {
-                              selectedCarModelId = value;
-                              // Reset child values
-                              selectedCarModelYearId = null;
-                              selectedCarModelYearColorId = null;
-                            });
-                            // Ambil model years berdasarkan model baru
-                            if (value != null) {
-                              getModelYearsByModelId(value as String);
-                            }
-                          },
-                          label: const MainText(text: "Select Car Model"),
-                          dropdownMenuEntries: models.isNotEmpty
-                              ? models.map((model) {
-                                  return DropdownMenuEntry(
-                                    value: model.id,
-                                    label: model.name,
-                                  );
-                                }).toList()
-                              : [
-                                  const DropdownMenuEntry(
-                                    value: "",
-                                    label: "No data available for this brand",
-                                  ),
-                                ],
-                        );
-                      },
-                    ),
+                    // // Dropdown Car Models (bergantung brand)
+                    // AnimatedStateHandler<CarModelsCubit,
+                    //     PaginationState<CarModel>>(
+                    //   show: selectedCarBrandId != null,
+                    //   onRetry: () => selectedCarBrandId != null
+                    //       ? getModelsByBrandId(selectedCarBrandId!)
+                    //       : Future.value(),
+                    //   onSuccess: (context, data, _) {
+                    //     final models = data.data;
+                    //     return DropdownMenu(
+                    //       enabled: selectedCarBrandId != null,
+                    //       width: double.infinity,
+                    //       controller: carModelIdController,
+                    //       enableFilter: true,
+                    //       requestFocusOnTap: true,
+                    //       initialSelection: selectedCarModelId,
+                    //       onSelected: (value) {
+                    //         setState(() {
+                    //           selectedCarModelId = value;
+                    //           // Reset child values
+                    //           selectedCarModelYearId = null;
+                    //           selectedCarModelYearColorId = null;
+                    //         });
+                    //         // Ambil model years berdasarkan model baru
+                    //         if (value != null) {
+                    //           getModelYearsByModelId(value as String);
+                    //         }
+                    //       },
+                    //       label: const MainText(text: "Select Car Model"),
+                    //       dropdownMenuEntries: models.isNotEmpty
+                    //           ? models.map((model) {
+                    //               return DropdownMenuEntry(
+                    //                 value: model.id,
+                    //                 label: model.name,
+                    //               );
+                    //             }).toList()
+                    //           : [
+                    //               const DropdownMenuEntry(
+                    //                 value: "",
+                    //                 label: "No data available for this brand",
+                    //               ),
+                    //             ],
+                    //     );
+                    //   },
+                    // ),
 
-                    AnimatedStateHandler<CarModelYearsCubit,
-                        PaginationState<CarModelYears>>(
-                      show: selectedCarModelId != null,
-                      onRetry: () => selectedCarModelId != null
-                          ? getModelYearsByModelId(selectedCarModelId!)
-                          : Future.value(),
-                      onSuccess: (context, data, _) {
-                        final modelYears = data.data;
-                        return DropdownMenu(
-                          enabled: selectedCarModelId != null,
-                          width: double.infinity,
-                          controller: carModelYearIdController,
-                          enableFilter: true,
-                          requestFocusOnTap: true,
-                          initialSelection: selectedCarModelYearId,
-                          onSelected: (value) {
-                            setState(() {
-                              selectedCarModelYearId = value;
-                              selectedCarModelYearColorId = null;
-                            });
-                            // Jika color sudah dipilih, ambil warna model year
-                            if (value != null && selectedCarColorId != null) {
-                              getModelYearColors(
-                                selectedCarModelId!,
-                                selectedCarColorId!,
-                              );
-                            }
-                          },
-                          label: const MainText(text: "Select Model Year"),
-                          dropdownMenuEntries: modelYears.isNotEmpty
-                              ? modelYears.map((modelYear) {
-                                  final label = modelYear.carModel!.name +
-                                      " " +
-                                      modelYear.year.toString();
-                                  return DropdownMenuEntry(
-                                    value: modelYear.id,
-                                    label: label,
-                                  );
-                                }).toList()
-                              : [
-                                  const DropdownMenuEntry(
-                                    value: "",
-                                    label: "No data available for this model",
-                                  ),
-                                ],
-                        );
-                      },
-                    ),
+                    // AnimatedStateHandler<CarModelYearsCubit,
+                    //     PaginationState<CarModelYears>>(
+                    //   show: selectedCarModelId != null,
+                    //   onRetry: () => selectedCarModelId != null
+                    //       ? getModelYearsByModelId(selectedCarModelId!)
+                    //       : Future.value(),
+                    //   onSuccess: (context, data, _) {
+                    //     final modelYears = data.data;
+                    //     return DropdownMenu(
+                    //       enabled: selectedCarModelId != null,
+                    //       width: double.infinity,
+                    //       controller: carModelYearIdController,
+                    //       enableFilter: true,
+                    //       requestFocusOnTap: true,
+                    //       initialSelection: selectedCarModelYearId,
+                    //       onSelected: (value) {
+                    //         setState(() {
+                    //           selectedCarModelYearId = value;
+                    //           selectedCarModelYearColorId = null;
+                    //         });
+                    //         // Jika color sudah dipilih, ambil warna model year
+                    //         if (value != null && selectedCarColorId != null) {
+                    //           getModelYearColors(
+                    //             selectedCarModelId!,
+                    //             selectedCarColorId!,
+                    //           );
+                    //         }
+                    //       },
+                    //       label: const MainText(text: "Select Model Year"),
+                    //       dropdownMenuEntries: modelYears.isNotEmpty
+                    //           ? modelYears.map((modelYear) {
+                    //               final label = modelYear.carModel!.name +
+                    //                   " " +
+                    //                   modelYear.year.toString();
+                    //               return DropdownMenuEntry(
+                    //                 value: modelYear.id,
+                    //                 label: label,
+                    //               );
+                    //             }).toList()
+                    //           : [
+                    //               const DropdownMenuEntry(
+                    //                 value: "",
+                    //                 label: "No data available for this model",
+                    //               ),
+                    //             ],
+                    //     );
+                    //   },
+                    // ),
 
                     // AnimatedStateHandler<CarModelYearColorCubit,
                     //     PaginationState<CarModelYearColor>>(
@@ -555,12 +555,12 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
                     Column(
                       spacing: 2,
                       children: [
-                        const MainText(
-                          extent: Medium(),
-                          maxLines: 2,
-                          text:
-                              "saat ini curang untuk sementara karena datanya ga selalu ada based on other fields",
-                        ),
+                        // const MainText(
+                        //   extent: Medium(),
+                        //   maxLines: 2,
+                        //   text:
+                        //       "saat ini curang untuk sementara karena datanya ga selalu ada based on other fields",
+                        // ),
                         StateHandler<CarModelYearColorCubit,
                             PaginationState<CarModelYearColor>>(
                           onRetry: () => getCarModelYearColor(),
