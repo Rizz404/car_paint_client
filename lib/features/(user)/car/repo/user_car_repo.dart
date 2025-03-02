@@ -40,18 +40,32 @@ class UserCarRepo {
     List<File> imageFiles,
     CancelToken cancelToken,
   ) async {
+    LogService.i("USER CAR REPO: $userCar");
+
+    // Buat map data request terlebih dahulu dengan field yang wajib dikirim
+    Map<String, dynamic> requestBody = {
+      'licensePlate': userCar.licensePlate,
+    };
+
+    // Jika carModelYearColorId tersedia, kirim hanya field tersebut
+    if (userCar.carModelYearColorId != null) {
+      requestBody['carModelYearColorId'] = userCar.carModelYearColorId;
+    } else {
+      // Jika carModelYearColorId null, maka kirim carModelYearId dan colorId
+      requestBody['carModelYearId'] = userCar.carModelYearColor?.carModelYearId;
+      requestBody['colorId'] = userCar.carModelYearColor?.colorId;
+    }
+
     final result = await apiClient.post<UserCar>(
       ApiConstant.userCarsPath,
-      {
-        'carModelYearColorId': userCar.carModelYearColorId,
-        'licensePlate': userCar.licensePlate,
-      },
+      requestBody,
       isMultiPart: true,
       imageFiles: imageFiles,
       keyImageFile: keyImageFile,
       fromJson: (json) => UserCar.fromMap(json),
       cancelToken: cancelToken,
     );
+
     return await handleApiResponse(result, isGet: false);
   }
 
@@ -61,12 +75,21 @@ class UserCarRepo {
     CancelToken cancelToken,
     List<String> deletedImagesUrl,
   ) async {
+    Map<String, dynamic> requestBody = {
+      'licensePlate': userCar.licensePlate,
+    };
+    if (userCar.carModelYearColorId != null) {
+      requestBody['carModelYearColorId'] = userCar.carModelYearColorId;
+    } else {
+      requestBody['carModelYearId'] = userCar.carModelYearColor?.carModelYearId;
+      requestBody['colorId'] = userCar.carModelYearColor?.colorId;
+    }
     final result = await apiClient.patch<UserCar>(
       "${ApiConstant.userCarsPath}/${userCar.id}",
       {
-        'carModelYearColorId': userCar.carModelYearColorId,
-        'licensePlate': userCar.licensePlate,
-        'deleteImages': jsonEncode(deletedImagesUrl),
+        ...requestBody,
+        if (deletedImagesUrl.isNotEmpty)
+          'deleteImages': jsonEncode(deletedImagesUrl),
       },
       isMultiPart: true,
       imageFiles: imageFiles,

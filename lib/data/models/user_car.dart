@@ -7,7 +7,7 @@ import 'package:paint_car/data/models/car_model_year_color.dart';
 class UserCar {
   final String? id;
   final String? userId;
-  final String carModelYearColorId;
+  final String? carModelYearColorId;
   final String licensePlate;
   final List<String?>? carImages;
   final DateTime createdAt;

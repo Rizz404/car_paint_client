@@ -99,7 +99,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
       );
       return;
     }
-    await context.read<UserOrdersCubit>().createOrderPaymentRequest(
+    await context.read<UserOrdersCubit>().createOrder(
           widget.selectedUserCarId,
           selectedPaymentMethod!.id!,
           widget.workshopId,

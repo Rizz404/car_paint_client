@@ -58,7 +58,7 @@ class ConfigurationTheme {
       focusedErrorBorder: OutlineInputBorder(
         borderSide: const BorderSide(
           width: 1.5,
-          color: CustomColors.border,
+          color: Colors.red,
         ),
         borderRadius: BorderRadius.circular(10),
       ),
@@ -74,8 +74,9 @@ class ConfigurationTheme {
         borderRadius: BorderRadius.circular(10),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(
+        borderSide: BorderSide(
           width: 1.5,
+          color: Colors.grey.shade300,
         ),
         borderRadius: BorderRadius.circular(10),
       ),

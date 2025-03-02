@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/data/models/user_car.dart';
+import 'package:paint_car/data/models/user_model.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
 import 'package:paint_car/features/(user)/car/pages/user_car_page.dart';
 import 'package:paint_car/features/(user)/financial/pages/user_history_page.dart';
 import 'package:paint_car/features/(user)/financial/pages/user_orders_page.dart';
+import 'package:paint_car/features/(user)/profile/pages/profile_page.dart';
 import 'package:paint_car/features/(user)/widgets/home/card_link_section.dart';
 import 'package:paint_car/features/(user)/widgets/home/card_mini_link_section.dart';
 import 'package:paint_car/features/(user)/workshop/pages/user_workshops_page.dart';
@@ -14,7 +17,9 @@ import 'package:paint_car/ui/shared/state_handler.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 
 class ServiceSection extends StatelessWidget {
-  const ServiceSection({super.key, required this.onRetry});
+  const ServiceSection({super.key, required this.onRetry, this.user});
+  final UserWithProfile? user;
+
   final Future<void> Function() onRetry;
 
   firstService() {
@@ -32,6 +37,19 @@ class ServiceSection extends StatelessWidget {
                 type: SnackBarType.warning,
               );
               Navigator.of(context).push(UserCarPage.route());
+              return;
+            }
+            if (user?.userProfile?.phoneNumber == null) {
+              SnackBarUtil.showSnackBar(
+                context: context,
+                message: "Harus input nomor telepon dulu untuk order",
+                type: SnackBarType.warning,
+              );
+              if (user == null) return;
+
+              Navigator.of(context).push(
+                ProfilePage.route(user: user!),
+              );
               return;
             }
             Navigator.of(context).push(UserWorkshopsPage.route());

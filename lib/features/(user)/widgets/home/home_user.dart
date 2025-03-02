@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/data/models/user_car.dart';
 import 'package:paint_car/data/utils/user_extension.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
 import 'package:paint_car/features/(user)/car/pages/user_car_page.dart';
 import 'package:paint_car/features/(user)/profile/pages/profile_page.dart';
@@ -10,6 +11,7 @@ import 'package:paint_car/features/(user)/widgets/home/service_section.dart';
 import 'package:paint_car/features/(user)/workshop/pages/user_workshops_page.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
+import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 
@@ -37,17 +39,7 @@ class _HomeUserState extends State<HomeUser> {
               Navigator.of(context).push(UserCarPage.route());
               return;
             }
-            if (context.currentUser?.userProfile?.phoneNumber == null) {
-              SnackBarUtil.showSnackBar(
-                context: context,
-                message: "Harus input nomor telepon dulu untuk order",
-                type: SnackBarType.warning,
-              );
-              Navigator.of(context).push(
-                ProfilePage.route(user: context.currentUser!),
-              );
-              return;
-            }
+
             Navigator.of(context).push(UserWorkshopsPage.route());
           },
           text: "Order Disini",
@@ -73,8 +65,8 @@ class _HomeUserState extends State<HomeUser> {
               const BannerSlider(),
               ServiceSection(
                 onRetry: widget.onRetry,
+                user: context.currentUser,
               ),
-              // buttonOrder(),
             ],
           ),
         ),
