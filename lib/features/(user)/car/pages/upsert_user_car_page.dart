@@ -88,25 +88,23 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
             .userCar!.carModelYearColor!.carModelYear!.carModel!.carBrand!.id;
         selectedCarColorId = widget.userCar!.carModelYearColor!.color!.id;
         await _loadExistingImages();
-        await getBrands();
-        await getColors();
-        if (selectedCarBrandId != null) {
-          await getModelsByBrandId(selectedCarBrandId!);
-        }
-        if (selectedCarModelId != null) {
-          await getModelYearsByModelId(selectedCarModelId!);
-        }
-        if (selectedCarModelYearId != null && selectedCarColorId != null) {
-          await getModelYearColors(
-            selectedCarModelYearId!,
-            selectedCarColorId!,
-          );
-        }
+        await Future.wait([
+          getBrands(),
+          getColors(),
+          if (selectedCarBrandId != null)
+            getModelsByBrandId(selectedCarBrandId!),
+          if (selectedCarModelId != null)
+            getModelYearsByModelId(selectedCarModelId!),
+          if (selectedCarModelYearId != null && selectedCarColorId != null)
+            getModelYearColors(selectedCarModelYearId!, selectedCarColorId!),
+        ]);
 
         return;
       }
-      await getBrands();
-      await getColors();
+      await Future.wait([
+        getBrands(),
+        getColors(),
+      ]);
     });
   }
 
@@ -254,7 +252,8 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
         );
   }
 
-  Future<void> getModelsByBrandId(String brandId) async {
+  Future<void> getModelsByBrandId(String? brandId) async {
+    if (brandId == null) return;
     await context.read<CarModelsCubit>().getModelsByBrandId(
           brandId,
           1,
@@ -263,7 +262,8 @@ class _UpsertUserCarPageState extends State<UpsertUserCarPage> {
         );
   }
 
-  Future<void> getModelYearsByModelId(String modelId) async {
+  Future<void> getModelYearsByModelId(String? modelId) async {
+    if (modelId == null) return;
     await context.read<CarModelYearsCubit>().getModelYearsByCarModel(
           modelId,
           1,

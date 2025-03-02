@@ -136,7 +136,6 @@ class CarModelYearsCubit extends Cubit<BaseState> with Cancelable {
               ),
               null));
         },
-        withLoading: false,
       );
     } catch (e) {
       emit(BaseErrorState(message: e.toString()));

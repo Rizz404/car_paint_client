@@ -49,7 +49,7 @@ class _AnimatedStateHandlerState<C extends Cubit<BaseState>, T>
 
   void _performRequest() {
     if (!_hasRequested && widget.show) {
-      widget.onRetry();
+      Future.microtask(() => widget.onRetry());
       _hasRequested = true;
     }
   }

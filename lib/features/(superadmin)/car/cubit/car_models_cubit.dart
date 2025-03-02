@@ -136,7 +136,6 @@ class CarModelsCubit extends Cubit<BaseState> with Cancelable {
               ),
               null));
         },
-        withLoading: false,
       );
     } catch (e) {
       emit(BaseErrorState(message: 'Unexpected error: $e'));

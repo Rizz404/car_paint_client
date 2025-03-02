@@ -130,7 +130,6 @@ class CarModelYearColorCubit extends Cubit<BaseState> with Cancelable {
             ),
             null));
       },
-      withLoading: false,
     );
   }
 
