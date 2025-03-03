@@ -80,7 +80,7 @@ class UserOrdersRepo {
     String orderId,
   ) async {
     final result = await apiClient.patch<void>(
-      "${ApiConstant.ordersUserCancelPath}/$orderId",
+      "${ApiConstant.ordersCancel}/$orderId",
       {},
       cancelToken: cancelToken,
     );

@@ -97,7 +97,7 @@ class _UpsertCarBrandsPageState extends State<UpsertCarBrandsPage> {
             updatedAt: widget.carBrand!.updatedAt,
           ),
           _selectedImage,
-          _cancelToken);
+          _cancelToken,);
     } else {
       context.read<CarBrandsCubit>().saveBrand(
             CarBrand(

@@ -80,11 +80,13 @@ extension PaymentStatusExtension on PaymentStatus {
 }
 
 enum PaymentMethodType {
+  CARD,
+  DIRECT_DEBIT,
   EWALLET,
-  BANK_TRANSFER,
-  CREDIT_CARD,
-  RETAIL_OUTLET,
-  QRIS,
+  OVER_THE_COUNTER,
+  QR_CODE,
+  VIRTUAL_ACCOUNT,
+  UNKNOWN_ENUM_VALUE,
 }
 
 extension PaymentMethodTypeExtension on PaymentMethodType {

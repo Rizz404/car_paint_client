@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:paint_car/data/models/car_workshop.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(user)/workshop/pages/user_detail_workshops_page.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/extension/padding.dart';

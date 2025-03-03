@@ -54,9 +54,9 @@ class ETicket {
 
   factory ETicket.fromMap(Map<String, dynamic> map) {
     return ETicket(
-      id: map['id'] != null ? map['id'] as String : null,
-      userId: map['userId'] != null ? map['userId'] as String : null,
-      orderId: map['orderId'] != null ? map['orderId'] as String : null,
+      id: map['id'] != null ? map['id'] as String : '',
+      userId: map['userId'] != null ? map['userId'] as String : '',
+      orderId: map['orderId'] != null ? map['orderId'] as String : '',
       ticketNumber: map['ticketNumber'] as int,
       // order: map['order'] != null
       //     ? Orders.fromMap(map['order'] as Map<String, dynamic>)

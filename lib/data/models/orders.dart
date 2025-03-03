@@ -96,41 +96,36 @@ class Orders {
 
   factory Orders.fromMap(Map<String, dynamic> map) {
     return Orders(
-      id: map['id'] != null ? map['id'] as String? : '',
-      userId: map['userId'] != null ? map['userId'] as String? : '',
-      userCarId: map['userCarId'] != null ? map['userCarId'] as String? : '',
-      workshopId: map['workshopId'] != null ? map['workshopId'] as String? : '',
-      transactionId:
-          map['transactionId'] != null ? map['transactionId'] as String? : '',
+      id: map['id'] as String? ?? '',
+      userId: map['userId'] as String? ?? '',
+      userCarId: map['userCarId'] as String? ?? '',
+      workshopId: map['workshopId'] as String? ?? '',
+      transactionId: map['transactionId'] as String? ?? '',
       workStatus: map['workStatus'] != null
           ? WorkStatusExtension.fromMap(map['workStatus'] as String)
           : WorkStatus.INSPECTION,
       orderStatus: map['orderStatus'] != null
           ? OrderStatusExtension.fromMap(map['orderStatus'] as String)
           : OrderStatus.DRAFT,
-      note: map['note'] != null ? map['note'] as String? : '',
+      note: map['note'] as String? ?? '',
       carServices: map['carServices'] != null
           ? List<CarService?>.from(
               (map['carServices'] as List<dynamic>).map<CarService?>(
-                (x) => CarService?.fromMap(x as Map<String, dynamic>),
+                (x) => CarService.fromMap(x as Map<String, dynamic>),
               ),
             )
           : null,
       eTicket: map['eTickets'] != null
           ? List<ETicket?>.from(
               (map['eTickets'] as List<dynamic>).map<ETicket?>(
-                (x) => x != null
-                    ? ETicket.fromMap(x as Map<String, dynamic>)
-                    : null,
+                (x) => ETicket.fromMap(x as Map<String, dynamic>),
               ),
             )
           : [], // Mengembalikan list kosong daripada null
-
       workshop: map['workshop'] != null
           ? CarWorkshop.fromMap(map['workshop'] as Map<String, dynamic>)
           : null,
-      subtotalPrice:
-          map['subtotalPrice'] != null ? map['subtotalPrice'] as String? : '',
+      subtotalPrice: map['subtotalPrice'] as String? ?? '',
       createdAt: map['createdAt'] != null
           ? DateTime.parse(map['createdAt'] as String)
           : null,

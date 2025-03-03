@@ -23,6 +23,7 @@ class ErrorStateWidget extends StatelessWidget {
           MainText(
             text: message,
             textAlign: TextAlign.center,
+            maxLines: 3,
           ),
           if (isRetrying)
             const CircularProgressIndicator()

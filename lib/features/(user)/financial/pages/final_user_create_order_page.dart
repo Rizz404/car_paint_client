@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 import 'package:paint_car/data/models/payment_method.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 
 import 'package:paint_car/features/(superadmin)/financial/cubit/payment_method_cubit.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_orders_cubit.dart';
-import 'package:paint_car/features/(user)/financial/pages/user_transactions_page.dart';
 import 'package:paint_car/features/home/pages/home_page.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
@@ -311,6 +311,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                     onRetry: () => getPaymentMethods(),
                     onSuccess: (context, data, _) {
                       final paymentMethods = data.data;
+                      LogService.i("Payment Methods: $paymentMethods");
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         spacing: 8,

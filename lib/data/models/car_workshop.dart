@@ -68,9 +68,9 @@ class CarWorkshop {
 
   factory CarWorkshop.fromMap(Map<String, dynamic> map) {
     return CarWorkshop(
-      id: map['id'] != null ? map['id'] as String : null,
-      name: map['name'] as String,
-      address: map['address'],
+      id: map['id'] != null ? map['id'] as String : '',
+      name: map['name'] != null ? map['name'] as String : '',
+      address: map['address'] != null ? map['address'] as String : '',
       email: map['email'] != null ? map['email'] as String : '',
       phoneNumber: map['phone_number'] != null
           ? map['phone_number'] as String? ?? ''

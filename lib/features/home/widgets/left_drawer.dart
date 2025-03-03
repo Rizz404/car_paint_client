@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/data/models/enums/user_role.dart';
 import 'package:paint_car/data/utils/user_extension.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(user)/car/pages/user_car_page.dart';
 import 'package:paint_car/features/home/home_constants.dart';
 import 'package:paint_car/features/home/widgets/actual_link.dart';
@@ -9,10 +8,8 @@ import 'package:paint_car/features/home/widgets/actual_link.dart';
 import 'package:paint_car/features/home/widgets/main_dropdown.dart';
 import 'package:paint_car/features/home/widgets/title_link.dart';
 import 'package:paint_car/ui/common/dropdown_state.dart';
-import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/circle_image_network.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
-import 'package:paint_car/ui/utils/snack_bar.dart';
 
 class LeftDrawer extends StatelessWidget {
   LeftDrawer({super.key});
@@ -73,7 +70,7 @@ class LeftDrawer extends StatelessWidget {
     BuildContext context,
   ) {
     return [
-      TitleLink(
+      const TitleLink(
         text: "Menu Car",
       ),
       ActualLink(

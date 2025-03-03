@@ -154,7 +154,7 @@ class UserOrdersCubit extends Cubit<BaseState> with Cancelable {
       emit,
       // TODO: REMOVE THIS OLD ONE
       // () => userOrdersRepo.cancelOrder(cancelToken, orderId),
-      () => userOrdersRepo.cancelOrderPaymentRequest(cancelToken, orderId),
+      () => userOrdersRepo.cancelOrder(cancelToken, orderId),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),
         getOrders(1, cancelToken),
