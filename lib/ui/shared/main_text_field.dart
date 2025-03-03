@@ -15,6 +15,7 @@ class MainTextField extends StatelessWidget {
   final void Function(String)? onChanged;
   final bool isOutlined;
   final double borderRadius;
+  final String? prefixText;
   const MainTextField({
     super.key,
     required this.controller,
@@ -30,6 +31,7 @@ class MainTextField extends StatelessWidget {
     this.isEnabled = true,
     this.isOutlined = true,
     this.borderRadius = 10,
+    this.prefixText,
   });
 
   @override
@@ -45,6 +47,7 @@ class MainTextField extends StatelessWidget {
         hintText: hintText,
         suffixIcon: trailingIcon,
         prefixIcon: leadingIcon,
+        prefixText: prefixText,
         enabled: isEnabled,
         border: isOutlined
             ? OutlineInputBorder(

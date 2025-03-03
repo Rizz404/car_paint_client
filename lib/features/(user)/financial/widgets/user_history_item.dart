@@ -134,7 +134,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
     // Capitalize with proper spacing for payment methods
     switch (name.toUpperCase()) {
       case 'SHOPEEPAY':
-        return 'ShopeePay';
+        return ' ShopeePay';
       case 'GOPAY':
         return 'GoPay';
       case 'BCA':
@@ -225,7 +225,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _keyValue(
-                  'Pembayaran',
+                  'Pembayaran ',
                   _getPaymentMethodName(transactions.paymentMethod?.name),
                 ),
                 if (hasNote) ...[
@@ -324,7 +324,8 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+                      color: theme.colorScheme.surfaceContainerHighest
+                          .withOpacity(0.3),
                       borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(8),
                         bottomRight: Radius.circular(8),

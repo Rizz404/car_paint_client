@@ -244,9 +244,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     MainTextField(
                       controller: phoneNumberController,
                       hintText: "Enter phone number",
+                      prefixText: "+62 ",
                       leadingIcon: const Icon(Icons.phone),
                       isEnabled: state is! BaseLoadingState,
-                      validator: numberValidator,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Phone number tidak boleh kosong";
+                        } else if (value.startsWith("0")) {
+                          return "Nomor telepon tidak boleh diawali 0";
+                        }
+                        return null;
+                      },
                       keyboardType: TextInputType.phone,
                     ),
                     MainTextField(
