@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 import 'package:paint_car/data/models/payment_method.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
@@ -183,7 +184,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
       color: isSelected
           ? Theme.of(context).colorScheme.secondary
           : Theme.of(context).colorScheme.secondary.withValues(
-                alpha: 0.7,
+                alpha: 5,
               ),
       borderOnForeground: false,
       child: ListTile(
@@ -311,7 +312,6 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                     onRetry: () => getPaymentMethods(),
                     onSuccess: (context, data, _) {
                       final paymentMethods = data.data;
-                      LogService.i("Payment Methods: $paymentMethods");
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         spacing: 8,

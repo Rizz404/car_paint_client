@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 import 'package:paint_car/data/models/transactions.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
@@ -64,8 +65,6 @@ class UserTransactionsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    LogService.i("TRANSACTION ITEM: $transactions");
-
     final hasVirtualAccount =
         transactions.paymentdetail?.virtualAccountNumber != null;
     final isPending =
@@ -102,7 +101,6 @@ class UserTransactionsItem extends StatelessWidget {
                       Icon(
                         Icons.receipt_long_rounded,
                         size: 20,
-                        color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(width: 8),
                       MainText(
@@ -111,7 +109,6 @@ class UserTransactionsItem extends StatelessWidget {
                         customTextStyle: const TextStyle(
                           fontWeight: FontWeight.w600,
                         ),
-                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ],
                   ),
@@ -277,7 +274,6 @@ class UserTransactionsItem extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                             fontSize: 16,
                           ),
-                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ],
                     ),
@@ -288,8 +284,7 @@ class UserTransactionsItem extends StatelessWidget {
                       child: TextButton(
                         onPressed: () => _handleTap(context),
                         style: TextButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
+                          backgroundColor: CustomColors.secondaryBlue,
                           foregroundColor:
                               Theme.of(context).colorScheme.onPrimary,
                           shape: RoundedRectangleBorder(

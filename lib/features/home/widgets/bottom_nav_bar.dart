@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -17,8 +18,9 @@ class BottomNavBar extends StatelessWidget {
       iconSize: 28,
       elevation: 0.0,
       onTap: onItemTapped,
-      selectedItemColor: Theme.of(context).colorScheme.primary,
-      unselectedItemColor: Theme.of(context).disabledColor,
+      selectedItemColor: CustomColors.secondaryBlue,
+      unselectedItemColor: CustomColors.tertiaryGray,
+      showUnselectedLabels: true,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -26,9 +28,14 @@ class BottomNavBar extends StatelessWidget {
           tooltip: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
-          label: 'Settings',
-          tooltip: 'Settings',
+          icon: Icon(Icons.book),
+          label: 'My Booking',
+          tooltip: 'My Booking',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.message),
+          label: 'Message',
+          tooltip: 'Message',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),

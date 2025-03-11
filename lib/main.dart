@@ -143,9 +143,35 @@ class MyApp extends StatelessWidget {
         drawerTheme: DrawerThemeData(
           backgroundColor: Theme.of(context).colorScheme.surfaceDim,
         ),
+        bottomSheetTheme: const BottomSheetThemeData(
+          backgroundColor: CustomColors.white,
+        ),
+        dialogTheme: const DialogThemeData(
+          backgroundColor: CustomColors.white,
+        ),
         cardTheme: const CardTheme(
           color: const Color(0xF2F2F2F2),
           elevation: 1,
+        ),
+        checkboxTheme: CheckboxThemeData(
+          checkColor: WidgetStateProperty.all(
+            CustomColors.secondaryBlue,
+          ),
+          fillColor: WidgetStateProperty.all(
+            CustomColors.white,
+          ),
+          overlayColor: WidgetStateProperty.all(
+            CustomColors.white,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+            side: const BorderSide(
+              color: CustomColors.secondaryBlue,
+            ),
+          ),
+          side: const BorderSide(
+            color: CustomColors.secondaryBlue,
+          ),
         ),
       ),
       home: const AuthWrapper(),

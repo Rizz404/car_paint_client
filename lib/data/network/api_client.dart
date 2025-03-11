@@ -64,6 +64,7 @@ class ApiClient {
       }
       final headers = await _getHeaders(isMultiPart);
       LogService.i('POST request to $uri');
+      LogService.i('body: $body');
 
       if (isMultiPart && imageFiles != null) {
         return _sendMultipartRequest<T>(

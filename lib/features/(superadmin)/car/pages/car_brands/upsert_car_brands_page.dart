@@ -89,15 +89,16 @@ class _UpsertCarBrandsPageState extends State<UpsertCarBrandsPage> {
   void _performAction() {
     if (isUpdate) {
       context.read<CarBrandsCubit>().updateBrand(
-          CarBrand(
-            id: widget.carBrand!.id,
-            name: nameController.text,
-            country: countryController.text,
-            createdAt: widget.carBrand!.createdAt,
-            updatedAt: widget.carBrand!.updatedAt,
-          ),
-          _selectedImage,
-          _cancelToken,);
+            CarBrand(
+              id: widget.carBrand!.id,
+              name: nameController.text,
+              country: countryController.text,
+              createdAt: widget.carBrand!.createdAt,
+              updatedAt: widget.carBrand!.updatedAt,
+            ),
+            _selectedImage,
+            _cancelToken,
+          );
     } else {
       context.read<CarBrandsCubit>().saveBrand(
             CarBrand(

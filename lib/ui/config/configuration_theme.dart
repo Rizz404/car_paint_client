@@ -26,8 +26,8 @@ class ConfigurationTheme {
 
   static ColorScheme get colorScheme {
     return ColorScheme.fromSeed(
-      seedColor: const Color(0xFFE63B2A),
-      primary: const Color(0xFFE63B2A),
+      seedColor: const Color(0xFF2291FF),
+      primary: const Color(0xFF2291FF),
       onPrimary: const Color(0xFFFFFFFF),
       surface: const Color(0xFFFFFFFF),
       secondary: const Color(0xF2F2F2F2),
@@ -157,6 +157,7 @@ class ConfigurationTheme {
   static ElevatedButtonThemeData get elevatedButtonTheme {
     return ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
+        backgroundColor: CustomColors.blue,
         minimumSize: const Size(double.infinity, 56),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),

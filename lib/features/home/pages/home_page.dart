@@ -5,6 +5,8 @@ import 'package:paint_car/data/models/enums/user_role.dart';
 import 'package:paint_car/data/utils/user_extension.dart';
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
 import 'package:paint_car/features/(user)/widgets/home/home_user.dart';
+import 'package:paint_car/features/home/pages/message_page.dart';
+import 'package:paint_car/features/home/pages/my_booking_page.dart';
 import 'package:paint_car/features/home/pages/settings_page.dart';
 import 'package:paint_car/features/home/pages/user_page.dart';
 import 'package:paint_car/features/home/widgets/bottom_nav_bar.dart';
@@ -69,11 +71,11 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return "Home";
       case 1:
-        return "Settings";
+        return "My Booking";
       case 2:
-        return "User";
-      default:
-        return "Home";
+        return "Message";
+      case 3:
+        return "Profile";
     }
   }
 
@@ -97,7 +99,9 @@ class _HomePageState extends State<HomePage> {
       drawer: drawerBasedOnRole(),
       body: [
         _buildHomePage(),
-        const SettingsPage(),
+        // TODO: DESIGN BOOKING AND MESSAGE PAGE
+        const MyBookingPage(),
+        const MessagePage(),
         const UserPage(),
       ][_selectedIndex],
     );

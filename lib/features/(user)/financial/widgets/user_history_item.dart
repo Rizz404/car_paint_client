@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 import 'package:paint_car/data/models/transactions.dart';
 import 'package:paint_car/features/shared/utils/currency_formatter.dart';
@@ -185,9 +186,8 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                 MainText(
                   text: 'Invoice #${transactions.id.substring(0, 8)}',
                   extent: const Medium(),
-                  customTextStyle: TextStyle(
+                  customTextStyle: const TextStyle(
                     fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.primary,
                   ),
                 ),
 
@@ -218,8 +218,8 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
           // Informasi Utama
           Container(
             padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+            decoration: const BoxDecoration(
+              color: CustomColors.aliceBlue,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,13 +258,13 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withOpacity(0.1),
+                      color: CustomColors.aliceBlue,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.store,
-                      color: theme.colorScheme.primary,
                       size: 24,
+                      color: CustomColors.secondaryRed,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -323,10 +323,9 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                 ),
                 children: [
                   Container(
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceContainerHighest
-                          .withOpacity(0.3),
-                      borderRadius: const BorderRadius.only(
+                    decoration: const BoxDecoration(
+                      color: CustomColors.aliceBlue,
+                      borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(8),
                         bottomRight: Radius.circular(8),
                       ),
@@ -356,9 +355,8 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                             text: CurrencyFormatter.toRupiah(
                               int.parse(carService.price),
                             ),
-                            customTextStyle: TextStyle(
+                            customTextStyle: const TextStyle(
                               fontWeight: FontWeight.w600,
-                              color: theme.colorScheme.primary,
                             ),
                           ),
                         );
@@ -374,9 +372,9 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
           // Total
           Container(
             padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withOpacity(0.05),
-              borderRadius: const BorderRadius.only(
+            decoration: const BoxDecoration(
+              color: CustomColors.aliceBlue,
+              borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(16),
                 bottomRight: Radius.circular(16),
               ),
@@ -398,10 +396,9 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                   ),
                   textAlign: TextAlign.end,
                   extent: const Medium(),
-                  customTextStyle: TextStyle(
+                  customTextStyle: const TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
-                    color: theme.colorScheme.primary,
                   ),
                 ),
               ],

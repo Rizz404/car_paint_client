@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
@@ -8,7 +9,7 @@ class MainElevatedButton extends StatelessWidget {
     this.isLoading = false,
     required this.onPressed,
     required this.text,
-    this.bgColor,
+    this.bgColor = CustomColors.secondaryBlue,
     this.extent = const Medium(),
     this.width = double.infinity,
     this.height = 46.0,
@@ -31,9 +32,11 @@ class MainElevatedButton extends StatelessWidget {
       onPressed: isLoading ? null : onPressed,
       style: ButtonStyle(
         backgroundColor: isLoading
-            ? WidgetStateProperty.all(Colors.grey)
+            ? WidgetStateProperty.all(
+                CustomColors.gray,
+              )
             : WidgetStateProperty.all(
-                bgColor ?? Theme.of(context).colorScheme.primary,
+                bgColor ?? CustomColors.secondaryBlue,
               ),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(

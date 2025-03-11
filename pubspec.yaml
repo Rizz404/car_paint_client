@@ -109,9 +109,23 @@ flutter:
     - assets/images/something_went_wrong.png
     - assets/images/whatsapp.svg
     - assets/images/white_bg.jpg
-    - assets/images/logo_nikken_red.png
+    - assets/images/logo/logo_nikken_red.png
     - assets/images/banner/banner-1.jpg
     - assets/images/banner/banner-2.jpg
+    - assets/images/car/red_car.png
+    - assets/images/motorcycle/red_motorcycle.png
+    - assets/images/car/black_car_hood.png
+    - assets/images/car/black_car_bumper.png
+    - assets/images/car/black_car_door.png
+    - assets/images/car/black_car_fender.png
+    - assets/images/car/black_car_front_bumper.png
+    - assets/images/car/black_car_full_body.png
+    - assets/images/car/black_car_roof.png
+    - assets/images/car/black_car_trunk.png
+    - assets/images/car/location_code_color_car_1.png
+    - assets/images/car/location_code_color_car_2.png
+    - assets/images/workshop/automotive.png
+    - assets/images/workshop/automotive_2.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
