@@ -91,12 +91,13 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
-      appBar: mainAppBar(_title()),
+      // appBar: mainAppBar(_title()),
       bottomNavigationBar: BottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
       ),
       drawer: drawerBasedOnRole(),
+
       body: [
         _buildHomePage(),
         // TODO: DESIGN BOOKING AND MESSAGE PAGE

@@ -197,7 +197,6 @@ class _MessagePageState extends State<MessagePage>
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        spacing: 8,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Tab Bar
@@ -304,7 +303,7 @@ class _MessagePageState extends State<MessagePage>
             ),
           ),
         ],
-      ),
+      ).paddingSymmetric(vertical: 24),
     );
   }
 

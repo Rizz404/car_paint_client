@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/features/home/widgets/user_history_in_booking.dart';
 import 'package:paint_car/features/home/widgets/user_transactions_in_booking.dart';
+import 'package:paint_car/ui/extension/padding.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
 class MyBookingPage extends StatefulWidget {
@@ -70,7 +71,7 @@ class _MyBookingPageState extends State<MyBookingPage>
             ),
           ),
         ],
-      ),
+      ).paddingSymmetric(vertical: 24),
     );
   }
 }

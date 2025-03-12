@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
 class ErrorStateWidget extends StatelessWidget {
@@ -34,7 +35,10 @@ class ErrorStateWidget extends StatelessWidget {
                   onRetry();
                 }
               },
-              child: const Text('Retry'),
+              child: const Text(
+                'Retry',
+                style: TextStyle(color: CustomColors.white),
+              ),
             ),
         ],
       ),
