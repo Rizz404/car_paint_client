@@ -129,19 +129,16 @@ class _MessagePageState extends State<MessagePage>
         id: '1',
         title: 'Pengecetan dengan no. order 121212121',
         time: 'Now',
-        isRead: false,
       ),
       NotificationItem(
         id: '2',
         title: 'Promo Ramadan NIKKEN untuk...',
         time: 'Now',
-        isRead: false,
       ),
       NotificationItem(
         id: '3',
         title: 'Pengecetan dengan no. order 121212121',
         time: 'Now',
-        isRead: false,
       ),
       NotificationItem(
         id: '4',
@@ -220,86 +217,90 @@ class _MessagePageState extends State<MessagePage>
           ),
 
           // Tab Content
-          SizedBox(
-            height: MediaQuery.of(context).size.height -
-                120, // Adjust height for status bar
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                // Messages Tab
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _bengkelList.length,
-                  separatorBuilder: (context, index) =>
-                      const Divider(height: 1).paddingSymmetric(horizontal: 16),
-                  itemBuilder: (context, index) {
-                    final bengkel = _bengkelList[index];
-                    final lastMessage = bengkel.messages.last;
-                    return _buildBengkelItem(
-                      bengkel: bengkel,
-                      logoAsset: bengkel.logoAsset,
-                      nama: bengkel.name,
-                      pesan: lastMessage.text,
-                      waktu: _getTimeDisplay(lastMessage.time),
-                      notifCount: index == 0 ? 1 : null,
-                      onTap: () {
-                        // Navigasi ke detail pesan
-                        Navigator.push(
-                          context,
-                          ChatDetailPage.route(bengkel),
-                        );
-                      },
-                    );
-                  },
-                ),
-
-                // Notifications Tab
-                _notifications.isEmpty
-                    ? const Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.notifications_none,
-                              size: 80,
-                              color: Colors.grey,
-                            ),
-                            SizedBox(height: 16),
-                            MainText(
-                              text: 'Belum ada notifikasi',
-                            ),
-                          ],
-                        ),
-                      )
-                    : ListView.separated(
-                        itemCount: _notifications.length,
-                        separatorBuilder: (context, index) => const Divider(
-                          height: 1,
-                          thickness: 1,
-                          color: Color(0xFFEEEEEE),
-                        ),
-                        itemBuilder: (context, index) {
-                          final notif = _notifications[index];
-                          return _buildNotificationItem(
-                            notification: notif,
-                            onTap: () {
-                              setState(() {
-                                // Mark notification as read when tapped
-                                _notifications[index] = NotificationItem(
-                                  id: notif.id,
-                                  title: notif.title,
-                                  time: notif.time,
-                                  isRead: true,
-                                );
-                              });
-                              // Handle notification tap
-                              // You could navigate to a specific page based on notification type
-                            },
+          Container(
+            child: SizedBox(
+              height: MediaQuery.of(context)
+                  .size
+                  .height, // Adjust height for status bar
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  // Messages Tab
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _bengkelList.length,
+                    separatorBuilder: (context, index) =>
+                        const Divider(height: 1)
+                            .paddingSymmetric(horizontal: 16),
+                    itemBuilder: (context, index) {
+                      final bengkel = _bengkelList[index];
+                      final lastMessage = bengkel.messages.last;
+                      return _buildBengkelItem(
+                        bengkel: bengkel,
+                        logoAsset: bengkel.logoAsset,
+                        nama: bengkel.name,
+                        pesan: lastMessage.text,
+                        waktu: _getTimeDisplay(lastMessage.time),
+                        notifCount: index == 0 ? 1 : null,
+                        onTap: () {
+                          // Navigasi ke detail pesan
+                          Navigator.push(
+                            context,
+                            ChatDetailPage.route(bengkel),
                           );
                         },
-                      ),
-              ],
+                      );
+                    },
+                  ),
+
+                  // Notifications Tab
+                  _notifications.isEmpty
+                      ? const Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.notifications_none,
+                                size: 80,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(height: 16),
+                              MainText(
+                                text: 'Belum ada notifikasi',
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.separated(
+                          itemCount: _notifications.length,
+                          separatorBuilder: (context, index) => const Divider(
+                            height: 1,
+                            thickness: 1,
+                            color: Color(0xFFEEEEEE),
+                          ),
+                          itemBuilder: (context, index) {
+                            final notif = _notifications[index];
+                            return _buildNotificationItem(
+                              notification: notif,
+                              onTap: () {
+                                setState(() {
+                                  // Mark notification as read when tapped
+                                  _notifications[index] = NotificationItem(
+                                    id: notif.id,
+                                    title: notif.title,
+                                    time: notif.time,
+                                    isRead: true,
+                                  );
+                                });
+                                // Handle notification tap
+                                // You could navigate to a specific page based on notification type
+                              },
+                            );
+                          },
+                        ),
+                ],
+              ),
             ),
           ),
         ],

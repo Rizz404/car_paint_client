@@ -102,6 +102,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 16,
       children: [
         SizedBox(
           width: 85,

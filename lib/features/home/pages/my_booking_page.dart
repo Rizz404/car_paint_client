@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paint_car/core/constants/api.dart';
+import 'package:paint_car/features/(user)/financial/cubit/user_history_cubit.dart';
+import 'package:paint_car/features/(user)/financial/cubit/user_transactions_cubit.dart';
 import 'package:paint_car/features/home/widgets/user_history_in_booking.dart';
 import 'package:paint_car/features/home/widgets/user_transactions_in_booking.dart';
+import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/extension/padding.dart';
-import 'package:paint_car/ui/shared/main_text.dart';
 
 class MyBookingPage extends StatefulWidget {
   static route() =>
@@ -16,27 +20,38 @@ class MyBookingPage extends StatefulWidget {
 class _MyBookingPageState extends State<MyBookingPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late CancelToken _transactionsCancelToken;
+  late CancelToken _historyCancelToken;
 
   @override
   void initState() {
     super.initState();
+    _transactionsCancelToken = CancelToken();
+    _historyCancelToken = CancelToken();
     _tabController = TabController(length: 2, vsync: this);
+
+    // Initial load untuk kedua tab
+    context
+        .read<UserTransactionsCubit>()
+        .refresh(ApiConstant.limit, _transactionsCancelToken);
+    context
+        .read<UserHistoryCubit>()
+        .refresh(ApiConstant.limit, _historyCancelToken);
   }
 
   @override
   void dispose() {
+    _transactionsCancelToken.cancel();
+    _historyCancelToken.cancel();
     _tabController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        spacing: 8,
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Scaffold(
+      body: Column(
         children: [
-          // Tab Bar
           Container(
             decoration: BoxDecoration(
               border: Border(
@@ -55,18 +70,12 @@ class _MyBookingPageState extends State<MyBookingPage>
               indicatorWeight: 3,
             ),
           ),
-
-          // Tab Content
-          SizedBox(
-            height: MediaQuery.of(context).size.height -
-                180, // Sesuaikan ukuran sesuai kebutuhan
+          Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [
-                // Transactions Tab
-                const UserTransactionsInBooking(),
-                // History Tab
-                const UserHistoryInBooking(),
+              children: const [
+                UserTransactionsInBooking(),
+                UserHistoryInBooking(),
               ],
             ),
           ),

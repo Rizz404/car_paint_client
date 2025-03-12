@@ -113,6 +113,6 @@ class _UserPageState extends State<UserPage> {
           );
         }
       },
-    );
+    ).paddingSymmetric(vertical: 24);
   }
 }

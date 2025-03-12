@@ -1,12 +1,6 @@
-// ignore_for_file: require_trailing_commas
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/constants/api.dart';
-// ignore: unused_import
-import 'package:paint_car/data/models/e_ticket.dart';
-// ignore: unused_import
-import 'package:paint_car/data/models/payment_method.dart';
 import 'package:paint_car/data/models/transactions.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_history_cubit.dart';
@@ -18,34 +12,28 @@ import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 
 class UserHistoryInBooking extends StatefulWidget {
-  static route() =>
-      MaterialPageRoute(builder: (_) => const UserHistoryInBooking());
   const UserHistoryInBooking({super.key});
 
   @override
   State<UserHistoryInBooking> createState() => _UserHistoryInBookingState();
 }
 
-class _UserHistoryInBookingState extends State<UserHistoryInBooking> {
+class _UserHistoryInBookingState extends State<UserHistoryInBooking>
+    with AutomaticKeepAliveClientMixin {
   late final ScrollController _scrollController;
-  late final CancelToken _cancelToken;
 
-  static const int limit = ApiConstant.limit;
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    _cancelToken = CancelToken();
     _scrollController = ScrollController()..addListener(_onScroll);
-
-    context.read<UserHistoryCubit>().refresh(limit, _cancelToken);
   }
 
   @override
   void dispose() {
-    _cancelToken.cancel();
     _scrollController.dispose();
-
     super.dispose();
   }
 
@@ -64,45 +52,43 @@ class _UserHistoryInBookingState extends State<UserHistoryInBooking> {
     if (currentScroll >= maxScroll - 200 &&
         !data.isLoadingMore &&
         data.pagination.hasNextPage) {
-      cubit.loadNextPage(_cancelToken);
+      final cancelToken = CancelToken();
+      cubit.loadNextPage(cancelToken);
     }
   }
 
   void _onRefresh() {
-    context.read<UserHistoryCubit>().refresh(limit, _cancelToken);
+    final cancelToken = CancelToken();
+    context.read<UserHistoryCubit>().refresh(ApiConstant.limit, cancelToken);
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return StateHandler<UserHistoryCubit, PaginationState<Transactions>>(
       onRetry: () => _onRefresh(),
       onSuccess: (context, data, message) {
         final models = data.data;
-        // final models = [];
         if (models.isEmpty) {
           return const CommonState(
             title: 'History anda masih kosong',
           );
         }
+
         return RefreshIndicator(
-          onRefresh: () async {
-            _onRefresh();
-          },
+          onRefresh: () async => _onRefresh(),
           child: Scrollbar(
             controller: _scrollController,
-            thumbVisibility: true,
             child: CustomScrollView(
-              cacheExtent: 2000, // ! Preload area di luar viewport
               controller: _scrollController,
-              physics:
-                  const AlwaysScrollableScrollPhysics(), // buat RefreshIndicator
+              physics: const AlwaysScrollableScrollPhysics(),
               slivers: [
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (context, index) =>
-                        UserHistoryItem(transactions: models[index]),
-                    childCount: models.length,
-                  ),
+                      (context, index) => UserHistoryItem(
+                            transactions: models[index],
+                          ),
+                      childCount: models.length),
                 ),
                 if (data.isLoadingMore)
                   const SliverToBoxAdapter(
