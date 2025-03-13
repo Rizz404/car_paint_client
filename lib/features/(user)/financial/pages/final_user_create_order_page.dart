@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
+import 'package:paint_car/data/models/order_notification.dart';
 import 'package:paint_car/data/models/payment_method.dart';
+import 'package:paint_car/data/utils/user_extension.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
 
 import 'package:paint_car/features/(superadmin)/financial/cubit/payment_method_cubit.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_orders_cubit.dart';
+import 'package:paint_car/features/cubit/notification_cubit.dart';
 import 'package:paint_car/features/home/pages/home_page.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
@@ -100,6 +103,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
       );
       return;
     }
+    final userId = context.currentUser!.id;
     await context.read<UserOrdersCubit>().createOrder(
           widget.selectedUserCarId,
           selectedPaymentMethod!.id!,
@@ -107,6 +111,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
           widget.note,
           widget.carServices,
           _cancelToken,
+          userId,
         );
   }
 
@@ -227,118 +232,132 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<UserOrdersCubit, BaseState>(
-      listener: (context, state) {
-        handleFormListenerState(
-          context: context,
-          state: state,
-          onRetry: submitForm,
-          onSuccess: () {
+    return BlocListener<NotificationCubit, List<OrderNotification>>(
+        listener: (context, notifications) {
+          final latestNotification = notifications.lastOrNull;
+          LogService.i("Latest notification: $latestNotification");
+          if (latestNotification != null &&
+              latestNotification.type == 'order:created') {
+            // Handle new order notification
             SnackBarUtil.showSnackBar(
               context: context,
-              message:
-                  "Transaction created successfully, go to Transaction to pay",
+              message: 'New order created: ${latestNotification.message}',
               type: SnackBarType.success,
             );
-            Navigator.of(context).pushAndRemoveUntil(
-              HomePage.route(),
-              (_) => false,
+          }
+        },
+        child: BlocConsumer<UserOrdersCubit, BaseState>(
+          listener: (context, state) {
+            handleFormListenerState(
+              context: context,
+              state: state,
+              onRetry: submitForm,
+              onSuccess: () {
+                SnackBarUtil.showSnackBar(
+                  context: context,
+                  message:
+                      "Transaction created successfully, go to Transaction to pay",
+                  type: SnackBarType.success,
+                );
+                Navigator.of(context).pushAndRemoveUntil(
+                  HomePage.route(),
+                  (_) => false,
+                );
+              },
             );
           },
-        );
-      },
-      builder: (context, state) {
-        return Scaffold(
-          appBar: mainAppBar(
-            "Order Confirmation",
-          ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: formKey,
-              child: Column(
-                spacing: 16,
-                children: [
-                  Material(
-                    color: Theme.of(context).colorScheme.secondary,
-                    child: Column(
-                      children: [
-                        rowKeyValue(
-                          "Total Panel",
-                          "${widget.carServices.length.toString()}/${widget.totalAllServices.toString()}",
-                          isBold: true,
-                        ),
-                        Divider(
-                          color: Theme.of(context).colorScheme.surfaceDim,
-                          thickness: 1,
-                        ),
-                        rowKeyValue(
-                          "Sub Total",
-                          CurrencyFormatter.toRupiah(
-                            widget.totalPrice.toDouble(),
-                          ),
-                        ),
-                        rowKeyValue(
-                          "Fee",
-                          selectedPaymentMethod != null
-                              ? CurrencyFormatter.toRupiah(
-                                  _parseFee(selectedPaymentMethod!.fee!)
-                                      .toDouble(),
-                                )
-                              : "-",
-                        ),
-                        Divider(
-                          color: Theme.of(context).colorScheme.surfaceDim,
-                          thickness: 1,
-                        ),
-                        rowKeyValue(
-                          "Total Price",
-                          selectedPaymentMethod != null
-                              ? CurrencyFormatter.toRupiah(
-                                  (widget.totalPrice +
-                                          _parseFee(
-                                            selectedPaymentMethod!.fee!,
-                                          ))
-                                      .toDouble(),
-                                )
-                              : "-",
-                          isBold: true,
-                        ),
-                      ],
-                    ).paddingAll(),
-                  ),
-                  StateHandler<PaymentMethodCubit,
-                      PaginationState<PaymentMethod>>(
-                    onRetry: () => getPaymentMethods(),
-                    onSuccess: (context, data, _) {
-                      final paymentMethods = data.data;
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 8,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                            child: MainText(
-                              text: "Payment Methods",
-                              extent: Large(),
-                            ),
-                          ),
-                          _buildPaymentMethodSections(paymentMethods),
-                        ],
-                      );
-                    },
-                  ),
-                  MainElevatedButton(
-                    onPressed: submitForm,
-                    text: "Create",
-                    isLoading: state is BaseLoadingState,
-                  ),
-                ],
+          builder: (context, state) {
+            return Scaffold(
+              appBar: mainAppBar(
+                "Order Confirmation",
               ),
-            ),
-          ),
-        );
-      },
-    );
+              body: SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    spacing: 16,
+                    children: [
+                      Material(
+                        color: Theme.of(context).colorScheme.secondary,
+                        child: Column(
+                          children: [
+                            rowKeyValue(
+                              "Total Panel",
+                              "${widget.carServices.length.toString()}/${widget.totalAllServices.toString()}",
+                              isBold: true,
+                            ),
+                            Divider(
+                              color: Theme.of(context).colorScheme.surfaceDim,
+                              thickness: 1,
+                            ),
+                            rowKeyValue(
+                              "Sub Total",
+                              CurrencyFormatter.toRupiah(
+                                widget.totalPrice.toDouble(),
+                              ),
+                            ),
+                            rowKeyValue(
+                              "Fee",
+                              selectedPaymentMethod != null
+                                  ? CurrencyFormatter.toRupiah(
+                                      _parseFee(selectedPaymentMethod!.fee!)
+                                          .toDouble(),
+                                    )
+                                  : "-",
+                            ),
+                            Divider(
+                              color: Theme.of(context).colorScheme.surfaceDim,
+                              thickness: 1,
+                            ),
+                            rowKeyValue(
+                              "Total Price",
+                              selectedPaymentMethod != null
+                                  ? CurrencyFormatter.toRupiah(
+                                      (widget.totalPrice +
+                                              _parseFee(
+                                                selectedPaymentMethod!.fee!,
+                                              ))
+                                          .toDouble(),
+                                    )
+                                  : "-",
+                              isBold: true,
+                            ),
+                          ],
+                        ).paddingAll(),
+                      ),
+                      StateHandler<PaymentMethodCubit,
+                          PaginationState<PaymentMethod>>(
+                        onRetry: () => getPaymentMethods(),
+                        onSuccess: (context, data, _) {
+                          final paymentMethods = data.data;
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: 8,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 16),
+                                child: MainText(
+                                  text: "Payment Methods",
+                                  extent: Large(),
+                                ),
+                              ),
+                              _buildPaymentMethodSections(paymentMethods),
+                            ],
+                          );
+                        },
+                      ),
+                      MainElevatedButton(
+                        onPressed: submitForm,
+                        text: "Create",
+                        isLoading: state is BaseLoadingState,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        ));
   }
 }

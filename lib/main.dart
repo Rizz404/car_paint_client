@@ -1,10 +1,13 @@
 // ignore_for_file: unused_import
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/car_model_year_color.dart';
+import 'package:paint_car/dependencies/services/socket.dart';
 import 'package:paint_car/features/(admin)/cubit/admin_orders_cubit.dart';
 import 'package:paint_car/features/(guest)/auth/cubit/auth_cubit.dart';
 import 'package:paint_car/features/(guest)/auth/pages/login_page.dart';
@@ -30,10 +33,39 @@ import 'package:paint_car/features/(user)/financial/cubit/user_transactions_cubi
 import 'package:paint_car/features/(user)/financial/user_e_tickets_cubit.dart';
 import 'package:paint_car/features/(user)/profile/cubit/profile_cubit.dart';
 import 'package:paint_car/features/(user)/workshop/cubit/user_workshops_cubit.dart';
+import 'package:paint_car/features/cubit/notification_cubit.dart';
 import 'package:paint_car/features/home/pages/home_page.dart';
 import 'package:paint_car/features/shared/cubit/user_cubit.dart';
 import 'package:paint_car/ui/config/configuration_theme.dart';
 import 'package:paint_car/dependencies/sl.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+Future<void> requestAndroidNotificationPermission() async {
+  // Cek status izin notifikasi
+  if (await Permission.notification.isDenied) {
+    // Meminta izin notifikasi
+    await Permission.notification.request();
+  }
+}
+
+Future<void> requestNotificationPermissions() async {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  // Untuk iOS
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin>()
+      ?.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+  // Untuk Android 13 (API level 33) dan di atasnya menggunakan permission_handler
+  await requestAndroidNotificationPermission();
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,9 +76,14 @@ Future<void> main() async {
   );
 
   await initializeSL();
+  await requestNotificationPermissions();
+
   runApp(
     MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (context) => getIt<NotificationCubit>(),
+        ),
         // ! SUPERADMIN
         BlocProvider(
           create: (context) => getIt<AuthCubit>(),

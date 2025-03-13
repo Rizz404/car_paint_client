@@ -1,13 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paint_car/data/models/user_model.dart';
 import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
+import 'package:paint_car/dependencies/services/socket.dart';
 import 'package:paint_car/features/(guest)/auth/repo/auth_repo.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 
 class AuthCubit extends Cubit<BaseState> with Cancelable {
   final AuthRepo authRepo;
+  final SocketService socketService;
+
   AuthCubit({
     required this.authRepo,
+    required this.socketService,
   }) : super(const BaseInitialState());
 
   @override
@@ -30,14 +35,14 @@ class AuthCubit extends Cubit<BaseState> with Cancelable {
   }
 
   Future<void> login(
-    String email,
-    String password,
-    CancelToken cancelToken,
-  ) async {
-    await handleBaseCubit<void>(
+      String email, String password, CancelToken cancelToken) async {
+    await handleBaseCubit<UserWithProfile>(
       emit,
       () => authRepo.login(email, password, cancelToken),
-      onSuccess: (data, message) => emit(const BaseActionSuccessState()),
+      onSuccess: (data, message) {
+        emit(const BaseActionSuccessState());
+        socketService.connect(data.id);
+      },
     );
   }
 }

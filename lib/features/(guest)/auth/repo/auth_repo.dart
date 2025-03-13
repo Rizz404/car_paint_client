@@ -40,7 +40,7 @@ class AuthRepo {
     }
   }
 
-  Future<ApiResponse<void>> login(
+  Future<ApiResponse<UserWithProfile>> login(
     String email,
     String password,
     CancelToken cancelToken,

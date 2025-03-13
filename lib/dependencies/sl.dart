@@ -1,8 +1,12 @@
+import "dart:io";
+
+import "package:flutter_local_notifications/flutter_local_notifications.dart";
 import "package:get_it/get_it.dart";
 import "package:paint_car/data/local/user_sp.dart";
 import "package:paint_car/data/network/api_client.dart";
 import "package:paint_car/data/local/token_sp.dart";
 import "package:paint_car/dependencies/services/log_service.dart";
+import "package:paint_car/dependencies/services/socket.dart";
 import "package:paint_car/features/(admin)/cubit/admin_orders_cubit.dart";
 import "package:paint_car/features/(admin)/repo/admin_orders_repo.dart";
 import "package:paint_car/features/(guest)/auth/cubit/auth_cubit.dart";
@@ -45,10 +49,12 @@ import "package:paint_car/features/(user)/profile/cubit/profile_cubit.dart";
 import "package:paint_car/features/(user)/profile/repo/profile_repo.dart";
 import "package:paint_car/features/(user)/workshop/cubit/user_workshops_cubit.dart";
 import "package:paint_car/features/(user)/workshop/repo/user_workshops_repo.dart";
+import "package:paint_car/features/cubit/notification_cubit.dart";
 import "package:paint_car/features/shared/cubit/user_cubit.dart";
 import "package:paint_car/features/shared/repo/user_repo.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:http/http.dart" as http;
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 final getIt = GetIt.instance;
 
@@ -66,6 +72,29 @@ initializeSL() async {
     () => ApiClient(client: getIt(), tokenSp: getIt()),
   );
 
+  getIt.registerLazySingleton<IO.Socket>(
+    () => IO.io(
+      'https://1715-160-22-134-241.ngrok-free.app',
+      IO.OptionBuilder()
+          .setTransports(['websocket'])
+          .enableForceNew()
+          .disableAutoConnect()
+          .build(),
+    ),
+  );
+  getIt.registerLazySingleton<FlutterLocalNotificationsPlugin>(
+    () => FlutterLocalNotificationsPlugin(),
+  );
+  getIt.registerLazySingleton<SocketService>(
+    () => SocketService(socket: getIt<IO.Socket>()),
+  );
+  getIt.registerFactory<NotificationCubit>(
+    () => NotificationCubit(
+      socketService: getIt(),
+      flutterLocalNotificationsPlugin: getIt(),
+    ),
+  );
+
   // ! GUEST
 
   // ! user
@@ -80,6 +109,7 @@ initializeSL() async {
       userRepo: getIt(),
     ),
   );
+
   // ! auth
   getIt.registerLazySingleton<AuthRepo>(
     () => AuthRepo(
@@ -88,7 +118,10 @@ initializeSL() async {
       userSp: getIt(),
     ),
   );
-  getIt.registerFactory<AuthCubit>(() => AuthCubit(authRepo: getIt()));
+  getIt.registerFactory<AuthCubit>(() => AuthCubit(
+        authRepo: getIt(),
+        socketService: getIt(),
+      ));
   // ! USER
   getIt.registerLazySingleton<UserCarRepo>(
     () => UserCarRepo(
@@ -118,6 +151,7 @@ initializeSL() async {
   getIt.registerFactory<UserOrdersCubit>(
     () => UserOrdersCubit(
       userOrdersRepo: getIt(),
+      socketService: getIt(),
     ),
   );
   getIt.registerLazySingleton<UserTransactionsRepo>(
