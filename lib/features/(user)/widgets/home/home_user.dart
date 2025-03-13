@@ -9,6 +9,7 @@ import 'package:paint_car/features/(user)/widgets/home/list_style_welcome.dart';
 import 'package:paint_car/features/(user)/widgets/home/service_section.dart';
 import 'package:paint_car/features/(user)/workshop/pages/user_workshops_page.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
+import 'package:paint_car/ui/extension/padding.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
@@ -68,7 +69,7 @@ class _HomeUserState extends State<HomeUser> {
             ],
           ),
         ),
-      ),
+      ).paddingSymmetric(vertical: 24),
     );
   }
 }
