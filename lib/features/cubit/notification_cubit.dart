@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:paint_car/data/local/user_sp.dart';
 import 'package:paint_car/data/models/order_notification.dart';
 import 'package:paint_car/dependencies/services/socket.dart';
 
@@ -8,10 +9,12 @@ class NotificationCubit extends Cubit<List<OrderNotification>> {
   final SocketService socketService;
   StreamSubscription? _subscription;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  UserLocal userSp;
 
   NotificationCubit({
     required this.socketService,
     required this.flutterLocalNotificationsPlugin,
+    required this.userSp,
   }) : super([]) {
     _initializeNotifications();
     _initializeSocketService();
@@ -40,10 +43,12 @@ class NotificationCubit extends Cubit<List<OrderNotification>> {
   }
 
   void _handleNotification(OrderNotification notification) {
-    emit([...state, notification]);
-
-    // Tampilkan notifikasi perangkat
-    _showNotification(notification);
+    final user = userSp.getUser();
+    if (user == null) return;
+    if (notification.userId == user.id) {
+      emit([...state, notification]);
+      _showNotification(notification);
+    }
   }
 
   Future<void> _showNotification(OrderNotification notification) async {

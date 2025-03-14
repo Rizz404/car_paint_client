@@ -18,12 +18,21 @@ class SocketService {
   Stream<OrderNotification> get notifications => _notificationController.stream;
 
   void connect(String userId) {
+    if (socket.connected) {
+      socket.disconnect();
+      socket.connect();
+    }
+
     _currentUserId = userId;
     if (!socket.connected) {
       socket.connect();
     }
     socket.emit('join:user', userId);
     LogService.i('Socket Connecting with user id: $userId');
+  }
+
+  void disconnect() {
+    socket.disconnect();
   }
 
   void _setupEventHandlers() {

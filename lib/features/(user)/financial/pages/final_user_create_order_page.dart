@@ -233,19 +233,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<NotificationCubit, List<OrderNotification>>(
-        listener: (context, notifications) {
-          final latestNotification = notifications.lastOrNull;
-          LogService.i("Latest notification: $latestNotification");
-          if (latestNotification != null &&
-              latestNotification.type == 'order:created') {
-            // Handle new order notification
-            SnackBarUtil.showSnackBar(
-              context: context,
-              message: 'New order created: ${latestNotification.message}',
-              type: SnackBarType.success,
-            );
-          }
-        },
+        listener: (context, notifications) {},
         child: BlocConsumer<UserOrdersCubit, BaseState>(
           listener: (context, state) {
             handleFormListenerState(

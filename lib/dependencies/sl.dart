@@ -74,7 +74,7 @@ initializeSL() async {
 
   getIt.registerLazySingleton<IO.Socket>(
     () => IO.io(
-      'https://1715-160-22-134-241.ngrok-free.app',
+      'http://192.168.1.8:5000',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .enableForceNew()
@@ -90,6 +90,7 @@ initializeSL() async {
   );
   getIt.registerFactory<NotificationCubit>(
     () => NotificationCubit(
+      userSp: getIt(),
       socketService: getIt(),
       flutterLocalNotificationsPlugin: getIt(),
     ),
@@ -107,6 +108,7 @@ initializeSL() async {
   getIt.registerFactory<UserCubit>(
     () => UserCubit(
       userRepo: getIt(),
+      socketService: getIt(),
     ),
   );
 
@@ -120,7 +122,6 @@ initializeSL() async {
   );
   getIt.registerFactory<AuthCubit>(() => AuthCubit(
         authRepo: getIt(),
-        socketService: getIt(),
       ));
   // ! USER
   getIt.registerLazySingleton<UserCarRepo>(
@@ -151,7 +152,6 @@ initializeSL() async {
   getIt.registerFactory<UserOrdersCubit>(
     () => UserOrdersCubit(
       userOrdersRepo: getIt(),
-      socketService: getIt(),
     ),
   );
   getIt.registerLazySingleton<UserTransactionsRepo>(

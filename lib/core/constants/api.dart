@@ -6,8 +6,7 @@ class ApiConstant {
   static const String multipartFormData = 'multipart/form-data';
   static const String search = '/search';
   // ! URL
-  static const String baseUrl =
-      'https://1715-160-22-134-241.ngrok-free.app/api/v1';
+  static const String baseUrl = 'http://192.168.1.8:5000/api/v1';
   // static const String baseUrl =
   //     'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
   // ! PATH

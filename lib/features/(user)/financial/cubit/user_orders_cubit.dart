@@ -6,17 +6,14 @@ import 'package:paint_car/core/types/pagination.dart';
 import 'package:paint_car/data/models/orders.dart';
 import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/dependencies/services/socket.dart';
 import 'package:paint_car/features/(user)/financial/repo/user_orders_repo.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 
 class UserOrdersCubit extends Cubit<BaseState> with Cancelable {
   final UserOrdersRepo userOrdersRepo;
-  final SocketService socketService;
   UserOrdersCubit({
     required this.userOrdersRepo,
-    required this.socketService,
   }) : super(const BaseInitialState());
 
   List<Orders> orders = [];
@@ -120,7 +117,6 @@ class UserOrdersCubit extends Cubit<BaseState> with Cancelable {
         carServices,
       ),
       onSuccess: (data, message) => {
-        socketService.connect(userId),
         emit(const BaseActionSuccessState()),
         getOrders(1, cancelToken),
       },
