@@ -61,26 +61,6 @@ class _HomeUserState extends State<HomeUser> {
           child: Column(
             spacing: 24,
             children: [
-              MainElevatedButton(
-                onPressed: () {
-                  final cubit = context.read<NotificationCubit>();
-                  cubit.addNotification(
-                    OrderNotification(
-                      data: {
-                        "order_id": "123",
-                        "status": "pending",
-                      },
-                      message: "Order baru masuk",
-                      type: OrderEventType.created,
-                      orderId: "123",
-                      userId: context.currentUser!.id,
-                      workshopId: "123",
-                      timestamp: DateTime.now(),
-                    ),
-                  );
-                },
-                text: "Test Notif",
-              ),
               ListStyleWelcome(
                 user: context.currentUser,
               ),

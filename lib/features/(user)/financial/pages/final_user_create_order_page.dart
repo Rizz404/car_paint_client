@@ -232,120 +232,118 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<NotificationCubit, List<OrderNotification>>(
-        listener: (context, notifications) {},
-        child: BlocConsumer<UserOrdersCubit, BaseState>(
-          listener: (context, state) {
-            handleFormListenerState(
+    return BlocConsumer<UserOrdersCubit, BaseState>(
+      listener: (context, state) {
+        handleFormListenerState(
+          context: context,
+          state: state,
+          onRetry: submitForm,
+          onSuccess: () {
+            SnackBarUtil.showSnackBar(
               context: context,
-              state: state,
-              onRetry: submitForm,
-              onSuccess: () {
-                SnackBarUtil.showSnackBar(
-                  context: context,
-                  message:
-                      "Transaction created successfully, go to Transaction to pay",
-                  type: SnackBarType.success,
-                );
-                Navigator.of(context).pushAndRemoveUntil(
-                  HomePage.route(),
-                  (_) => false,
-                );
-              },
+              message:
+                  "Transaction created successfully, go to Transaction to pay",
+              type: SnackBarType.success,
+            );
+            Navigator.of(context).pushAndRemoveUntil(
+              HomePage.route(),
+              (_) => false,
             );
           },
-          builder: (context, state) {
-            return Scaffold(
-              appBar: mainAppBar(
-                "Order Confirmation",
-              ),
-              body: SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    spacing: 16,
-                    children: [
-                      Material(
-                        color: Theme.of(context).colorScheme.secondary,
-                        child: Column(
-                          children: [
-                            rowKeyValue(
-                              "Total Panel",
-                              "${widget.carServices.length.toString()}/${widget.totalAllServices.toString()}",
-                              isBold: true,
-                            ),
-                            Divider(
-                              color: Theme.of(context).colorScheme.surfaceDim,
-                              thickness: 1,
-                            ),
-                            rowKeyValue(
-                              "Sub Total",
-                              CurrencyFormatter.toRupiah(
-                                widget.totalPrice.toDouble(),
-                              ),
-                            ),
-                            rowKeyValue(
-                              "Fee",
-                              selectedPaymentMethod != null
-                                  ? CurrencyFormatter.toRupiah(
-                                      _parseFee(selectedPaymentMethod!.fee!)
-                                          .toDouble(),
-                                    )
-                                  : "-",
-                            ),
-                            Divider(
-                              color: Theme.of(context).colorScheme.surfaceDim,
-                              thickness: 1,
-                            ),
-                            rowKeyValue(
-                              "Total Price",
-                              selectedPaymentMethod != null
-                                  ? CurrencyFormatter.toRupiah(
-                                      (widget.totalPrice +
-                                              _parseFee(
-                                                selectedPaymentMethod!.fee!,
-                                              ))
-                                          .toDouble(),
-                                    )
-                                  : "-",
-                              isBold: true,
-                            ),
-                          ],
-                        ).paddingAll(),
-                      ),
-                      StateHandler<PaymentMethodCubit,
-                          PaginationState<PaymentMethod>>(
-                        onRetry: () => getPaymentMethods(),
-                        onSuccess: (context, data, _) {
-                          final paymentMethods = data.data;
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            spacing: 8,
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 16),
-                                child: MainText(
-                                  text: "Payment Methods",
-                                  extent: Large(),
-                                ),
-                              ),
-                              _buildPaymentMethodSections(paymentMethods),
-                            ],
-                          );
-                        },
-                      ),
-                      MainElevatedButton(
-                        onPressed: submitForm,
-                        text: "Create",
-                        isLoading: state is BaseLoadingState,
-                      ),
-                    ],
+        );
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: mainAppBar(
+            "Order Confirmation",
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                spacing: 16,
+                children: [
+                  Material(
+                    color: Theme.of(context).colorScheme.secondary,
+                    child: Column(
+                      children: [
+                        rowKeyValue(
+                          "Total Panel",
+                          "${widget.carServices.length.toString()}/${widget.totalAllServices.toString()}",
+                          isBold: true,
+                        ),
+                        Divider(
+                          color: Theme.of(context).colorScheme.surfaceDim,
+                          thickness: 1,
+                        ),
+                        rowKeyValue(
+                          "Sub Total",
+                          CurrencyFormatter.toRupiah(
+                            widget.totalPrice.toDouble(),
+                          ),
+                        ),
+                        rowKeyValue(
+                          "Fee",
+                          selectedPaymentMethod != null
+                              ? CurrencyFormatter.toRupiah(
+                                  _parseFee(selectedPaymentMethod!.fee!)
+                                      .toDouble(),
+                                )
+                              : "-",
+                        ),
+                        Divider(
+                          color: Theme.of(context).colorScheme.surfaceDim,
+                          thickness: 1,
+                        ),
+                        rowKeyValue(
+                          "Total Price",
+                          selectedPaymentMethod != null
+                              ? CurrencyFormatter.toRupiah(
+                                  (widget.totalPrice +
+                                          _parseFee(
+                                            selectedPaymentMethod!.fee!,
+                                          ))
+                                      .toDouble(),
+                                )
+                              : "-",
+                          isBold: true,
+                        ),
+                      ],
+                    ).paddingAll(),
                   ),
-                ),
+                  StateHandler<PaymentMethodCubit,
+                      PaginationState<PaymentMethod>>(
+                    onRetry: () => getPaymentMethods(),
+                    onSuccess: (context, data, _) {
+                      final paymentMethods = data.data;
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 8,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: MainText(
+                              text: "Payment Methods",
+                              extent: Large(),
+                            ),
+                          ),
+                          _buildPaymentMethodSections(paymentMethods),
+                        ],
+                      );
+                    },
+                  ),
+                  MainElevatedButton(
+                    onPressed: submitForm,
+                    text: "Create",
+                    isLoading: state is BaseLoadingState,
+                  ),
+                ],
               ),
-            );
-          },
-        ));
+            ),
+          ),
+        );
+      },
+    );
   }
 }

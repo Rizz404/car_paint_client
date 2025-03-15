@@ -88,7 +88,7 @@ initializeSL() async {
   getIt.registerLazySingleton<SocketService>(
     () => SocketService(socket: getIt<IO.Socket>()),
   );
-  getIt.registerFactory<NotificationCubit>(
+  getIt.registerLazySingleton<NotificationCubit>(
     () => NotificationCubit(
       userSp: getIt(),
       socketService: getIt(),
