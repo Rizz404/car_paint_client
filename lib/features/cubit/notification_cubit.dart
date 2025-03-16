@@ -1,23 +1,60 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:paint_car/data/local/token_sp.dart';
 import 'package:paint_car/data/local/user_sp.dart';
-import 'package:paint_car/data/models/order_notification.dart';
+import 'package:paint_car/data/models/base_notification.dart';
+import 'package:paint_car/data/models/orders.dart';
+import 'package:paint_car/data/models/transactions.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/dependencies/services/socket.dart';
 
-class NotificationCubit extends Cubit<List<OrderNotification>> {
+// Define notification state as a class to make it more flexible
+class NotificationState {
+  final List<BaseNotification> notifications;
+  final bool isLoading;
+  final String? error;
+
+  NotificationState({
+    this.notifications = const [],
+    this.isLoading = false,
+    this.error,
+  });
+
+  NotificationState copyWith({
+    List<BaseNotification>? notifications,
+    bool? isLoading,
+    String? error,
+  }) {
+    return NotificationState(
+      notifications: notifications ?? this.notifications,
+      isLoading: isLoading ?? this.isLoading,
+      error: error,
+    );
+  }
+}
+
+class NotificationCubit extends Cubit<NotificationState> {
   final SocketService socketService;
-  StreamSubscription? _subscription;
+  StreamSubscription? _generalSubscription;
+  StreamSubscription? _orderSubscription;
+  StreamSubscription? _transactionSubscription;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   UserLocal userSp;
+  TokenLocal tokenSp;
+
+  // Map to store notification handlers by type
+  final Map<String, Function(BaseNotification)> _notificationHandlers = {};
 
   NotificationCubit({
     required this.socketService,
     required this.flutterLocalNotificationsPlugin,
     required this.userSp,
-  }) : super([]) {
+    required this.tokenSp,
+  }) : super(NotificationState()) {
     _initializeNotifications();
     _initializeSocketService();
+    _registerDefaultHandlers();
   }
 
   Future<void> _initializeNotifications() async {
@@ -39,24 +76,113 @@ class NotificationCubit extends Cubit<List<OrderNotification>> {
   }
 
   void _initializeSocketService() {
-    _subscription = socketService.notifications.listen(_handleNotification);
+    // Connect to socket server with authentication token
+    final user = userSp.getUser();
+    final token = tokenSp.getToken();
+
+    if (user != null && token != null) {
+      socketService.connect(token);
+
+      // Subscribe to order notifications
+      _orderSubscription =
+          socketService.orderNotifications.listen((notification) {
+        _handleTypedNotification<Orders>(notification, 'order');
+      });
+
+      // Subscribe to transaction notifications
+      _transactionSubscription =
+          socketService.transactionNotifications.listen((notification) {
+        _handleTypedNotification<Transactions>(notification, 'transaction');
+      });
+
+      // // Join workshops and rooms based on user permissions
+      // if (user.workshopId != null) {
+      //   socketService.joinWorkshop(user.workshopId!);
+      // }
+    }
   }
 
-  void _handleNotification(OrderNotification notification) {
-    final user = userSp.getUser();
-    if (user == null) return;
-    if (notification.userId == user.id) {
-      emit([...state, notification]);
+  // Register default notification handlers
+  void _registerDefaultHandlers() {
+    // Order notification handlers
+    registerNotificationHandler('order', (notification) {
+      _showNotification(notification, "Order Status");
+    });
+
+    registerNotificationHandler('order:admin', (notification) {
+      _showNotification(notification, "Order Admin Alert");
+    });
+
+    // Work status notification handlers
+    registerNotificationHandler('work_status', (notification) {
+      _showNotification(notification, "Work Status");
+    });
+
+    registerNotificationHandler('work_status:admin', (notification) {
+      _showNotification(notification, "Work Status Admin Alert");
+    });
+
+    // Transaction notification handlers
+    registerNotificationHandler('transaction', (notification) {
+      _showNotification(notification, "Payment Status");
+    });
+
+    registerNotificationHandler('transaction:admin', (notification) {
+      _showNotification(notification, "Payment Admin Alert");
+    });
+  }
+
+  // Method to register custom notification handlers
+  void registerNotificationHandler(
+      String type, Function(BaseNotification) handler) {
+    _notificationHandlers[type] = handler;
+  }
+
+  // For backward compatibility with string notifications
+  void _handleNotification(BaseNotification notification) {
+    // Add notification to state
+    final updatedNotifications = [...state.notifications, notification];
+    emit(state.copyWith(notifications: updatedNotifications));
+
+    // Handle based on type if a handler exists
+    if (_notificationHandlers.containsKey(notification.type)) {
+      _notificationHandlers[notification.type]!(notification);
+    } else {
+      // Default handling
       _showNotification(notification);
     }
   }
 
-  Future<void> _showNotification(OrderNotification notification) async {
+  // Handle typed notifications (Order, Transaction)
+  void _handleTypedNotification<T>(
+      BaseNotification<T> notification, String category) {
+    // Add notification to state (cast to BaseNotification for state storage)
+    final updatedNotifications = [
+      ...state.notifications,
+      notification as BaseNotification
+    ];
+    emit(state.copyWith(notifications: updatedNotifications));
+
+    // Get the appropriate handler based on notification type
+    if (_notificationHandlers.containsKey(notification.type)) {
+      _notificationHandlers[notification.type]!(notification);
+    } else {
+      // Default handling based on category
+      _showNotification(notification, category);
+    }
+
+    // Log for debugging
+    LogService.i(
+        '[Notification] Received ${T.toString()} notification: ${notification.type}');
+  }
+
+  Future<void> _showNotification(BaseNotification notification,
+      [String? title]) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-      'order_channel',
-      'Order Notifications',
-      channelDescription: 'Notifications for order status updates',
+      'notification_channel',
+      'General Notifications',
+      channelDescription: 'Notifications from the application',
       importance: Importance.max,
       priority: Priority.high,
     );
@@ -71,19 +197,48 @@ class NotificationCubit extends Cubit<List<OrderNotification>> {
 
     await flutterLocalNotificationsPlugin.show(
       notification.hashCode,
-      'Order Update',
+      title ?? notification.type,
       notification.message,
       platformChannelSpecifics,
+      payload: notification.type,
     );
   }
 
-  Future<void> addNotification(OrderNotification notification) async {
+  // Method to manually add a notification
+  Future<void> addNotification(BaseNotification notification) async {
     _handleNotification(notification);
+  }
+
+  // Method to reconnect to socket (useful after token refresh)
+  void reconnect() {
+    final token = tokenSp.getToken();
+    if (token != null) {
+      socketService.connect(token);
+    }
+  }
+
+  // Method to clear all notifications
+  void clearNotifications() {
+    emit(state.copyWith(notifications: []));
+  }
+
+  void resetState() {
+    emit(NotificationState()); // Reset ke state awal
+  }
+
+  // Method to remove a specific notification
+  void removeNotification(BaseNotification notification) {
+    final updatedNotifications = state.notifications
+        .where((n) => n.hashCode != notification.hashCode)
+        .toList();
+    emit(state.copyWith(notifications: updatedNotifications));
   }
 
   @override
   Future<void> close() {
-    _subscription?.cancel();
+    _generalSubscription?.cancel();
+    _orderSubscription?.cancel();
+    _transactionSubscription?.cancel();
     socketService.dispose();
     return super.close();
   }

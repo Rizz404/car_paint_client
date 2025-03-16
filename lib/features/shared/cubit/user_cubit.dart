@@ -15,7 +15,6 @@ class UserCubit extends Cubit<BaseState> {
   Future<void> getUserLocal() async {
     final user = await userRepo.getUserLocal();
     if (user != null) {
-      socketService.connect(user.id);
       emit(BaseSuccessState<UserWithProfile?>(user, null));
     } else {
       emit(

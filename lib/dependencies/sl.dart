@@ -74,11 +74,14 @@ initializeSL() async {
 
   getIt.registerLazySingleton<IO.Socket>(
     () => IO.io(
-      'http://192.168.1.8:5000',
+      'http://192.168.223.16:5000/',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .enableForceNew()
           .disableAutoConnect()
+          .setExtraHeaders({
+            'Accept': 'application/json',
+          })
           .build(),
     ),
   );
@@ -91,6 +94,7 @@ initializeSL() async {
   getIt.registerLazySingleton<NotificationCubit>(
     () => NotificationCubit(
       userSp: getIt(),
+      tokenSp: getIt(),
       socketService: getIt(),
       flutterLocalNotificationsPlugin: getIt(),
     ),
@@ -101,6 +105,7 @@ initializeSL() async {
   // ! user
   getIt.registerLazySingleton<UserRepo>(
     () => UserRepo(
+      getIt(),
       getIt(),
       getIt(),
     ),
