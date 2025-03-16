@@ -1,68 +1,254 @@
 import 'dart:async';
-
-import 'package:paint_car/data/models/order_notification.dart';
+import 'package:paint_car/data/models/base_notification.dart';
+import 'package:paint_car/data/models/orders.dart';
+import 'package:paint_car/data/models/transactions.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
-// ignore: library_prefixes
+
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService {
   final IO.Socket socket;
-  final _notificationController =
-      StreamController<OrderNotification>.broadcast();
-  String? _currentUserId;
 
-  SocketService({required this.socket}) {
+  final _stringNotificationController =
+      StreamController<BaseNotification<String>>.broadcast();
+  final _orderNotificationController =
+      StreamController<BaseNotification<Orders>>.broadcast();
+  final _transactionNotificationController =
+      StreamController<BaseNotification<Transactions>>.broadcast();
+
+  final _rawMessageController = StreamController<dynamic>.broadcast();
+  bool enableDebugLogs = true;
+
+  SocketService({required this.socket, this.enableDebugLogs = true}) {
     _setupEventHandlers();
   }
 
-  Stream<OrderNotification> get notifications => _notificationController.stream;
+  Stream<BaseNotification<String>> get stringNotifications =>
+      _stringNotificationController.stream;
+  Stream<BaseNotification<Orders>> get orderNotifications =>
+      _orderNotificationController.stream;
+  Stream<BaseNotification<Transactions>> get transactionNotifications =>
+      _transactionNotificationController.stream;
 
-  void connect(String userId) {
+  Stream<dynamic> get rawMessages => _rawMessageController.stream;
+
+  void connect(String token) {
     if (socket.connected) {
+      _debugLog('Socket was already connected, disconnecting first');
       socket.disconnect();
-      socket.connect();
     }
 
-    _currentUserId = userId;
-    if (!socket.connected) {
-      socket.connect();
+    socket.auth = {'token': token};
+
+    socket.connect();
+  }
+
+  String _safeStringify(dynamic obj) {
+    try {
+      return obj.toString();
+    } catch (e) {
+      return 'Unable to stringify: $e';
     }
-    socket.emit('join:user', userId);
-    LogService.i('Socket Connecting with user id: $userId');
   }
 
   void disconnect() {
+    _debugLog('Manual disconnect called');
     socket.disconnect();
+  }
+
+  void resetAuth() {
+    socket.auth = null;
+
+    socket.io.options!['autoConnect'] = false;
+    _debugLog('Socket auth reset');
+  }
+
+  void joinWorkshop(String workshopId) {
+    if (socket.connected) {
+      socket.emit('join:room', 'workshop:$workshopId');
+      _debugLog('Joining workshop room: workshop:$workshopId');
+    } else {
+      _debugLog('Cannot join workshop: Socket not connected', isError: true);
+    }
+  }
+
+  void joinRoom(String roomName) {
+    if (socket.connected) {
+      socket.emit('join:room', roomName);
+      _debugLog('Joining custom room: $roomName');
+    } else {
+      _debugLog('Cannot join room: Socket not connected', isError: true);
+    }
   }
 
   void _setupEventHandlers() {
     socket.onConnect((_) {
-      LogService.i('Socket Connected');
-      if (_currentUserId != null) {
-        LogService.i('Socket Connected with user id: $_currentUserId');
-        socket.emit('join:user', _currentUserId!);
-      }
+      _debugLog('Socket Connected - ID: ${socket.id}');
     });
 
-    socket.onDisconnect((_) => LogService.i('Socket Disconnected'));
-    socket.on('notification', (data) => _handleNotification(data));
+    socket.onConnectError((error) {
+      _debugLog('Socket Connect Error: $error', isError: true);
+    });
+
+    socket.onError((error) {
+      _debugLog('Socket Error: $error', isError: true);
+    });
+
+    socket.onDisconnect((_) {
+      _debugLog('Socket Disconnected');
+    });
+
+    socket.onAny((event, data) {
+      _debugLog('Event received: $event with data: ${_safeStringify(data)}');
+      _rawMessageController.add({'event': event, 'data': data});
+    });
+
+    socket.on('notification', (data) {
+      _debugLog('Notification event received: ${_safeStringify(data)}');
+      _handleNotification(data);
+    });
+
+    socket.on('order:update', (data) {
+      _debugLog('Order update received: ${_safeStringify(data)}');
+      _handleOrderNotification(data);
+    });
+
+    socket.on('work_status:update', (data) {
+      _debugLog('Work status update received: ${_safeStringify(data)}');
+      _handleOrderNotification(data);
+    });
+
+    socket.on('transaction:update', (data) {
+      _debugLog('Transaction update received: ${_safeStringify(data)}');
+      _handleTransactionNotification(data);
+    });
+
+    socket.on('error', (error) {
+      _debugLog('Socket server error: $error', isError: true);
+    });
   }
 
   void _handleNotification(dynamic data) {
     try {
+      _debugLog('Processing notification data: ${_safeStringify(data)}');
+
       if (data is Map<String, dynamic>) {
-        final notification = OrderNotification.fromMap(data);
-        _notificationController.add(notification);
+        if (data.containsKey('type') &&
+            data.containsKey('message') &&
+            data.containsKey('timestamp')) {
+          _debugLog('Valid notification format detected');
+
+          final notification = BaseNotification<String>.fromMap(data);
+
+          _stringNotificationController.add(notification);
+
+          _debugLog(
+              'Notification processed: [${notification.type}] ${notification.message}');
+        } else {
+          _debugLog(
+              'Notification missing required fields: ${_safeStringify(data)}',
+              isError: true);
+        }
       } else {
-        LogService.e('Invalid notification format: $data');
+        _debugLog('Invalid notification format: ${data.runtimeType}',
+            isError: true);
       }
-    } catch (e) {
-      LogService.e('Error handling notification: $e');
+    } catch (e, stackTrace) {
+      _debugLog('Error handling notification: $e\nStack: $stackTrace',
+          isError: true);
     }
   }
 
+  void _handleOrderNotification(dynamic data) {
+    try {
+      if (data is Map<String, dynamic> &&
+          data.containsKey('type') &&
+          data.containsKey('message') &&
+          data.containsKey('timestamp') &&
+          data.containsKey('data')) {
+        FromJsonFunction<Orders> mapToOrders = (Map<String, dynamic> json) {
+          return Orders.fromMap(json);
+        };
+
+        final notification = BaseNotification<Orders>.fromMap(
+          data,
+          fromJson: mapToOrders,
+        );
+
+        _orderNotificationController.add(notification);
+
+        _debugLog(
+            'Order notification processed: [${notification.type}] ${notification.message}');
+      } else {
+        _debugLog('Invalid order notification format', isError: true);
+      }
+    } catch (e, stackTrace) {
+      _debugLog('Error handling order notification: $e\nStack: $stackTrace',
+          isError: true);
+    }
+  }
+
+  void _handleTransactionNotification(dynamic data) {
+    try {
+      if (data is Map<String, dynamic> &&
+          data.containsKey('type') &&
+          data.containsKey('message') &&
+          data.containsKey('timestamp') &&
+          data.containsKey('data')) {
+        FromJsonFunction<Transactions> mapToTransactions =
+            (Map<String, dynamic> json) {
+          return Transactions.fromMap(json);
+        };
+
+        final notification = BaseNotification<Transactions>.fromMap(
+          data,
+          fromJson: mapToTransactions,
+        );
+
+        _transactionNotificationController.add(notification);
+
+        _debugLog(
+            'Transaction notification processed: [${notification.type}] ${notification.message}');
+      } else {
+        _debugLog('Invalid transaction notification format', isError: true);
+      }
+    } catch (e, stackTrace) {
+      _debugLog(
+          'Error handling transaction notification: $e\nStack: $stackTrace',
+          isError: true);
+    }
+  }
+
+  void _debugLog(String message, {bool isError = false}) {
+    if (enableDebugLogs) {
+      if (isError) {
+        LogService.e('[SocketDebug] $message');
+      } else {
+        LogService.i('[SocketDebug] $message');
+      }
+    }
+  }
+
+  void emitTest(String event, dynamic data) {
+    if (socket.connected) {
+      socket.emit(event, data);
+      _debugLog(
+          'Test event emitted: $event with data: ${_safeStringify(data)}');
+    } else {
+      _debugLog('Cannot emit test: Socket not connected', isError: true);
+    }
+  }
+
+  bool get isConnected => socket.connected;
+
+  String? get socketId => socket.id;
+
   void dispose() {
     socket.disconnect();
-    _notificationController.close();
+    _stringNotificationController.close();
+    _orderNotificationController.close();
+    _transactionNotificationController.close();
+    _rawMessageController.close();
+    _debugLog('Socket service disposed');
   }
 }

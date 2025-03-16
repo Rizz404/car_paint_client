@@ -74,11 +74,14 @@ initializeSL() async {
 
   getIt.registerLazySingleton<IO.Socket>(
     () => IO.io(
-      'http://192.168.1.8:5000',
+      'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .enableForceNew()
           .disableAutoConnect()
+          .setExtraHeaders({
+            'Accept': 'application/json',
+          })
           .build(),
     ),
   );
@@ -91,6 +94,7 @@ initializeSL() async {
   getIt.registerLazySingleton<NotificationCubit>(
     () => NotificationCubit(
       userSp: getIt(),
+      tokenSp: getIt(),
       socketService: getIt(),
       flutterLocalNotificationsPlugin: getIt(),
     ),
@@ -103,12 +107,13 @@ initializeSL() async {
     () => UserRepo(
       getIt(),
       getIt(),
+      getIt(),
     ),
   );
   getIt.registerFactory<UserCubit>(
     () => UserCubit(
       userRepo: getIt(),
-      socketService: getIt(),
+      notificationCubit: getIt(),
     ),
   );
 
@@ -122,6 +127,7 @@ initializeSL() async {
   );
   getIt.registerFactory<AuthCubit>(() => AuthCubit(
         authRepo: getIt(),
+        notificationCubit: getIt(),
       ));
   // ! USER
   getIt.registerLazySingleton<UserCarRepo>(
