@@ -3,13 +3,12 @@ import 'package:paint_car/data/models/base_notification.dart';
 import 'package:paint_car/data/models/orders.dart';
 import 'package:paint_car/data/models/transactions.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
-// ignore: library_prefixes
+
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService {
   final IO.Socket socket;
 
-  // Use multiple controllers for different notification types
   final _stringNotificationController =
       StreamController<BaseNotification<String>>.broadcast();
   final _orderNotificationController =
@@ -17,7 +16,6 @@ class SocketService {
   final _transactionNotificationController =
       StreamController<BaseNotification<Transactions>>.broadcast();
 
-  // Add debug flags and controllers
   final _rawMessageController = StreamController<dynamic>.broadcast();
   bool enableDebugLogs = true;
 
@@ -25,7 +23,6 @@ class SocketService {
     _setupEventHandlers();
   }
 
-  // Expose streams for different notification types
   Stream<BaseNotification<String>> get stringNotifications =>
       _stringNotificationController.stream;
   Stream<BaseNotification<Orders>> get orderNotifications =>
@@ -41,13 +38,11 @@ class SocketService {
       socket.disconnect();
     }
 
-    // Set auth token in socket connection
     socket.auth = {'token': token};
 
     socket.connect();
   }
 
-  // Helper to safely stringify objects for debugging
   String _safeStringify(dynamic obj) {
     try {
       return obj.toString();
@@ -62,9 +57,8 @@ class SocketService {
   }
 
   void resetAuth() {
-    // Hapus token dari konfigurasi socket
     socket.auth = null;
-    // Hentikan reconnect otomatis
+
     socket.io.options!['autoConnect'] = false;
     _debugLog('Socket auth reset');
   }
@@ -104,31 +98,26 @@ class SocketService {
       _debugLog('Socket Disconnected');
     });
 
-    // Listen to all events for debugging
     socket.onAny((event, data) {
       _debugLog('Event received: $event with data: ${_safeStringify(data)}');
       _rawMessageController.add({'event': event, 'data': data});
     });
 
-    // Standard notification event
     socket.on('notification', (data) {
       _debugLog('Notification event received: ${_safeStringify(data)}');
       _handleNotification(data);
     });
 
-    // Listen for order updates
     socket.on('order:update', (data) {
       _debugLog('Order update received: ${_safeStringify(data)}');
       _handleOrderNotification(data);
     });
 
-    // Listen for work status updates
     socket.on('work_status:update', (data) {
       _debugLog('Work status update received: ${_safeStringify(data)}');
       _handleOrderNotification(data);
     });
 
-    // Listen for transaction updates
     socket.on('transaction:update', (data) {
       _debugLog('Transaction update received: ${_safeStringify(data)}');
       _handleTransactionNotification(data);
@@ -144,16 +133,13 @@ class SocketService {
       _debugLog('Processing notification data: ${_safeStringify(data)}');
 
       if (data is Map<String, dynamic>) {
-        // Check if data matches BaseNotification structure
         if (data.containsKey('type') &&
             data.containsKey('message') &&
             data.containsKey('timestamp')) {
           _debugLog('Valid notification format detected');
 
-          // Create BaseNotification object with String data
           final notification = BaseNotification<String>.fromMap(data);
 
-          // Add to the stream
           _stringNotificationController.add(notification);
 
           _debugLog(
@@ -180,13 +166,10 @@ class SocketService {
           data.containsKey('message') &&
           data.containsKey('timestamp') &&
           data.containsKey('data')) {
-        // Create a function that converts Map<String, dynamic> to Orders
-        // This bridges the gap between your typedef and Orders.fromJson
         FromJsonFunction<Orders> mapToOrders = (Map<String, dynamic> json) {
           return Orders.fromMap(json);
         };
 
-        // Parse the data as an Order using the adapter function
         final notification = BaseNotification<Orders>.fromMap(
           data,
           fromJson: mapToOrders,
@@ -212,13 +195,11 @@ class SocketService {
           data.containsKey('message') &&
           data.containsKey('timestamp') &&
           data.containsKey('data')) {
-        // Create a function that converts Map<String, dynamic> to Transactions
         FromJsonFunction<Transactions> mapToTransactions =
             (Map<String, dynamic> json) {
           return Transactions.fromMap(json);
         };
 
-        // Parse the data as a Transaction
         final notification = BaseNotification<Transactions>.fromMap(
           data,
           fromJson: mapToTransactions,
@@ -238,7 +219,6 @@ class SocketService {
     }
   }
 
-  // Debug logging helper
   void _debugLog(String message, {bool isError = false}) {
     if (enableDebugLogs) {
       if (isError) {
@@ -249,7 +229,6 @@ class SocketService {
     }
   }
 
-  // Method to manually emit events for testing
   void emitTest(String event, dynamic data) {
     if (socket.connected) {
       socket.emit(event, data);
@@ -260,10 +239,8 @@ class SocketService {
     }
   }
 
-  // Method to check socket connection status
   bool get isConnected => socket.connected;
 
-  // Get current socket ID
   String? get socketId => socket.id;
 
   void dispose() {

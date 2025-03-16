@@ -42,10 +42,8 @@ class NotificationScreen extends StatelessWidget {
 
   Widget _buildNotificationCard(
       BuildContext context, BaseNotification notification) {
-    // Get appropriate icon based on notification type
     IconData icon = _getNotificationIcon(notification.type);
 
-    // Get appropriate color based on notification type
     Color color = _getNotificationColor(notification.type);
 
     return Dismissible(
@@ -75,7 +73,6 @@ class NotificationScreen extends StatelessWidget {
           ),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
-            // Handle notification tap based on type
             _handleNotificationTap(context, notification);
           },
         ),
@@ -83,7 +80,6 @@ class NotificationScreen extends StatelessWidget {
     );
   }
 
-  // Helper methods for notification display
   IconData _getNotificationIcon(String type) {
     switch (type) {
       case 'testing':
@@ -146,16 +142,12 @@ class NotificationScreen extends StatelessWidget {
     final dateToCheck = DateTime(dateTime.year, dateTime.month, dateTime.day);
 
     if (dateToCheck == today) {
-      // Today, just show time
       return 'Today, ${DateFormat.jm().format(dateTime)}';
     } else if (dateToCheck == today.subtract(const Duration(days: 1))) {
-      // Yesterday
       return 'Yesterday, ${DateFormat.jm().format(dateTime)}';
     } else if (now.difference(dateTime).inDays < 7) {
-      // Within last week
       return '${DateFormat.E().format(dateTime)}, ${DateFormat.jm().format(dateTime)}';
     } else {
-      // Older than a week
       return DateFormat('MMM d, y - h:mm a').format(dateTime);
     }
   }
@@ -163,34 +155,24 @@ class NotificationScreen extends StatelessWidget {
   void _handleNotificationTap(
       BuildContext context, BaseNotification notification) {
     try {
-      // For order-related notifications
       if (notification.type.startsWith('ORDER_') && notification.data != null) {
-        // Check if data contains orderId
         if (notification.data is Map<String, dynamic> &&
             (notification.data as Map<String, dynamic>).containsKey('id')) {
           final orderId = notification.data['id'];
 
-          // Navigate to order details
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) => OrderDetailScreen(orderId: orderId),
-          //   ),
-          // );
           return;
         }
       }
 
-      // For testing notifications
       if (notification.type == 'testing') {
         _showDetailDialog(context, notification);
         return;
       }
 
-      // For other notification types, show a dialog with details
       _showDetailDialog(context, notification);
     } catch (e) {
       LogService.e('Error handling notification tap: $e');
-      // Show a fallback dialog
+
       _showErrorDialog(context, 'Could not process this notification');
     }
   }
@@ -260,7 +242,7 @@ class NotificationScreen extends StatelessWidget {
 
   String _formatDataValue(dynamic value) {
     if (value is Map || value is List) {
-      return '...'; // Truncated for complex nested structures
+      return '...';
     } else {
       return value.toString();
     }

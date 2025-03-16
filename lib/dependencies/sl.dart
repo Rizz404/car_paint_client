@@ -74,7 +74,7 @@ initializeSL() async {
 
   getIt.registerLazySingleton<IO.Socket>(
     () => IO.io(
-      'http://192.168.223.16:5000/',
+      'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .enableForceNew()
@@ -113,7 +113,7 @@ initializeSL() async {
   getIt.registerFactory<UserCubit>(
     () => UserCubit(
       userRepo: getIt(),
-      socketService: getIt(),
+      notificationCubit: getIt(),
     ),
   );
 
@@ -127,6 +127,7 @@ initializeSL() async {
   );
   getIt.registerFactory<AuthCubit>(() => AuthCubit(
         authRepo: getIt(),
+        notificationCubit: getIt(),
       ));
   // ! USER
   getIt.registerLazySingleton<UserCarRepo>(

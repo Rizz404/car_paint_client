@@ -9,7 +9,6 @@ import 'package:paint_car/data/models/transactions.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/dependencies/services/socket.dart';
 
-// Define notification state as a class to make it more flexible
 class NotificationState {
   final List<BaseNotification> notifications;
   final bool isLoading;
@@ -43,7 +42,6 @@ class NotificationCubit extends Cubit<NotificationState> {
   UserLocal userSp;
   TokenLocal tokenSp;
 
-  // Map to store notification handlers by type
   final Map<String, Function(BaseNotification)> _notificationHandlers = {};
 
   NotificationCubit({
@@ -76,35 +74,49 @@ class NotificationCubit extends Cubit<NotificationState> {
   }
 
   void _initializeSocketService() {
-    // Connect to socket server with authentication token
     final user = userSp.getUser();
     final token = tokenSp.getToken();
 
     if (user != null && token != null) {
       socketService.connect(token);
 
-      // Subscribe to order notifications
       _orderSubscription =
           socketService.orderNotifications.listen((notification) {
         _handleTypedNotification<Orders>(notification, 'order');
       });
 
-      // Subscribe to transaction notifications
       _transactionSubscription =
           socketService.transactionNotifications.listen((notification) {
         _handleTypedNotification<Transactions>(notification, 'transaction');
       });
-
-      // // Join workshops and rooms based on user permissions
-      // if (user.workshopId != null) {
-      //   socketService.joinWorkshop(user.workshopId!);
-      // }
     }
   }
 
-  // Register default notification handlers
+  // * Reinit
+  void reinitialize() {
+    resetState();
+
+    final user = userSp.getUser();
+    final token = tokenSp.getToken();
+
+    if (user != null && token != null) {
+      socketService.connect(token);
+
+      _orderSubscription?.cancel();
+      _orderSubscription =
+          socketService.orderNotifications.listen((notification) {
+        _handleTypedNotification<Orders>(notification, 'order');
+      });
+
+      _transactionSubscription?.cancel();
+      _transactionSubscription =
+          socketService.transactionNotifications.listen((notification) {
+        _handleTypedNotification<Transactions>(notification, 'transaction');
+      });
+    }
+  }
+
   void _registerDefaultHandlers() {
-    // Order notification handlers
     registerNotificationHandler('order', (notification) {
       _showNotification(notification, "Order Status");
     });
@@ -113,7 +125,6 @@ class NotificationCubit extends Cubit<NotificationState> {
       _showNotification(notification, "Order Admin Alert");
     });
 
-    // Work status notification handlers
     registerNotificationHandler('work_status', (notification) {
       _showNotification(notification, "Work Status");
     });
@@ -122,7 +133,6 @@ class NotificationCubit extends Cubit<NotificationState> {
       _showNotification(notification, "Work Status Admin Alert");
     });
 
-    // Transaction notification handlers
     registerNotificationHandler('transaction', (notification) {
       _showNotification(notification, "Payment Status");
     });
@@ -132,46 +142,36 @@ class NotificationCubit extends Cubit<NotificationState> {
     });
   }
 
-  // Method to register custom notification handlers
   void registerNotificationHandler(
       String type, Function(BaseNotification) handler) {
     _notificationHandlers[type] = handler;
   }
 
-  // For backward compatibility with string notifications
   void _handleNotification(BaseNotification notification) {
-    // Add notification to state
     final updatedNotifications = [...state.notifications, notification];
     emit(state.copyWith(notifications: updatedNotifications));
 
-    // Handle based on type if a handler exists
     if (_notificationHandlers.containsKey(notification.type)) {
       _notificationHandlers[notification.type]!(notification);
     } else {
-      // Default handling
       _showNotification(notification);
     }
   }
 
-  // Handle typed notifications (Order, Transaction)
   void _handleTypedNotification<T>(
       BaseNotification<T> notification, String category) {
-    // Add notification to state (cast to BaseNotification for state storage)
     final updatedNotifications = [
       ...state.notifications,
       notification as BaseNotification
     ];
     emit(state.copyWith(notifications: updatedNotifications));
 
-    // Get the appropriate handler based on notification type
     if (_notificationHandlers.containsKey(notification.type)) {
       _notificationHandlers[notification.type]!(notification);
     } else {
-      // Default handling based on category
       _showNotification(notification, category);
     }
 
-    // Log for debugging
     LogService.i(
         '[Notification] Received ${T.toString()} notification: ${notification.type}');
   }
@@ -204,12 +204,10 @@ class NotificationCubit extends Cubit<NotificationState> {
     );
   }
 
-  // Method to manually add a notification
   Future<void> addNotification(BaseNotification notification) async {
     _handleNotification(notification);
   }
 
-  // Method to reconnect to socket (useful after token refresh)
   void reconnect() {
     final token = tokenSp.getToken();
     if (token != null) {
@@ -217,16 +215,14 @@ class NotificationCubit extends Cubit<NotificationState> {
     }
   }
 
-  // Method to clear all notifications
   void clearNotifications() {
     emit(state.copyWith(notifications: []));
   }
 
   void resetState() {
-    emit(NotificationState()); // Reset ke state awal
+    emit(NotificationState());
   }
 
-  // Method to remove a specific notification
   void removeNotification(BaseNotification notification) {
     final updatedNotifications = state.notifications
         .where((n) => n.hashCode != notification.hashCode)
