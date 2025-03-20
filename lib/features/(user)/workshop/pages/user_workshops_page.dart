@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/data/models/car_workshop.dart';
+import 'package:paint_car/data/models/user_detail_vehicle_paint_model.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(user)/workshop/cubit/user_workshops_cubit.dart';
@@ -18,9 +19,18 @@ import 'package:paint_car/ui/utils/snack_bar.dart';
 
 // ! design example
 class UserWorkshopsPage extends StatefulWidget {
-  static route() =>
-      MaterialPageRoute(builder: (_) => const UserWorkshopsPage());
-  const UserWorkshopsPage({super.key});
+  static route({
+    VehicleData? vehicleData,
+    PaintableParts? paintableParts,
+  }) =>
+      MaterialPageRoute(
+          builder: (_) => UserWorkshopsPage(
+                vehicleData: vehicleData,
+                paintableParts: paintableParts,
+              ));
+  final VehicleData? vehicleData;
+  final PaintableParts? paintableParts;
+  const UserWorkshopsPage({super.key, this.vehicleData, this.paintableParts});
 
   @override
   State<UserWorkshopsPage> createState() => _UserWorkshopsPageState();

@@ -242,7 +242,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
             SnackBarUtil.showSnackBar(
               context: context,
               message:
-                  "Transaction created successfully, go to Transaction to pay",
+                  "Transaction created successfully, go to My Booking to pay",
               type: SnackBarType.success,
             );
             Navigator.of(context).pushAndRemoveUntil(

@@ -3,11 +3,14 @@ import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
 class CardChooseService extends StatefulWidget {
-  const CardChooseService(
-      {super.key,
-      required this.imageAsset,
-      required this.title,
-      required this.onTap});
+  const CardChooseService({
+    super.key,
+    required this.imageAsset,
+    required this.title,
+    required this.onTap,
+    this.isDisabled = false,
+  });
+  final bool isDisabled;
   final String imageAsset;
   final String title;
   final Function() onTap;
@@ -24,7 +27,9 @@ class _CardChooseServiceState extends State<CardChooseService> {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          color: CustomColors.secondaryWhite,
+          color: widget.isDisabled
+              ? CustomColors.fifthGray
+              : CustomColors.secondaryWhite,
           boxShadow: [
             BoxShadow(
               color: CustomColors.black.withAlpha(25),

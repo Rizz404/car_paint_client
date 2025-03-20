@@ -52,17 +52,20 @@ class _UserChooseServicePageState extends State<UserChooseServicePage> {
                 spacing: 16,
                 children: [
                   CardChooseService(
-                      imageAsset: "assets/images/car/red_car.png",
-                      title: "Mobil",
-                      onTap: () {
-                        Navigator.of(context).push(
-                          UserDetailVehiclePaintPage.route(),
-                        );
-                      }),
+                    imageAsset: "assets/images/car/red_car.png",
+                    title: "Mobil",
+                    onTap: () {
+                      Navigator.of(context).push(
+                        UserDetailVehiclePaintPage.route(),
+                      );
+                    },
+                  ),
                   CardChooseService(
-                      imageAsset: "assets/images/motorcycle/red_motorcycle.png",
-                      title: "Motor",
-                      onTap: () {}),
+                    imageAsset: "assets/images/motorcycle/red_motorcycle.png",
+                    title: "Motor",
+                    onTap: () {},
+                    isDisabled: true,
+                  ),
                 ],
               ),
             )

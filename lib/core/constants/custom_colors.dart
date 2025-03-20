@@ -17,4 +17,5 @@ class CustomColors {
   static const secondaryGray = Color(0xFF78828A);
   static const tertiaryGray = Color(0xFF616161);
   static const fourthGray = Color(0xFFFEFEFE);
+  static const fifthGray = Color(0xD6D6D6D6);
 }

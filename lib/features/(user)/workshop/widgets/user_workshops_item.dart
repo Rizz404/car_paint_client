@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:paint_car/data/models/car_workshop.dart';
+import 'package:paint_car/data/models/user_detail_vehicle_paint_model.dart';
 import 'package:paint_car/features/(user)/workshop/pages/user_detail_workshops_page.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/extension/padding.dart';
@@ -11,8 +12,15 @@ import 'package:paint_car/ui/shared/main_text.dart';
 class UserWorkshopsItem extends StatefulWidget {
   final CarWorkshop workshop;
   final Function() onRefresh;
+  final VehicleData? vehicleData;
+  final PaintableParts? paintableParts;
+
   const UserWorkshopsItem(
-      {super.key, required this.workshop, required this.onRefresh});
+      {super.key,
+      required this.workshop,
+      required this.onRefresh,
+      this.vehicleData,
+      this.paintableParts});
 
   @override
   State<UserWorkshopsItem> createState() => _UserWorkshopsItemState();

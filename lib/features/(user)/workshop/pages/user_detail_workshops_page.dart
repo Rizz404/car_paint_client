@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/data/models/car_workshop.dart';
+import 'package:paint_car/data/models/user_detail_vehicle_paint_model.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_services_cubit.dart';
 import 'package:paint_car/features/(user)/financial/pages/user_create_order_page.dart';
@@ -21,11 +22,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserDetailWorkshopsPage extends StatefulWidget {
   final CarWorkshop workshop;
-  static Route route({required CarWorkshop workshop}) => MaterialPageRoute(
-        builder: (_) => UserDetailWorkshopsPage(workshop: workshop),
+  final VehicleData? vehicleData;
+  final PaintableParts? paintableParts;
+
+  static Route route({
+    required CarWorkshop workshop,
+    VehicleData? vehicleData,
+    PaintableParts? paintableParts,
+  }) =>
+      MaterialPageRoute(
+        builder: (_) => UserDetailWorkshopsPage(
+          workshop: workshop,
+          vehicleData: vehicleData,
+          paintableParts: paintableParts,
+        ),
       );
-  const UserDetailWorkshopsPage({Key? key, required this.workshop})
-      : super(key: key);
+  const UserDetailWorkshopsPage({
+    Key? key,
+    required this.workshop,
+    this.vehicleData,
+    this.paintableParts,
+  }) : super(key: key);
 
   @override
   State<UserDetailWorkshopsPage> createState() =>
@@ -129,6 +146,7 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                     ),
                   ),
                   _buildDetailSection(),
+                  // TODO Revisi
                   StateHandler<CarServicesCubit, PaginationState<CarService>>(
                     onRetry: () => getCarServices(),
                     onSuccess: (context, data, _) {

@@ -51,8 +51,8 @@ class ServiceSection extends StatelessWidget {
               return;
             }
             // ! BEKAS REVISI
-            Navigator.of(context).push(UserWorkshopsPage.route());
-            // Navigator.of(context).push(UserChooseServicePage.route());
+            // Navigator.of(context).push(UserWorkshopsPage.route());
+            Navigator.of(context).push(UserChooseServicePage.route());
           },
         );
       },

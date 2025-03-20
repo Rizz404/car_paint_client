@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/data/models/user_car.dart';
+import 'package:paint_car/data/models/user_detail_vehicle_paint_model.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
@@ -23,11 +24,16 @@ class UserCreateOrderPage extends StatefulWidget {
   final List<String> carServices;
   final int totalPrice;
   final int totalAllServices;
+  final VehicleData? vehicleData;
+  final PaintableParts? paintableParts;
+
   static route({
     required String workshopId,
     required List<String> carServices,
     required int totalPrice,
     required int totalAllServices,
+    VehicleData? vehicleData,
+    PaintableParts? paintableParts,
   }) =>
       MaterialPageRoute(
         builder: (_) => UserCreateOrderPage(
@@ -35,6 +41,8 @@ class UserCreateOrderPage extends StatefulWidget {
           carServices: carServices,
           totalPrice: totalPrice,
           totalAllServices: totalAllServices,
+          vehicleData: vehicleData,
+          paintableParts: paintableParts,
         ),
       );
 
@@ -44,6 +52,8 @@ class UserCreateOrderPage extends StatefulWidget {
     required this.carServices,
     required this.totalPrice,
     required this.totalAllServices,
+    this.vehicleData,
+    this.paintableParts,
   });
 
   @override
