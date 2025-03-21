@@ -19,7 +19,6 @@ import 'package:paint_car/ui/shared/main_text_field.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 import 'package:paint_car/ui/utils/url_to_file.dart';
 import 'package:paint_car/ui/validator/file_validator.dart';
-import 'package:paint_car/ui/validator/number_validator.dart';
 
 class ProfilePage extends StatefulWidget {
   final UserWithProfile user;

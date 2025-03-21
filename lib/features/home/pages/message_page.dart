@@ -17,7 +17,6 @@ class _MessagePageState extends State<MessagePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  // Data mock untuk bengkel dan chat
   late List<Bengkel> _bengkelList;
   late List<NotificationItem> _notifications;
 
@@ -196,7 +195,6 @@ class _MessagePageState extends State<MessagePage>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Tab Bar
           Container(
             decoration: BoxDecoration(
               border: Border(
@@ -215,17 +213,12 @@ class _MessagePageState extends State<MessagePage>
               indicatorWeight: 3,
             ),
           ),
-
-          // Tab Content
           Container(
             child: SizedBox(
-              height: MediaQuery.of(context)
-                  .size
-                  .height, // Adjust height for status bar
+              height: MediaQuery.of(context).size.height,
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  // Messages Tab
                   ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -244,7 +237,6 @@ class _MessagePageState extends State<MessagePage>
                         waktu: _getTimeDisplay(lastMessage.time),
                         notifCount: index == 0 ? 1 : null,
                         onTap: () {
-                          // Navigasi ke detail pesan
                           Navigator.push(
                             context,
                             ChatDetailPage.route(bengkel),
@@ -253,8 +245,6 @@ class _MessagePageState extends State<MessagePage>
                       );
                     },
                   ),
-
-                  // Notifications Tab
                   _notifications.isEmpty
                       ? const Center(
                           child: Column(
@@ -285,7 +275,6 @@ class _MessagePageState extends State<MessagePage>
                               notification: notif,
                               onTap: () {
                                 setState(() {
-                                  // Mark notification as read when tapped
                                   _notifications[index] = NotificationItem(
                                     id: notif.id,
                                     title: notif.title,
@@ -293,8 +282,6 @@ class _MessagePageState extends State<MessagePage>
                                     isRead: true,
                                   );
                                 });
-                                // Handle notification tap
-                                // You could navigate to a specific page based on notification type
                               },
                             );
                           },
@@ -320,7 +307,6 @@ class _MessagePageState extends State<MessagePage>
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Blue dot for unread notifications
             if (!notification.isRead) ...[
               Container(
                 margin: const EdgeInsets.only(top: 7, right: 8),
@@ -332,10 +318,8 @@ class _MessagePageState extends State<MessagePage>
                 ),
               ),
             ] else ...[
-              const SizedBox(width: 16), // Placeholder for alignment
+              const SizedBox(width: 16),
             ],
-
-            // Notification content
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -353,7 +337,7 @@ class _MessagePageState extends State<MessagePage>
                   const SizedBox(height: 4),
                   MainText(
                     text: notification.time,
-                    customTextStyle: TextStyle(
+                    customTextStyle: const TextStyle(
                       fontSize: 12,
                       color: Colors.grey,
                     ),
@@ -368,14 +352,14 @@ class _MessagePageState extends State<MessagePage>
   }
 
   String _getTimeDisplay(String time) {
-    // Contoh sederhana, seharusnya ada logika untuk menentukan 22m, 22h, 2d dll
-    // berdasarkan selisih waktu pesan dengan waktu sekarang
     if (_bengkelList.indexOf(
-            _bengkelList.firstWhere((b) => b.messages.last.time == time)) <
+          _bengkelList.firstWhere((b) => b.messages.last.time == time),
+        ) <
         2) {
       return '22m';
     } else if (_bengkelList.indexOf(
-            _bengkelList.firstWhere((b) => b.messages.last.time == time)) <
+          _bengkelList.firstWhere((b) => b.messages.last.time == time),
+        ) <
         4) {
       return '22h';
     } else {

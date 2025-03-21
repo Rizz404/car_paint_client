@@ -143,7 +143,9 @@ class NotificationCubit extends Cubit<NotificationState> {
   }
 
   void registerNotificationHandler(
-      String type, Function(BaseNotification) handler) {
+    String type,
+    Function(BaseNotification) handler,
+  ) {
     _notificationHandlers[type] = handler;
   }
 
@@ -159,10 +161,12 @@ class NotificationCubit extends Cubit<NotificationState> {
   }
 
   void _handleTypedNotification<T>(
-      BaseNotification<T> notification, String category) {
+    BaseNotification<T> notification,
+    String category,
+  ) {
     final updatedNotifications = [
       ...state.notifications,
-      notification as BaseNotification
+      notification as BaseNotification,
     ];
     emit(state.copyWith(notifications: updatedNotifications));
 
@@ -173,11 +177,14 @@ class NotificationCubit extends Cubit<NotificationState> {
     }
 
     LogService.i(
-        '[Notification] Received ${T.toString()} notification: ${notification.type}');
+      '[Notification] Received ${T.toString()} notification: ${notification.type}',
+    );
   }
 
-  Future<void> _showNotification(BaseNotification notification,
-      [String? title]) async {
+  Future<void> _showNotification(
+    BaseNotification notification, [
+    String? title,
+  ]) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
       'notification_channel',

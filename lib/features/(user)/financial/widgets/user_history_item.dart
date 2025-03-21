@@ -48,8 +48,9 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: statusColor.withOpacity(0.1),
-        border: Border.all(color: statusColor.withOpacity(0.3), width: 1.5),
+        color: statusColor.withValues(alpha: 0.1),
+        border:
+            Border.all(color: statusColor.withValues(alpha: 0.3), width: 1.5),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -111,8 +112,10 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
             customTextStyle: keyStyle ??
                 TextStyle(
                   fontWeight: FontWeight.w600,
-                  color:
-                      Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.7),
                 ),
           ),
         ),
@@ -172,7 +175,8 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
       color: theme.colorScheme.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: theme.colorScheme.outline.withOpacity(0.1)),
+        side:
+            BorderSide(color: theme.colorScheme.outline.withValues(alpha: 0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,7 +207,8 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                         text: _formatDate(transactions.createdAt),
                         customTextStyle: TextStyle(
                           fontSize: 13,
-                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.7),
                         ),
                       ),
                     ),
@@ -286,7 +291,8 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                           extent: const ExtraSmall(),
                           maxLines: 2,
                           customTextStyle: TextStyle(
-                            color: theme.colorScheme.onSurface.withOpacity(0.7),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.7),
                           ),
                         ),
                       ],
@@ -339,7 +345,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                         height: 1,
                         indent: 16,
                         endIndent: 16,
-                        color: theme.colorScheme.outline.withOpacity(0.2),
+                        color: theme.colorScheme.outline.withValues(alpha: 0.2),
                       ),
                       itemBuilder: (context, i) {
                         final carService = order.carServices![i];

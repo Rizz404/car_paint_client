@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/data/models/car_workshop.dart';
 import 'package:paint_car/data/models/user_detail_vehicle_paint_model.dart';
@@ -194,6 +193,8 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                           carServices: selectedServices,
                           totalPrice: totalPrice,
                           totalAllServices: carServices.length,
+                          vehicleData: widget.vehicleData,
+                          paintableParts: widget.paintableParts,
                         ),
                       );
                     },

@@ -1,5 +1,3 @@
-import "dart:io";
-
 import "package:flutter_local_notifications/flutter_local_notifications.dart";
 import "package:get_it/get_it.dart";
 import "package:paint_car/data/local/user_sp.dart";
@@ -54,6 +52,7 @@ import "package:paint_car/features/shared/cubit/user_cubit.dart";
 import "package:paint_car/features/shared/repo/user_repo.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:http/http.dart" as http;
+// ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 final getIt = GetIt.instance;
@@ -125,10 +124,12 @@ initializeSL() async {
       userSp: getIt(),
     ),
   );
-  getIt.registerFactory<AuthCubit>(() => AuthCubit(
-        authRepo: getIt(),
-        notificationCubit: getIt(),
-      ));
+  getIt.registerFactory<AuthCubit>(
+    () => AuthCubit(
+      authRepo: getIt(),
+      notificationCubit: getIt(),
+    ),
+  );
   // ! USER
   getIt.registerLazySingleton<UserCarRepo>(
     () => UserCarRepo(

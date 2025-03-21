@@ -4,6 +4,7 @@ import 'package:paint_car/data/models/orders.dart';
 import 'package:paint_car/data/models/transactions.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
 
+// ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService {
@@ -143,19 +144,25 @@ class SocketService {
           _stringNotificationController.add(notification);
 
           _debugLog(
-              'Notification processed: [${notification.type}] ${notification.message}');
+            'Notification processed: [${notification.type}] ${notification.message}',
+          );
         } else {
           _debugLog(
-              'Notification missing required fields: ${_safeStringify(data)}',
-              isError: true);
+            'Notification missing required fields: ${_safeStringify(data)}',
+            isError: true,
+          );
         }
       } else {
-        _debugLog('Invalid notification format: ${data.runtimeType}',
-            isError: true);
+        _debugLog(
+          'Invalid notification format: ${data.runtimeType}',
+          isError: true,
+        );
       }
     } catch (e, stackTrace) {
-      _debugLog('Error handling notification: $e\nStack: $stackTrace',
-          isError: true);
+      _debugLog(
+        'Error handling notification: $e\nStack: $stackTrace',
+        isError: true,
+      );
     }
   }
 
@@ -178,13 +185,16 @@ class SocketService {
         _orderNotificationController.add(notification);
 
         _debugLog(
-            'Order notification processed: [${notification.type}] ${notification.message}');
+          'Order notification processed: [${notification.type}] ${notification.message}',
+        );
       } else {
         _debugLog('Invalid order notification format', isError: true);
       }
     } catch (e, stackTrace) {
-      _debugLog('Error handling order notification: $e\nStack: $stackTrace',
-          isError: true);
+      _debugLog(
+        'Error handling order notification: $e\nStack: $stackTrace',
+        isError: true,
+      );
     }
   }
 
@@ -208,14 +218,16 @@ class SocketService {
         _transactionNotificationController.add(notification);
 
         _debugLog(
-            'Transaction notification processed: [${notification.type}] ${notification.message}');
+          'Transaction notification processed: [${notification.type}] ${notification.message}',
+        );
       } else {
         _debugLog('Invalid transaction notification format', isError: true);
       }
     } catch (e, stackTrace) {
       _debugLog(
-          'Error handling transaction notification: $e\nStack: $stackTrace',
-          isError: true);
+        'Error handling transaction notification: $e\nStack: $stackTrace',
+        isError: true,
+      );
     }
   }
 
@@ -233,7 +245,8 @@ class SocketService {
     if (socket.connected) {
       socket.emit(event, data);
       _debugLog(
-          'Test event emitted: $event with data: ${_safeStringify(data)}');
+        'Test event emitted: $event with data: ${_safeStringify(data)}',
+      );
     } else {
       _debugLog('Cannot emit test: Socket not connected', isError: true);
     }

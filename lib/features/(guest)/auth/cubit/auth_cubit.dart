@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/logger.dart';
 import 'package:paint_car/data/models/user_model.dart';
 import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
@@ -37,7 +36,10 @@ class AuthCubit extends Cubit<BaseState> with Cancelable {
   }
 
   Future<void> login(
-      String email, String password, CancelToken cancelToken) async {
+    String email,
+    String password,
+    CancelToken cancelToken,
+  ) async {
     await handleBaseCubit<UserWithProfile>(
       emit,
       () => authRepo.login(email, password, cancelToken),

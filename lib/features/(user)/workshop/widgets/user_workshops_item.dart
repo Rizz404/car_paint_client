@@ -57,7 +57,11 @@ class _UserWorkshopsItemState extends State<UserWorkshopsItem> {
       child: InkWell(
           onTap: () {
             Navigator.of(context).push(
-              UserDetailWorkshopsPage.route(workshop: workshop),
+              UserDetailWorkshopsPage.route(
+                workshop: workshop,
+                vehicleData: widget.vehicleData,
+                paintableParts: widget.paintableParts,
+              ),
             );
           },
           child: Row(

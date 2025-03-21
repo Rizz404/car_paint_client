@@ -18,6 +18,15 @@ class CarModelYears {
     this.updatedAt,
     this.carModel,
   });
+  static empty() {
+    return CarModelYears(
+      id: '',
+      carModelId: '',
+      year: 0,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+  }
 
   CarModelYears copyWith({
     String? id,

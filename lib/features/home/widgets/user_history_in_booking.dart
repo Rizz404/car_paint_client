@@ -85,10 +85,11 @@ class _UserHistoryInBookingState extends State<UserHistoryInBooking>
               slivers: [
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
-                      (context, index) => UserHistoryItem(
-                            transactions: models[index],
-                          ),
-                      childCount: models.length),
+                    (context, index) => UserHistoryItem(
+                      transactions: models[index],
+                    ),
+                    childCount: models.length,
+                  ),
                 ),
                 if (data.isLoadingMore)
                   const SliverToBoxAdapter(

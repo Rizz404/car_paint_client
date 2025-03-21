@@ -34,16 +34,6 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
     return DateFormat('dd MMM yyyy').format(date);
   }
 
-  String _formatCurrency(dynamic price) {
-    if (price == null) return '-';
-    final formatter = NumberFormat.currency(
-      locale: 'id',
-      symbol: 'Rp ',
-      decimalDigits: 0,
-    );
-    return formatter.format(price);
-  }
-
   void _cancelOrder() async {
     if (widget.order.id == null) {
       SnackBarUtil.showSnackBar(
@@ -200,7 +190,8 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
                       text: "Catatan:",
                       customTextStyle: TextStyle(
                         fontWeight: FontWeight.w600,
-                        color: theme.colorScheme.onSurface.withOpacity(0.8),
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.8),
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -209,7 +200,8 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
                       maxLines: 2,
                       customTextStyle: TextStyle(
                         fontSize: 14,
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
                     ),
                   ],

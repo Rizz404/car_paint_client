@@ -13,6 +13,15 @@ class CarColor {
     this.updatedAt,
   });
 
+  static empty() {
+    return CarColor(
+      id: '',
+      name: '',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+  }
+
   CarColor copyWith({
     String? id,
     String? name,

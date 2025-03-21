@@ -20,6 +20,16 @@ class CarModel {
     this.carBrand,
   });
 
+  static empty() {
+    return CarModel(
+      id: '',
+      carBrandId: '',
+      name: '',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+  }
+
   CarModel copyWith({
     String? id,
     String? carBrandId,

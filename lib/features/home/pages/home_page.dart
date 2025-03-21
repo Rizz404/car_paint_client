@@ -7,13 +7,11 @@ import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
 import 'package:paint_car/features/(user)/widgets/home/home_user.dart';
 import 'package:paint_car/features/home/pages/message_page.dart';
 import 'package:paint_car/features/home/pages/my_booking_page.dart';
-import 'package:paint_car/features/home/pages/settings_page.dart';
 import 'package:paint_car/features/home/pages/user_page.dart';
 import 'package:paint_car/features/home/widgets/bottom_nav_bar.dart';
 import 'package:paint_car/features/home/widgets/home_admin.dart';
 import 'package:paint_car/features/home/widgets/left_drawer.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
-import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
 class HomePage extends StatefulWidget {
@@ -64,19 +62,6 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  _title() {
-    switch (_selectedIndex) {
-      case 0:
-        return "Home";
-      case 1:
-        return "My Booking";
-      case 2:
-        return "Message";
-      case 3:
-        return "Profile";
-    }
   }
 
   @override

@@ -21,6 +21,15 @@ class CarModelYearColor {
     this.createdAt,
     this.updatedAt,
   });
+  static empty() {
+    return CarModelYearColor(
+      id: '',
+      carModelYearId: '',
+      colorId: '',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+  }
 
   CarModelYearColor copyWith({
     String? id,

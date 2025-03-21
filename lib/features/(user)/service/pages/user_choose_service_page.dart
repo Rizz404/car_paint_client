@@ -1,25 +1,12 @@
 // ignore_for_file: require_trailing_commas
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:paint_car/core/constants/api.dart';
-import 'package:paint_car/core/constants/custom_colors.dart';
-import 'package:paint_car/data/models/car_workshop.dart';
-import 'package:paint_car/dependencies/helper/base_state.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(user)/paint/pages/user_detail_vehicle_paint.dart';
 import 'package:paint_car/features/(user)/service/widgets/card_choose_service.dart';
-import 'package:paint_car/features/(user)/workshop/cubit/user_workshops_cubit.dart';
-import 'package:paint_car/features/shared/types/pagination_state.dart';
-import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/extension/padding.dart';
-import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
-import 'package:paint_car/ui/shared/state_handler.dart';
-import 'package:paint_car/ui/utils/snack_bar.dart';
 
 // ! design example
 class UserChooseServicePage extends StatefulWidget {

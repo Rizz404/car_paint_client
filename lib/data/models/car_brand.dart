@@ -17,6 +17,17 @@ class CarBrand {
     this.updatedAt,
   });
 
+  static empty() {
+    return CarBrand(
+      id: '',
+      name: '',
+      logo: '',
+      country: '',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+  }
+
   CarBrand copyWith({
     String? id,
     String? name,

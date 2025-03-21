@@ -41,7 +41,9 @@ class NotificationScreen extends StatelessWidget {
   }
 
   Widget _buildNotificationCard(
-      BuildContext context, BaseNotification notification) {
+    BuildContext context,
+    BaseNotification notification,
+  ) {
     IconData icon = _getNotificationIcon(notification.type);
 
     Color color = _getNotificationColor(notification.type);
@@ -56,7 +58,7 @@ class NotificationScreen extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: ListTile(
           leading: CircleAvatar(
-            backgroundColor: color.withOpacity(0.2),
+            backgroundColor: color.withValues(alpha: 0.2),
             child: Icon(icon, color: color),
           ),
           title: Text(_getNotificationTitle(notification)),
@@ -129,9 +131,11 @@ class NotificationScreen extends StatelessWidget {
       default:
         return notification.type
             .split('_')
-            .map((word) => word.isNotEmpty
-                ? '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}'
-                : '')
+            .map(
+              (word) => word.isNotEmpty
+                  ? '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}'
+                  : '',
+            )
             .join(' ');
     }
   }
@@ -153,13 +157,13 @@ class NotificationScreen extends StatelessWidget {
   }
 
   void _handleNotificationTap(
-      BuildContext context, BaseNotification notification) {
+    BuildContext context,
+    BaseNotification notification,
+  ) {
     try {
       if (notification.type.startsWith('ORDER_') && notification.data != null) {
         if (notification.data is Map<String, dynamic> &&
             (notification.data as Map<String, dynamic>).containsKey('id')) {
-          final orderId = notification.data['id'];
-
           return;
         }
       }
@@ -190,13 +194,16 @@ class NotificationScreen extends StatelessWidget {
               Text('Message: ${notification.message}'),
               const SizedBox(height: 8),
               Text(
-                  'Time: ${DateFormat('MMM d, y - h:mm a').format(notification.timestamp)}'),
+                'Time: ${DateFormat('MMM d, y - h:mm a').format(notification.timestamp)}',
+              ),
               const SizedBox(height: 8),
               Text('Type: ${notification.type}'),
               if (notification.data != null) ...[
                 const SizedBox(height: 16),
-                const Text('Additional Data:',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text(
+                  'Additional Data:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 8),
                 _buildDataDetails(notification.data),
               ],

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:paint_car/core/constants/custom_colors.dart';
-import 'package:paint_car/data/models/order_notification.dart';
 import 'package:paint_car/data/models/user_car.dart';
 import 'package:paint_car/data/utils/user_extension.dart';
 import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
@@ -10,13 +8,11 @@ import 'package:paint_car/features/(user)/widgets/home/list_style_welcome.dart';
 import 'package:paint_car/features/(user)/widgets/home/notification_screen.dart';
 import 'package:paint_car/features/(user)/widgets/home/service_section.dart';
 import 'package:paint_car/features/(user)/workshop/pages/user_workshops_page.dart';
-import 'package:paint_car/features/cubit/notification_cubit.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/ui/extension/padding.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeUser extends StatefulWidget {
   const HomeUser({super.key, required this.onRetry});
@@ -63,12 +59,15 @@ class _HomeUserState extends State<HomeUser> {
             spacing: 24,
             children: [
               ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => NotificationScreen(),
-                    ));
-                  },
-                  child: Text('ke notif screen')),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const NotificationScreen(),
+                    ),
+                  );
+                },
+                child: const Text('ke notif screen'),
+              ),
               ListStyleWelcome(
                 user: context.currentUser,
               ),

@@ -1,24 +1,30 @@
 /// Model untuk data kendaraan
 class VehicleData {
-  String brand;
-  String model;
-  String year;
-  String color;
+  String? carModelYearColor;
+  String? carBrand;
+  String? carColor;
+  String? carModel;
+  String? carModelYear;
+  String? carModelYearColorId;
+  String? carBrandId;
+  String? carColorId;
+  String? carModelId;
+  String? carModelYearId;
 
   VehicleData({
-    required this.brand,
-    required this.model,
-    required this.year,
-    required this.color,
+    this.carModelYearColor,
+    this.carBrand,
+    this.carColor,
+    this.carModel,
+    this.carModelYear,
+    this.carModelYearColorId,
+    this.carBrandId,
+    this.carColorId,
+    this.carModelId,
+    this.carModelYearId,
   });
-
-  @override
-  String toString() {
-    return "VehicleData(brand: $brand, model: $model, year: $year, color: $color)";
-  }
 }
 
-/// Model untuk bagian-bagian mobil yang dapat dicat
 class PaintableParts {
   bool isFullBodySelected;
   bool isHoodSelected;
@@ -43,12 +49,4 @@ class PaintableParts {
   String toString() {
     return "PaintableParts(isFullBodySelected: $isFullBodySelected, isHoodSelected: $isHoodSelected, isDoorSelected: $isDoorSelected, isFenderSelected: $isFenderSelected, isRoofSelected: $isRoofSelected, isTrunkSelected: $isTrunkSelected, isBumperSelected: $isBumperSelected, isFrontBumperSelected: $isFrontBumperSelected)";
   }
-}
-
-/// Model untuk warna mobil dengan informasi kode dan model yang tersedia
-class CarColor {
-  final String name;
-  final List<String> availableModels;
-
-  CarColor({required this.name, required this.availableModels});
 }

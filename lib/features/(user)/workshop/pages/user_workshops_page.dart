@@ -144,7 +144,11 @@ class _UserWorkshopsPageState extends State<UserWorkshopsPage> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => UserWorkshopsItem(
-                          workshop: workshops[index], onRefresh: _onRefresh),
+                        workshop: workshops[index],
+                        onRefresh: _onRefresh,
+                        vehicleData: widget.vehicleData,
+                        paintableParts: widget.paintableParts,
+                      ),
                       childCount: workshops.length,
                     ),
                   ),
