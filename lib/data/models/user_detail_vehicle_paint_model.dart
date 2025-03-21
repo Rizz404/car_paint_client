@@ -1,4 +1,3 @@
-/// Model untuk data kendaraan
 class VehicleData {
   String? carModelYearColor;
   String? carBrand;
@@ -35,6 +34,15 @@ class PaintableParts {
   bool isBumperSelected;
   bool isFrontBumperSelected;
 
+  final String fullBodyId = "full_body";
+  final String hoodId = "hood";
+  final String doorId = "door";
+  final String fenderId = "fender";
+  final String roofId = "roof";
+  final String trunkId = "trunk";
+  final String bumperId = "bumper";
+  final String frontBumperId = "front_bumper";
+
   PaintableParts({
     this.isFullBodySelected = false,
     this.isHoodSelected = false,
@@ -45,8 +53,52 @@ class PaintableParts {
     this.isBumperSelected = false,
     this.isFrontBumperSelected = false,
   });
+
+  List<String> getSelectedPartsIds() {
+    List<String> selectedParts = [];
+
+    if (isFullBodySelected) {
+      selectedParts.add(fullBodyId);
+    } else {
+      if (isHoodSelected) selectedParts.add(hoodId);
+      if (isDoorSelected) selectedParts.add(doorId);
+      if (isFenderSelected) selectedParts.add(fenderId);
+      if (isRoofSelected) selectedParts.add(roofId);
+      if (isTrunkSelected) selectedParts.add(trunkId);
+      if (isBumperSelected) selectedParts.add(bumperId);
+      if (isFrontBumperSelected) selectedParts.add(frontBumperId);
+    }
+
+    return selectedParts;
+  }
+
+  bool get areAllPartsSelected =>
+      isHoodSelected &&
+      isDoorSelected &&
+      isFenderSelected &&
+      isRoofSelected &&
+      isBumperSelected &&
+      isFrontBumperSelected;
+
+  void selectAllParts(bool value) {
+    isHoodSelected = value;
+    isDoorSelected = value;
+    isFenderSelected = value;
+    isRoofSelected = value;
+    isTrunkSelected = value;
+    isBumperSelected = value;
+    isFrontBumperSelected = value;
+  }
+
   @override
   String toString() {
-    return "PaintableParts(isFullBodySelected: $isFullBodySelected, isHoodSelected: $isHoodSelected, isDoorSelected: $isDoorSelected, isFenderSelected: $isFenderSelected, isRoofSelected: $isRoofSelected, isTrunkSelected: $isTrunkSelected, isBumperSelected: $isBumperSelected, isFrontBumperSelected: $isFrontBumperSelected)";
+    return "PaintableParts(isFullBodySelected: $isFullBodySelected, "
+        "isHoodSelected: $isHoodSelected, "
+        "isDoorSelected: $isDoorSelected, "
+        "isFenderSelected: $isFenderSelected, "
+        "isRoofSelected: $isRoofSelected, "
+        "isTrunkSelected: $isTrunkSelected, "
+        "isBumperSelected: $isBumperSelected, "
+        "isFrontBumperSelected: $isFrontBumperSelected)";
   }
 }

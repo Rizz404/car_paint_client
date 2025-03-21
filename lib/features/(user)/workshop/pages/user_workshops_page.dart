@@ -22,15 +22,23 @@ class UserWorkshopsPage extends StatefulWidget {
   static route({
     VehicleData? vehicleData,
     PaintableParts? paintableParts,
+    List<String>? selectedServiceIds,
   }) =>
       MaterialPageRoute(
           builder: (_) => UserWorkshopsPage(
                 vehicleData: vehicleData,
                 paintableParts: paintableParts,
+                selectedServiceIds: selectedServiceIds,
               ));
   final VehicleData? vehicleData;
   final PaintableParts? paintableParts;
-  const UserWorkshopsPage({super.key, this.vehicleData, this.paintableParts});
+  final List<String>? selectedServiceIds;
+  const UserWorkshopsPage({
+    super.key,
+    this.vehicleData,
+    this.paintableParts,
+    this.selectedServiceIds,
+  });
 
   @override
   State<UserWorkshopsPage> createState() => _UserWorkshopsPageState();

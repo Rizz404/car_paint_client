@@ -45,6 +45,8 @@ class _UserDetailVehiclePaintPageState
 
   late PaintableParts _paintableParts;
 
+  List<String> carServices = [];
+
   @override
   void initState() {
     super.initState();
@@ -154,10 +156,10 @@ class _UserDetailVehiclePaintPageState
     return Column(
       children: [
         _buildBrandsSelectField(divider),
+        _buildColorSelectField(divider),
         _buildModelSelectField(divider),
         _buildModelYearSelectField(divider),
-        _buildColorSelectField(divider),
-        _buildModelYearColorHelpText(),
+        _buildModelYearColotSelectField(),
       ],
     );
   }
@@ -175,6 +177,9 @@ class _UserDetailVehiclePaintPageState
               value: _vehicleData.carBrand ?? '',
               options: brands.map((e) => e.name).toList(),
               onSelected: (value) {
+                getModelsByBrandId(
+                  brands.firstWhere((element) => element.name == value).id,
+                );
                 setState(() {
                   _vehicleData.carBrand = value;
                   _vehicleData.carBrandId =
@@ -290,7 +295,7 @@ class _UserDetailVehiclePaintPageState
     );
   }
 
-  Widget _buildModelYearColorHelpText() {
+  Widget _buildModelYearColotSelectField() {
     return AnimatedStateHandler<CarModelYearColorCubit,
         PaginationState<CarModelYearColor>>(
       show: _vehicleData.carModelYearId != null &&
@@ -346,48 +351,96 @@ class _UserDetailVehiclePaintPageState
           "assets/images/car/black_car_full_body.png",
           "Full Body",
           _paintableParts.isFullBodySelected,
-          (value) =>
-              setState(() => _paintableParts.isFullBodySelected = value!),
+          (value) {
+            setState(() {
+              _paintableParts.isFullBodySelected = value!;
+
+              // Jika Full Body dicentang, semua bagian lain juga dicentang
+              if (value) {
+                _paintableParts.selectAllParts(true);
+              }
+              // Jika Full Body tidak dicentang, semua bagian lain juga tidak dicentang
+              else {
+                _paintableParts.selectAllParts(false);
+              }
+            });
+          },
         ),
         _buildCheckboxPaintPanel(
           "assets/images/car/black_car_hood.png",
           "Hood",
           _paintableParts.isHoodSelected,
-          (value) => setState(() => _paintableParts.isHoodSelected = value!),
+          (value) {
+            setState(() {
+              _paintableParts.isHoodSelected = value!;
+              // Periksa apakah semua bagian telah dipilih
+              _updateFullBodySelection();
+            });
+          },
         ),
         _buildCheckboxPaintPanel(
           "assets/images/car/black_car_door.png",
           "Door",
           _paintableParts.isDoorSelected,
-          (value) => setState(() => _paintableParts.isDoorSelected = value!),
+          (value) {
+            setState(() {
+              _paintableParts.isDoorSelected = value!;
+              _updateFullBodySelection();
+            });
+          },
         ),
         _buildCheckboxPaintPanel(
           "assets/images/car/black_car_fender.png",
           "Fender",
           _paintableParts.isFenderSelected,
-          (value) => setState(() => _paintableParts.isFenderSelected = value!),
+          (value) {
+            setState(() {
+              _paintableParts.isFenderSelected = value!;
+              _updateFullBodySelection();
+            });
+          },
         ),
         _buildCheckboxPaintPanel(
           "assets/images/car/black_car_roof.png",
           "Roof",
           _paintableParts.isRoofSelected,
-          (value) => setState(() => _paintableParts.isRoofSelected = value!),
+          (value) {
+            setState(() {
+              _paintableParts.isRoofSelected = value!;
+              _updateFullBodySelection();
+            });
+          },
         ),
         _buildCheckboxPaintPanel(
           "assets/images/car/black_car_bumper.png",
           "Bumper",
           _paintableParts.isBumperSelected,
-          (value) => setState(() => _paintableParts.isBumperSelected = value!),
+          (value) {
+            setState(() {
+              _paintableParts.isBumperSelected = value!;
+              _updateFullBodySelection();
+            });
+          },
         ),
         _buildCheckboxPaintPanel(
           "assets/images/car/black_car_front_bumper.png",
           "FrontBumper",
           _paintableParts.isFrontBumperSelected,
-          (value) =>
-              setState(() => _paintableParts.isFrontBumperSelected = value!),
+          (value) {
+            setState(() {
+              _paintableParts.isFrontBumperSelected = value!;
+              _updateFullBodySelection();
+            });
+          },
         ),
       ],
     );
+  }
+
+  void _updateFullBodySelection() {
+    setState(() {
+      _paintableParts.isFullBodySelected = _paintableParts.areAllPartsSelected;
+    });
   }
 
   Widget _buildCheckboxPaintPanel(
@@ -414,11 +467,17 @@ class _UserDetailVehiclePaintPageState
   }
 
   void _handleNextButton() {
-    LogService.i("Vehicle Data: $_vehicleData, $_paintableParts");
+    List<String> selectedServiceIds = _paintableParts.getSelectedPartsIds();
+
+    LogService.i("Vehicle Data: $_vehicleData");
+    LogService.i("Paintable Parts: $_paintableParts");
+    LogService.i("Selected Part IDs: $selectedServiceIds");
+
     Navigator.of(context).push(
       UserWorkshopsPage.route(
         vehicleData: _vehicleData,
         paintableParts: _paintableParts,
+        selectedServiceIds: selectedServiceIds,
       ),
     );
   }

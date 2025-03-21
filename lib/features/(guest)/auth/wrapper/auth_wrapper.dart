@@ -28,7 +28,6 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
     if (cubit.state is BaseSuccessState<UserWithProfile?> &&
         (cubit.state as BaseSuccessState<UserWithProfile?>).data != null) {
-      LogService.i("User is logged in and init notification cubit");
       await context.read<NotificationCubit>();
     }
   }

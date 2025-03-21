@@ -40,18 +40,13 @@ class UserCarRepo {
     List<File> imageFiles,
     CancelToken cancelToken,
   ) async {
-    LogService.i("USER CAR REPO: $userCar");
-
-    // Buat map data request terlebih dahulu dengan field yang wajib dikirim
     Map<String, dynamic> requestBody = {
       'licensePlate': userCar.licensePlate,
     };
 
-    // Jika carModelYearColorId tersedia, kirim hanya field tersebut
     if (userCar.carModelYearColorId != null) {
       requestBody['carModelYearColorId'] = userCar.carModelYearColorId;
     } else {
-      // Jika carModelYearColorId null, maka kirim carModelYearId dan colorId
       requestBody['carModelYearId'] = userCar.carModelYearColor?.carModelYearId;
       requestBody['colorId'] = userCar.carModelYearColor?.colorId;
     }
