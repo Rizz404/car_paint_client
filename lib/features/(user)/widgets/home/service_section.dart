@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:paint_car/data/models/user_car.dart';
 import 'package:paint_car/data/models/user_model.dart';
-import 'package:paint_car/features/(user)/car/cubit/user_car_cubit.dart';
-import 'package:paint_car/features/(user)/car/pages/user_car_page.dart';
 import 'package:paint_car/features/(user)/profile/pages/profile_page.dart';
 import 'package:paint_car/features/(user)/service/pages/user_choose_service_page.dart';
 import 'package:paint_car/features/(user)/widgets/home/card_link_section.dart';
-import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
-import 'package:paint_car/ui/shared/state_handler.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 
 class ServiceSection extends StatelessWidget {

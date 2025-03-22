@@ -2,7 +2,6 @@ import 'package:paint_car/data/local/token_sp.dart';
 import 'package:paint_car/data/local/user_sp.dart';
 import 'package:paint_car/data/models/user_model.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
-import 'package:paint_car/dependencies/services/socket.dart';
 
 class UserRepo {
   final UserLocal userSp;

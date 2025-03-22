@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/data/models/user_model.dart';
-import 'package:paint_car/features/(user)/car/pages/user_car_page.dart';
-import 'package:paint_car/features/(user)/widgets/home/notification_screen.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
 class ListStyleWelcome extends StatelessWidget {

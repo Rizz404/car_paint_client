@@ -4,7 +4,6 @@ import 'package:paint_car/data/models/user_model.dart';
 import 'package:paint_car/dependencies/helper/base_cubit.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/(guest)/auth/repo/auth_repo.dart';
-import 'package:paint_car/features/cubit/notification_cubit.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 
 class AuthCubit extends Cubit<BaseState> with Cancelable {
