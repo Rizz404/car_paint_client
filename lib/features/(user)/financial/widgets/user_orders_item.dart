@@ -167,7 +167,7 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
                       ),
                       MainText(
                         text:
-                            'Total: ${widget.order.subtotalPrice != null ? CurrencyFormatter.toRupiah(int.parse(widget.order.subtotalPrice!)) : '-'}',
+                            'Total: ${widget.order.subtotalPrice != null ? CurrencyFormatter.toRupiah(double.parse(widget.order.subtotalPrice!)) : '-'}',
                         customTextStyle: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: theme.colorScheme.primary,

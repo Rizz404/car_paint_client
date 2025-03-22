@@ -360,7 +360,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                           ),
                           trailing: MainText(
                             text: CurrencyFormatter.toRupiah(
-                              int.parse(carService.price),
+                              double.parse(carService.price),
                             ),
                             customTextStyle: const TextStyle(
                               fontWeight: FontWeight.w600,
@@ -399,7 +399,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                 ),
                 MainText(
                   text: CurrencyFormatter.toRupiah(
-                    int.parse(transactions.totalPrice),
+                    double.parse(transactions.totalPrice),
                   ),
                   textAlign: TextAlign.end,
                   extent: const Medium(),
