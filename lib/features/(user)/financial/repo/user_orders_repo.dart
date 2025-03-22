@@ -32,21 +32,23 @@ class UserOrdersRepo {
 
   Future<ApiResponse<Transactions>> createOrder(
     CancelToken cancelToken,
-    String userCarId,
     String paymentMethodId,
     String workshopId,
     String? note,
     List<String> carServices,
+    String carModelYearId,
+    String colorId,
   ) async {
     final result = await apiClient.post<Transactions>(
       ApiConstant.ordersPath,
       fromJson: (json) => Transactions.fromMap(json),
       {
-        'userCarId': userCarId,
         'paymentMethodId': paymentMethodId,
         'workshopId': workshopId,
         'note': note,
         'carServices': carServices.map((id) => {'carServiceId': id}).toList(),
+        'carModelYearId': carModelYearId,
+        'colorId': colorId,
       },
       cancelToken: cancelToken,
     );

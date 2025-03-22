@@ -20,24 +20,36 @@ import 'package:paint_car/ui/utils/snack_bar.dart';
 // ! design example
 class UserWorkshopsPage extends StatefulWidget {
   static route({
-    VehicleData? vehicleData,
-    PaintableParts? paintableParts,
-    List<String>? selectedServiceIds,
+    required VehicleData vehicleData,
+    required List<String> carServices,
+    required String carModelYearId,
+    required String colorId,
+    required double totalPrice,
+    required int totalAllServices,
   }) =>
       MaterialPageRoute(
           builder: (_) => UserWorkshopsPage(
                 vehicleData: vehicleData,
-                paintableParts: paintableParts,
-                selectedServiceIds: selectedServiceIds,
+                carServices: carServices,
+                carModelYearId: carModelYearId,
+                colorId: colorId,
+                totalPrice: totalPrice,
+                totalAllServices: totalAllServices,
               ));
-  final VehicleData? vehicleData;
-  final PaintableParts? paintableParts;
-  final List<String>? selectedServiceIds;
+  final VehicleData vehicleData;
+  final List<String> carServices;
+  final String carModelYearId;
+  final String colorId;
+  final double totalPrice;
+  final int totalAllServices;
   const UserWorkshopsPage({
     super.key,
-    this.vehicleData,
-    this.paintableParts,
-    this.selectedServiceIds,
+    required this.vehicleData,
+    required this.carServices,
+    required this.carModelYearId,
+    required this.colorId,
+    required this.totalPrice,
+    required this.totalAllServices,
   });
 
   @override
@@ -155,7 +167,11 @@ class _UserWorkshopsPageState extends State<UserWorkshopsPage> {
                         workshop: workshops[index],
                         onRefresh: _onRefresh,
                         vehicleData: widget.vehicleData,
-                        paintableParts: widget.paintableParts,
+                        carServices: widget.carServices,
+                        carModelYearId: widget.carModelYearId,
+                        colorId: widget.colorId,
+                        totalPrice: widget.totalPrice,
+                        totalAllServices: widget.totalAllServices,
                       ),
                       childCount: workshops.length,
                     ),

@@ -9,11 +9,11 @@ import 'package:paint_car/features/shared/utils/cancel_token.dart';
 
 class AuthCubit extends Cubit<BaseState> with Cancelable {
   final AuthRepo authRepo;
-  final NotificationCubit notificationCubit;
+  // final NotificationCubit notificationCubit;
 
   AuthCubit({
     required this.authRepo,
-    required this.notificationCubit,
+    // required this.notificationCubit,
   }) : super(const BaseInitialState());
 
   @override
@@ -45,7 +45,7 @@ class AuthCubit extends Cubit<BaseState> with Cancelable {
       () => authRepo.login(email, password, cancelToken),
       onSuccess: (data, message) {
         debugPrint(message);
-        notificationCubit.reinitialize();
+        // notificationCubit.reinitialize();
         emit(const BaseActionSuccessState());
       },
     );

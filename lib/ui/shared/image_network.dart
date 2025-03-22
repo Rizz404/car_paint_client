@@ -3,16 +3,16 @@ import 'package:paint_car/dependencies/services/log_service.dart';
 
 class ImageNetwork extends StatefulWidget {
   final String src;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final BoxFit fit;
   final double borderRadius;
 
   const ImageNetwork({
     Key? key,
     required this.src,
-    required this.width,
-    required this.height,
+    this.width,
+    this.height,
     this.borderRadius = 8,
     this.fit = BoxFit.contain,
   }) : super(key: key);
@@ -32,8 +32,8 @@ class _ImageNetworkState extends State<ImageNetwork> {
         headers: const {"Cache-Control": "max-age=604800"},
         width: widget.width,
         height: widget.height,
-        cacheWidth: widget.width.toInt(),
-        cacheHeight: widget.height.toInt(),
+        // cacheWidth: widget.width.toInt(),
+        // cacheHeight: widget.height.toInt(),
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) {
             return child;
@@ -60,7 +60,7 @@ class _ImageNetworkState extends State<ImageNetwork> {
             child: Center(
               child: Icon(
                 Icons.signal_wifi_off,
-                size: widget.width / 2,
+                // size: widget.width / 2,
                 color: Theme.of(context).disabledColor,
               ),
             ),

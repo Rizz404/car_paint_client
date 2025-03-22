@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> getUserCars() async {
-    context.read<UserCarCubit>().getUserCars(1, _cancelToken);
+    // context.read<UserCarCubit>().getUserCars(1, _cancelToken);
   }
 
   Widget _buildHomePage() {

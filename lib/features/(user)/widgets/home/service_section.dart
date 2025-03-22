@@ -18,42 +18,69 @@ class ServiceSection extends StatelessWidget {
 
   final Future<void> Function() onRetry;
 
-  firstService() {
-    return StateHandler<UserCarCubit, PaginationState<UserCar>>(
-      onRetry: () => onRetry(),
-      onSuccess: (context, data, message) {
-        final cars = data.data;
-        return CardLinkSection(
-          text: "Order Here",
-          onTap: () {
-            // ! BEKAS REVISI
-            if (cars.isEmpty) {
-              SnackBarUtil.showSnackBar(
-                context: context,
-                message: "Harus input mobil dulu untuk order",
-                type: SnackBarType.warning,
-              );
-              Navigator.of(context).push(UserCarPage.route());
-              return;
-            }
-            if (user?.userProfile?.phoneNumber == null) {
-              SnackBarUtil.showSnackBar(
-                context: context,
-                message: "Harus input nomor telepon dulu untuk order",
-                type: SnackBarType.warning,
-              );
-              if (user == null) return;
+  // firstService() {
+  //   return StateHandler<UserCarCubit, PaginationState<UserCar>>(
+  //     onRetry: () => onRetry(),
+  //     onSuccess: (context, data, message) {
+  //       final cars = data.data;
+  //       return CardLinkSection(
+  //         text: "Order Here",
+  //         onTap: () {
+  //           // ! BEKAS REVISI
+  //           if (cars.isEmpty) {
+  //             SnackBarUtil.showSnackBar(
+  //               context: context,
+  //               message: "Harus input mobil dulu untuk order",
+  //               type: SnackBarType.warning,
+  //             );
+  //             Navigator.of(context).push(UserCarPage.route());
+  //             return;
+  //           }
+  //           if (user?.userProfile?.phoneNumber == null) {
+  //             SnackBarUtil.showSnackBar(
+  //               context: context,
+  //               message: "Harus input nomor telepon dulu untuk order",
+  //               type: SnackBarType.warning,
+  //             );
+  //             if (user == null) return;
 
-              Navigator.of(context).push(
-                ProfilePage.route(user: user!),
-              );
-              return;
-            }
-            // ! BEKAS REVISI
-            // Navigator.of(context).push(UserWorkshopsPage.route());
-            Navigator.of(context).push(UserChooseServicePage.route());
-          },
-        );
+  //             Navigator.of(context).push(
+  //               ProfilePage.route(user: user!),
+  //             );
+  //             return;
+  //           }
+  //           // ! BEKAS REVISI
+  //           // Navigator.of(context).push(UserWorkshopsPage.route());
+  //           Navigator.of(context).push(UserChooseServicePage.route());
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
+  firstService(
+    BuildContext context,
+  ) {
+    return CardLinkSection(
+      text: "Order Here",
+      onTap: () {
+        // ! BEKAS REVISI
+
+        if (user?.userProfile?.phoneNumber == null) {
+          SnackBarUtil.showSnackBar(
+            context: context,
+            message: "Harus input nomor telepon dulu untuk order",
+            type: SnackBarType.warning,
+          );
+          if (user == null) return;
+
+          Navigator.of(context).push(
+            ProfilePage.route(user: user!),
+          );
+          return;
+        }
+        // ! BEKAS REVISI
+        // Navigator.of(context).push(UserWorkshopsPage.route());
+        Navigator.of(context).push(UserChooseServicePage.route());
       },
     );
   }
@@ -68,7 +95,7 @@ class ServiceSection extends StatelessWidget {
           text: "Services",
           extent: Large(),
         ),
-        firstService(),
+        firstService(context),
         // ! BEKAS REVISI
         // Row(
         //   spacing: 16,

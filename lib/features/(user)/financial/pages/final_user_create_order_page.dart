@@ -23,28 +23,34 @@ import 'package:paint_car/ui/utils/snack_bar.dart';
 
 class FinalUserCreateOrderPage extends StatefulWidget {
   final String workshopId;
-  final String selectedUserCarId;
+  // final String selectedUserCarId;
   final String? note;
   final List<String> carServices;
-  final int totalPrice;
+  final double totalPrice;
   final int totalAllServices;
+  final String carModelYearId;
+  final String colorId;
 
   static route({
     required String workshopId,
     required List<String> carServices,
-    required String selectedUserCarId,
+    // required String selectedUserCarId,
     String? note,
-    required int totalPrice,
+    required double totalPrice,
     required int totalAllServices,
+    required String carModelYearId,
+    required String colorId,
   }) =>
       MaterialPageRoute(
         builder: (_) => FinalUserCreateOrderPage(
           workshopId: workshopId,
           carServices: carServices,
-          selectedUserCarId: selectedUserCarId,
+          // selectedUserCarId: selectedUserCarId,
           note: note,
           totalPrice: totalPrice,
           totalAllServices: totalAllServices,
+          carModelYearId: carModelYearId,
+          colorId: colorId,
         ),
       );
 
@@ -52,10 +58,12 @@ class FinalUserCreateOrderPage extends StatefulWidget {
     super.key,
     required this.workshopId,
     required this.carServices,
-    required this.selectedUserCarId,
+    // required this.selectedUserCarId,
     this.note,
     required this.totalPrice,
     required this.totalAllServices,
+    required this.carModelYearId,
+    required this.colorId,
   });
 
   @override
@@ -101,13 +109,15 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
     }
     final userId = context.currentUser!.id;
     await context.read<UserOrdersCubit>().createOrder(
-          widget.selectedUserCarId,
+          // widget.selectedUserCarId,
           selectedPaymentMethod!.id!,
           widget.workshopId,
           widget.note,
           widget.carServices,
           _cancelToken,
           userId,
+          widget.carModelYearId,
+          widget.colorId,
         );
   }
 

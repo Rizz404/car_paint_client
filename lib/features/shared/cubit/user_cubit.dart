@@ -6,11 +6,11 @@ import 'package:paint_car/features/shared/repo/user_repo.dart';
 
 class UserCubit extends Cubit<BaseState> {
   final UserRepo userRepo;
-  final NotificationCubit notificationCubit;
+  // final NotificationCubit notificationCubit;
 
   UserCubit({
     required this.userRepo,
-    required this.notificationCubit,
+    // required this.notificationCubit,
   }) : super(const BaseInitialState());
 
   Future<void> getUserLocal() async {
@@ -25,7 +25,7 @@ class UserCubit extends Cubit<BaseState> {
   }
 
   Future<void> logout() async {
-    notificationCubit.resetState();
+    // notificationCubit.resetState();
     await userRepo.logout();
     emit(const BaseInitialState());
   }

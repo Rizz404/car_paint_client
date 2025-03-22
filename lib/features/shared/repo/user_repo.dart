@@ -7,12 +7,12 @@ import 'package:paint_car/dependencies/services/socket.dart';
 class UserRepo {
   final UserLocal userSp;
   final TokenLocal tokenSp;
-  final SocketService socketService;
+  // final SocketService socketService;
 
   const UserRepo(
     this.userSp,
     this.tokenSp,
-    this.socketService,
+    // this.socketService,
   );
 
   Future<UserWithProfile?> getUserLocal() async {
@@ -28,8 +28,8 @@ class UserRepo {
 
   Future<void> logout() async {
     try {
-      socketService.resetAuth();
-      socketService.disconnect();
+      // socketService.resetAuth();
+      // socketService.disconnect();
       await tokenSp.removeToken();
       await userSp.removeUser();
     } catch (e) {

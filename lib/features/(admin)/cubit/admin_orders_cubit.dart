@@ -38,7 +38,6 @@ class AdminOrdersCubit extends Cubit<BaseState> with Cancelable {
     if (page == 1) {
       emit(const BaseLoadingState());
     } else {
-      // kalo dah ada data, update state buat tampilin loading di bagian bawah
       if (state is BaseSuccessState<PaginationState<Orders>>) {
         final currentState = state as BaseSuccessState<PaginationState<Orders>>;
         final data = currentState.data;

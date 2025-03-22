@@ -74,24 +74,23 @@ class PaymentMethod {
 
   factory PaymentMethod.fromMap(Map<String, dynamic> map) {
     return PaymentMethod(
-      id: map['id'] != null ? map['id'] as String : null,
-      name: map['name'] as String,
-      fee: map['fee'] != null ? map['fee'] as String : '',
+      id: map['id']?.toString(),
+      name: map['name']?.toString() ?? '',
+      fee: map['fee']?.toString() ?? '0',
       createdAt: map['createdAt'] != null
-          ? DateTime.parse(map['createdAt'] as String)
+          ? DateTime.parse(map['createdAt'].toString())
           : null,
-      logoUrl: map['logoUrl'] != null ? map['logoUrl'] as String : null,
-      isActive: map['isActive'] != null ? map['isActive'] as bool : null,
-      description:
-          map['description'] != null ? map['description'] as String : null,
+      logoUrl: map['logoUrl']?.toString(),
+      isActive: map['isActive'] as bool?,
+      description: map['description']?.toString(),
       type: map['type'] != null
-          ? PaymentMethodTypeExtension.fromMap(map['type'] as String)
+          ? PaymentMethodTypeExtension.fromMap(map['type'].toString())
           : null,
       reusability: map['reusability'] != null
-          ? PaymentReusabilityExtension.fromMap(map['reusability'] as String)
+          ? PaymentReusabilityExtension.fromMap(map['reusability'].toString())
           : null,
       updatedAt: map['updatedAt'] != null
-          ? DateTime.parse(map['updatedAt'] as String)
+          ? DateTime.parse(map['updatedAt'].toString())
           : null,
     );
   }

@@ -10,7 +10,7 @@ import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart'
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
-import 'package:paint_car/ui/utils/snack_bar.dart'; // pastikan sudah ada model CarService
+import 'package:paint_car/ui/utils/snack_bar.dart';
 
 class AdminOrdersItem extends StatefulWidget {
   final Orders order;
@@ -52,15 +52,12 @@ class _AdminOrdersItemState extends State<AdminOrdersItem> {
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: InkWell(
-        onTap: () {
-          // aksi ketika item di-tap, misalnya navigasi ke detail order
-        },
+        onTap: () {},
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header: Total Harga dan Tanggal Order
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -73,13 +70,11 @@ class _AdminOrdersItemState extends State<AdminOrdersItem> {
                 ],
               ),
               const SizedBox(height: 8),
-              // Catatan order (jika ada)
               if (widget.order.note != null && widget.order.note!.isNotEmpty)
                 MainText(
                   text: widget.order.note!,
                 ),
               const SizedBox(height: 8),
-              // Status order
               Row(
                 children: [
                   Expanded(

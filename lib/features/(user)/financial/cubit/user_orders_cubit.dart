@@ -99,22 +99,24 @@ class UserOrdersCubit extends Cubit<BaseState> with Cancelable {
   }
 
   Future<void> createOrder(
-      String userCarId,
       String paymentMethodId,
       String workshopId,
       String? note,
       List<String> carServices,
       CancelToken cancelToken,
-      String userId) async {
+      String userId,
+      String carModelYearId,
+      String colorId) async {
     await handleBaseCubit<void>(
       emit,
       () => userOrdersRepo.createOrder(
         cancelToken,
-        userCarId,
         paymentMethodId,
         workshopId,
         note,
         carServices,
+        carModelYearId,
+        colorId,
       ),
       onSuccess: (data, message) => {
         emit(const BaseActionSuccessState()),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
+import 'package:paint_car/ui/shared/image_network.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
 class CheckboxPaintPanel extends StatefulWidget {
@@ -9,10 +10,12 @@ class CheckboxPaintPanel extends StatefulWidget {
     required this.title,
     required this.value,
     required this.onChanged,
+    this.isImageNetwork = true,
   });
   final String imageAsset;
   final String title;
   final bool value;
+  final bool isImageNetwork;
   final Function(bool?) onChanged;
   @override
   State<CheckboxPaintPanel> createState() => _CheckboxPaintPanelState();
@@ -41,34 +44,17 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Positioned(
-              right: 0,
-              top: 0,
-              child: Checkbox(
-                value: widget.value,
-                onChanged: widget.onChanged,
-                // Gunakan MaterialStateProperty untuk side
-                side: WidgetStateBorderSide.resolveWith(
-                  (states) => const BorderSide(
-                    color: CustomColors.gray,
-                    width: 2,
+            widget.isImageNetwork
+                ? ImageNetwork(
+                    src: widget.imageAsset,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  )
+                : Image.asset(
+                    widget.imageAsset,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
                   ),
-                ),
-                shape: const CircleBorder(),
-                checkColor: CustomColors.blue,
-                activeColor: CustomColors.blue,
-                fillColor: WidgetStateProperty.resolveWith((states) {
-                  if (states.contains(WidgetState.selected)) {
-                    return CustomColors.blue;
-                  }
-                  return CustomColors.gray;
-                }),
-              ),
-            ),
-            Image.asset(
-              widget.imageAsset,
-              fit: BoxFit.cover,
-            ),
             Positioned(
               bottom: 0,
               child: MainText(
@@ -83,6 +69,31 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
                       color: CustomColors.black.withAlpha(50),
                     ),
                   ],
+                ),
+              ),
+            ),
+            Positioned(
+              right: 0,
+              top: 0,
+              child: Container(
+                child: Checkbox(
+                  value: widget.value,
+                  onChanged: widget.onChanged,
+                  side: WidgetStateBorderSide.resolveWith(
+                    (states) => const BorderSide(
+                      color: CustomColors.gray,
+                      width: 2,
+                    ),
+                  ),
+                  shape: const CircleBorder(),
+                  checkColor: CustomColors.blue,
+                  activeColor: CustomColors.blue,
+                  fillColor: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.selected)) {
+                      return CustomColors.blue;
+                    }
+                    return CustomColors.gray;
+                  }),
                 ),
               ),
             ),

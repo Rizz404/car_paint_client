@@ -87,17 +87,17 @@ initializeSL() async {
   getIt.registerLazySingleton<FlutterLocalNotificationsPlugin>(
     () => FlutterLocalNotificationsPlugin(),
   );
-  getIt.registerLazySingleton<SocketService>(
-    () => SocketService(socket: getIt<IO.Socket>()),
-  );
-  getIt.registerLazySingleton<NotificationCubit>(
-    () => NotificationCubit(
-      userSp: getIt(),
-      tokenSp: getIt(),
-      socketService: getIt(),
-      flutterLocalNotificationsPlugin: getIt(),
-    ),
-  );
+  // getIt.registerLazySingleton<SocketService>(
+  //   () => SocketService(socket: getIt<IO.Socket>()),
+  // );
+  // getIt.registerLazySingleton<NotificationCubit>(
+  //   () => NotificationCubit(
+  //     userSp: getIt(),
+  //     tokenSp: getIt(),
+  //     socketService: getIt(),
+  //     flutterLocalNotificationsPlugin: getIt(),
+  //   ),
+  // );
 
   // ! GUEST
 
@@ -106,13 +106,13 @@ initializeSL() async {
     () => UserRepo(
       getIt(),
       getIt(),
-      getIt(),
+      // getIt(),
     ),
   );
   getIt.registerFactory<UserCubit>(
     () => UserCubit(
       userRepo: getIt(),
-      notificationCubit: getIt(),
+      // notificationCubit: getIt(),
     ),
   );
 
@@ -127,20 +127,20 @@ initializeSL() async {
   getIt.registerFactory<AuthCubit>(
     () => AuthCubit(
       authRepo: getIt(),
-      notificationCubit: getIt(),
+      // notificationCubit: getIt(),
     ),
   );
   // ! USER
-  getIt.registerLazySingleton<UserCarRepo>(
-    () => UserCarRepo(
-      apiClient: getIt(),
-    ),
-  );
-  getIt.registerFactory<UserCarCubit>(
-    () => UserCarCubit(
-      userCarRepo: getIt(),
-    ),
-  );
+  // getIt.registerLazySingleton<UserCarRepo>(
+  //   () => UserCarRepo(
+  //     apiClient: getIt(),
+  //   ),
+  // );
+  // getIt.registerFactory<UserCarCubit>(
+  //   () => UserCarCubit(
+  //     userCarRepo: getIt(),
+  //   ),
+  // );
   getIt.registerLazySingleton<UserWorkshopsRepo>(
     () => UserWorkshopsRepo(
       apiClient: getIt(),

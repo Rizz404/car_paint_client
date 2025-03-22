@@ -264,7 +264,7 @@ class UserTransactionsItem extends StatelessWidget {
                         const SizedBox(height: 2),
                         MainText(
                           text: CurrencyFormatter.toRupiah(
-                            int.parse(
+                            double.parse(
                               transactions.totalPrice,
                             ),
                           ),

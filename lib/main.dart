@@ -81,9 +81,9 @@ Future<void> main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => getIt<NotificationCubit>(),
-        ),
+        // BlocProvider(
+        //   create: (context) => getIt<NotificationCubit>(),
+        // ),
         // ! SUPERADMIN
         BlocProvider(
           create: (context) => getIt<AuthCubit>(),
@@ -131,9 +131,9 @@ Future<void> main() async {
           create: (context) => getIt<HistoryCubit>(),
         ),
         // ! USER
-        BlocProvider(
-          create: (context) => getIt<UserCarCubit>(),
-        ),
+        // BlocProvider(
+        //   create: (context) => getIt<UserCarCubit>(),
+        // ),
         BlocProvider(
           create: (context) => getIt<UserWorkshopCubit>(),
         ),

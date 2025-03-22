@@ -13,14 +13,22 @@ class UserWorkshopsItem extends StatefulWidget {
   final CarWorkshop workshop;
   final Function() onRefresh;
   final VehicleData? vehicleData;
-  final PaintableParts? paintableParts;
+  final List<String> carServices;
+  final String carModelYearId;
+  final String colorId;
+  final double totalPrice;
+  final int totalAllServices;
 
   const UserWorkshopsItem(
       {super.key,
       required this.workshop,
       required this.onRefresh,
       this.vehicleData,
-      this.paintableParts});
+      required this.carServices,
+      required this.carModelYearId,
+      required this.colorId,
+      required this.totalPrice,
+      required this.totalAllServices});
 
   @override
   State<UserWorkshopsItem> createState() => _UserWorkshopsItemState();
@@ -60,7 +68,11 @@ class _UserWorkshopsItemState extends State<UserWorkshopsItem> {
               UserDetailWorkshopsPage.route(
                 workshop: workshop,
                 vehicleData: widget.vehicleData,
-                paintableParts: widget.paintableParts,
+                carServices: widget.carServices,
+                carModelYearId: widget.carModelYearId,
+                colorId: widget.colorId,
+                totalPrice: widget.totalPrice,
+                totalAllServices: widget.totalAllServices,
               ),
             );
           },

@@ -18,14 +18,14 @@ class LeftDrawer extends StatelessWidget {
     BuildContext context,
   ) {
     return [
-      ListTile(
-        leading: const Icon(Icons.car_rental),
-        subtitle: const MainText(text: "Your Cars"),
-        title: const MainText(text: "Car"),
-        onTap: () {
-          Navigator.of(context).push(UserCarPage.route());
-        },
-      ),
+      // ListTile(
+      //   leading: const Icon(Icons.car_rental),
+      //   subtitle: const MainText(text: "Your Cars"),
+      //   title: const MainText(text: "Car"),
+      //   onTap: () {
+      //     Navigator.of(context).push(UserCarPage.route());
+      //   },
+      // ),
       MainDropdown(
         state: DropdownState(
           title: 'Financial',
@@ -73,13 +73,13 @@ class LeftDrawer extends StatelessWidget {
       const TitleLink(
         text: "Menu Car",
       ),
-      ActualLink(
-        text: "Your Car",
-        onTap: () {
-          Navigator.of(context).push(UserCarPage.route());
-        },
-        leading: Icons.car_rental,
-      ),
+      // ActualLink(
+      //   text: "Your Car",
+      //   onTap: () {
+      //     Navigator.of(context).push(UserCarPage.route());
+      //   },
+      //   leading: Icons.car_rental,
+      // ),
       const TitleLink(
         text: "Menu Financial",
       ),

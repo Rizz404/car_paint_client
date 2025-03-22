@@ -5,13 +5,16 @@ import 'package:paint_car/data/models/car_color.dart';
 import 'package:paint_car/data/models/car_model.dart';
 import 'package:paint_car/data/models/car_model_year_color.dart';
 import 'package:paint_car/data/models/car_model_years.dart';
+import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/data/models/user_detail_vehicle_paint_model.dart';
+import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_colors_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_model_year_color_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_model_years_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_models_cubit.dart';
+import 'package:paint_car/features/(superadmin)/car/cubit/car_services_cubit.dart';
 import 'package:paint_car/features/(user)/paint/widgets/checkbox_paint_panel.dart';
 import 'package:paint_car/features/(user)/paint/widgets/select_field_vehicle.dart';
 import 'package:paint_car/features/(user)/workshop/pages/user_workshops_page.dart';
@@ -25,6 +28,7 @@ import 'package:paint_car/ui/shared/main_elevated_button.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
+import 'package:paint_car/ui/utils/snack_bar.dart';
 
 class UserDetailVehiclePaintPage extends StatefulWidget {
   static route() =>
@@ -39,13 +43,59 @@ class UserDetailVehiclePaintPage extends StatefulWidget {
 
 class _UserDetailVehiclePaintPageState
     extends State<UserDetailVehiclePaintPage> {
+  static const int limit = 100;
+
   late final CancelToken _cancelToken;
 
   late VehicleData _vehicleData;
 
-  late PaintableParts _paintableParts;
-
   List<String> carServices = [];
+  List<String> selectedServices = [];
+  bool isSelectAll = false;
+  totalPrice() {
+    final totalPrice = (context.read<CarServicesCubit>().state
+            as BaseSuccessState<PaginationState<CarService>>)
+        .data
+        .data
+        .where(
+          (service) => selectedServices.contains(service.id),
+        )
+        .fold(
+          0.0, // ! ini biar double yh
+          (sum, service) => sum + double.parse(service.price),
+        );
+    return totalPrice;
+  }
+
+  totalServices() {
+    return (context.read<CarServicesCubit>().state
+            as BaseSuccessState<PaginationState<CarService>>)
+        .data
+        .data
+        .length;
+  }
+
+  void _toggleService(String serviceId) {
+    setState(() {
+      if (selectedServices.contains(serviceId)) {
+        selectedServices.remove(serviceId);
+      } else {
+        selectedServices.add(serviceId);
+      }
+      isSelectAll = selectedServices.length == carServices.length;
+    });
+  }
+
+  void _toggleAllServices(List<CarService> services) {
+    setState(() {
+      isSelectAll = !isSelectAll;
+      if (isSelectAll) {
+        selectedServices = services.map((e) => e.id!).toList();
+      } else {
+        selectedServices.clear();
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -54,13 +104,19 @@ class _UserDetailVehiclePaintPageState
 
     _vehicleData = VehicleData();
 
-    _paintableParts = PaintableParts();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.wait([
         getBrands(),
         getColors(),
+        getCarServices(),
       ]);
     });
+  }
+
+  Future<void> getCarServices() async {
+    await context
+        .read<CarServicesCubit>()
+        .getServices(1, _cancelToken, limit: limit);
   }
 
   Future<void> getBrands() async {
@@ -115,10 +171,6 @@ class _UserDetailVehiclePaintPageState
 
   @override
   Widget build(BuildContext context) {
-    LogService.i(
-      "car brand:${_vehicleData.carBrand}, car brand id:${_vehicleData.carBrandId}",
-    );
-
     return Scaffold(
       appBar: mainAppBar("Detail Vehicle Paint"),
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -313,7 +365,7 @@ class _UserDetailVehiclePaintPageState
           children: [
             SelectFieldVehicle(
               field: "Model Tahun Warna Mobil*",
-              value: _vehicleData.carModelYear ?? '',
+              value: _vehicleData.carModelYearColor ?? '',
               options: modelYearColor.map((e) => e.color!.name).toList(),
               onSelected: (value) {
                 setState(() {
@@ -344,116 +396,55 @@ class _UserDetailVehiclePaintPageState
   }
 
   Widget _buildPaintCheckboxes() {
-    return Column(
-      spacing: 12,
-      children: [
-        _buildCheckboxPaintPanel(
-          "assets/images/car/black_car_full_body.png",
-          "Full Body",
-          _paintableParts.isFullBodySelected,
-          (value) {
-            setState(() {
-              _paintableParts.isFullBodySelected = value!;
+    return StateHandler<CarServicesCubit, PaginationState<CarService>>(
+      onRetry: () => getCarServices(),
+      onSuccess: (context, data, _) {
+        final services = data.data;
+        if (carServices.isEmpty && services.isNotEmpty) {
+          carServices = services.map((e) => e.id!).toList();
+        }
 
-              // Jika Full Body dicentang, semua bagian lain juga dicentang
-              if (value) {
-                _paintableParts.selectAllParts(true);
-              }
-              // Jika Full Body tidak dicentang, semua bagian lain juga tidak dicentang
-              else {
-                _paintableParts.selectAllParts(false);
-              }
-            });
-          },
-        ),
-        _buildCheckboxPaintPanel(
-          "assets/images/car/black_car_hood.png",
-          "Hood",
-          _paintableParts.isHoodSelected,
-          (value) {
-            setState(() {
-              _paintableParts.isHoodSelected = value!;
-              // Periksa apakah semua bagian telah dipilih
-              _updateFullBodySelection();
-            });
-          },
-        ),
-        _buildCheckboxPaintPanel(
-          "assets/images/car/black_car_door.png",
-          "Door",
-          _paintableParts.isDoorSelected,
-          (value) {
-            setState(() {
-              _paintableParts.isDoorSelected = value!;
-              _updateFullBodySelection();
-            });
-          },
-        ),
-        _buildCheckboxPaintPanel(
-          "assets/images/car/black_car_fender.png",
-          "Fender",
-          _paintableParts.isFenderSelected,
-          (value) {
-            setState(() {
-              _paintableParts.isFenderSelected = value!;
-              _updateFullBodySelection();
-            });
-          },
-        ),
-        _buildCheckboxPaintPanel(
-          "assets/images/car/black_car_roof.png",
-          "Roof",
-          _paintableParts.isRoofSelected,
-          (value) {
-            setState(() {
-              _paintableParts.isRoofSelected = value!;
-              _updateFullBodySelection();
-            });
-          },
-        ),
-        _buildCheckboxPaintPanel(
-          "assets/images/car/black_car_bumper.png",
-          "Bumper",
-          _paintableParts.isBumperSelected,
-          (value) {
-            setState(() {
-              _paintableParts.isBumperSelected = value!;
-              _updateFullBodySelection();
-            });
-          },
-        ),
-        _buildCheckboxPaintPanel(
-          "assets/images/car/black_car_front_bumper.png",
-          "FrontBumper",
-          _paintableParts.isFrontBumperSelected,
-          (value) {
-            setState(() {
-              _paintableParts.isFrontBumperSelected = value!;
-              _updateFullBodySelection();
-            });
-          },
-        ),
-      ],
+        return Column(
+          spacing: 12,
+          children: [
+            _buildCheckboxPaintPanel(
+              "assets/images/car/black_car_full_body.png",
+              "Full Body",
+              isSelectAll,
+              (value) {
+                _toggleAllServices(services);
+              },
+              isImageNetwork: false,
+            ),
+            ...services.map(
+              (service) => _buildCheckboxPaintPanel(
+                service.carServiceImage!,
+                service.name,
+                selectedServices.contains(service.id),
+                (value) {
+                  _toggleService(service.id!);
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
-  }
-
-  void _updateFullBodySelection() {
-    setState(() {
-      _paintableParts.isFullBodySelected = _paintableParts.areAllPartsSelected;
-    });
   }
 
   Widget _buildCheckboxPaintPanel(
     String imageAsset,
     String title,
     bool isSelected,
-    void Function(bool?) onChanged,
-  ) {
+    void Function(bool?) onChanged, {
+    bool isImageNetwork = true,
+  }) {
     return CheckboxPaintPanel(
       imageAsset: imageAsset,
       title: title,
       value: isSelected,
       onChanged: onChanged,
+      isImageNetwork: isImageNetwork,
     );
   }
 
@@ -467,17 +458,24 @@ class _UserDetailVehiclePaintPageState
   }
 
   void _handleNextButton() {
-    List<String> selectedServiceIds = _paintableParts.getSelectedPartsIds();
-
-    LogService.i("Vehicle Data: $_vehicleData");
-    LogService.i("Paintable Parts: $_paintableParts");
-    LogService.i("Selected Part IDs: $selectedServiceIds");
-
+    if (_vehicleData.carModelYearId == null ||
+        _vehicleData.carColorId == null ||
+        carServices.isEmpty) {
+      SnackBarUtil.showSnackBar(
+        context: context,
+        message: "Mohon lengkapi data terlebih dahulu",
+        type: SnackBarType.warning,
+      );
+      return;
+    }
     Navigator.of(context).push(
       UserWorkshopsPage.route(
         vehicleData: _vehicleData,
-        paintableParts: _paintableParts,
-        selectedServiceIds: selectedServiceIds,
+        carServices: selectedServices,
+        carModelYearId: _vehicleData.carModelYearId!,
+        colorId: _vehicleData.carColorId!,
+        totalAllServices: totalServices(),
+        totalPrice: totalPrice(),
       ),
     );
   }

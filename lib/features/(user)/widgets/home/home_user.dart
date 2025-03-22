@@ -22,30 +22,38 @@ class HomeUser extends StatefulWidget {
 }
 
 class _HomeUserState extends State<HomeUser> {
-  buttonOrder() {
-    return StateHandler<UserCarCubit, PaginationState<UserCar>>(
-      onRetry: () => widget.onRetry(),
-      onSuccess: (context, data, message) {
-        final cars = data.data;
-        return MainElevatedButton(
-          onPressed: () {
-            if (cars.isEmpty) {
-              SnackBarUtil.showSnackBar(
-                context: context,
-                message: "Harus input mobil dulu untuk order",
-                type: SnackBarType.warning,
-              );
-              Navigator.of(context).push(UserCarPage.route());
-              return;
-            }
+  // buttonOrder() {
+  //   return StateHandler<UserCarCubit, PaginationState<UserCar>>(
+  //     onRetry: () => widget.onRetry(),
+  //     onSuccess: (context, data, message) {
+  //       final cars = data.data;
+  //       return MainElevatedButton(
+  //         onPressed: () {
+  //           if (cars.isEmpty) {
+  //             SnackBarUtil.showSnackBar(
+  //               context: context,
+  //               message: "Harus input mobil dulu untuk order",
+  //               type: SnackBarType.warning,
+  //             );
+  //             Navigator.of(context).push(UserCarPage.route());
+  //             return;
+  //           }
 
-            Navigator.of(context).push(UserWorkshopsPage.route());
-          },
-          text: "Order Disini",
-        );
-      },
-    );
-  }
+  //           Navigator.of(context).push(UserWorkshopsPage.route());
+  //         },
+  //         text: "Order Disini",
+  //       );
+  //     },
+  //   );
+  // }
+  // buttonOrder() {
+  //   return MainElevatedButton(
+  //     onPressed: () {
+  //       Navigator.of(context).push(UserWorkshopsPage.route());
+  //     },
+  //     text: "Order Disini",
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -58,16 +66,16 @@ class _HomeUserState extends State<HomeUser> {
           child: Column(
             spacing: 24,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const NotificationScreen(),
-                    ),
-                  );
-                },
-                child: const Text('ke notif screen'),
-              ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     Navigator.of(context).push(
+              //       MaterialPageRoute(
+              //         builder: (context) => const NotificationScreen(),
+              //       ),
+              //     );
+              //   },
+              //   child: const Text('ke notif screen'),
+              // ),
               ListStyleWelcome(
                 user: context.currentUser,
               ),

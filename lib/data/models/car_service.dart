@@ -5,6 +5,7 @@ class CarService {
   final String? id;
   final String name;
   final String price;
+  final String? carServiceImage;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   CarService({
@@ -13,12 +14,14 @@ class CarService {
     required this.price,
     this.createdAt,
     this.updatedAt,
+    this.carServiceImage,
   });
 
   CarService copyWith({
     String? id,
     String? name,
     String? price,
+    String? carServiceImage,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -26,6 +29,7 @@ class CarService {
       id: id ?? this.id,
       name: name ?? this.name,
       price: price ?? this.price,
+      carServiceImage: carServiceImage ?? this.carServiceImage,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -36,6 +40,7 @@ class CarService {
       'id': id,
       'name': name,
       'price': price,
+      'carServiceImage': carServiceImage,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
     };
@@ -43,15 +48,16 @@ class CarService {
 
   factory CarService.fromMap(Map<String, dynamic> map) {
     return CarService(
-      id: map['id'] != null ? map['id'] as String : null,
-      name: map['name'] as String,
-      price: map['price'] as String,
+      id: map['id']?.toString(),
+      name: map['name']?.toString() ?? '',
+      price: map['price']?.toString() ?? '0',
       createdAt: map['createdAt'] != null
-          ? DateTime.parse(map['createdAt'] as String)
+          ? DateTime.parse(map['createdAt'].toString())
           : null,
       updatedAt: map['updatedAt'] != null
-          ? DateTime.parse(map['updatedAt'] as String)
+          ? DateTime.parse(map['updatedAt'].toString())
           : null,
+      carServiceImage: map['carServiceImage']?.toString() ?? '',
     );
   }
 
@@ -62,7 +68,7 @@ class CarService {
 
   @override
   String toString() {
-    return 'CarService(id: $id, name: $name, price: $price, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'CarService(id: $id, name: $name, price: $price, createdAt: $createdAt, updatedAt: $updatedAt, carServiceImage: $carServiceImage)';
   }
 
   @override

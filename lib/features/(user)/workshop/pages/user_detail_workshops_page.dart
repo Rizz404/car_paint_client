@@ -22,25 +22,41 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class UserDetailWorkshopsPage extends StatefulWidget {
   final CarWorkshop workshop;
   final VehicleData? vehicleData;
-  final PaintableParts? paintableParts;
+  final List<String> carServices;
+  final String carModelYearId;
+  final String colorId;
+  final double totalPrice;
+  final int totalAllServices;
 
   static Route route({
     required CarWorkshop workshop,
     VehicleData? vehicleData,
-    PaintableParts? paintableParts,
+    required List<String> carServices,
+    required String carModelYearId,
+    required String colorId,
+    required double totalPrice,
+    required int totalAllServices,
   }) =>
       MaterialPageRoute(
         builder: (_) => UserDetailWorkshopsPage(
           workshop: workshop,
           vehicleData: vehicleData,
-          paintableParts: paintableParts,
+          carServices: carServices,
+          carModelYearId: carModelYearId,
+          colorId: colorId,
+          totalPrice: totalPrice,
+          totalAllServices: totalAllServices,
         ),
       );
   const UserDetailWorkshopsPage({
     Key? key,
     required this.workshop,
-    this.vehicleData,
-    this.paintableParts,
+    required this.vehicleData,
+    required this.carServices,
+    required this.carModelYearId,
+    required this.colorId,
+    required this.totalPrice,
+    required this.totalAllServices,
   }) : super(key: key);
 
   @override
@@ -54,31 +70,31 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
   static const double _zoomLevel = 14;
 
   late final GoogleMapController? _mapController;
-  List<String> carServices = [];
-  List<String> selectedServices = [];
-  bool isSelectAll = false;
+  // List<String> carServices = [];
+  // List<String> selectedServices = [];
+  // bool isSelectAll = false;
 
-  void _toggleService(String serviceId) {
-    setState(() {
-      if (selectedServices.contains(serviceId)) {
-        selectedServices.remove(serviceId);
-      } else {
-        selectedServices.add(serviceId);
-      }
-      isSelectAll = selectedServices.length == carServices.length;
-    });
-  }
+  // void _toggleService(String serviceId) {
+  //   setState(() {
+  //     if (selectedServices.contains(serviceId)) {
+  //       selectedServices.remove(serviceId);
+  //     } else {
+  //       selectedServices.add(serviceId);
+  //     }
+  //     isSelectAll = selectedServices.length == carServices.length;
+  //   });
+  // }
 
-  void _toggleAllServices(List<CarService> services) {
-    setState(() {
-      isSelectAll = !isSelectAll;
-      if (isSelectAll) {
-        selectedServices = services.map((e) => e.id!).toList();
-      } else {
-        selectedServices.clear();
-      }
-    });
-  }
+  // void _toggleAllServices(List<CarService> services) {
+  //   setState(() {
+  //     isSelectAll = !isSelectAll;
+  //     if (isSelectAll) {
+  //       selectedServices = services.map((e) => e.id!).toList();
+  //     } else {
+  //       selectedServices.clear();
+  //     }
+  //   });
+  // }
 
   @override
   void initState() {
@@ -146,55 +162,57 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                   ),
                   _buildDetailSection(),
                   // TODO Revisi
-                  StateHandler<CarServicesCubit, PaginationState<CarService>>(
-                    onRetry: () => getCarServices(),
-                    onSuccess: (context, data, _) {
-                      final services = data.data;
-                      if (carServices.isEmpty && services.isNotEmpty) {
-                        carServices = services.map((e) => e.id!).toList();
-                      }
+                  // StateHandler<CarServicesCubit, PaginationState<CarService>>(
+                  //   onRetry: () => getCarServices(),
+                  //   onSuccess: (context, data, _) {
+                  //     final services = data.data;
+                  //     if (carServices.isEmpty && services.isNotEmpty) {
+                  //       carServices = services.map((e) => e.id!).toList();
+                  //     }
 
-                      return RepaintBoundary(
-                        child: CheckboxServices(
-                          carServices: services,
-                          selectedServices: selectedServices,
-                          isSelectAll: isSelectAll,
-                          toggleAllServices: _toggleAllServices,
-                          toggleService: _toggleService,
-                        ),
-                      );
-                    },
-                  ),
+                  //     return RepaintBoundary(
+                  //       child: CheckboxServices(
+                  //         carServices: services,
+                  //         selectedServices: selectedServices,
+                  //         isSelectAll: isSelectAll,
+                  //         toggleAllServices: _toggleAllServices,
+                  //         toggleService: _toggleService,
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                   MainElevatedButton(
                     onPressed: () {
-                      if (selectedServices.isEmpty) {
-                        SnackBarUtil.showSnackBar(
-                          context: context,
-                          message: 'Pilih layanan terlebih dahulu',
-                          type: SnackBarType.warning,
-                        );
-                        return;
-                      }
-                      final totalPrice = (context.read<CarServicesCubit>().state
-                              as BaseSuccessState<PaginationState<CarService>>)
-                          .data
-                          .data
-                          .where(
-                            (service) => selectedServices.contains(service.id),
-                          )
-                          .fold(
-                            0,
-                            (sum, service) => sum + int.parse(service.price),
-                          );
+                      // if (selectedServices.isEmpty) {
+                      //   SnackBarUtil.showSnackBar(
+                      //     context: context,
+                      //     message: 'Pilih layanan terlebih dahulu',
+                      //     type: SnackBarType.warning,
+                      //   );
+                      //   return;
+                      // }
+                      // final totalPrice = (context.read<CarServicesCubit>().state
+                      //         as BaseSuccessState<PaginationState<CarService>>)
+                      //     .data
+                      //     .data
+                      //     .where(
+                      //       (service) => selectedServices.contains(service.id),
+                      //     )
+                      //     .fold(
+                      //       0,
+                      //       (sum, service) => sum + int.parse(service.price),
+                      //     );
 
                       Navigator.of(context).push(
                         UserCreateOrderPage.route(
                           workshopId: widget.workshop.id!,
-                          carServices: selectedServices,
-                          totalPrice: totalPrice,
-                          totalAllServices: carServices.length,
+                          carServices: widget.carServices,
+                          carModelYearId: widget.carModelYearId,
+                          colorId: widget.colorId,
+                          // TODO: REPLACE
+                          totalPrice: widget.totalPrice,
+                          totalAllServices: widget.totalAllServices,
                           vehicleData: widget.vehicleData,
-                          paintableParts: widget.paintableParts,
                         ),
                       );
                     },
