@@ -9,6 +9,7 @@ import 'package:paint_car/features/(admin)/cubit/admin_orders_cubit.dart';
 import 'package:paint_car/features/(admin)/widgets/admin_orders_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
+import 'package:paint_car/ui/extension/padding.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 
@@ -104,6 +105,6 @@ class _HomeAdminState extends State<HomeAdmin> {
           ),
         );
       },
-    );
+    ).paddingSymmetric(vertical: 24);
   }
 }
