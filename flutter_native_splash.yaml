@@ -1,12 +1,13 @@
 flutter_native_splash:
   color: "#FFFFFF"
-  image: assets/images/logo/logo_nikken_red.png
+  image: assets/images/logo/logo_nikken_red_with_padding.png
+  fullscreen: true
   android_gravity: center
   ios_content_mode: center
-  web_image_mode: contain
+  web_image_mode: center
   android_12:
     color: "#FFFFFF"
-    image: assets/images/logo/logo_nikken_red.png
+    image: assets/images/logo/logo_nikken_red_with_padding.png
     icon_background_color: "#FFFFFF"
   android: true
   ios: true
