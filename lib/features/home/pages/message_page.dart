@@ -204,8 +204,8 @@ class _MessagePageState extends State<MessagePage>
             child: TabBar(
               controller: _tabController,
               tabs: const [
-                Tab(text: 'Messages'),
-                Tab(text: 'Notifications'),
+                Tab(text: 'Pesan'),
+                Tab(text: 'Notifikasi'),
               ],
               labelColor: CustomColors.secondaryBlue,
               unselectedLabelColor: Colors.grey,

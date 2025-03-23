@@ -60,7 +60,7 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
               child: MainText(
                 text: widget.title,
                 customTextStyle: TextStyle(
-                  fontSize: 48,
+                  fontSize: 36,
                   color: CustomColors.white,
                   shadows: [
                     Shadow(

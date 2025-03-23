@@ -143,7 +143,7 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
       builder: (context, state) {
         return Scaffold(
           appBar: mainAppBar(
-            "Order",
+            "Catatan Order",
           ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
@@ -207,13 +207,13 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
                   // ),
                   MainTextField(
                     controller: noteController,
-                    hintText: "Enter note",
-                    leadingIcon: const Icon(Icons.note),
                     isEnabled: state is! BaseLoadingState,
+                    maxLines: 3,
+                    hintText: "Masukkan catatan",
                   ),
                   MainElevatedButton(
                     onPressed: submitForm,
-                    text: "Order",
+                    text: "Selanjutnya",
                     isLoading: state is BaseLoadingState,
                   ),
                 ],

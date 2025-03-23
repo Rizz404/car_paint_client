@@ -22,7 +22,7 @@ class _UserChooseServicePageState extends State<UserChooseServicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: mainAppBar("Choose Service"),
+      appBar: mainAppBar("Pilih Layanan"),
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
       body: SingleChildScrollView(
         child: Column(

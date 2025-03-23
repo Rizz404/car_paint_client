@@ -176,6 +176,7 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                   //     );
                   //   },
                   // ),
+                  const SizedBox(height: 20),
                   MainElevatedButton(
                     onPressed: () {
                       // if (selectedServices.isEmpty) {

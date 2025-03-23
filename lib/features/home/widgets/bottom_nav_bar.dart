@@ -24,23 +24,23 @@ class BottomNavBar extends StatelessWidget {
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          label: 'Home',
-          tooltip: 'Home',
+          label: 'Beranda',
+          tooltip: 'Beranda',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.book),
-          label: 'My Booking',
-          tooltip: 'My Booking',
+          label: 'Transaksi',
+          tooltip: 'Transaksi',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.message),
-          label: 'Message',
-          tooltip: 'Message',
+          label: 'Pesan',
+          tooltip: 'Pesan',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
-          label: 'Profile',
-          tooltip: 'Profile',
+          label: 'Profil',
+          tooltip: 'Profil',
         ),
       ],
     );

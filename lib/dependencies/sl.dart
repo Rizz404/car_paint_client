@@ -1,6 +1,7 @@
 import "package:flutter_local_notifications/flutter_local_notifications.dart";
 import "package:get_it/get_it.dart";
 import "package:paint_car/data/local/user_sp.dart";
+import "package:paint_car/data/local/vehicle_data_sp.dart";
 import "package:paint_car/data/network/api_client.dart";
 import "package:paint_car/data/local/token_sp.dart";
 import "package:paint_car/dependencies/services/log_service.dart";
@@ -61,6 +62,7 @@ initializeSL() async {
   getIt.registerSingleton<LogService>(LogService());
   getIt.registerSingleton<TokenLocal>(TokenLocal(getIt()));
   getIt.registerSingleton<UserLocal>(UserLocal(getIt()));
+  getIt.registerSingleton<VehicleDataLocal>(VehicleDataLocal(getIt()));
   //  !
   getIt.registerLazySingleton<http.Client>(() => http.Client());
   getIt.registerLazySingleton<ApiClient>(

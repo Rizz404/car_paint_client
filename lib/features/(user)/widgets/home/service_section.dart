@@ -51,12 +51,12 @@ class ServiceSection extends StatelessWidget {
   //       );
   //     },
   //   );
-  // }
+// }
   firstService(
     BuildContext context,
   ) {
     return CardLinkSection(
-      text: "Order Here",
+      text: "Order Disini",
       onTap: () {
         // ! BEKAS REVISI
 
@@ -87,7 +87,7 @@ class ServiceSection extends StatelessWidget {
       spacing: 16,
       children: [
         const MainText(
-          text: "Services",
+          text: "Layanan",
           extent: Large(),
         ),
         firstService(context),

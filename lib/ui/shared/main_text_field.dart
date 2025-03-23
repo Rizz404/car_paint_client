@@ -3,7 +3,7 @@ import 'package:paint_car/core/types/validator.dart';
 
 class MainTextField extends StatelessWidget {
   final TextEditingController controller;
-  final String hintText;
+  final String? hintText;
   final String? labelText;
   final Widget? trailingIcon;
   final Widget? leadingIcon;
@@ -19,7 +19,7 @@ class MainTextField extends StatelessWidget {
   const MainTextField({
     super.key,
     required this.controller,
-    required this.hintText,
+    this.hintText,
     this.trailingIcon,
     this.onChanged,
     this.leadingIcon,

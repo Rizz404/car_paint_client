@@ -80,9 +80,8 @@ class _UserWorkshopsItemState extends State<UserWorkshopsItem> {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 16,
             children: [
-              const ImageNetwork(
-                src:
-                    "https://i.pinimg.com/736x/b6/53/c1/b653c128eb1017e5983388c6fc3e9bf1.jpg",
+              Image.asset(
+                "assets/images/workshop/automotive.png",
                 width: 90,
                 height: 90,
               ),

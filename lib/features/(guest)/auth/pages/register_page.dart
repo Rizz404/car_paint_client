@@ -91,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
             if (context.mounted) {
               SnackBarUtil.showSnackBar(
                 context: context,
-                message: "Register success",
+                message: "Register berhasil",
                 type: SnackBarType.success,
               );
               Navigator.of(context)
@@ -116,7 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const MainText(text: "Sign Up", extent: ExtraLarge()),
+                        const MainText(text: "Daftar", extent: ExtraLarge()),
                         const SizedBox(height: 32),
                         Form(
                           key: formKey,
@@ -128,7 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 leadingIcon: const Icon(Icons.person),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return "Username is required";
+                                    return "Mohon masukkan username";
                                   }
                                   return null;
                                 },
@@ -165,14 +165,14 @@ class _RegisterPageState extends State<RegisterPage> {
                               const SizedBox(height: 16),
                               MainTextField(
                                 controller: confirmPasswordController,
-                                hintText: "Confirm Password",
+                                hintText: "Konfirmasi Password",
                                 leadingIcon: const Icon(Icons.lock),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return "Confirm Password is required";
+                                    return "Mohon masukkan password";
                                   }
                                   if (value != passwordController.text) {
-                                    return "Password does not match";
+                                    return "Password tidak sama";
                                   }
                                   return null;
                                 },
@@ -195,7 +195,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               const SizedBox(height: 24),
                               MainElevatedButton(
                                 onPressed: signUp,
-                                text: "Sign Up",
+                                text: "Daftar",
                                 isLoading: state is BaseLoadingState,
                                 bgColor: getButtonColor(),
                                 height: 52,
@@ -213,10 +213,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: RichText(
                             text: TextSpan(
                               style: Theme.of(context).textTheme.bodyMedium,
-                              text: "Already have an account? ",
+                              text: "Sudah punya akun? ",
                               children: [
                                 const TextSpan(
-                                  text: "Sign In",
+                                  text: "Masuk",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     decoration: TextDecoration.underline,

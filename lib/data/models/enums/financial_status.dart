@@ -79,6 +79,14 @@ extension PaymentStatusExtension on PaymentStatus {
   }
 }
 
+final Map<PaymentStatus, String> paymentStatusLabels = {
+  PaymentStatus.SUCCESS: 'Berhasil',
+  PaymentStatus.PENDING: 'Menunggu',
+  PaymentStatus.FAILED: 'Gagal',
+  PaymentStatus.EXPIRED: 'Kedaluwarsa',
+  PaymentStatus.REFUNDED: 'Dikembalikan',
+};
+
 enum PaymentMethodType {
   CARD,
   DIRECT_DEBIT,

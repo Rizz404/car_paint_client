@@ -20,14 +20,6 @@ class UserHistoryItem extends StatefulWidget {
 }
 
 class _UserHistoryItemState extends State<UserHistoryItem> {
-  final Map<PaymentStatus, String> statusLabels = {
-    PaymentStatus.SUCCESS: 'Berhasil',
-    PaymentStatus.PENDING: 'Menunggu',
-    PaymentStatus.FAILED: 'Gagal',
-    PaymentStatus.EXPIRED: 'Kedaluwarsa',
-    PaymentStatus.REFUNDED: 'Dikembalikan',
-  };
-
   Color getPaymentStatusColor(PaymentStatus status) {
     switch (status) {
       case PaymentStatus.SUCCESS:
@@ -63,7 +55,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
           ),
           const SizedBox(width: 4),
           MainText(
-            text: statusLabels[status] ?? status.name,
+            text: paymentStatusLabels[status] ?? status.name,
             customTextStyle: TextStyle(
               color: statusColor,
               fontWeight: FontWeight.w600,
@@ -320,7 +312,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                     ),
                     const SizedBox(width: 8),
                     MainText(
-                      text: "Layanan (${order.carServices!.length})",
+                      text: "Panel (${order.carServices!.length})",
                       customTextStyle: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.onSurface,
@@ -339,6 +331,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                     ),
                     child: ListView.separated(
                       shrinkWrap: true,
+                      padding: const EdgeInsets.all(0),
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: order.carServices!.length,
                       separatorBuilder: (_, __) => Divider(

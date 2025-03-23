@@ -91,12 +91,12 @@ class _SelectFieldVehicleState extends State<SelectFieldVehicle> {
                       extent: const Medium(),
                       color: isSelected
                           ? CustomColors.black
-                          : CustomColors.black.withAlpha(50),
+                          : CustomColors.black.withAlpha(90),
                     ),
                     trailing: isSelected
                         ? Icon(
                             Icons.check,
-                            color: CustomColors.black.withAlpha(50),
+                            color: CustomColors.black.withAlpha(90),
                           )
                         : null,
                     onTap: () {

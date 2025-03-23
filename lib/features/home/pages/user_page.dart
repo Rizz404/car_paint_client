@@ -81,8 +81,7 @@ class _UserPageState extends State<UserPage> {
                     ),
                   ],
                 ),
-                const MainText(text: "Action", extent: Medium())
-                    .paddingSymmetric(
+                const MainText(text: "Aksi", extent: Medium()).paddingSymmetric(
                   horizontal: 16,
                 ),
                 Material(
@@ -94,7 +93,7 @@ class _UserPageState extends State<UserPage> {
                           .pushAndRemoveUntil(LoginPage.route(), (_) => false);
                     },
                     child: const ListTile(
-                      title: MainText(text: "Logout"),
+                      title: MainText(text: "Keluar"),
                       leading: Icon(Icons.logout),
                     ),
                   ),

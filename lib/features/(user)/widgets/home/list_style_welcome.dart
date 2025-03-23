@@ -26,7 +26,7 @@ class ListStyleWelcome extends StatelessWidget {
       ),
       child: ListTile(
         title: const MainText(
-          text: "Welcome",
+          text: "Selamat Datang",
           customTextStyle: TextStyle(
             fontWeight: FontWeight.w500,
           ),

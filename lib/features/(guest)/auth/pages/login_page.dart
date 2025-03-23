@@ -39,8 +39,8 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     _cancelToken = CancelToken();
     setState(() {
-      emailController.text = Mock.admin["email"];
-      passwordController.text = Mock.admin["password"];
+      emailController.text = Mock.user["email"];
+      passwordController.text = Mock.user["password"];
     });
   }
 
@@ -84,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
             if (context.mounted) {
               SnackBarUtil.showSnackBar(
                 context: context,
-                message: "Login success",
+                message: "Login berhasil",
                 type: SnackBarType.success,
               );
               Navigator.of(context)
@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const MainText(text: "Sign In", extent: ExtraLarge()),
+                        const MainText(text: "Masuk", extent: ExtraLarge()),
                         const SizedBox(height: 32),
                         Form(
                           key: formKey,
@@ -144,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               MainElevatedButton(
                                 onPressed: signIn,
-                                text: "Sign In",
+                                text: "Masuk",
                                 isLoading: state is BaseLoadingState,
                                 bgColor: getButtonColor(),
                                 height: 52,
@@ -162,10 +162,10 @@ class _LoginPageState extends State<LoginPage> {
                           child: RichText(
                             text: TextSpan(
                               style: Theme.of(context).textTheme.bodyMedium,
-                              text: "Does'nt have an account? ",
+                              text: "Tidak punya akun? ",
                               children: [
                                 const TextSpan(
-                                  text: "Sign Up",
+                                  text: "Daftar",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     decoration: TextDecoration.underline,

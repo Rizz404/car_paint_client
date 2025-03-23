@@ -61,8 +61,8 @@ class _MyBookingPageState extends State<MyBookingPage>
             child: TabBar(
               controller: _tabController,
               tabs: const [
-                Tab(text: 'Transactions'),
-                Tab(text: 'History'),
+                Tab(text: 'Transaksi'),
+                Tab(text: 'Riwayat'),
               ],
               labelColor: Colors.blue,
               unselectedLabelColor: Colors.grey,

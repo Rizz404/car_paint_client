@@ -179,7 +179,7 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (context, state) {
         return Scaffold(
           appBar: mainAppBar(
-            "Update Profile",
+            "Profil Kamu",
           ),
           body: Center(
             child: SingleChildScrollView(
@@ -206,7 +206,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     MainTextField(
                       controller: usernameController,
-                      hintText: "Enter username",
+                      hintText: "Masukkan username",
                       leadingIcon: const Icon(Icons.person),
                       isEnabled: state is! BaseLoadingState,
                       validator: (value) {
@@ -218,7 +218,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     MainTextField(
                       controller: emailController,
-                      hintText: "Enter email",
+                      hintText: "Masukkan email",
                       leadingIcon: const Icon(Icons.email),
                       isEnabled: state is! BaseLoadingState,
                       validator: (value) {
@@ -230,7 +230,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     MainTextField(
                       controller: fullnameController,
-                      hintText: "Enter fullname",
+                      hintText: "Masukkan nama lengkap",
                       leadingIcon: const Icon(Icons.person),
                       isEnabled: state is! BaseLoadingState,
                       validator: (value) {
@@ -242,7 +242,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     MainTextField(
                       controller: phoneNumberController,
-                      hintText: "Enter phone number",
+                      hintText: "Masukkan nomor telepon",
                       prefixText: "+62 ",
                       leadingIcon: const Icon(Icons.phone),
                       isEnabled: state is! BaseLoadingState,
@@ -258,7 +258,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     MainTextField(
                       controller: addressController,
-                      hintText: "Enter address",
+                      hintText: "Masukkan alamat",
                       leadingIcon: const Icon(Icons.home),
                       isEnabled: state is! BaseLoadingState,
                       validator: (value) {
@@ -270,7 +270,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     MainElevatedButton(
                       onPressed: submitForm,
-                      text: "Update",
+                      text: "Simpan",
                       isLoading: state is BaseLoadingState,
                     ),
                   ],

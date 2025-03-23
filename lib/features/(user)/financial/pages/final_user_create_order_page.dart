@@ -102,7 +102,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
     if (selectedPaymentMethod == null) {
       SnackBarUtil.showSnackBar(
         context: context,
-        message: "Please select payment method",
+        message: "Mohon pilih metode pembayaran",
         type: SnackBarType.error,
       );
       return;
@@ -248,7 +248,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
             SnackBarUtil.showSnackBar(
               context: context,
               message:
-                  "Transaction created successfully, go to My Booking to pay",
+                  "Order telah berhasil dibuat, silahkan ke menu My Booking untuk melakukan pembayaran",
               type: SnackBarType.success,
             );
             Navigator.of(context).pushAndRemoveUntil(
@@ -261,7 +261,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
       builder: (context, state) {
         return Scaffold(
           appBar: mainAppBar(
-            "Order Confirmation",
+            "Konfirmasi Order",
           ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
@@ -284,13 +284,13 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                           thickness: 1,
                         ),
                         rowKeyValue(
-                          "Sub Total",
+                          "Total Sementara",
                           CurrencyFormatter.toRupiah(
                             widget.totalPrice.toDouble(),
                           ),
                         ),
                         rowKeyValue(
-                          "Fee",
+                          "Biaya Layanan",
                           selectedPaymentMethod != null
                               ? CurrencyFormatter.toRupiah(
                                   _parseFee(selectedPaymentMethod!.fee!)
@@ -303,7 +303,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                           thickness: 1,
                         ),
                         rowKeyValue(
-                          "Total Price",
+                          "Total Harga",
                           selectedPaymentMethod != null
                               ? CurrencyFormatter.toRupiah(
                                   (widget.totalPrice +
@@ -330,7 +330,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16),
                             child: MainText(
-                              text: "Payment Methods",
+                              text: "Metode Pembayaran",
                               extent: Large(),
                             ),
                           ),
@@ -341,7 +341,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                   ),
                   MainElevatedButton(
                     onPressed: submitForm,
-                    text: "Create",
+                    text: "Order Sekarang",
                     isLoading: state is BaseLoadingState,
                   ),
                 ],

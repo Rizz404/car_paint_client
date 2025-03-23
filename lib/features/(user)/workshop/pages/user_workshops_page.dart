@@ -141,7 +141,7 @@ class _UserWorkshopsPageState extends State<UserWorkshopsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: mainAppBar("Workshops"),
+      appBar: mainAppBar("Bengkel"),
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
       body: StateHandler<UserWorkshopCubit, PaginationState<CarWorkshop>>(
         onRetry: () => _onRefresh(),

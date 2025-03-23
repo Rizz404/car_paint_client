@@ -140,7 +140,7 @@ class UserTransactionsItem extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       MainText(
-                        text: 'Payment Method: ${_getPaymentMethodName()}',
+                        text: 'Metode Pembayaran: ${_getPaymentMethodName()}',
                         customTextStyle: TextStyle(
                           fontSize: 14,
                           color: Theme.of(context)
@@ -220,7 +220,7 @@ class UserTransactionsItem extends StatelessWidget {
                         const SizedBox(width: 8),
                         Expanded(
                           child: MainText(
-                            text: "Note: ${transactions.order?.first?.note}",
+                            text: "Catatan: ${transactions.order?.first?.note}",
                             customTextStyle: TextStyle(
                               fontSize: 14,
                               color: Theme.of(context)
@@ -301,7 +301,7 @@ class UserTransactionsItem extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             const MainText(
-                              text: 'Pay Now',
+                              text: 'Bayar',
                               customTextStyle: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 12,
@@ -337,8 +337,6 @@ class UserTransactionsItem extends StatelessWidget {
 
   Widget buildPaymentStatusWidget(PaymentStatus status) {
     final Color statusColor = getPaymentStatusColor(status);
-    final String statusText =
-        status.name.substring(0, 1) + status.name.substring(1).toLowerCase();
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -356,7 +354,7 @@ class UserTransactionsItem extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           MainText(
-            text: statusText,
+            text: paymentStatusLabels[status] ?? 'Unknown',
             customTextStyle: TextStyle(
               color: statusColor,
               fontSize: 13,

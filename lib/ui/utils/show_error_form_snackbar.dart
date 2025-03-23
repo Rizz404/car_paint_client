@@ -29,7 +29,7 @@ void showFormErrorSnackbar(BuildContext context, BaseErrorState state) {
 
   SnackBarUtil.showSnackBar(
     context: context,
-    message: "Error: $errorMsg",
+    message: errorMsg,
     type: SnackBarType.error,
   );
 }
