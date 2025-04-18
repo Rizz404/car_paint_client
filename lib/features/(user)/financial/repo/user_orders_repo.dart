@@ -40,7 +40,7 @@ class UserOrdersRepo {
     String colorId,
   ) async {
     final result = await apiClient.post<Transactions>(
-      ApiConstant.ordersPath,
+      ApiConstant.ordersWithMidtrans,
       fromJson: (json) => Transactions.fromMap(json),
       {
         'paymentMethodId': paymentMethodId,

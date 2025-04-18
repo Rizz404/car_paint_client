@@ -6,6 +6,7 @@ class ApiConstant {
   static const String multipartFormData = 'multipart/form-data';
   static const String search = '/search';
   // ! URL
+  // static const String baseUrl = 'http://192.168.1.3:5500/api/v1';
   static const String baseUrl =
       'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
   // static const String baseUrl = 'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
@@ -61,6 +62,7 @@ class ApiConstant {
   static const String ordersPaymentRequestPath = "$ordersPath/payment-request";
   static const String ordersPaymentRequestCancelPath =
       "$ordersPaymentRequestPath/cancel";
+  static const String ordersWithMidtrans = "$ordersPath/midtrans";
   // * transactions
   static const String transactionsPath = "/transactions";
   static const String transactionsUserPath = "$transactionsPath/user";

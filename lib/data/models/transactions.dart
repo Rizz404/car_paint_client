@@ -88,7 +88,7 @@ class Transactions {
       'paymentMethod': paymentMethod?.toMap(),
       'order': order?.map((x) => x?.toMap()).toList(),
       'cancellation': cancellation?.toMap(),
-      'paymentdetail': paymentdetail?.toMap(),
+      'paymentDetail': paymentdetail?.toMap(),
       'refund': refund?.toMap(),
     };
   }
@@ -127,8 +127,8 @@ class Transactions {
       cancellation: map['cancellation'] != null
           ? Cancellation.fromMap(map['cancellation'] as Map<String, dynamic>)
           : null,
-      paymentdetail: map['paymentdetail'] != null
-          ? PaymentDetail.fromMap(map['paymentdetail'] as Map<String, dynamic>)
+      paymentdetail: map['paymentDetail'] != null
+          ? PaymentDetail.fromMap(map['paymentDetail'] as Map<String, dynamic>)
           : null,
       refund: map['refund'] != null
           ? Refund.fromMap(map['refund'] as Map<String, dynamic>)

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 import 'package:paint_car/data/models/transactions.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/shared/utils/currency_formatter.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
@@ -40,6 +41,8 @@ class UserTransactionsItem extends StatelessWidget {
     final url = paymentDetail?.deeplinkUrl ??
         paymentDetail?.mobileUrl ??
         paymentDetail?.webUrl;
+    LogService.i("TRANSACTIONS, ${transactions.paymentdetail}");
+    LogService.i(url ?? "nul");
 
     if (url == null ||
         transactions.paymentdetail!.virtualAccountNumber != null) {
@@ -85,8 +88,11 @@ class UserTransactionsItem extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap:
-            isPending && !hasVirtualAccount ? () => _handleTap(context) : null,
+        onTap: isPending && !hasVirtualAccount
+            ? () {
+                _handleTap(context);
+              }
+            : null,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
