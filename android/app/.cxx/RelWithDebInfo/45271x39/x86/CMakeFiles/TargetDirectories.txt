@@ -1,0 +1,2 @@
+D:/aku/code/project/pt/wma/client/android/app/.cxx/RelWithDebInfo/45271x39/x86/CMakeFiles/edit_cache.dir
+D:/aku/code/project/pt/wma/client/android/app/.cxx/RelWithDebInfo/45271x39/x86/CMakeFiles/rebuild_cache.dir

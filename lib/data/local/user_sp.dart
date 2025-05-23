@@ -17,5 +17,10 @@ class UserLocal {
     return _prefs.setString('user_profile', userJson);
   }
 
+  Future<bool> updateUser(UserWithProfile user) {
+    final userJson = user.toJson();
+    return _prefs.setString('user_profile', userJson);
+  }
+
   Future<bool> removeUser() => _prefs.remove('user_profile');
 }

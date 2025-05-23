@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:paint_car/data/models/enums/user_role.dart';
 import 'package:paint_car/data/models/user_profile_model.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 
 class User {
   final String id;

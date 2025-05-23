@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:paint_car/data/local/user_sp.dart';
 import 'package:paint_car/data/models/user_model.dart';
 import 'package:paint_car/data/models/user_profile_model.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
@@ -19,6 +20,7 @@ import 'package:paint_car/ui/shared/main_text_field.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 import 'package:paint_car/ui/utils/url_to_file.dart';
 import 'package:paint_car/ui/validator/file_validator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   final UserWithProfile user;
@@ -164,15 +166,44 @@ class _ProfilePageState extends State<ProfilePage> {
           context: context,
           state: state,
           onRetry: submitForm,
-          onSuccess: () {
+          onSuccess: () async {
+            var ul = UserLocal(await SharedPreferences.getInstance());
+            await ul.removeUser();
+            await ul.saveUser(
+              UserWithProfile(
+                id: widget.user.id,
+                createdAt: widget.user.createdAt,
+                updatedAt: widget.user.updatedAt,
+                username: usernameController.text,
+                email: emailController.text,
+                // TODO: nanti fix, soalnya ga nge sync di local
+                profileImage: widget.user.profileImage,
+                role: widget.user.role,
+                newAccessToken: widget.user.newAccessToken,
+                userProfile: UserProfile(
+                  id: widget.user.userProfile?.id ?? "",
+                  userId: widget.user.id,
+                  fullname: fullnameController.text,
+                  phoneNumber: phoneNumberController.text,
+                  address: addressController.text,
+                  createdAt: widget.user.userProfile?.createdAt,
+                  latitude: widget.user.userProfile?.latitude,
+                  longitude: widget.user.userProfile?.longitude,
+                  updatedAt: widget.user.userProfile?.updatedAt,
+                ),
+              ),
+            );
+            await context.read<UserCubit>().getUserLocal();
+
             SnackBarUtil.showSnackBar(
               context: context,
               message: "Profile updated successfully",
               type: SnackBarType.success,
             );
-            context.read<UserCubit>().logout();
-            Navigator.of(context)
-                .pushAndRemoveUntil(LoginPage.route(), (_) => false);
+            Navigator.of(context).pop();
+            // context.read<UserCubit>().logout();
+            // Navigator.of(context)
+            //     .pushAndRemoveUntil(LoginPage.route(), (_) => false);
           },
         );
       },

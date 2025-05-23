@@ -5,8 +5,8 @@ class Mock {
   //   'password': "test123",
   // };
   static const Map<String, dynamic> user = {
-    'username': "new3",
-    'email': "new3@gmail.com",
+    'username': "new87",
+    'email': "new87@gmail.com",
     'password': "test123",
   };
   static const Map<String, dynamic> admin = {
