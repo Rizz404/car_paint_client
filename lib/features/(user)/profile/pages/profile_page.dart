@@ -167,6 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
           state: state,
           onRetry: submitForm,
           onSuccess: () async {
+            final result = state as BaseActionSuccessState<UserWithProfile>;
             var ul = UserLocal(await SharedPreferences.getInstance());
             await ul.removeUser();
             await ul.saveUser(
@@ -176,8 +177,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 updatedAt: widget.user.updatedAt,
                 username: usernameController.text,
                 email: emailController.text,
-                // TODO: nanti fix, soalnya ga nge sync di local
-                profileImage: widget.user.profileImage,
+                profileImage: result.data!.profileImage,
                 role: widget.user.role,
                 newAccessToken: widget.user.newAccessToken,
                 userProfile: UserProfile(

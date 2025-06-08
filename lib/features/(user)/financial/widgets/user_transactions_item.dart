@@ -41,8 +41,6 @@ class UserTransactionsItem extends StatelessWidget {
     final url = paymentDetail?.deeplinkUrl ??
         paymentDetail?.mobileUrl ??
         paymentDetail?.webUrl;
-    LogService.i("TRANSACTIONS, ${transactions.paymentdetail}");
-    LogService.i(url ?? "nul");
 
     if (url == null ||
         transactions.paymentdetail!.virtualAccountNumber != null) {

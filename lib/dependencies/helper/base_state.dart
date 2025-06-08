@@ -29,6 +29,7 @@ class BaseSuccessState<T> extends BaseState {
 }
 
 // ! untuk di listener, bukan di state handler. untuk post, patch, delete / action lah intinya
-class BaseActionSuccessState extends BaseState {
-  const BaseActionSuccessState() : super();
+class BaseActionSuccessState<T> extends BaseState {
+  final T? data;
+  const BaseActionSuccessState({this.data}) : super();
 }
