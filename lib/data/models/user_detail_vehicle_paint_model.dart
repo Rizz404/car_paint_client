@@ -1,26 +1,33 @@
 class VehicleData {
-  String? carModelYearColor;
+  // String? carModelYearColor;
   String? carBrand;
   String? carColor;
   String? carModel;
-  String? carModelYear;
-  String? carModelYearColorId;
+  String? carModelColor;
+  // String? carModelYear;
+  // String? carModelYear;
+  // String? carModelYearColorId;
   String? carBrandId;
   String? carColorId;
   String? carModelId;
-  String? carModelYearId;
+  String? carModelColorId;
+  // String? carModelYearId;
+  // String? carModelYearId;
 
   VehicleData({
-    this.carModelYearColor,
+    // this.carModelYearColor,
     this.carBrand,
     this.carColor,
     this.carModel,
-    this.carModelYear,
-    this.carModelYearColorId,
+    this.carModelColor,
+
+    // this.carModelYear,
+    // this.carModelYearColorId,
     this.carBrandId,
     this.carColorId,
     this.carModelId,
-    this.carModelYearId,
+    this.carModelColorId,
+    // this.carModelYearId,
   });
 }
 

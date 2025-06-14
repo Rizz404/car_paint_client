@@ -19,8 +19,11 @@ class UserCreateOrderPage extends StatefulWidget {
   final double totalPrice;
   final int totalAllServices;
   final VehicleData? vehicleData;
-  final String carModelYearId;
-  final String colorId;
+  // final String carModelYearId;
+  // final String colorId;
+  final String carModelColorId;
+  final String carColorId;
+  final String carModelId;
 
   static route({
     required String workshopId,
@@ -28,8 +31,11 @@ class UserCreateOrderPage extends StatefulWidget {
     required double totalPrice,
     required int totalAllServices,
     VehicleData? vehicleData,
-    required String carModelYearId,
-    required String colorId,
+    required String carModelId,
+    required String carColorId,
+    // required String carModelYearId,
+    // required String colorId,
+    required String carModelColorId,
   }) =>
       MaterialPageRoute(
         builder: (_) => UserCreateOrderPage(
@@ -38,8 +44,11 @@ class UserCreateOrderPage extends StatefulWidget {
           totalPrice: totalPrice,
           totalAllServices: totalAllServices,
           vehicleData: vehicleData,
-          carModelYearId: carModelYearId,
-          colorId: colorId,
+          carModelId: carModelId,
+          carColorId: carColorId,
+          // carModelYearId: carModelYearId,
+          // colorId: colorId,
+          carModelColorId: carModelColorId,
         ),
       );
 
@@ -50,8 +59,11 @@ class UserCreateOrderPage extends StatefulWidget {
     required this.totalPrice,
     required this.totalAllServices,
     this.vehicleData,
-    required this.carModelYearId,
-    required this.colorId,
+    required this.carModelId,
+    required this.carColorId,
+    // required this.carModelYearId,
+    // required this.colorId,
+    required this.carModelColorId,
   });
 
   @override
@@ -99,8 +111,11 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
         note: noteController.text,
         totalPrice: widget.totalPrice,
         totalAllServices: widget.totalAllServices,
-        carModelYearId: widget.carModelYearId,
-        colorId: widget.colorId,
+        // carModelYearId: widget.carModelYearId,
+        // colorId: widget.colorId,
+        carModelColorId: widget.carModelColorId,
+        carColorId: widget.carColorId,
+        carModelId: widget.carModelId,
       ),
     );
   }

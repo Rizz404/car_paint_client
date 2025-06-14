@@ -22,8 +22,10 @@ class UserWorkshopsPage extends StatefulWidget {
   static route({
     required VehicleData vehicleData,
     required List<String> carServices,
-    required String carModelYearId,
-    required String colorId,
+    // required String carModelYearId,
+    required String carModelId,
+    required String carColorId,
+    required String carModelColorId,
     required double totalPrice,
     required int totalAllServices,
   }) =>
@@ -31,23 +33,29 @@ class UserWorkshopsPage extends StatefulWidget {
           builder: (_) => UserWorkshopsPage(
                 vehicleData: vehicleData,
                 carServices: carServices,
-                carModelYearId: carModelYearId,
-                colorId: colorId,
+                // carModelYearId: carModelYearId,
+                carModelId: carModelId,
+                carColorId: carColorId,
+                carModelColorId: vehicleData.carModelColorId ?? "",
                 totalPrice: totalPrice,
                 totalAllServices: totalAllServices,
               ));
   final VehicleData vehicleData;
   final List<String> carServices;
-  final String carModelYearId;
-  final String colorId;
+  // final String carModelYearId;
+  final String carColorId;
+  final String carModelId;
+  final String carModelColorId;
   final double totalPrice;
   final int totalAllServices;
   const UserWorkshopsPage({
     super.key,
     required this.vehicleData,
     required this.carServices,
-    required this.carModelYearId,
-    required this.colorId,
+    required this.carModelId,
+    // required this.carModelYearId,
+    required this.carColorId,
+    required this.carModelColorId,
     required this.totalPrice,
     required this.totalAllServices,
   });
@@ -168,8 +176,10 @@ class _UserWorkshopsPageState extends State<UserWorkshopsPage> {
                         onRefresh: _onRefresh,
                         vehicleData: widget.vehicleData,
                         carServices: widget.carServices,
-                        carModelYearId: widget.carModelYearId,
-                        colorId: widget.colorId,
+                        // carModelYearId: widget.carModelYearId,
+                        carColorId: widget.carColorId,
+                        carModelId: widget.carModelId,
+                        carModelColorId: widget.carModelColorId,
                         totalPrice: widget.totalPrice,
                         totalAllServices: widget.totalAllServices,
                       ),

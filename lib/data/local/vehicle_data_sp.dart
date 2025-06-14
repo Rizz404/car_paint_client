@@ -16,10 +16,12 @@ class VehicleDataLocal {
       'carColorId': vehicleData.carColorId,
       'carModel': vehicleData.carModel,
       'carModelId': vehicleData.carModelId,
-      'carModelYear': vehicleData.carModelYear,
-      'carModelYearId': vehicleData.carModelYearId,
-      'carModelYearColor': vehicleData.carModelYearColor,
-      'carModelYearColorId': vehicleData.carModelYearColorId,
+      'carModelColor': vehicleData.carModelColor,
+      'carModelColorId': vehicleData.carModelColorId,
+      // 'carModelYear': vehicleData.carModelYear,
+      // 'carModelYearId': vehicleData.carModelYearId,
+      // 'carModelYearColor': vehicleData.carModelYearColor,
+      // 'carModelYearColorId': vehicleData.carModelYearColorId,
     };
     await _prefs.setString(_vehicleDataKey, jsonEncode(vehicleDataJson));
   }
@@ -40,10 +42,8 @@ class VehicleDataLocal {
         carColorId: vehicleDataJson['carColorId'] as String?,
         carModel: vehicleDataJson['carModel'] as String?,
         carModelId: vehicleDataJson['carModelId'] as String?,
-        carModelYear: vehicleDataJson['carModelYear'] as String?,
-        carModelYearId: vehicleDataJson['carModelYearId'] as String?,
-        carModelYearColor: vehicleDataJson['carModelYearColor'] as String?,
-        carModelYearColorId: vehicleDataJson['carModelYearColorId'] as String?,
+        carModelColor: vehicleDataJson['carModelColor'] as String?,
+        carModelColorId: vehicleDataJson['carModelColorId'] as String?,
       );
     } catch (e) {
       return null;

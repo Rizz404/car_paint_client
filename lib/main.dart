@@ -106,15 +106,13 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => getIt<CarColorsCubit>(),
         ),
-        BlocProvider(
-          create: (context) => getIt<CarModelYearsCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<CarModelYearsCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<CarModelYearColorCubit>(),
-        ),
+        // BlocProvider(
+        //   create: (context) => getIt<CarModelYearsCubit>(),
+        // ),
+
+        // BlocProvider(
+        //   create: (context) => getIt<CarModelYearColorCubit>(),
+        // ),
         BlocProvider(
           create: (context) => getIt<ETicketCubit>(),
         ),

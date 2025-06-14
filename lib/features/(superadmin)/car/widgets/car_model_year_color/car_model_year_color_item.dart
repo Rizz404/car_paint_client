@@ -10,86 +10,86 @@ import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart'
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 
-class CarModelYearColorItem extends StatefulWidget {
-  final CarModelYearColor model;
-  final Function() onDelete;
-  final Function() onRefresh;
+// class CarModelYearColorItem extends StatefulWidget {
+//   final CarModelYearColor model;
+//   final Function() onDelete;
+//   final Function() onRefresh;
 
-  const CarModelYearColorItem(
-      {super.key,
-      required this.model,
-      required this.onDelete,
-      required this.onRefresh});
+//   const CarModelYearColorItem(
+//       {super.key,
+//       required this.model,
+//       required this.onDelete,
+//       required this.onRefresh});
 
-  @override
-  State<CarModelYearColorItem> createState() => _CarModelYearColorItemState();
-}
+//   @override
+//   State<CarModelYearColorItem> createState() => _CarModelYearColorItemState();
+// }
 
-class _CarModelYearColorItemState extends State<CarModelYearColorItem> {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      child: GestureDetector(
-        onTap: () => Navigator.of(context)
-            .push(UpsertCarModelYearColor.route(
-          carModelYearColor: widget.model,
-        ))
-            .then(
-          (_) {
-            widget.onRefresh();
-          },
-        ),
-        child: BlocConsumer<CarModelYearColorCubit, BaseState>(
-          listener: (context, state) {
-            handleFormListenerState(
-              context: context,
-              state: state,
-              onRetry: () {
-                widget.onDelete();
-              },
-              onSuccess: () {
-                SnackBarUtil.showSnackBar(
-                  context: context,
-                  message: "Car model deleted successfully",
-                  type: SnackBarType.success,
-                );
-                Navigator.pop(context);
-              },
-            );
-          },
-          builder: (context, state) {
-            return Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      child: SizedBox(
-                        height: 100,
-                        child: Column(
-                          children: [
-                            MainText(
-                              text: widget.model.carModelYear!.year.toString(),
-                            ),
-                            MainText(
-                              text: widget.model.color!.name.toString(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          widget.onDelete();
-                        },
-                        icon: const Icon(Icons.delete))
-                  ],
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
+// class _CarModelYearColorItemState extends State<CarModelYearColorItem> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       child: GestureDetector(
+//         onTap: () => Navigator.of(context)
+//             .push(UpsertCarModelYearColor.route(
+//           carModelYearColor: widget.model,
+//         ))
+//             .then(
+//           (_) {
+//             widget.onRefresh();
+//           },
+//         ),
+//         child: BlocConsumer<CarModelYearColorCubit, BaseState>(
+//           listener: (context, state) {
+//             handleFormListenerState(
+//               context: context,
+//               state: state,
+//               onRetry: () {
+//                 widget.onDelete();
+//               },
+//               onSuccess: () {
+//                 SnackBarUtil.showSnackBar(
+//                   context: context,
+//                   message: "Car model deleted successfully",
+//                   type: SnackBarType.success,
+//                 );
+//                 Navigator.pop(context);
+//               },
+//             );
+//           },
+//           builder: (context, state) {
+//             return Column(
+//               children: [
+//                 Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                   children: [
+//                     GestureDetector(
+//                       child: SizedBox(
+//                         height: 100,
+//                         child: Column(
+//                           children: [
+//                             MainText(
+//                               text: widget.model.carModelYear!.year.toString(),
+//                             ),
+//                             MainText(
+//                               text: widget.model.color!.name.toString(),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+//                     IconButton(
+//                         onPressed: () {
+//                           widget.onDelete();
+//                         },
+//                         icon: const Icon(Icons.delete))
+//                   ],
+//                 ),
+//               ],
+//             );
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -150,4 +150,65 @@ class CarColorsCubit extends Cubit<BaseState> with Cancelable {
       },
     );
   }
+
+  Future<void> getColorsByModelId(
+      String modelId, int page, CancelToken cancelToken,
+      {int limit = 10}) async {
+    if (isLoadingMore) return;
+    cancelRequests();
+
+    isLoadingMore = page != 1;
+
+    if (page == 1) {
+      emit(const BaseLoadingState());
+    } else {
+      // kalo dah ada data, update state buat tampilin loading di bagian bawah
+      if (state is BaseSuccessState<PaginationState<CarColor>>) {
+        final currentState =
+            state as BaseSuccessState<PaginationState<CarColor>>;
+        final data = currentState.data;
+        emit(BaseSuccessState<PaginationState<CarColor>>(
+            PaginationState<CarColor>(
+              data: data.data,
+              pagination: data.pagination,
+              currentPage: data.currentPage,
+              isLoadingMore: true,
+            ),
+            null));
+      }
+    }
+
+    try {
+      await handleBaseCubit<PaginatedData<CarColor>>(
+        emit,
+        () => carColorsRepo.getColorsByModelId(
+          page,
+          limit,
+          cancelToken,
+          modelId,
+        ),
+        onSuccess: (data, message) {
+          if (page == 1) colors.clear();
+
+          colors.addAll(data.items);
+          pagination = data.pagination;
+          currentPage = page;
+          isLoadingMore = false;
+
+          emit(BaseSuccessState(
+              PaginationState<CarColor>(
+                data: colors,
+                pagination: pagination!,
+                currentPage: currentPage,
+                isLoadingMore: isLoadingMore,
+              ),
+              null));
+        },
+      );
+    } catch (e) {
+      emit(BaseErrorState(message: e.toString()));
+    } finally {
+      isLoadingMore = false;
+    }
+  }
 }

@@ -18,8 +18,11 @@ class UserDetailWorkshopsPage extends StatefulWidget {
   final CarWorkshop workshop;
   final VehicleData? vehicleData;
   final List<String> carServices;
-  final String carModelYearId;
-  final String colorId;
+  // final String carModelYearId;
+  // final String colorId;
+  final String carColorId;
+  final String carModelId;
+  final String carModelColorId;
   final double totalPrice;
   final int totalAllServices;
 
@@ -27,8 +30,12 @@ class UserDetailWorkshopsPage extends StatefulWidget {
     required CarWorkshop workshop,
     VehicleData? vehicleData,
     required List<String> carServices,
-    required String carModelYearId,
-    required String colorId,
+    // required String carModelYearId,
+    // required String colorId,
+    // required String carModelColorId,
+    required String carColorId,
+    required String carModelId,
+    required String carModelColorId,
     required double totalPrice,
     required int totalAllServices,
   }) =>
@@ -37,8 +44,11 @@ class UserDetailWorkshopsPage extends StatefulWidget {
           workshop: workshop,
           vehicleData: vehicleData,
           carServices: carServices,
-          carModelYearId: carModelYearId,
-          colorId: colorId,
+          // carModelYearId: carModelYearId,
+          // colorId: colorId,
+          carColorId: carColorId,
+          carModelId: carModelId,
+          carModelColorId: carModelColorId,
           totalPrice: totalPrice,
           totalAllServices: totalAllServices,
         ),
@@ -46,10 +56,14 @@ class UserDetailWorkshopsPage extends StatefulWidget {
   const UserDetailWorkshopsPage({
     Key? key,
     required this.workshop,
+    required this.carColorId,
+    required this.carModelId,
     required this.vehicleData,
     required this.carServices,
-    required this.carModelYearId,
-    required this.colorId,
+    // required this.carModelColorId,
+    required this.carModelColorId,
+    // required this.carModelYearId,
+    // required this.colorId,
     required this.totalPrice,
     required this.totalAllServices,
   }) : super(key: key);
@@ -203,8 +217,11 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                         UserCreateOrderPage.route(
                           workshopId: widget.workshop.id!,
                           carServices: widget.carServices,
-                          carModelYearId: widget.carModelYearId,
-                          colorId: widget.colorId,
+                          carModelColorId: widget.carModelColorId,
+                          carColorId: widget.carColorId,
+                          carModelId: widget.carModelId,
+                          // carModelYearId: widget.carModelYearId,
+                          // colorId: widget.colorId,
                           // TODO: REPLACE
                           totalPrice: widget.totalPrice,
                           totalAllServices: widget.totalAllServices,

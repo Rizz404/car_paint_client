@@ -41,10 +41,10 @@ class _RegisterPageState extends State<RegisterPage> {
     super.initState();
     _cancelToken = CancelToken();
     setState(() {
-      usernameController.text = Mock.user["username"];
-      emailController.text = Mock.user["email"];
-      passwordController.text = Mock.user["password"];
-      confirmPasswordController.text = Mock.user["password"];
+      usernameController.text = Mock.user2["username"];
+      emailController.text = Mock.user2["email"];
+      passwordController.text = Mock.user2["password"];
+      confirmPasswordController.text = Mock.user2["password"];
       ;
     });
   }

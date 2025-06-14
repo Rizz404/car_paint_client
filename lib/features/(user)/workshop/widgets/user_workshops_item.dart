@@ -14,8 +14,11 @@ class UserWorkshopsItem extends StatefulWidget {
   final Function() onRefresh;
   final VehicleData? vehicleData;
   final List<String> carServices;
-  final String carModelYearId;
-  final String colorId;
+  final String carModelColorId;
+  // final String carModelYearId;
+  // final String colorId;
+  final String carColorId;
+  final String carModelId;
   final double totalPrice;
   final int totalAllServices;
 
@@ -24,9 +27,12 @@ class UserWorkshopsItem extends StatefulWidget {
       required this.workshop,
       required this.onRefresh,
       this.vehicleData,
+      required this.carModelId,
+      required this.carColorId,
+      required this.carModelColorId,
       required this.carServices,
-      required this.carModelYearId,
-      required this.colorId,
+      // required this.carModelYearId,
+      // required this.colorId,
       required this.totalPrice,
       required this.totalAllServices});
 
@@ -69,8 +75,11 @@ class _UserWorkshopsItemState extends State<UserWorkshopsItem> {
                 workshop: workshop,
                 vehicleData: widget.vehicleData,
                 carServices: widget.carServices,
-                carModelYearId: widget.carModelYearId,
-                colorId: widget.colorId,
+                // carModelYearId: widget.carModelYearId,
+                // colorId: widget.colorId,
+                carModelId: widget.carModelId,
+                carColorId: widget.carColorId,
+                carModelColorId: widget.carModelColorId,
                 totalPrice: widget.totalPrice,
                 totalAllServices: widget.totalAllServices,
               ),

@@ -24,106 +24,113 @@ class CarModelYearsPage extends StatefulWidget {
 }
 
 class _CarModelYearsPageState extends State<CarModelYearsPage> {
-  late final CancelToken _cancelToken;
-  late final ScrollController _scrollController;
-  static const int limit = ApiConstant.limit;
+  // late final CancelToken _cancelToken;
+  // late final ScrollController _scrollController;
+  // static const int limit = ApiConstant.limit;
 
-  @override
-  void initState() {
-    super.initState();
-    _cancelToken = CancelToken();
-    _scrollController = ScrollController()..addListener(_onScroll);
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _cancelToken = CancelToken();
+  //   _scrollController = ScrollController()..addListener(_onScroll);
 
-    context.read<CarModelYearsCubit>().refresh(limit, _cancelToken);
-  }
+  //   context.read<CarModelYearsCubit>().refresh(limit, _cancelToken);
+  // }
 
-  @override
-  void dispose() {
-    _cancelToken.cancel();
-    _scrollController.dispose();
+  // @override
+  // void dispose() {
+  //   _cancelToken.cancel();
+  //   _scrollController.dispose();
 
-    super.dispose();
-  }
+  //   super.dispose();
+  // }
 
-  void _onScroll() {
-    final cubit = context.read<CarModelYearsCubit>();
-    if (!_scrollController.hasClients ||
-        cubit.state is! BaseSuccessState<PaginationState<CarModelYears>>) {
-      return;
-    }
+  // void _onScroll() {
+  //   final cubit = context.read<CarModelYearsCubit>();
+  //   if (!_scrollController.hasClients ||
+  //       cubit.state is! BaseSuccessState<PaginationState<CarModelYears>>) {
+  //     return;
+  //   }
 
-    final data =
-        (cubit.state as BaseSuccessState<PaginationState<CarModelYears>>).data;
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.position.pixels;
+  //   final data =
+  //       (cubit.state as BaseSuccessState<PaginationState<CarModelYears>>).data;
+  //   final maxScroll = _scrollController.position.maxScrollExtent;
+  //   final currentScroll = _scrollController.position.pixels;
 
-    if (currentScroll >= maxScroll - 200 &&
-        !data.isLoadingMore &&
-        data.pagination.hasNextPage) {
-      cubit.loadNextPage(
-        _cancelToken,
-      );
-    }
-  }
+  //   if (currentScroll >= maxScroll - 200 &&
+  //       !data.isLoadingMore &&
+  //       data.pagination.hasNextPage) {
+  //     cubit.loadNextPage(
+  //       _cancelToken,
+  //     );
+  //   }
+  // }
 
-  void _delete(
-    String id,
-  ) async {
-    context.read<CarModelYearsCubit>().deleteModelYear(id, _cancelToken);
-  }
+  // void _delete(
+  //   String id,
+  // ) async {
+  //   context.read<CarModelYearsCubit>().deleteModelYear(id, _cancelToken);
+  // }
 
-  void _onRefresh() {
-    context.read<CarModelYearsCubit>().refresh(limit, _cancelToken);
-  }
+  // void _onRefresh() {
+  //   context.read<CarModelYearsCubit>().refresh(limit, _cancelToken);
+  // }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: mainAppBar("Car Model Years"),
+  //     floatingActionButton: FloatingActionButton(
+  //       onPressed: () =>
+  //           Navigator.of(context).push(UpsertCarModelYearsPage.route()),
+  //       child: const Icon(Icons.add),
+  //     ),
+  //     body: StateHandler<CarModelYearsCubit, PaginationState<CarModelYears>>(
+  //       onRetry: () => _onRefresh(),
+  //       onSuccess: (context, data, message) {
+  //         final modelYearsCarModelYears = data.data;
+
+  //         return RefreshIndicator(
+  //           onRefresh: () async {
+  //             _onRefresh();
+  //           },
+  //           child: Scrollbar(
+  //             controller: _scrollController,
+  //             thumbVisibility: true,
+  //             child: CustomScrollView(
+  //               cacheExtent: 2000, // ! Preload area di luar viewport
+  //               controller: _scrollController,
+  //               physics:
+  //                   const AlwaysScrollableScrollPhysics(), // buat RefreshIndicator
+  //               slivers: [
+  //                 SliverList(
+  //                   delegate: SliverChildBuilderDelegate(
+  //                     (context, index) => CarModelYearsItem(
+  //                         model: modelYearsCarModelYears[index],
+  //                         onDelete: () {
+  //                           _delete(modelYearsCarModelYears[index].id!);
+  //                         },
+  //                         onRefresh: _onRefresh),
+  //                     childCount: modelYearsCarModelYears.length,
+  //                   ),
+  //                 ),
+  //                 if (data.isLoadingMore)
+  //                   const SliverToBoxAdapter(
+  //                     child: Loading(),
+  //                   ),
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: mainAppBar("Car Model Years"),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            Navigator.of(context).push(UpsertCarModelYearsPage.route()),
-        child: const Icon(Icons.add),
-      ),
-      body: StateHandler<CarModelYearsCubit, PaginationState<CarModelYears>>(
-        onRetry: () => _onRefresh(),
-        onSuccess: (context, data, message) {
-          final modelYearsCarModelYears = data.data;
-
-          return RefreshIndicator(
-            onRefresh: () async {
-              _onRefresh();
-            },
-            child: Scrollbar(
-              controller: _scrollController,
-              thumbVisibility: true,
-              child: CustomScrollView(
-                cacheExtent: 2000, // ! Preload area di luar viewport
-                controller: _scrollController,
-                physics:
-                    const AlwaysScrollableScrollPhysics(), // buat RefreshIndicator
-                slivers: [
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) => CarModelYearsItem(
-                          model: modelYearsCarModelYears[index],
-                          onDelete: () {
-                            _delete(modelYearsCarModelYears[index].id!);
-                          },
-                          onRefresh: _onRefresh),
-                      childCount: modelYearsCarModelYears.length,
-                    ),
-                  ),
-                  if (data.isLoadingMore)
-                    const SliverToBoxAdapter(
-                      child: Loading(),
-                    ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+      appBar: mainAppBar("Car Model Year Color"),
+      body: const Text("test"),
     );
   }
 }

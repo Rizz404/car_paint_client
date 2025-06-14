@@ -258,26 +258,26 @@ initializeSL() async {
     ),
   );
   // ! car model years
-  getIt.registerLazySingleton<CarModelYearsRepo>(
-    () => CarModelYearsRepo(
-      apiClient: getIt(),
-    ),
-  );
-  getIt.registerFactory<CarModelYearsCubit>(
-    () => CarModelYearsCubit(
-      carModelYearsRepo: getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<CarModelYearColorRepo>(
-    () => CarModelYearColorRepo(
-      apiClient: getIt(),
-    ),
-  );
-  getIt.registerFactory<CarModelYearColorCubit>(
-    () => CarModelYearColorCubit(
-      carModelYearColorRepo: getIt(),
-    ),
-  );
+  // getIt.registerLazySingleton<CarModelYearsRepo>(
+  //   () => CarModelYearsRepo(
+  //     apiClient: getIt(),
+  //   ),
+  // );
+  // getIt.registerFactory<CarModelYearsCubit>(
+  //   () => CarModelYearsCubit(
+  //     carModelYearsRepo: getIt(),
+  //   ),
+  // );
+  // getIt.registerLazySingleton<CarModelYearColorRepo>(
+  //   () => CarModelYearColorRepo(
+  //     apiClient: getIt(),
+  //   ),
+  // );
+  // getIt.registerFactory<CarModelYearColorCubit>(
+  //   () => CarModelYearColorCubit(
+  //     carModelYearColorRepo: getIt(),
+  //   ),
+  // );
   // ! history
   // ! history
   getIt.registerLazySingleton<HistoryRepo>(

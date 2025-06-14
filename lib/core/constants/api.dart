@@ -8,7 +8,9 @@ class ApiConstant {
   // ! URL
   // static const String baseUrl = 'http://192.168.1.3:5500/api/v1';
   static const String baseUrl =
-      'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
+      'https://2656-160-22-134-241.ngrok-free.app/api/v1';
+  // static const String baseUrl =
+  //     'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
   // static const String baseUrl = 'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
   // static const String baseUrl =
   //     'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
@@ -34,12 +36,17 @@ class ApiConstant {
   static const String workshopsPath = "/workshops";
   // * colors
   static const String colorsPath = "/colors";
+  static const String colorsByCarModelPath = "$colorsPath/car-model";
+  // * car model colors
+  static const String carModelColorsPath = "/car-model-colors";
+  static const String carModelColorsByCarModelIdPath =
+      "$carModelColorsPath/car-model";
   // * model years
-  static const String carModelYearsPath = "/car-model-years";
-  static const String carModelYearsByCarModelPath =
-      "/car-model-years/car-model";
+  // static const String carModelYearsPath = "/car-model-years";
+  // static const String carModelYearsByCarModelPath =
+  //     "/car-model-years/car-model";
   // * model year colors
-  static const String carModelYearColorsPath = "/car-model-year-colors";
+  // static const String carModelYearColorsPath = "/car-model-year-colors";
 
   // * AUTH
   static const String authPath = "/auth";

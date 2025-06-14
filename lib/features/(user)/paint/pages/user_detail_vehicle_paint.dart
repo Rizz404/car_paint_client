@@ -4,6 +4,7 @@ import 'package:paint_car/data/local/vehicle_data_sp.dart';
 import 'package:paint_car/data/models/car_brand.dart';
 import 'package:paint_car/data/models/car_color.dart';
 import 'package:paint_car/data/models/car_model.dart';
+import 'package:paint_car/data/models/car_model_color.dart';
 import 'package:paint_car/data/models/car_model_years.dart';
 import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/data/models/user_detail_vehicle_paint_model.dart';
@@ -11,6 +12,7 @@ import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/dependencies/sl.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_colors_cubit.dart';
+import 'package:paint_car/features/(superadmin)/car/cubit/car_model_color_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_model_year_color_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_model_years_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_models_cubit.dart';
@@ -53,14 +55,12 @@ class _UserDetailVehiclePaintPageState
   List<String> selectedServices = [];
   bool isSelectAll = false;
   final VehicleDataLocal _vehicleDataLocal = getIt<VehicleDataLocal>();
-  bool _dataLoaded = false;
 
   Future<void> _loadSavedVehicleData() async {
     final savedData = _vehicleDataLocal.getVehicleData();
     if (savedData != null) {
       setState(() {
         _vehicleData = savedData;
-        _dataLoaded = true;
       });
 
       // Load data yang terkait dengan data yang tersimpan
@@ -68,15 +68,8 @@ class _UserDetailVehiclePaintPageState
         await getModelsByBrandId(_vehicleData.carBrandId);
 
         if (_vehicleData.carModelId != null) {
-          await getModelYearsByModelId(_vehicleData.carModelId);
-
-          if (_vehicleData.carModelYearId != null &&
-              _vehicleData.carColorId != null) {
-            await getModelYearColors(
-              _vehicleData.carModelYearId,
-              _vehicleData.carColorId,
-            );
-          }
+          // Load colors berdasarkan model ID, bukan brand ID
+          await getColorsByModelId(_vehicleData.carModelId);
         }
       }
     }
@@ -171,23 +164,10 @@ class _UserDetailVehiclePaintPageState
         );
   }
 
-  Future<void> getModelYearsByModelId(String? modelId) async {
+  Future<void> getColorsByModelId(String? modelId) async {
     if (modelId == null) return;
-    await context.read<CarModelYearsCubit>().getModelYearsByCarModel(
+    await context.read<CarColorsCubit>().getColorsByModelId(
           modelId,
-          1,
-          _cancelToken,
-          limit: 100,
-        );
-  }
-
-  Future<void> getModelYearColors(String? modelYearId, String? colorId) async {
-    if (modelYearId == null || colorId == null) return;
-    await context
-        .read<CarModelYearColorCubit>()
-        .getModelYearColorByModelAndColor(
-          modelYearId,
-          colorId,
           1,
           _cancelToken,
           limit: 100,
@@ -239,10 +219,8 @@ class _UserDetailVehiclePaintPageState
     return Column(
       children: [
         _buildBrandsSelectField(divider),
-        _buildColorSelectField(divider),
         _buildModelSelectField(divider),
-        _buildModelYearSelectField(divider),
-        // _buildModelYearColotSelectField(),
+        _buildColorsByModelIdSelectField(divider),
       ],
     );
   }
@@ -260,46 +238,17 @@ class _UserDetailVehiclePaintPageState
               value: _vehicleData.carBrand ?? '',
               options: brands.map((e) => e.name).toList(),
               onSelected: (value) {
-                getModelsByBrandId(
-                  brands.firstWhere((element) => element.name == value).id,
-                );
+                final selectedBrand =
+                    brands.firstWhere((element) => element.name == value);
+                getModelsByBrandId(selectedBrand.id);
                 setState(() {
                   _vehicleData.carBrand = value;
-                  _vehicleData.carBrandId =
-                      brands.firstWhere((element) => element.name == value).id;
+                  _vehicleData.carBrandId = selectedBrand.id;
+                  // Reset model dan color ketika brand berubah
                   _vehicleData.carModel = null;
-                  _vehicleData.carModelYear = null;
-                  _vehicleData.carModelYearColor = null;
-                });
-              },
-            ),
-            divider,
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildColorSelectField(Widget divider) {
-    return StateHandler<CarColorsCubit, PaginationState<CarColor>>(
-      onRetry: () => getColors(),
-      onSuccess: (context, data, _) {
-        final colors = data.data;
-        if (colors.isEmpty) return const SizedBox();
-        return Column(
-          children: [
-            SelectFieldVehicle(
-              field: "Warna Mobil*",
-              value: _vehicleData.carColor ?? '',
-              options: colors.map((e) => e.name).toList(),
-              onSelected: (value) {
-                setState(() {
-                  _vehicleData.carColor = value;
-                  _vehicleData.carColorId =
-                      colors.firstWhere((element) => element.name == value).id;
-                  _vehicleData.carModel = null;
-                  _vehicleData.carModelYear = null;
-                  _vehicleData.carModelYearColor = null;
+                  _vehicleData.carModelId = null;
+                  _vehicleData.carColor = null;
+                  _vehicleData.carColorId = null;
                 });
               },
             ),
@@ -312,7 +261,7 @@ class _UserDetailVehiclePaintPageState
 
   Widget _buildModelSelectField(Widget divider) {
     return AnimatedStateHandler<CarModelsCubit, PaginationState<CarModel>>(
-      show: _vehicleData.carBrandId != null,
+      show: _vehicleData.carBrandId != null, // Show ketika brand sudah dipilih
       onRetry: () => _vehicleData.carBrandId != null
           ? getModelsByBrandId(_vehicleData.carBrandId!)
           : Future.value(),
@@ -325,14 +274,17 @@ class _UserDetailVehiclePaintPageState
               value: _vehicleData.carModel ?? '',
               options: models.map((e) => e.name).toList(),
               onSelected: (value) {
+                final selectedModel =
+                    models.firstWhere((element) => element.name == value);
                 setState(() {
                   _vehicleData.carModel = value;
-                  _vehicleData.carModelId =
-                      models.firstWhere((element) => element.name == value).id;
-                  _vehicleData.carModelYear = null;
-                  _vehicleData.carModelYearColor = null;
+                  _vehicleData.carModelId = selectedModel.id;
+                  // Reset color ketika model berubah
+                  _vehicleData.carColor = null;
+                  _vehicleData.carColorId = null;
                 });
-                getModelYearsByModelId(_vehicleData.carModelId);
+                // Load colors berdasarkan model yang dipilih
+                getColorsByModelId(_vehicleData.carModelId);
               },
             ),
             divider,
@@ -342,33 +294,28 @@ class _UserDetailVehiclePaintPageState
     );
   }
 
-  Widget _buildModelYearSelectField(Widget divider) {
-    return AnimatedStateHandler<CarModelYearsCubit,
-        PaginationState<CarModelYears>>(
-      show: _vehicleData.carModelId != null,
+  Widget _buildColorsByModelIdSelectField(Widget divider) {
+    return AnimatedStateHandler<CarColorsCubit, PaginationState<CarColor>>(
+      show: _vehicleData.carModelId != null, // Show ketika model sudah dipilih
       onRetry: () => _vehicleData.carModelId != null
-          ? getModelYearsByModelId(_vehicleData.carModelId!)
+          ? getColorsByModelId(
+              _vehicleData.carModelId!) // Gunakan carModelId, bukan carBrandId
           : Future.value(),
       onSuccess: (context, data, _) {
-        final modelYears = data.data;
+        final colors = data.data;
         return Column(
           children: [
             SelectFieldVehicle(
-              field: "Model Tahun Mobil*",
-              value: _vehicleData.carModelYear ?? '',
-              options: modelYears.map((e) => e.year.toString()).toList(),
+              field: "Warna Mobil*",
+              value: _vehicleData.carColor ?? '',
+              options: colors.map((e) => e.name).toList(),
               onSelected: (value) {
+                final selectedColor =
+                    colors.firstWhere((element) => element.name == value);
                 setState(() {
-                  _vehicleData.carModelYear = value;
-                  _vehicleData.carModelYearId = modelYears
-                      .firstWhere((element) => element.year.toString() == value)
-                      .id;
-                  _vehicleData.carModelYearColor = null;
+                  _vehicleData.carColor = value;
+                  _vehicleData.carColorId = selectedColor.id;
                 });
-                getModelYearColors(
-                  _vehicleData.carModelYearId,
-                  _vehicleData.carColorId,
-                );
               },
             ),
             divider,
@@ -377,41 +324,6 @@ class _UserDetailVehiclePaintPageState
       },
     );
   }
-
-  // Widget _buildModelYearColotSelectField() {
-  //   return AnimatedStateHandler<CarModelYearColorCubit,
-  //       PaginationState<CarModelYearColor>>(
-  //     show: _vehicleData.carModelYearId != null &&
-  //         _vehicleData.carColorId != null,
-  //     onRetry: () =>
-  //         _vehicleData.carModelYearId != null && _vehicleData.carColorId != null
-  //             ? getModelYearColors(
-  //                 _vehicleData.carModelYearId!,
-  //                 _vehicleData.carColorId!,
-  //               )
-  //             : Future.value(),
-  //     onSuccess: (context, data, _) {
-  //       final modelYearColor = data.data;
-  //       return Column(
-  //         children: [
-  //           SelectFieldVehicle(
-  //             field: "Model Tahun Warna Mobil*",
-  //             value: _vehicleData.carModelYearColor ?? '',
-  //             options: modelYearColor.map((e) => e.color!.name).toList(),
-  //             onSelected: (value) {
-  //               setState(() {
-  //                 _vehicleData.carModelYearColor = value;
-  //                 _vehicleData.carModelYearColorId = modelYearColor
-  //                     .firstWhere((element) => element.color!.name == value)
-  //                     .id;
-  //               });
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
 
   Widget _buildPaintSelectionSection() {
     return Column(
@@ -489,7 +401,7 @@ class _UserDetailVehiclePaintPageState
   }
 
   void _handleNextButton() {
-    if (_vehicleData.carModelYearId == null ||
+    if (_vehicleData.carModelId == null ||
         _vehicleData.carColorId == null ||
         selectedServices.isEmpty) {
       SnackBarUtil.showSnackBar(
@@ -505,8 +417,9 @@ class _UserDetailVehiclePaintPageState
       UserWorkshopsPage.route(
         vehicleData: _vehicleData,
         carServices: selectedServices,
-        carModelYearId: _vehicleData.carModelYearId!,
-        colorId: _vehicleData.carColorId!,
+        carModelColorId: _vehicleData.carModelColorId ?? '',
+        carModelId: _vehicleData.carModelId!,
+        carColorId: _vehicleData.carColorId!,
         totalAllServices: totalServices(),
         totalPrice: totalPrice(),
       ),

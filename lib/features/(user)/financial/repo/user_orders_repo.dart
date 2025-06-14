@@ -36,8 +36,11 @@ class UserOrdersRepo {
     String workshopId,
     String? note,
     List<String> carServices,
-    String carModelYearId,
-    String colorId,
+    // String carModelYearId,
+    // String colorId,
+    String carModelColorId,
+    String carColorId,
+    String carModelId,
   ) async {
     final result = await apiClient.post<Transactions>(
       ApiConstant.ordersWithMidtrans,
@@ -47,8 +50,11 @@ class UserOrdersRepo {
         'workshopId': workshopId,
         'note': note,
         'carServices': carServices.map((id) => {'carServiceId': id}).toList(),
-        'carModelYearId': carModelYearId,
-        'colorId': colorId,
+        // 'carModelYearId': carModelYearId,
+        // 'colorId': colorId,
+        // 'carModelColorId': carModelColorId,
+        'colorId': carColorId,
+        'carModelId': carModelId,
       },
       cancelToken: cancelToken,
     );

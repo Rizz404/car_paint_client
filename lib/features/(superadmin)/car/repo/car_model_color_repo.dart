@@ -1,93 +1,91 @@
-// ignore_for_file: unused_import
-
-import 'dart:convert';
-
 import 'package:paint_car/core/common/api_response.dart';
 import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/core/types/paginated_data.dart';
-import 'package:paint_car/data/models/car_color.dart';
+import 'package:paint_car/data/models/car_model_color.dart';
 import 'package:paint_car/data/network/api_client.dart';
 import 'package:paint_car/features/shared/utils/build_pagination_params.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/from_json_pagination.dart';
 import 'package:paint_car/features/shared/utils/handle_api_response.dart';
 
-class CarColorsRepo {
+class CarModelColorRepo {
   final ApiClient apiClient;
-  const CarColorsRepo({required this.apiClient});
+  const CarModelColorRepo({required this.apiClient});
 
-  Future<ApiResponse<PaginatedData<CarColor>>> getColors(
+  Future<ApiResponse<PaginatedData<CarModelColor>>> getCarModelColors(
     int page,
     int limit,
     CancelToken cancelToken,
   ) async {
-    final result = await apiClient.get<PaginatedData<CarColor>>(
-      ApiConstant.colorsPath,
+    final result = await apiClient.get<PaginatedData<CarModelColor>>(
+      ApiConstant.carModelColorsPath,
       queryParameters: buildPaginationParams(page, limit),
-      fromJson: (json) => fromJsonPagination<CarColor>(
+      fromJson: (json) => fromJsonPagination<CarModelColor>(
         json,
-        (json) => CarColor.fromMap(json),
+        (json) => CarModelColor.fromMap(json),
       ),
       cancelToken: cancelToken,
     );
     return await handleApiResponse(result);
   }
 
-  Future<ApiResponse<PaginatedData<CarColor>>> getColorsByModelId(
+  Future<ApiResponse<PaginatedData<CarModelColor>>> getCarModelColorsByModelId(
     int page,
     int limit,
     CancelToken cancelToken,
     String modelId,
   ) async {
-    final result = await apiClient.get<PaginatedData<CarColor>>(
-      "${ApiConstant.colorsByCarModelPath}/$modelId",
+    final result = await apiClient.get<PaginatedData<CarModelColor>>(
+      "${ApiConstant.carModelColorsByCarModelIdPath}/$modelId",
       queryParameters: buildPaginationParams(page, limit),
-      fromJson: (json) => fromJsonPagination<CarColor>(
+      fromJson: (json) => fromJsonPagination<CarModelColor>(
         json,
-        (json) => CarColor.fromMap(json),
+        (json) => CarModelColor.fromMap(json),
       ),
       cancelToken: cancelToken,
     );
     return await handleApiResponse(result);
   }
 
-  Future<ApiResponse<CarColor>> saveColor(
-    CarColor carColorCarColor,
+  Future<ApiResponse<CarModelColor>> saveModel(
+    CarModelColor carModelColor,
     CancelToken cancelToken,
   ) async {
-    final result = await apiClient.post<CarColor>(
-      ApiConstant.colorsPath,
+    final result = await apiClient.post<CarModelColor>(
+      ApiConstant.carModelColorsPath,
       {
-        'name': carColorCarColor.name,
+        'carModelId': carModelColor.carModelId,
+        'colorId': carModelColor.colorId,
       },
-      fromJson: (json) => CarColor.fromMap(json),
+      fromJson: (json) => CarModelColor.fromMap(json),
       cancelToken: cancelToken,
     );
     return await handleApiResponse(result, isGet: false);
   }
 
-  Future<ApiResponse<CarColor>> updateColor(
-    CarColor carColorCarColor,
+  Future<ApiResponse<CarModelColor>> updateModel(
+    CarModelColor carModelColor,
     CancelToken cancelToken,
   ) async {
-    final result = await apiClient.patch<CarColor>(
-      '${ApiConstant.colorsPath}/${carColorCarColor.id}',
+    final result = await apiClient.patch<CarModelColor>(
+      '${ApiConstant.carModelColorsPath}/${carModelColor.id}',
       {
-        'id': carColorCarColor.id,
-        'name': carColorCarColor.name,
+        'id': carModelColor.id,
+        'colorId': carModelColor.colorId,
+        'carModelId': carModelColor.carModelId,
       },
-      fromJson: (json) => CarColor.fromMap(json),
+      fromJson: (json) => CarModelColor.fromMap(json),
       cancelToken: cancelToken,
     );
     return await handleApiResponse(result, isGet: false);
   }
 
-  Future<ApiResponse<void>> deleteColor(
+  Future<ApiResponse<void>> deleteModel(
     String id,
     CancelToken cancelToken,
   ) async {
     final result = await apiClient.delete<void>(
-      '${ApiConstant.colorsPath}/$id',
+      '${ApiConstant.carModelColorsPath}/$id',
       cancelToken: cancelToken,
     );
     return await handleApiResponse(result, isGet: false);
