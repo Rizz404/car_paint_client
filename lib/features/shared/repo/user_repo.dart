@@ -46,4 +46,8 @@ class UserRepo {
       return null;
     }
   }
+
+  Future<bool> updateUserLocal(UserWithProfile user) async {
+    return await userSp.updateUser(user);
+  }
 }

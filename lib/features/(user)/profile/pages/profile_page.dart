@@ -8,8 +8,8 @@ import 'package:paint_car/data/models/user_model.dart';
 import 'package:paint_car/data/models/user_profile_model.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/dependencies/services/log_service.dart';
-import 'package:paint_car/features/(guest)/auth/pages/login_page.dart';
 import 'package:paint_car/features/(user)/profile/cubit/profile_cubit.dart';
+import 'package:paint_car/features/home/pages/home_page.dart';
 import 'package:paint_car/features/shared/cubit/user_cubit.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
@@ -87,7 +87,6 @@ class _ProfilePageState extends State<ProfilePage> {
         _selectedImage = file;
       });
     } catch (e) {
-      // TODO: DELETE LATERR
       SnackBarUtil.showSnackBar(
         context: context,
         message: "Error loading image",
@@ -133,6 +132,14 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  Future<void> _updateUserLocal(UserWithProfile updatedUser) async {
+    try {
+      await context.read<UserCubit>().updateUserData(updatedUser);
+    } catch (e) {
+      LogService.e("Error updating user local: $e");
+    }
+  }
+
   Future<void> _pickImage() async {
     try {
       final pickedFile = await ImagePicker().pickImage(
@@ -147,8 +154,6 @@ class _ProfilePageState extends State<ProfilePage> {
         setState(() => _selectedImage = File(pickedFile.path));
       }
     } on PlatformException catch (e) {
-      // TODO: DELETE LATERR
-
       LogService.e("Error picking image: $e");
       SnackBarUtil.showSnackBar(
         context: context,
@@ -167,43 +172,22 @@ class _ProfilePageState extends State<ProfilePage> {
           state: state,
           onRetry: submitForm,
           onSuccess: () async {
-            // final result = state as BaseActionSuccessState<UserWithProfile>;
-            // var ul = UserLocal(await SharedPreferences.getInstance());
-            // await ul.removeUser();
-            // await ul.saveUser(
-            //   UserWithProfile(
-            //     id: widget.user.id,
-            //     createdAt: widget.user.createdAt,
-            //     updatedAt: widget.user.updatedAt,
-            //     username: usernameController.text,
-            //     email: emailController.text,
-            //     profileImage: result.data!.profileImage,
-            //     role: widget.user.role,
-            //     newAccessToken: widget.user.newAccessToken,
-            //     userProfile: UserProfile(
-            //       id: widget.user.userProfile?.id ?? "",
-            //       userId: widget.user.id,
-            //       fullname: fullnameController.text,
-            //       phoneNumber: phoneNumberController.text,
-            //       address: addressController.text,
-            //       createdAt: widget.user.userProfile?.createdAt,
-            //       latitude: widget.user.userProfile?.latitude,
-            //       longitude: widget.user.userProfile?.longitude,
-            //       updatedAt: widget.user.userProfile?.updatedAt,
-            //     ),
-            //   ),
-            // );
-            // await context.read<UserCubit>().getUserLocal();
+            final result = state as BaseActionSuccessState<UserWithProfile>;
+
+            if (result.data != null) {
+              await _updateUserLocal(result.data!);
+            }
 
             SnackBarUtil.showSnackBar(
               context: context,
               message: "Profile updated successfully",
               type: SnackBarType.success,
             );
-            Navigator.of(context).pop();
-            context.read<UserCubit>().logout();
-            Navigator.of(context)
-                .pushAndRemoveUntil(LoginPage.route(), (_) => false);
+
+            Navigator.of(context).pushAndRemoveUntil(
+              HomePage.route(),
+              (route) => false,
+            );
           },
         );
       },

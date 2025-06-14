@@ -5,11 +5,9 @@ import 'package:paint_car/features/shared/repo/user_repo.dart';
 
 class UserCubit extends Cubit<BaseState> {
   final UserRepo userRepo;
-  // final NotificationCubit notificationCubit;
 
   UserCubit({
     required this.userRepo,
-    // required this.notificationCubit,
   }) : super(const BaseInitialState());
 
   Future<void> getUserLocal() async {
@@ -24,7 +22,6 @@ class UserCubit extends Cubit<BaseState> {
   }
 
   Future<void> logout() async {
-    // notificationCubit.resetState();
     await userRepo.logout();
     emit(const BaseInitialState());
   }
@@ -39,6 +36,30 @@ class UserCubit extends Cubit<BaseState> {
           message: "Token not found",
         ),
       );
+    }
+  }
+
+  void updateUserState(UserWithProfile updatedUser) {
+    emit(
+      BaseSuccessState<UserWithProfile?>(
+        updatedUser,
+        "User updated successfully",
+      ),
+    );
+  }
+
+  Future<void> updateUserData(UserWithProfile updatedUser) async {
+    try {
+      await userRepo.updateUserLocal(updatedUser);
+
+      emit(
+        BaseSuccessState<UserWithProfile?>(
+          updatedUser,
+          "User updated successfully",
+        ),
+      );
+    } catch (e) {
+      emit(BaseErrorState(message: "Failed to update user: $e"));
     }
   }
 }
