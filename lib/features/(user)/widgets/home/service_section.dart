@@ -13,45 +13,6 @@ class ServiceSection extends StatelessWidget {
 
   final Future<void> Function() onRetry;
 
-  // firstService() {
-  //   return StateHandler<UserCarCubit, PaginationState<UserCar>>(
-  //     onRetry: () => onRetry(),
-  //     onSuccess: (context, data, message) {
-  //       final cars = data.data;
-  //       return CardLinkSection(
-  //         text: "Order Here",
-  //         onTap: () {
-  //           // ! BEKAS REVISI
-  //           if (cars.isEmpty) {
-  //             SnackBarUtil.showSnackBar(
-  //               context: context,
-  //               message: "Harus input mobil dulu untuk order",
-  //               type: SnackBarType.warning,
-  //             );
-  //             Navigator.of(context).push(UserCarPage.route());
-  //             return;
-  //           }
-  //           if (user?.userProfile?.phoneNumber == null) {
-  //             SnackBarUtil.showSnackBar(
-  //               context: context,
-  //               message: "Harus input nomor telepon dulu untuk order",
-  //               type: SnackBarType.warning,
-  //             );
-  //             if (user == null) return;
-
-  //             Navigator.of(context).push(
-  //               ProfilePage.route(user: user!),
-  //             );
-  //             return;
-  //           }
-  //           // ! BEKAS REVISI
-  //           // Navigator.of(context).push(UserWorkshopsPage.route());
-  //           Navigator.of(context).push(UserChooseServicePage.route());
-  //         },
-  //       );
-  //     },
-  //   );
-// }
   firstService(
     BuildContext context,
   ) {
@@ -91,26 +52,6 @@ class ServiceSection extends StatelessWidget {
           extent: Large(),
         ),
         firstService(context),
-        // ! BEKAS REVISI
-        // Row(
-        //   spacing: 16,
-        //   children: [
-        //     CardMiniLinkSection(
-        //       image: "assets/images/user_car_orders.png",
-        //       text: "Processed Orders",
-        //       onTap: () {
-        //         Navigator.of(context).push(UserOrdersPage.route());
-        //       },
-        //     ),
-        //     CardMiniLinkSection(
-        //       image: "assets/images/history.png",
-        //       text: "History Orders",
-        //       onTap: () {
-        //         Navigator.of(context).push(UserHistoryPage.route());
-        //       },
-        //     ),
-        //   ],
-        // ),
       ],
     );
   }

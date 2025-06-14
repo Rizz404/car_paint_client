@@ -167,33 +167,33 @@ class _ProfilePageState extends State<ProfilePage> {
           state: state,
           onRetry: submitForm,
           onSuccess: () async {
-            final result = state as BaseActionSuccessState<UserWithProfile>;
-            var ul = UserLocal(await SharedPreferences.getInstance());
-            await ul.removeUser();
-            await ul.saveUser(
-              UserWithProfile(
-                id: widget.user.id,
-                createdAt: widget.user.createdAt,
-                updatedAt: widget.user.updatedAt,
-                username: usernameController.text,
-                email: emailController.text,
-                profileImage: result.data!.profileImage,
-                role: widget.user.role,
-                newAccessToken: widget.user.newAccessToken,
-                userProfile: UserProfile(
-                  id: widget.user.userProfile?.id ?? "",
-                  userId: widget.user.id,
-                  fullname: fullnameController.text,
-                  phoneNumber: phoneNumberController.text,
-                  address: addressController.text,
-                  createdAt: widget.user.userProfile?.createdAt,
-                  latitude: widget.user.userProfile?.latitude,
-                  longitude: widget.user.userProfile?.longitude,
-                  updatedAt: widget.user.userProfile?.updatedAt,
-                ),
-              ),
-            );
-            await context.read<UserCubit>().getUserLocal();
+            // final result = state as BaseActionSuccessState<UserWithProfile>;
+            // var ul = UserLocal(await SharedPreferences.getInstance());
+            // await ul.removeUser();
+            // await ul.saveUser(
+            //   UserWithProfile(
+            //     id: widget.user.id,
+            //     createdAt: widget.user.createdAt,
+            //     updatedAt: widget.user.updatedAt,
+            //     username: usernameController.text,
+            //     email: emailController.text,
+            //     profileImage: result.data!.profileImage,
+            //     role: widget.user.role,
+            //     newAccessToken: widget.user.newAccessToken,
+            //     userProfile: UserProfile(
+            //       id: widget.user.userProfile?.id ?? "",
+            //       userId: widget.user.id,
+            //       fullname: fullnameController.text,
+            //       phoneNumber: phoneNumberController.text,
+            //       address: addressController.text,
+            //       createdAt: widget.user.userProfile?.createdAt,
+            //       latitude: widget.user.userProfile?.latitude,
+            //       longitude: widget.user.userProfile?.longitude,
+            //       updatedAt: widget.user.userProfile?.updatedAt,
+            //     ),
+            //   ),
+            // );
+            // await context.read<UserCubit>().getUserLocal();
 
             SnackBarUtil.showSnackBar(
               context: context,
@@ -201,9 +201,9 @@ class _ProfilePageState extends State<ProfilePage> {
               type: SnackBarType.success,
             );
             Navigator.of(context).pop();
-            // context.read<UserCubit>().logout();
-            // Navigator.of(context)
-            //     .pushAndRemoveUntil(LoginPage.route(), (_) => false);
+            context.read<UserCubit>().logout();
+            Navigator.of(context)
+                .pushAndRemoveUntil(LoginPage.route(), (_) => false);
           },
         );
       },
