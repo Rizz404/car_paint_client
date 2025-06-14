@@ -7,10 +7,10 @@ class ApiConstant {
   static const String search = '/search';
   // ! URL
   // static const String baseUrl = 'http://192.168.1.3:5500/api/v1';
-  static const String baseUrl =
-      'https://2656-160-22-134-241.ngrok-free.app/api/v1';
   // static const String baseUrl =
-  //     'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
+  //     'https://2656-160-22-134-241.ngrok-free.app/api/v1';
+  static const String baseUrl =
+      'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
   // static const String baseUrl = 'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
   // static const String baseUrl =
   //     'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
