@@ -71,7 +71,6 @@ class UserCreateOrderPage extends StatefulWidget {
 }
 
 class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
-  static const int limit = 50;
   late final CancelToken _cancelToken;
 
   final paymentMethodController = TextEditingController();

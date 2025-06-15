@@ -4,17 +4,12 @@ import 'package:paint_car/data/local/vehicle_data_sp.dart';
 import 'package:paint_car/data/models/car_brand.dart';
 import 'package:paint_car/data/models/car_color.dart';
 import 'package:paint_car/data/models/car_model.dart';
-import 'package:paint_car/data/models/car_model_color.dart';
-import 'package:paint_car/data/models/car_model_years.dart';
 import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/data/models/user_detail_vehicle_paint_model.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/dependencies/sl.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_colors_cubit.dart';
-import 'package:paint_car/features/(superadmin)/car/cubit/car_model_color_cubit.dart';
-import 'package:paint_car/features/(superadmin)/car/cubit/car_model_year_color_cubit.dart';
-import 'package:paint_car/features/(superadmin)/car/cubit/car_model_years_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_models_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_services_cubit.dart';
 import 'package:paint_car/features/(user)/paint/widgets/checkbox_paint_panel.dart';
@@ -23,7 +18,6 @@ import 'package:paint_car/features/(user)/workshop/pages/user_workshops_page.dar
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/ui/common/extent.dart';
-import 'package:paint_car/ui/extension/padding.dart';
 import 'package:paint_car/ui/shared/animated_state_handler.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
@@ -63,12 +57,10 @@ class _UserDetailVehiclePaintPageState
         _vehicleData = savedData;
       });
 
-      // Load data yang terkait dengan data yang tersimpan
       if (_vehicleData.carBrandId != null) {
         await getModelsByBrandId(_vehicleData.carBrandId);
 
         if (_vehicleData.carModelId != null) {
-          // Load colors berdasarkan model ID, bukan brand ID
           await getColorsByModelId(_vehicleData.carModelId);
         }
       }
@@ -84,7 +76,7 @@ class _UserDetailVehiclePaintPageState
           (service) => selectedServices.contains(service.id),
         )
         .fold(
-          0.0, // ! ini biar double yh
+          0.0,
           (sum, service) => sum + double.parse(service.price),
         );
     return totalPrice;
@@ -190,15 +182,51 @@ class _UserDetailVehiclePaintPageState
           padding:
               const EdgeInsets.only(top: 16, bottom: 16, left: 16, right: 16),
           child: Column(
-            spacing: 24,
             children: [
               _buildHeader(),
+              const SizedBox(height: 24),
               _buildVehicleDetailsSection(),
+              _buildLocationCodeColorCar(),
               _buildPaintSelectionSection(),
               _buildNextButton(),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLocationCodeColorCar() {
+    return TextButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const MainText(
+              text: "Lokasi Kode Warna Mobil",
+              textAlign: TextAlign.center,
+              extent: Large(),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  "assets/images/car/location_code_color_car_1.png",
+                  fit: BoxFit.cover,
+                ),
+                Image.asset(
+                  "assets/images/car/location_code_color_car_2.png",
+                  fit: BoxFit.cover,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      child: const MainText(
+        text: "Cara menemukan kode warna mobil anda",
+        customTextStyle: TextStyle(decoration: TextDecoration.underline),
+        extent: const Medium(),
       ),
     );
   }
@@ -244,7 +272,7 @@ class _UserDetailVehiclePaintPageState
                 setState(() {
                   _vehicleData.carBrand = value;
                   _vehicleData.carBrandId = selectedBrand.id;
-                  // Reset model dan color ketika brand berubah
+
                   _vehicleData.carModel = null;
                   _vehicleData.carModelId = null;
                   _vehicleData.carColor = null;
@@ -261,7 +289,7 @@ class _UserDetailVehiclePaintPageState
 
   Widget _buildModelSelectField(Widget divider) {
     return AnimatedStateHandler<CarModelsCubit, PaginationState<CarModel>>(
-      show: _vehicleData.carBrandId != null, // Show ketika brand sudah dipilih
+      show: _vehicleData.carBrandId != null,
       onRetry: () => _vehicleData.carBrandId != null
           ? getModelsByBrandId(_vehicleData.carBrandId!)
           : Future.value(),
@@ -279,11 +307,11 @@ class _UserDetailVehiclePaintPageState
                 setState(() {
                   _vehicleData.carModel = value;
                   _vehicleData.carModelId = selectedModel.id;
-                  // Reset color ketika model berubah
+
                   _vehicleData.carColor = null;
                   _vehicleData.carColorId = null;
                 });
-                // Load colors berdasarkan model yang dipilih
+
                 getColorsByModelId(_vehicleData.carModelId);
               },
             ),
@@ -296,10 +324,11 @@ class _UserDetailVehiclePaintPageState
 
   Widget _buildColorsByModelIdSelectField(Widget divider) {
     return AnimatedStateHandler<CarColorsCubit, PaginationState<CarColor>>(
-      show: _vehicleData.carModelId != null, // Show ketika model sudah dipilih
+      show: _vehicleData.carModelId != null,
       onRetry: () => _vehicleData.carModelId != null
           ? getColorsByModelId(
-              _vehicleData.carModelId!) // Gunakan carModelId, bukan carBrandId
+              _vehicleData.carModelId!,
+            )
           : Future.value(),
       onSuccess: (context, data, _) {
         final colors = data.data;
@@ -335,7 +364,7 @@ class _UserDetailVehiclePaintPageState
         ),
         _buildPaintCheckboxes(),
       ],
-    ).paddingSymmetric(horizontal: 16);
+    );
   }
 
   Widget _buildPaintCheckboxes() {

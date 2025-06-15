@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 import 'package:paint_car/data/models/transactions.dart';
-import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/shared/utils/currency_formatter.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_text.dart';

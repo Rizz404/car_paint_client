@@ -6,7 +6,6 @@ import 'package:paint_car/data/models/user_detail_vehicle_paint_model.dart';
 import 'package:paint_car/features/(user)/workshop/pages/user_detail_workshops_page.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/extension/padding.dart';
-import 'package:paint_car/ui/shared/image_network.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
 class UserWorkshopsItem extends StatefulWidget {

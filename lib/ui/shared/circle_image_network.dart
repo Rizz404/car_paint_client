@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:paint_car/ui/utils/snack_bar.dart';
 
 class CircleImageNetwork extends StatelessWidget {
   const CircleImageNetwork({

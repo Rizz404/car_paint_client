@@ -25,7 +25,7 @@
              "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
     -->
     <application
-        android:label="paint_car"
+        android:label="Nikken Paint"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAcr-fp47UZg4hqloD8t55jGmYZkijBC6U"/>

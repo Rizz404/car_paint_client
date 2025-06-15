@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:paint_car/data/local/user_sp.dart';
 import 'package:paint_car/data/models/user_model.dart';
 import 'package:paint_car/data/models/user_profile_model.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
@@ -20,7 +19,6 @@ import 'package:paint_car/ui/shared/main_text_field.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 import 'package:paint_car/ui/utils/url_to_file.dart';
 import 'package:paint_car/ui/validator/file_validator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   final UserWithProfile user;
