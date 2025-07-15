@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 import 'package:paint_car/data/models/transactions.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/features/shared/utils/currency_formatter.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
@@ -64,6 +65,7 @@ class UserTransactionsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LogService.i("TRANSACTIONS ITEM: ${transactions.paymentdetail.toString()}");
     final hasVirtualAccount =
         transactions.paymentdetail?.virtualAccountNumber != null;
     final isPending =
@@ -144,13 +146,6 @@ class UserTransactionsItem extends StatelessWidget {
                       const SizedBox(width: 8),
                       MainText(
                         text: 'Metode Pembayaran: ${_getPaymentMethodName()}',
-                        customTextStyle: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.8),
-                        ),
                       ),
                     ],
                   ),
@@ -171,15 +166,6 @@ class UserTransactionsItem extends StatelessWidget {
                           child: MainText(
                             text:
                                 'Virtual Account: ${transactions.paymentdetail?.virtualAccountNumber}',
-                            customTextStyle: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'monospace',
-                              fontWeight: FontWeight.w500,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withValues(alpha: 0.8),
-                            ),
                           ),
                         ),
                         if (transactions.paymentdetail?.virtualAccountNumber !=

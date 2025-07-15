@@ -74,7 +74,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (context.read<AuthCubit>().state is BaseLoadingState) {
       return Theme.of(context).disabledColor;
     } else {
-      return CustomColors.black;
+      return Theme.of(context).colorScheme.primary;
     }
   }
 
@@ -214,13 +214,15 @@ class _RegisterPageState extends State<RegisterPage> {
                               style: Theme.of(context).textTheme.bodyMedium,
                               text: "Sudah punya akun? ",
                               children: [
-                                const TextSpan(
+                                TextSpan(
                                   text: "Masuk",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     decoration: TextDecoration.underline,
-                                    decorationColor: CustomColors.black,
-                                    color: CustomColors.black,
+                                    decorationColor:
+                                        Theme.of(context).colorScheme.primary,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                               ],

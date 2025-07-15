@@ -14,7 +14,7 @@ class GradientBgAuth extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondary,
+        color: Theme.of(context).colorScheme.primary,
       ),
       child: SafeArea(
         child: Padding(

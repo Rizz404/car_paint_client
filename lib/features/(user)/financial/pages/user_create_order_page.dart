@@ -135,6 +135,8 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return BlocConsumer<UserOrdersCubit, BaseState>(
       listener: (context, state) {
         handleFormListenerState(
@@ -224,6 +226,7 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
                     isEnabled: state is! BaseLoadingState,
                     maxLines: 3,
                     hintText: "Masukkan catatan",
+                    valueColor: Colors.white,
                   ),
                   MainElevatedButton(
                     onPressed: submitForm,

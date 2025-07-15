@@ -216,9 +216,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
           // Informasi Utama
           Container(
             padding: const EdgeInsets.all(16.0),
-            decoration: const BoxDecoration(
-              color: CustomColors.aliceBlue,
-            ),
+            decoration: const BoxDecoration(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -256,13 +254,11 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: CustomColors.aliceBlue,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
                       Icons.store,
                       size: 24,
-                      color: CustomColors.secondaryRed,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -323,7 +319,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                 children: [
                   Container(
                     decoration: const BoxDecoration(
-                      color: CustomColors.aliceBlue,
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(8),
                         bottomRight: Radius.circular(8),
@@ -373,7 +368,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
           Container(
             padding: const EdgeInsets.all(16.0),
             decoration: const BoxDecoration(
-              color: CustomColors.aliceBlue,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(16),
                 bottomRight: Radius.circular(16),

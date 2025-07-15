@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
     if (context.read<AuthCubit>().state is BaseLoadingState) {
       return Theme.of(context).disabledColor;
     } else {
-      return CustomColors.black;
+      return Theme.of(context).colorScheme.primary;
     }
   }
 
@@ -109,7 +109,11 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const MainText(text: "Masuk", extent: ExtraLarge()),
+                        const MainText(
+                          text: "Masuk",
+                          extent: ExtraLarge(),
+                          color: CustomColors.black,
+                        ),
                         const SizedBox(height: 32),
                         Form(
                           key: formKey,
@@ -168,8 +172,6 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     decoration: TextDecoration.underline,
-                                    decorationColor: CustomColors.black,
-                                    color: CustomColors.black,
                                   ),
                                 ),
                               ],

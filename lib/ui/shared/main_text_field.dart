@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/core/types/validator.dart';
 
 class MainTextField extends StatelessWidget {
   final TextEditingController controller;
   final String? hintText;
+  final Color valueColor;
   final String? labelText;
   final Widget? trailingIcon;
   final Widget? leadingIcon;
@@ -26,6 +28,7 @@ class MainTextField extends StatelessWidget {
     this.obscureText,
     this.validator,
     this.labelText,
+    this.valueColor = CustomColors.black,
     this.keyboardType = TextInputType.text,
     this.maxLines = 1,
     this.isEnabled = true,
@@ -42,6 +45,9 @@ class MainTextField extends StatelessWidget {
       validator: validator,
       obscureText: obscureText ?? false,
       maxLines: maxLines,
+      style: TextStyle(
+        color: valueColor,
+      ),
       onChanged: onChanged,
       decoration: InputDecoration(
         hintText: hintText,

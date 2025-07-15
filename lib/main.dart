@@ -1,5 +1,3 @@
-// ignore_for_file: unused_import
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -44,9 +42,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 Future<void> requestAndroidNotificationPermission() async {
-  // Cek status izin notifikasi
   if (await Permission.notification.isDenied) {
-    // Meminta izin notifikasi
     await Permission.notification.request();
   }
 }
@@ -55,7 +51,6 @@ Future<void> requestNotificationPermissions() async {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  // Untuk iOS
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           IOSFlutterLocalNotificationsPlugin>()
@@ -65,7 +60,6 @@ Future<void> requestNotificationPermissions() async {
         sound: true,
       );
 
-  // Untuk Android 13 (API level 33) dan di atasnya menggunakan permission_handler
   await requestAndroidNotificationPermission();
 }
 
@@ -83,10 +77,6 @@ Future<void> main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        // BlocProvider(
-        //   create: (context) => getIt<NotificationCubit>(),
-        // ),
-        // ! SUPERADMIN
         BlocProvider(
           create: (context) => getIt<AuthCubit>(),
         ),
@@ -108,13 +98,6 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => getIt<CarColorsCubit>(),
         ),
-        // BlocProvider(
-        //   create: (context) => getIt<CarModelYearsCubit>(),
-        // ),
-
-        // BlocProvider(
-        //   create: (context) => getIt<CarModelYearColorCubit>(),
-        // ),
         BlocProvider(
           create: (context) => getIt<ETicketCubit>(),
         ),
@@ -130,10 +113,6 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => getIt<HistoryCubit>(),
         ),
-        // ! USER
-        // BlocProvider(
-        //   create: (context) => getIt<UserCarCubit>(),
-        // ),
         BlocProvider(
           create: (context) => getIt<UserWorkshopCubit>(),
         ),
@@ -152,7 +131,6 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => getIt<ProfileCubit>(),
         ),
-        // ! ADMIN
         BlocProvider(
           create: (context) => getIt<AdminOrdersCubit>(),
         ),
