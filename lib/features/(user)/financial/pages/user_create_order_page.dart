@@ -226,7 +226,6 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
                     isEnabled: state is! BaseLoadingState,
                     maxLines: 3,
                     hintText: "Masukkan catatan",
-                    valueColor: Colors.white,
                   ),
                   MainElevatedButton(
                     onPressed: submitForm,

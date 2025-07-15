@@ -101,7 +101,6 @@ class _LoginPageState extends State<LoginPage> {
               child: SingleChildScrollView(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onPrimary,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Padding(
@@ -112,7 +111,6 @@ class _LoginPageState extends State<LoginPage> {
                         const MainText(
                           text: "Masuk",
                           extent: ExtraLarge(),
-                          color: CustomColors.black,
                         ),
                         const SizedBox(height: 32),
                         Form(
