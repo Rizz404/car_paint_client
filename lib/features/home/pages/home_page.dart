@@ -65,8 +65,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     drawerBasedOnRole() {
-      if (context.userRole == UserRole.SUPER_ADMIN ||
-          context.userRole == UserRole.USER) {
+      if (context.userRole == UserRole.SUPER_ADMIN) {
         return LeftDrawer();
       } else {
         null;
