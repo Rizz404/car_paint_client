@@ -7,6 +7,7 @@ import 'package:paint_car/data/models/car_model.dart';
 import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/data/models/user_detail_vehicle_paint_model.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 import 'package:paint_car/dependencies/sl.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_colors_cubit.dart';
@@ -176,7 +177,6 @@ class _UserDetailVehiclePaintPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: mainAppBar("Detail Kendaraan"),
-      backgroundColor: Theme.of(context).colorScheme.onPrimary,
       body: SingleChildScrollView(
         child: Padding(
           padding:
@@ -376,6 +376,15 @@ class _UserDetailVehiclePaintPageState
           carServices = services.map((e) => e.id!).toList();
         }
 
+        double totalPriceFromDb = 0;
+        for (var service in services) {
+          if (carServices.contains(service.id)) {
+            totalPriceFromDb += double.parse(service.price);
+          }
+        }
+
+        LogService.i("SERVICES: $services");
+
         return Column(
           spacing: 12,
           children: [
@@ -383,6 +392,7 @@ class _UserDetailVehiclePaintPageState
               "assets/images/car/black_car_full_body.png",
               "Semua Bagian",
               isSelectAll,
+              totalPriceFromDb.toString(),
               (value) {
                 _toggleAllServices(services);
               },
@@ -393,6 +403,7 @@ class _UserDetailVehiclePaintPageState
                 service.carServiceImage!,
                 service.name,
                 selectedServices.contains(service.id),
+                service.price,
                 (value) {
                   _toggleService(service.id!);
                 },
@@ -408,6 +419,7 @@ class _UserDetailVehiclePaintPageState
     String imageAsset,
     String title,
     bool isSelected,
+    String price,
     void Function(bool?) onChanged, {
     bool isImageNetwork = true,
   }) {
@@ -417,6 +429,7 @@ class _UserDetailVehiclePaintPageState
       value: isSelected,
       onChanged: onChanged,
       isImageNetwork: isImageNetwork,
+      price: price,
     );
   }
 
@@ -424,7 +437,6 @@ class _UserDetailVehiclePaintPageState
     return MainElevatedButton(
       onPressed: _handleNextButton,
       text: "Selanjutnya",
-      bgColor: CustomColors.blue,
       borderRadius: 10,
     );
   }

@@ -23,7 +23,6 @@ class _UserChooseServicePageState extends State<UserChooseServicePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: mainAppBar("Pilih Layanan"),
-      backgroundColor: Theme.of(context).colorScheme.onPrimary,
       body: SingleChildScrollView(
         child: Column(
           spacing: 24,
@@ -47,12 +46,12 @@ class _UserChooseServicePageState extends State<UserChooseServicePage> {
                       );
                     },
                   ),
-                  CardChooseService(
-                    imageAsset: "assets/images/motorcycle/red_motorcycle.png",
-                    title: "Motor",
-                    onTap: () {},
-                    isDisabled: true,
-                  ),
+                  // CardChooseService(
+                  //   imageAsset: "assets/images/motorcycle/red_motorcycle.png",
+                  //   title: "Motor",
+                  //   onTap: () {},
+                  //   isDisabled: true,
+                  // ),
                 ],
               ),
             )

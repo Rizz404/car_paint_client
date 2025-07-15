@@ -146,7 +146,6 @@ class _LoginPageState extends State<LoginPage> {
                                 onPressed: signIn,
                                 text: "Masuk",
                                 isLoading: state is BaseLoadingState,
-                                bgColor: getButtonColor(),
                                 height: 52,
                                 borderRadius: 32,
                                 extent: const Large(),

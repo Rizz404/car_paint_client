@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
@@ -35,19 +34,16 @@ class _SelectFieldVehicleState extends State<SelectFieldVehicle> {
             MainText(
               extent: const Medium(),
               text: widget.field,
-              color: CustomColors.tertiaryGray,
             ),
             Row(
               children: [
                 MainText(
                   extent: const Medium(),
                   text: widget.value,
-                  color: CustomColors.tertiaryGray,
                 ),
                 const SizedBox(width: 8),
                 const Icon(
                   Icons.chevron_right,
-                  color: CustomColors.tertiaryGray,
                 ),
               ],
             ),
@@ -89,14 +85,10 @@ class _SelectFieldVehicleState extends State<SelectFieldVehicle> {
                     title: MainText(
                       text: option,
                       extent: const Medium(),
-                      color: isSelected
-                          ? CustomColors.black
-                          : CustomColors.black.withAlpha(90),
                     ),
                     trailing: isSelected
                         ? Icon(
                             Icons.check,
-                            color: CustomColors.black.withAlpha(90),
                           )
                         : null,
                     onTap: () {

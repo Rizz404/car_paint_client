@@ -35,6 +35,8 @@ import 'package:paint_car/features/(user)/profile/cubit/profile_cubit.dart';
 import 'package:paint_car/features/(user)/workshop/cubit/user_workshops_cubit.dart';
 import 'package:paint_car/features/cubit/notification_cubit.dart';
 import 'package:paint_car/features/home/pages/home_page.dart';
+import 'package:paint_car/features/shared/cubit/theme_cubit.dart';
+import 'package:paint_car/features/shared/cubit/theme_state.dart';
 import 'package:paint_car/features/shared/cubit/user_cubit.dart';
 import 'package:paint_car/ui/config/configuration_theme.dart';
 import 'package:paint_car/dependencies/sl.dart';
@@ -154,6 +156,9 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => getIt<AdminOrdersCubit>(),
         ),
+        BlocProvider(
+          create: (context) => getIt<ThemeCubit>()..initializeTheme(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -165,52 +170,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Nikken Paint',
-      theme: ThemeData(
-        colorScheme: ConfigurationTheme.colorScheme,
-        useMaterial3: true,
-        appBarTheme: ConfigurationTheme.appBarTheme(context),
-        textTheme: ConfigurationTheme.textTheme,
-        elevatedButtonTheme: ConfigurationTheme.elevatedButtonTheme,
-        dropdownMenuTheme: ConfigurationTheme.dropdownMenuTheme(context),
-        inputDecorationTheme: ConfigurationTheme.inputDecorationTheme,
-        drawerTheme: DrawerThemeData(
-          backgroundColor: Theme.of(context).colorScheme.surfaceDim,
-        ),
-        bottomSheetTheme: const BottomSheetThemeData(
-          backgroundColor: CustomColors.white,
-        ),
-        dialogTheme: const DialogThemeData(
-          backgroundColor: CustomColors.white,
-        ),
-        cardTheme: const CardTheme(
-          color: const Color(0xF2F2F2F2),
-          elevation: 1,
-        ),
-        checkboxTheme: CheckboxThemeData(
-          checkColor: WidgetStateProperty.all(
-            CustomColors.secondaryBlue,
-          ),
-          fillColor: WidgetStateProperty.all(
-            CustomColors.white,
-          ),
-          overlayColor: WidgetStateProperty.all(
-            CustomColors.white,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-            side: const BorderSide(
-              color: CustomColors.secondaryBlue,
-            ),
-          ),
-          side: const BorderSide(
-            color: CustomColors.secondaryBlue,
-          ),
-        ),
-      ),
-      home: const AuthWrapper(),
-      debugShowCheckedModeBanner: false,
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, themeState) {
+        return MaterialApp(
+          title: 'Nikken Paint',
+          theme: themeState.themeData,
+          home: const AuthWrapper(),
+          debugShowCheckedModeBanner: false,
+        );
+      },
     );
   }
 }

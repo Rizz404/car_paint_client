@@ -113,12 +113,6 @@ class _AdminOrdersItemState extends State<AdminOrdersItem> {
                                 },
                                 text: "Cancel Order",
                                 isLoading: state is BaseLoadingState,
-                                bgColor: widget.order.orderStatus ==
-                                        OrderStatus.CANCELLED
-                                    ? Theme.of(context)
-                                        .colorScheme
-                                        .errorContainer
-                                    : Theme.of(context).colorScheme.error,
                                 extent: const Small(),
                               );
                       },

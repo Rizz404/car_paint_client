@@ -9,19 +9,15 @@ class MainElevatedButton extends StatelessWidget {
     this.isLoading = false,
     required this.onPressed,
     required this.text,
-    this.bgColor = CustomColors.secondaryBlue,
     this.extent = const Medium(),
     this.width = double.infinity,
     this.height = 46.0,
-    this.textColor = Colors.white,
     this.borderRadius = 16.0,
   });
   final Extent extent;
   final bool isLoading;
   final void Function()? onPressed;
   final String text;
-  final Color textColor;
-  final Color? bgColor;
   final double width;
   final double height;
   final double borderRadius;
@@ -31,13 +27,6 @@ class MainElevatedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
       style: ButtonStyle(
-        backgroundColor: isLoading
-            ? WidgetStateProperty.all(
-                CustomColors.gray,
-              )
-            : WidgetStateProperty.all(
-                bgColor ?? CustomColors.secondaryBlue,
-              ),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
@@ -47,7 +36,7 @@ class MainElevatedButton extends StatelessWidget {
         ),
         minimumSize: WidgetStateProperty.all(Size(width, height)),
       ),
-      child: MainText(text: text, extent: extent, color: textColor),
+      child: MainText(text: text, extent: extent),
     );
   }
 }

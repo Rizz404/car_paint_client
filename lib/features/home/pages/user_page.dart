@@ -4,6 +4,8 @@ import 'package:paint_car/data/models/user_model.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/(guest)/auth/pages/login_page.dart';
 import 'package:paint_car/features/(user)/profile/pages/profile_page.dart';
+import 'package:paint_car/features/shared/cubit/theme_cubit.dart';
+import 'package:paint_car/features/shared/cubit/theme_state.dart';
 import 'package:paint_car/features/shared/cubit/user_cubit.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/extension/padding.dart';
@@ -96,6 +98,25 @@ class _UserPageState extends State<UserPage> {
                       title: MainText(text: "Keluar"),
                       leading: Icon(Icons.logout),
                     ),
+                  ),
+                ),
+                Material(
+                  color: Theme.of(context).colorScheme.secondary,
+                  child: BlocBuilder<ThemeCubit, ThemeState>(
+                    builder: (context, themeState) {
+                      return SwitchListTile(
+                        title: const MainText(text: "Mode Gelap"),
+                        secondary: Icon(
+                          themeState.status == ThemeStatus.dark
+                              ? Icons.dark_mode
+                              : Icons.light_mode,
+                        ),
+                        value: themeState.status == ThemeStatus.dark,
+                        onChanged: (value) {
+                          context.read<ThemeCubit>().toggleTheme();
+                        },
+                      );
+                    },
                   ),
                 ),
               ],

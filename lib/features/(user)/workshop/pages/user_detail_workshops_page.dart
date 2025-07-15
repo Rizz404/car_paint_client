@@ -119,6 +119,23 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
     super.dispose();
   }
 
+  Future<void> _launchGoogleMaps() async {
+    final lat = widget.workshop.latitude;
+    final lng = widget.workshop.longitude;
+    final uri =
+        Uri.parse('https://www.google.com/maps/search/?api=1&query=$lat,$lng');
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      SnackBarUtil.showSnackBar(
+        context: context,
+        message: 'Tidak dapat membuka Google Maps',
+        type: SnackBarType.error,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,6 +158,10 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                           onMapCreated: _onMapCreated,
                           mapToolbarEnabled: false,
                           zoomControlsEnabled: false,
+                          onTap: (LatLng position) {
+                            // Klik di mana saja pada map akan membuka Google Maps
+                            _launchGoogleMaps();
+                          },
                           initialCameraPosition: CameraPosition(
                             target: LatLng(
                               widget.workshop.latitude,
@@ -247,23 +268,6 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
     setState(() {
       _mapController = controller;
     });
-  }
-
-  Future<void> _launchGoogleMaps() async {
-    final lat = widget.workshop.latitude;
-    final lng = widget.workshop.longitude;
-    final uri =
-        Uri.parse('https://www.google.com/maps/search/?api=1&query=$lat,$lng');
-
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      SnackBarUtil.showSnackBar(
-        context: context,
-        message: 'Tidak dapat membuka Google Maps',
-        type: SnackBarType.error,
-      );
-    }
   }
 
   Widget _buildDetailSection() {

@@ -26,7 +26,6 @@ class _HomeUserState extends State<HomeUser> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.onPrimary,
       height: double.infinity,
       child: SingleChildScrollView(
         child: Padding(

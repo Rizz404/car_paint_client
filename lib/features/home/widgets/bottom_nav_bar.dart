@@ -32,11 +32,11 @@ class BottomNavBar extends StatelessWidget {
           label: 'Transaksi',
           tooltip: 'Transaksi',
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.message),
-          label: 'Pesan',
-          tooltip: 'Pesan',
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.message),
+        //   label: 'Pesan',
+        //   tooltip: 'Pesan',
+        // ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: 'Profil',

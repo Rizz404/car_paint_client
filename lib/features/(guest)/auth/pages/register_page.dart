@@ -197,7 +197,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                 onPressed: signUp,
                                 text: "Daftar",
                                 isLoading: state is BaseLoadingState,
-                                bgColor: getButtonColor(),
                                 height: 52,
                                 borderRadius: 40,
                                 extent: const Large(),

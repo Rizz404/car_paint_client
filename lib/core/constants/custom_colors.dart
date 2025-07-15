@@ -18,4 +18,27 @@ class CustomColors {
   static const tertiaryGray = Color(0xFF616161);
   static const fourthGray = Color(0xFFFEFEFE);
   static const fifthGray = Color(0xD6D6D6D6);
+
+  static const darkTextIcon = Color(0xFFFFFFFF);
+  static const darkBorder = Color(0xFF404040);
+  static const darkSecondaryBorder = Color(0xFF606060);
+  static const darkBackground = Color(0xFF121212);
+  static const darkSurface = Color(0xFF1E1E1E);
+  static const darkSecondary = Color(0xFF2A2A2A);
+  static const darkGray = Color(0xFF404040);
+  static const darkSecondaryGray = Color(0xFF606060);
+  static const darkTertiaryGray = Color(0xFF808080);
+}
+
+extension ThemeExtension on BuildContext {
+  bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
+
+  Color get adaptiveTextColor =>
+      isDarkMode ? CustomColors.darkTextIcon : CustomColors.textIcon;
+
+  Color get adaptiveBorderColor =>
+      isDarkMode ? CustomColors.darkBorder : CustomColors.border;
+
+  Color get adaptiveBackgroundColor =>
+      isDarkMode ? CustomColors.darkBackground : CustomColors.white;
 }

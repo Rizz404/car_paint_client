@@ -261,7 +261,6 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
                     onPressed: state is BaseLoadingState ? null : _cancelOrder,
                     text: "Batalkan Pesanan",
                     isLoading: state is BaseLoadingState,
-                    bgColor: theme.colorScheme.error,
                     extent: const Small(),
                   ),
                 );

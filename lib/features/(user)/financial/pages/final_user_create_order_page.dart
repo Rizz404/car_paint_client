@@ -237,12 +237,6 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
           text:
               'Fee: ${CurrencyFormatter.toRupiah(_parseFee(pm.fee!).toDouble())}',
         ),
-        trailing: isSelected
-            ? Icon(
-                Icons.check_circle,
-                color: Theme.of(context).colorScheme.primary,
-              )
-            : null,
         onTap: () {
           setState(() {
             selectedPaymentMethod = pm;
@@ -287,7 +281,6 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                 spacing: 16,
                 children: [
                   Material(
-                    color: Theme.of(context).colorScheme.secondary,
                     child: Column(
                       children: [
                         rowKeyValue(
@@ -296,7 +289,6 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                           isBold: true,
                         ),
                         Divider(
-                          color: Theme.of(context).colorScheme.surfaceDim,
                           thickness: 1,
                         ),
                         rowKeyValue(
@@ -315,7 +307,6 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                               : "-",
                         ),
                         Divider(
-                          color: Theme.of(context).colorScheme.surfaceDim,
                           thickness: 1,
                         ),
                         rowKeyValue(

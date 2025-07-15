@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
+import 'package:paint_car/features/shared/utils/currency_formatter.dart';
 import 'package:paint_car/ui/shared/image_network.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
@@ -8,12 +9,14 @@ class CheckboxPaintPanel extends StatefulWidget {
     super.key,
     required this.imageAsset,
     required this.title,
+    required this.price,
     required this.value,
     required this.onChanged,
     this.isImageNetwork = true,
   });
   final String imageAsset;
   final String title;
+  final String price;
   final bool value;
   final bool isImageNetwork;
   final Function(bool?) onChanged;
@@ -56,9 +59,28 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
                     width: double.infinity,
                   ),
             Positioned(
-              bottom: 0,
+              bottom: 40,
               child: MainText(
                 text: widget.title,
+                customTextStyle: TextStyle(
+                  fontSize: 36,
+                  color: CustomColors.white,
+                  shadows: [
+                    Shadow(
+                      offset: const Offset(0, 4),
+                      blurRadius: 4,
+                      color: CustomColors.black.withAlpha(50),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              child: MainText(
+                text: CurrencyFormatter.toRupiah(
+                  double.parse(widget.price),
+                ),
                 customTextStyle: TextStyle(
                   fontSize: 36,
                   color: CustomColors.white,

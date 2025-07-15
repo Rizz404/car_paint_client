@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
         _buildHomePage(),
         // TODO: DESIGN BOOKING AND MESSAGE PAGE
         const MyBookingPage(),
-        const MessagePage(),
+        // const MessagePage(),
         const UserPage(),
       ][_selectedIndex],
     );

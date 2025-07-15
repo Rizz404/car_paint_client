@@ -1,5 +1,6 @@
 import "package:flutter_local_notifications/flutter_local_notifications.dart";
 import "package:get_it/get_it.dart";
+import "package:paint_car/data/local/theme_sp.dart";
 import "package:paint_car/data/local/user_sp.dart";
 import "package:paint_car/data/local/vehicle_data_sp.dart";
 import "package:paint_car/data/network/api_client.dart";
@@ -45,6 +46,7 @@ import "package:paint_car/features/(user)/profile/cubit/profile_cubit.dart";
 import "package:paint_car/features/(user)/profile/repo/profile_repo.dart";
 import "package:paint_car/features/(user)/workshop/cubit/user_workshops_cubit.dart";
 import "package:paint_car/features/(user)/workshop/repo/user_workshops_repo.dart";
+import "package:paint_car/features/shared/cubit/theme_cubit.dart";
 import "package:paint_car/features/shared/cubit/user_cubit.dart";
 import "package:paint_car/features/shared/repo/user_repo.dart";
 import "package:shared_preferences/shared_preferences.dart";
@@ -62,6 +64,8 @@ initializeSL() async {
   getIt.registerSingleton<LogService>(LogService());
   getIt.registerSingleton<TokenLocal>(TokenLocal(getIt()));
   getIt.registerSingleton<UserLocal>(UserLocal(getIt()));
+  getIt.registerSingleton<ThemeLocal>(ThemeLocal(getIt()));
+  getIt.registerSingleton<ThemeCubit>(ThemeCubit(getIt()));
   getIt.registerSingleton<VehicleDataLocal>(VehicleDataLocal(getIt()));
   //  !
   getIt.registerLazySingleton<http.Client>(() => http.Client());

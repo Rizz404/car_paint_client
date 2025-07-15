@@ -157,7 +157,6 @@ class ConfigurationTheme {
   static ElevatedButtonThemeData get elevatedButtonTheme {
     return ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: CustomColors.blue,
         minimumSize: const Size(double.infinity, 56),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),

@@ -27,9 +27,6 @@ class _CardChooseServiceState extends State<CardChooseService> {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          color: widget.isDisabled
-              ? CustomColors.fifthGray
-              : CustomColors.secondaryWhite,
           boxShadow: [
             BoxShadow(
               color: CustomColors.black.withAlpha(25),
