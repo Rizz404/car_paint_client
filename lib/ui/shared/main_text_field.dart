@@ -52,21 +52,32 @@ class MainTextField extends StatelessWidget {
         enabled: isEnabled,
         border: isOutlined
             ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(
-                  borderRadius,
-                ),
+                borderRadius: BorderRadius.circular(borderRadius),
               )
             : null,
-
+        enabledBorder: isOutlined
+            ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(borderRadius),
+              )
+            : null,
+        focusedBorder: isOutlined
+            ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(borderRadius),
+                borderSide: const BorderSide(width: 2),
+              )
+            : null,
+        disabledBorder: isOutlined
+            ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(borderRadius),
+                borderSide: const BorderSide(color: Colors.black12),
+              )
+            : null,
         alignLabelWithHint: true,
-        // ! ganti ama label text boleh
         labelText: hintText,
-
-        // ! nge align icon dengan text
         contentPadding: const EdgeInsets.symmetric(
           vertical: 16,
           horizontal: 12,
-        ), // Tambahkan ini
+        ),
       ),
     );
   }
