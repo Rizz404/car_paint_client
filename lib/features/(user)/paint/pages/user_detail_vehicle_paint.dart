@@ -188,6 +188,7 @@ class _UserDetailVehiclePaintPageState
               _buildVehicleDetailsSection(),
               _buildLocationCodeColorCar(),
               _buildPaintSelectionSection(),
+              const SizedBox(height: 24),
               _buildNextButton(),
             ],
           ),
@@ -262,7 +263,7 @@ class _UserDetailVehiclePaintPageState
         return Column(
           children: [
             SelectFieldVehicle(
-              field: "Merk Mobil*",
+              field: "Merek Mobil*",
               value: _vehicleData.carBrand ?? '',
               options: brands.map((e) => e.name).toList(),
               onSelected: (value) {
@@ -383,14 +384,12 @@ class _UserDetailVehiclePaintPageState
           }
         }
 
-        LogService.i("SERVICES: $services");
-
         return Column(
           spacing: 12,
           children: [
             _buildCheckboxPaintPanel(
               "assets/images/car/black_car_full_body.png",
-              "Semua Bagian",
+              "Semua",
               isSelectAll,
               totalPriceFromDb.toString(),
               (value) {
@@ -436,7 +435,7 @@ class _UserDetailVehiclePaintPageState
   Widget _buildNextButton() {
     return MainElevatedButton(
       onPressed: _handleNextButton,
-      text: "Selanjutnya",
+      text: "Pilih Warna",
       borderRadius: 10,
     );
   }

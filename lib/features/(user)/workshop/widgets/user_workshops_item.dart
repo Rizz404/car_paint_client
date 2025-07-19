@@ -1,6 +1,7 @@
 // ignore_for_file: require_trailing_commas
 
 import 'package:flutter/material.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/car_workshop.dart';
 import 'package:paint_car/data/models/user_detail_vehicle_paint_model.dart';
 import 'package:paint_car/features/(user)/workshop/pages/user_detail_workshops_page.dart';
@@ -64,7 +65,7 @@ class _UserWorkshopsItemState extends State<UserWorkshopsItem> {
     // }
 
     return Material(
-      color: Theme.of(context).colorScheme.secondary,
+      color: CustomColors.pureWhite,
       elevation: 2,
       borderRadius: BorderRadius.circular(8),
       child: InkWell(

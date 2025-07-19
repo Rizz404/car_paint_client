@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/features/shared/utils/currency_formatter.dart';
+import 'package:paint_car/ui/common/extent.dart';
+import 'package:paint_car/ui/extension/padding.dart';
 import 'package:paint_car/ui/shared/image_network.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
@@ -35,60 +37,58 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          // color: CustomColors.secondaryWhite,
+          color: CustomColors.pureWhite,
           boxShadow: [
             BoxShadow(
-              // color: CustomColors.black.withAlpha(25),
+              color: CustomColors.black.withAlpha(25),
               blurRadius: 5,
               offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Stack(
-          alignment: Alignment.center,
           children: [
             widget.isImageNetwork
                 ? ImageNetwork(
                     src: widget.imageAsset,
                     fit: BoxFit.cover,
                     width: double.infinity,
-                  )
+                  ).paddingSymmetric(vertical: 16)
                 : Image.asset(
                     widget.imageAsset,
                     fit: BoxFit.cover,
                     width: double.infinity,
-                  ),
-            Positioned(
-              bottom: 40,
-              child: MainText(
-                text: widget.title,
-                customTextStyle: TextStyle(
-                  fontSize: 36,
-                  // color: CustomColors.white,
-                  shadows: [
-                    Shadow(
-                      offset: const Offset(0, 4),
-                      blurRadius: 4,
-                      // color: CustomColors.black.withAlpha(50),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                  ).paddingSymmetric(vertical: 16),
             Positioned(
               bottom: 0,
-              child: MainText(
-                text: CurrencyFormatter.toRupiah(
-                  double.parse(widget.price),
-                ),
-                customTextStyle: TextStyle(
-                  fontSize: 36,
-                  // color: CustomColors.white,
-                  shadows: [
-                    Shadow(
-                      offset: const Offset(0, 4),
-                      blurRadius: 4,
-                      // color: CustomColors.black.withAlpha(50),
+              left: 0,
+              right: 0,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    MainText(
+                      text: widget.title,
+                      customTextStyle: const TextStyle(
+                        fontSize: 20,
+                        color: CustomColors.guideDarkGray,
+                      ),
+                      extent: const Medium(),
+                    ),
+                    Expanded(
+                      child: MainText(
+                        text: CurrencyFormatter.toRupiah(
+                          double.parse(widget.price),
+                        ),
+                        extent: const Medium(),
+                        customTextStyle: const TextStyle(
+                          fontSize: 20,
+                          color: CustomColors.guideDarkGray,
+                        ),
+                        textAlign: TextAlign.end,
+                      ),
                     ),
                   ],
                 ),
@@ -102,20 +102,9 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
                   value: widget.value,
                   onChanged: widget.onChanged,
                   side: WidgetStateBorderSide.resolveWith(
-                    (states) => const BorderSide(
-                      // color: CustomColors.gray,
-                      width: 2,
-                    ),
+                    (states) => const BorderSide(),
                   ),
                   shape: const CircleBorder(),
-                  // checkColor: CustomColors.blue,
-                  // activeColor: CustomColors.blue,
-                  // fillColor: WidgetStateProperty.resolveWith((states) {
-                  //   if (states.contains(WidgetState.selected)) {
-                  //     return CustomColors.blue;
-                  //   }
-                  //   return CustomColors.gray;
-                  // }),
                 ),
               ),
             ),
