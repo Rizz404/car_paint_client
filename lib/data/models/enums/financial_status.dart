@@ -33,9 +33,22 @@ const Map<WorkStatus, String> workStatusDescriptions = {
   WorkStatus.CANCELLED: 'Pekerjaan telah dibatalkan.',
 };
 
+const Map<WorkStatus, String> workStatusLabels = {
+  WorkStatus.QUEUED: 'Antrian',
+  WorkStatus.INSPECTION: 'Inspeksi',
+  WorkStatus.PUTTY: 'Dempul',
+  WorkStatus.SURFACER: 'Surfacer',
+  WorkStatus.APPLICATION_COLOR_BASE: 'Cat Dasar',
+  WorkStatus.APPLICATION_CLEAR_COAT: 'Clear Coat',
+  WorkStatus.POLISHING: 'Poles',
+  WorkStatus.FINAL_QC: 'QC Akhir',
+  WorkStatus.COMPLETED: 'Selesai',
+  WorkStatus.CANCELLED: 'Dibatalkan',
+};
+
 extension WorkStatusExtension on WorkStatus {
   String toMap() {
-    return name; // Konversi enum ke string
+    return name;
   }
 
   static WorkStatus fromMap(String status) {
@@ -44,6 +57,9 @@ extension WorkStatusExtension on WorkStatus {
       orElse: () => WorkStatus.INSPECTION,
     );
   }
+
+  String get label => workStatusLabels[this] ?? name;
+  String get description => workStatusDescriptions[this] ?? '';
 }
 
 enum OrderStatus {
@@ -53,6 +69,14 @@ enum OrderStatus {
   COMPLETED,
   CANCELLED,
 }
+
+const Map<OrderStatus, String> orderStatusLabels = {
+  OrderStatus.DRAFT: 'Draft',
+  OrderStatus.CONFIRMED: 'Dikonfirmasi',
+  OrderStatus.PROCESSING: 'Diproses',
+  OrderStatus.COMPLETED: 'Selesai',
+  OrderStatus.CANCELLED: 'Dibatalkan',
+};
 
 extension OrderStatusExtension on OrderStatus {
   String toMap() {

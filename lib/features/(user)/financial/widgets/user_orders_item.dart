@@ -71,29 +71,31 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
 
   void _viewOrderDetails() {}
 
-  Widget _buildStatusBadge(OrderStatus? status) {
+  Widget _buildOrderStatusBadge(OrderStatus? status) {
     Color bgColor;
     Color textColor = Colors.white;
-    String statusText = status?.name ?? 'UNKNOWN';
+    String statusText = orderStatusLabels[status] ?? 'TIDAK DIKETAHUI';
 
     switch (status) {
       case OrderStatus.COMPLETED:
         bgColor = Colors.green;
-        statusText = 'Selesai';
         break;
       case OrderStatus.CANCELLED:
         bgColor = Colors.red;
-        textColor = Colors.white;
-        statusText = 'Dibatalkan';
         break;
       case OrderStatus.DRAFT:
         bgColor = Colors.amber;
         textColor = Colors.black87;
-        statusText = 'Draft';
+        break;
+      case OrderStatus.CONFIRMED:
+        bgColor = Colors.blue;
+        break;
+      case OrderStatus.PROCESSING:
+        bgColor = Colors.orange;
         break;
       default:
-        bgColor = Colors.blue;
-        statusText = status?.name ?? 'UNKNOWN';
+        bgColor = Colors.grey;
+        statusText = 'TIDAK DIKETAHUI';
     }
 
     return Container(
@@ -113,6 +115,131 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
     );
   }
 
+  Widget _buildWorkStatusIndicator(WorkStatus? workStatus) {
+    if (workStatus == null) return const SizedBox.shrink();
+
+    Color indicatorColor;
+    IconData iconData;
+
+    switch (workStatus) {
+      case WorkStatus.QUEUED:
+        indicatorColor = Colors.grey;
+        iconData = Icons.hourglass_empty;
+        break;
+      case WorkStatus.INSPECTION:
+        indicatorColor = Colors.blue;
+        iconData = Icons.search;
+        break;
+      case WorkStatus.PUTTY:
+        indicatorColor = Colors.brown;
+        iconData = Icons.build;
+        break;
+      case WorkStatus.SURFACER:
+        indicatorColor = Colors.purple;
+        iconData = Icons.layers;
+        break;
+      case WorkStatus.APPLICATION_COLOR_BASE:
+        indicatorColor = Colors.indigo;
+        iconData = Icons.color_lens;
+        break;
+      case WorkStatus.APPLICATION_CLEAR_COAT:
+        indicatorColor = Colors.teal;
+        iconData = Icons.auto_fix_high;
+        break;
+      case WorkStatus.POLISHING:
+        indicatorColor = Colors.yellow;
+        iconData = Icons.star;
+        break;
+      case WorkStatus.FINAL_QC:
+        indicatorColor = Colors.orange;
+        iconData = Icons.fact_check;
+        break;
+      case WorkStatus.COMPLETED:
+        indicatorColor = Colors.green;
+        iconData = Icons.check_circle;
+        break;
+      case WorkStatus.CANCELLED:
+        indicatorColor = Colors.red;
+        iconData = Icons.cancel;
+        break;
+      default:
+        indicatorColor = Colors.grey;
+        iconData = Icons.help;
+    }
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            color: indicatorColor.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: indicatorColor.withOpacity(0.3)),
+          ),
+          child: Icon(
+            iconData,
+            color: indicatorColor,
+            size: 16,
+          ),
+        ),
+        const SizedBox(width: 6),
+        Flexible(
+          child: MainText(
+            text: workStatus.label,
+            customTextStyle: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: indicatorColor,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPaymentStatusBadge(PaymentStatus? paymentStatus) {
+    if (paymentStatus == null) return const SizedBox.shrink();
+
+    Color bgColor;
+    Color textColor = Colors.white;
+    String statusText = paymentStatusLabels[paymentStatus] ?? 'TIDAK DIKETAHUI';
+
+    switch (paymentStatus) {
+      case PaymentStatus.SUCCESS:
+        bgColor = Colors.green;
+        break;
+      case PaymentStatus.PENDING:
+        bgColor = Colors.orange;
+        break;
+      case PaymentStatus.FAILED:
+        bgColor = Colors.red;
+        break;
+      case PaymentStatus.EXPIRED:
+        bgColor = Colors.grey;
+        break;
+      case PaymentStatus.REFUNDED:
+        bgColor = Colors.purple;
+        break;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        statusText,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 10,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -125,7 +252,7 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: theme.colorScheme.outline.withValues(alpha: 0.1),
+          color: theme.colorScheme.outline.withOpacity(0.1),
         ),
       ),
       child: InkWell(
@@ -134,6 +261,7 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Header Section
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -151,34 +279,118 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
                           ),
                         ),
                       ),
-                      _buildStatusBadge(order.orderStatus),
+                      _buildOrderStatusBadge(order.orderStatus),
                     ],
                   ),
+                  const SizedBox(height: 12),
+
+                  // Work Status Indicator
+                  _buildWorkStatusIndicator(order.workStatus),
                   const SizedBox(height: 8),
+
+                  // Date and Total Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      MainText(
-                        text: 'Tanggal: ${_formatDate(order.createdAt)}',
-                        customTextStyle: TextStyle(
-                          color: theme.colorScheme.onSurface
-                              .withValues(alpha: 0.7),
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          MainText(
+                            text: 'Tanggal: ${_formatDate(order.createdAt)}',
+                            customTextStyle: TextStyle(
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.7),
+                              fontSize: 13,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          if (order.updatedAt != null)
+                            MainText(
+                              text:
+                                  'Diperbarui: ${_formatDate(order.updatedAt)}',
+                              customTextStyle: TextStyle(
+                                color: theme.colorScheme.onSurface
+                                    .withOpacity(0.5),
+                                fontSize: 11,
+                              ),
+                            ),
+                        ],
                       ),
-                      MainText(
-                        text:
-                            'Total: ${widget.order.subtotalPrice != null ? CurrencyFormatter.toRupiah(double.parse(widget.order.subtotalPrice!)) : '-'}',
-                        customTextStyle: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: theme.colorScheme.primary,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          MainText(
+                            text:
+                                'Total: ${widget.order.subtotalPrice != null ? CurrencyFormatter.toRupiah(double.parse(widget.order.subtotalPrice!)) : '-'}',
+                            customTextStyle: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.primary,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          // Payment Status (uncomment jika ada data payment status)
+                          // _buildPaymentStatusBadge(order.paymentStatus),
+                        ],
                       ),
                     ],
                   ),
                 ],
               ),
             ),
+
             const Divider(height: 1),
+
+            // Work Status Description
+            if (order.workStatus != null)
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: theme.colorScheme.outline.withOpacity(0.2),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            size: 16,
+                            color: theme.colorScheme.primary,
+                          ),
+                          const SizedBox(width: 6),
+                          MainText(
+                            text: "Status Pengerjaan",
+                            customTextStyle: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      MainText(
+                        text: order.workStatus!.description,
+                        customTextStyle: TextStyle(
+                          fontSize: 12,
+                          color: theme.colorScheme.onSurface.withOpacity(0.8),
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+            // Note Section
             if (order.note != null && order.note!.isNotEmpty)
               Padding(
                 padding:
@@ -190,8 +402,8 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
                       text: "Catatan:",
                       customTextStyle: TextStyle(
                         fontWeight: FontWeight.w600,
-                        color:
-                            theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                        color: theme.colorScheme.onSurface.withOpacity(0.8),
+                        fontSize: 13,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -199,25 +411,37 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
                       text: order.note!,
                       maxLines: 2,
                       customTextStyle: TextStyle(
-                        fontSize: 14,
-                        color:
-                            theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        fontSize: 12,
+                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        height: 1.3,
                       ),
                     ),
                   ],
                 ),
               ),
+
+            // Status Timeline Expansion
             Theme(
               data: expansionTheme,
               child: ExpansionTile(
                 tilePadding:
                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                title: const MainText(
-                  text: "Status Pengerjaan",
-                  customTextStyle: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
-                  ),
+                title: Row(
+                  children: [
+                    Icon(
+                      Icons.timeline,
+                      size: 18,
+                      color: theme.colorScheme.primary,
+                    ),
+                    const SizedBox(width: 8),
+                    const MainText(
+                      text: "Timeline Pengerjaan",
+                      customTextStyle: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
                 ),
                 childrenPadding: const EdgeInsets.only(bottom: 16.0),
                 children: [
@@ -230,6 +454,8 @@ class _UserOrdersItemState extends State<UserOrdersItem> {
                 ],
               ),
             ),
+
+            // Action Button
             BlocConsumer<UserOrdersCubit, BaseState>(
               listener: (context, state) {
                 handleFormListenerState(

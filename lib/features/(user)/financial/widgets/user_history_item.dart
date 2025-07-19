@@ -9,10 +9,14 @@ import 'package:paint_car/ui/shared/main_text.dart';
 
 class UserHistoryItem extends StatefulWidget {
   final Transactions transactions;
+  final bool enableWorkStatusEdit;
+  final Function(WorkStatus)? onWorkStatusChanged;
 
   const UserHistoryItem({
     Key? key,
     required this.transactions,
+    this.enableWorkStatusEdit = false,
+    this.onWorkStatusChanged,
   }) : super(key: key);
 
   @override
@@ -20,6 +24,18 @@ class UserHistoryItem extends StatefulWidget {
 }
 
 class _UserHistoryItemState extends State<UserHistoryItem> {
+  WorkStatus? selectedWorkStatus;
+  bool isWorkStatusExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.transactions.order != null &&
+        widget.transactions.order!.isNotEmpty) {
+      selectedWorkStatus = widget.transactions.order!.first?.workStatus;
+    }
+  }
+
   Color getPaymentStatusColor(PaymentStatus status) {
     switch (status) {
       case PaymentStatus.SUCCESS:
@@ -32,6 +48,48 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
         return Colors.grey.shade700;
       case PaymentStatus.REFUNDED:
         return Colors.blue.shade700;
+    }
+  }
+
+  // Fungsi untuk mendapatkan warna work status
+  Color getWorkStatusColor(WorkStatus status) {
+    switch (status) {
+      case WorkStatus.QUEUED:
+        return Colors.grey.shade600;
+      case WorkStatus.INSPECTION:
+        return Colors.orange.shade600;
+      case WorkStatus.PUTTY:
+        return Colors.brown.shade600;
+      case WorkStatus.SURFACER:
+        return Colors.indigo.shade600;
+      case WorkStatus.APPLICATION_COLOR_BASE:
+        return Colors.purple.shade600;
+      case WorkStatus.APPLICATION_CLEAR_COAT:
+        return Colors.blue.shade600;
+      case WorkStatus.POLISHING:
+        return Colors.cyan.shade600;
+      case WorkStatus.FINAL_QC:
+        return Colors.teal.shade600;
+      case WorkStatus.COMPLETED:
+        return Colors.green.shade600;
+      case WorkStatus.CANCELLED:
+        return Colors.red.shade600;
+    }
+  }
+
+  // Fungsi untuk mendapatkan warna order status
+  Color getOrderStatusColor(OrderStatus status) {
+    switch (status) {
+      case OrderStatus.DRAFT:
+        return Colors.grey.shade600;
+      case OrderStatus.CONFIRMED:
+        return Colors.blue.shade600;
+      case OrderStatus.PROCESSING:
+        return Colors.orange.shade600;
+      case OrderStatus.COMPLETED:
+        return Colors.green.shade600;
+      case OrderStatus.CANCELLED:
+        return Colors.red.shade600;
     }
   }
 
@@ -49,7 +107,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            _getStatusIcon(status),
+            _getPaymentStatusIcon(status),
             color: statusColor,
             size: 14,
           ),
@@ -67,7 +125,448 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
     );
   }
 
-  IconData _getStatusIcon(PaymentStatus status) {
+  // Widget untuk work status
+  Widget buildWorkStatusWidget(WorkStatus status) {
+    final Color statusColor = getWorkStatusColor(status);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: statusColor.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            _getWorkStatusIcon(status),
+            color: statusColor,
+            size: 12,
+          ),
+          const SizedBox(width: 4),
+          MainText(
+            text: status.label,
+            customTextStyle: TextStyle(
+              color: statusColor,
+              fontWeight: FontWeight.w600,
+              fontSize: 11,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Widget untuk order status
+  Widget buildOrderStatusWidget(OrderStatus status) {
+    final Color statusColor = getOrderStatusColor(status);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: statusColor.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            _getOrderStatusIcon(status),
+            color: statusColor,
+            size: 12,
+          ),
+          const SizedBox(width: 4),
+          MainText(
+            text: orderStatusLabels[status] ?? status.name,
+            customTextStyle: TextStyle(
+              color: statusColor,
+              fontWeight: FontWeight.w600,
+              fontSize: 11,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Widget WorkStatus Dropdown dengan semua data status
+  Widget buildWorkStatusDropdown() {
+    final theme = Theme.of(context);
+
+    return Container(
+      margin: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: theme.colorScheme.outline.withValues(alpha: 0.3),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header dengan toggle expand/collapse
+          InkWell(
+            onTap: () {
+              setState(() {
+                isWorkStatusExpanded = !isWorkStatusExpanded;
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceContainerHighest
+                    .withValues(alpha: 0.3),
+                borderRadius: BorderRadius.only(
+                  topLeft: const Radius.circular(12),
+                  topRight: const Radius.circular(12),
+                  bottomLeft: Radius.circular(isWorkStatusExpanded ? 0 : 12),
+                  bottomRight: Radius.circular(isWorkStatusExpanded ? 0 : 12),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.timeline,
+                    color: theme.colorScheme.primary,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: MainText(
+                      text: 'Status Pekerjaan',
+                      customTextStyle: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    isWorkStatusExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Current Status Display (always visible)
+          if (selectedWorkStatus != null) ...[
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: getWorkStatusColor(selectedWorkStatus!)
+                    .withValues(alpha: 0.05),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const MainText(
+                        text: 'Status Saat Ini:',
+                        customTextStyle: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const Spacer(),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: getWorkStatusColor(selectedWorkStatus!)
+                              .withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              _getWorkStatusIcon(selectedWorkStatus!),
+                              color: getWorkStatusColor(selectedWorkStatus!),
+                              size: 14,
+                            ),
+                            const SizedBox(width: 6),
+                            MainText(
+                              text: selectedWorkStatus!.label,
+                              customTextStyle: TextStyle(
+                                color: getWorkStatusColor(selectedWorkStatus!),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: getWorkStatusColor(selectedWorkStatus!)
+                          .withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: getWorkStatusColor(selectedWorkStatus!)
+                            .withValues(alpha: 0.2),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.info_outline,
+                          size: 16,
+                          color: getWorkStatusColor(selectedWorkStatus!)
+                              .withValues(alpha: 0.8),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: MainText(
+                            text: selectedWorkStatus!.description,
+                            customTextStyle: TextStyle(
+                              fontSize: 13,
+                              color: theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.8),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+
+          // Expanded content
+          if (isWorkStatusExpanded) ...[
+            const Divider(height: 1),
+
+            // Dropdown untuk edit status (jika diaktifkan)
+            if (widget.enableWorkStatusEdit) ...[
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: DropdownButtonFormField<WorkStatus>(
+                  value: selectedWorkStatus,
+                  decoration: InputDecoration(
+                    labelText: 'Ubah Status Pekerjaan',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 16,
+                    ),
+                  ),
+                  hint: const MainText(
+                    text: 'Pilih status pekerjaan...',
+                    customTextStyle: TextStyle(fontSize: 14),
+                  ),
+                  isExpanded: true,
+                  items: WorkStatus.values.map((WorkStatus status) {
+                    return DropdownMenuItem<WorkStatus>(
+                      value: status,
+                      child: _buildWorkStatusItem(status),
+                    );
+                  }).toList(),
+                  onChanged: (WorkStatus? newValue) {
+                    if (newValue != null) {
+                      setState(() {
+                        selectedWorkStatus = newValue;
+                      });
+                      widget.onWorkStatusChanged?.call(newValue);
+                    }
+                  },
+                ),
+              ),
+              const Divider(height: 1),
+            ],
+
+            // Semua status timeline
+            Container(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const MainText(
+                    text: 'Timeline Status Pekerjaan:',
+                    customTextStyle: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildStatusTimeline(),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  // Widget untuk item status dalam dropdown
+  Widget _buildWorkStatusItem(WorkStatus status) {
+    final Color statusColor = getWorkStatusColor(status);
+    final bool isSelected = status == selectedWorkStatus;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: isSelected
+            ? statusColor.withValues(alpha: 0.1)
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            _getWorkStatusIcon(status),
+            color: statusColor,
+            size: 16,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                MainText(
+                  text: status.label,
+                  customTextStyle: TextStyle(
+                    color: statusColor,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    fontSize: 13,
+                  ),
+                ),
+                MainText(
+                  text: status.description,
+                  maxLines: 2,
+                  customTextStyle: TextStyle(
+                    fontSize: 11,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.6),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Widget timeline status
+  Widget _buildStatusTimeline() {
+    final currentIndex = selectedWorkStatus != null
+        ? WorkStatus.values.indexOf(selectedWorkStatus!)
+        : -1;
+
+    return Column(
+      children: WorkStatus.values.asMap().entries.map((entry) {
+        final index = entry.key;
+        final status = entry.value;
+        final isActive = index <= currentIndex;
+        final isCurrent = status == selectedWorkStatus;
+        final statusColor = getWorkStatusColor(status);
+
+        return Row(
+          children: [
+            // Timeline indicator
+            Column(
+              children: [
+                Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: isCurrent
+                        ? statusColor
+                        : isActive
+                            ? statusColor.withValues(alpha: 0.7)
+                            : Colors.grey.shade300,
+                    border: Border.all(
+                      color: isCurrent
+                          ? statusColor
+                          : isActive
+                              ? statusColor.withValues(alpha: 0.5)
+                              : Colors.grey.shade400,
+                      width: 2,
+                    ),
+                  ),
+                  child: Icon(
+                    _getWorkStatusIcon(status),
+                    size: 12,
+                    color: isCurrent || isActive
+                        ? Colors.white
+                        : Colors.grey.shade600,
+                  ),
+                ),
+                if (index < WorkStatus.values.length - 1)
+                  Container(
+                    width: 2,
+                    height: 40,
+                    color: isActive
+                        ? statusColor.withValues(alpha: 0.5)
+                        : Colors.grey.shade300,
+                  ),
+              ],
+            ),
+            const SizedBox(width: 16),
+            // Status info
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    MainText(
+                      text: status.label,
+                      customTextStyle: TextStyle(
+                        fontWeight: isCurrent
+                            ? FontWeight.w700
+                            : isActive
+                                ? FontWeight.w600
+                                : FontWeight.w500,
+                        color: isCurrent
+                            ? statusColor
+                            : isActive
+                                ? statusColor.withValues(alpha: 0.8)
+                                : Colors.grey.shade600,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    MainText(
+                      text: status.description,
+                      maxLines: 2,
+                      customTextStyle: TextStyle(
+                        fontSize: 12,
+                        color: isActive
+                            ? Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.7)
+                            : Colors.grey.shade500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      }).toList(),
+    );
+  }
+
+  IconData _getPaymentStatusIcon(PaymentStatus status) {
     switch (status) {
       case PaymentStatus.SUCCESS:
         return Icons.check_circle_outline;
@@ -79,6 +578,48 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
         return Icons.timer_off_outlined;
       case PaymentStatus.REFUNDED:
         return Icons.replay;
+    }
+  }
+
+  // Icon untuk work status
+  IconData _getWorkStatusIcon(WorkStatus status) {
+    switch (status) {
+      case WorkStatus.QUEUED:
+        return Icons.queue;
+      case WorkStatus.INSPECTION:
+        return Icons.search;
+      case WorkStatus.PUTTY:
+        return Icons.construction;
+      case WorkStatus.SURFACER:
+        return Icons.format_paint;
+      case WorkStatus.APPLICATION_COLOR_BASE:
+        return Icons.palette;
+      case WorkStatus.APPLICATION_CLEAR_COAT:
+        return Icons.brush;
+      case WorkStatus.POLISHING:
+        return Icons.auto_fix_high;
+      case WorkStatus.FINAL_QC:
+        return Icons.checklist;
+      case WorkStatus.COMPLETED:
+        return Icons.task_alt;
+      case WorkStatus.CANCELLED:
+        return Icons.cancel;
+    }
+  }
+
+  // Icon untuk order status
+  IconData _getOrderStatusIcon(OrderStatus status) {
+    switch (status) {
+      case OrderStatus.DRAFT:
+        return Icons.edit_note;
+      case OrderStatus.CONFIRMED:
+        return Icons.check_circle;
+      case OrderStatus.PROCESSING:
+        return Icons.settings;
+      case OrderStatus.COMPLETED:
+        return Icons.done_all;
+      case OrderStatus.CANCELLED:
+        return Icons.cancel;
     }
   }
 
@@ -190,7 +731,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
 
                 const SizedBox(height: 8),
 
-                // Tanggal dan Status
+                // Tanggal dan Status Pembayaran
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -207,9 +748,27 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                     buildPaymentStatusWidget(transactions.paymentStatus),
                   ],
                 ),
+
+                // Status Order dan Work
+                if (order.orderStatus != null || order.workStatus != null) ...[
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      if (order.orderStatus != null) ...[
+                        buildOrderStatusWidget(order.orderStatus!),
+                        const SizedBox(width: 8),
+                      ],
+                      if (order.workStatus != null)
+                        buildWorkStatusWidget(order.workStatus!),
+                    ],
+                  ),
+                ],
               ],
             ),
           ),
+
+          // WorkStatus Dropdown dengan timeline
+          if (selectedWorkStatus != null) buildWorkStatusDropdown(),
 
           const Divider(height: 1),
 
