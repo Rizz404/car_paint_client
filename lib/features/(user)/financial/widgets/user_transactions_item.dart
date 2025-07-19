@@ -79,7 +79,7 @@ class UserTransactionsItem extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       elevation: 2,
-      color: Theme.of(context).colorScheme.secondary,
+      color: CustomColors.pureWhite,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(

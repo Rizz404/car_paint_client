@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/constants/api.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_history_cubit.dart';
 import 'package:paint_car/features/(user)/financial/cubit/user_transactions_cubit.dart';
 import 'package:paint_car/features/home/widgets/user_history_in_booking.dart';
@@ -64,9 +65,9 @@ class _MyBookingPageState extends State<MyBookingPage>
                 Tab(text: 'Transaksi'),
                 Tab(text: 'Riwayat'),
               ],
-              labelColor: Colors.blue,
+              labelColor: CustomColors.guideDark,
               unselectedLabelColor: Colors.grey,
-              indicatorColor: Colors.blue,
+              indicatorColor: CustomColors.guideDark,
               indicatorWeight: 3,
             ),
           ),

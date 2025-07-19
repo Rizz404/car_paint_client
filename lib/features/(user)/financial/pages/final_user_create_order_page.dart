@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
 import 'package:paint_car/data/models/payment_method.dart';
 import 'package:paint_car/data/utils/user_extension.dart';
@@ -215,7 +216,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
               ),
       borderOnForeground: false,
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        contentPadding: const EdgeInsets.all(8.0),
         leading: pm.logoUrl != null
             ? ImageNetwork(
                 src: pm.logoUrl!,
@@ -233,10 +234,10 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
           maxLines: 2,
           extent: const Medium(),
         ),
-        subtitle: MainText(
-          text:
-              'Fee: ${CurrencyFormatter.toRupiah(_parseFee(pm.fee!).toDouble())}',
-        ),
+        // subtitle: MainText(
+        //   text:
+        //       'Fee: ${CurrencyFormatter.toRupiah(_parseFee(pm.fee!).toDouble())}',
+        // ),
         onTap: () {
           setState(() {
             selectedPaymentMethod = pm;
@@ -281,6 +282,8 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                 spacing: 16,
                 children: [
                   Material(
+                    color: CustomColors.pureWhite,
+                    borderRadius: BorderRadius.circular(10),
                     child: Column(
                       children: [
                         rowKeyValue(
@@ -330,19 +333,22 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                     onRetry: () => getPaymentMethods(),
                     onSuccess: (context, data, _) {
                       final paymentMethods = data.data;
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 8,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                            child: MainText(
-                              text: "Metode Pembayaran",
-                              extent: Large(),
-                            ),
-                          ),
-                          _buildPaymentMethodSections(paymentMethods),
-                        ],
+                      return Material(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          spacing: 8,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: MainText(
+                                text: "Metode Pembayaran",
+                                extent: Large(),
+                              ),
+                            ).paddingOnly(top: 16),
+                            _buildPaymentMethodSections(paymentMethods),
+                          ],
+                        ),
                       );
                     },
                   ),

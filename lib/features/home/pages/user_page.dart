@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/user_model.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 import 'package:paint_car/features/(guest)/auth/pages/login_page.dart';
@@ -42,42 +43,48 @@ class _UserPageState extends State<UserPage> {
                 Column(
                   spacing: 8,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          spacing: 16,
-                          children: [
-                            CircleImageNetwork(
-                              imageUrl: data?.profileImage,
-                              radius: 36,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                MainText(
-                                  text: " ${data?.username}",
-                                  extent: const Medium(),
-                                ),
-                                MainText(
-                                  text: " ${data?.email}",
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              ProfilePage.route(
-                                user: data!,
+                    Container(
+                      color: CustomColors.pureWhite,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            spacing: 16,
+                            children: [
+                              CircleImageNetwork(
+                                imageUrl: data?.profileImage,
+                                radius: 36,
                               ),
-                            );
-                          },
-                          icon: const Icon(Icons.edit),
-                        ),
-                      ],
-                    ).paddingSymmetric(horizontal: 16),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  MainText(
+                                    text: " ${data?.username}",
+                                    extent: const Medium(),
+                                  ),
+                                  MainText(
+                                    text: " ${data?.email}",
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                ProfilePage.route(
+                                  user: data!,
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.edit),
+                          ),
+                        ],
+                      ).paddingSymmetric(horizontal: 16),
+                    ),
                     const Divider(
                       thickness: 1,
                     ),
@@ -87,7 +94,7 @@ class _UserPageState extends State<UserPage> {
                   horizontal: 16,
                 ),
                 Material(
-                  color: Theme.of(context).colorScheme.secondary,
+                  color: CustomColors.pureWhite,
                   child: InkWell(
                     onTap: () {
                       context.read<UserCubit>().logout();
@@ -100,25 +107,25 @@ class _UserPageState extends State<UserPage> {
                     ),
                   ),
                 ),
-                Material(
-                  color: Theme.of(context).colorScheme.secondary,
-                  child: BlocBuilder<ThemeCubit, ThemeState>(
-                    builder: (context, themeState) {
-                      return SwitchListTile(
-                        title: const MainText(text: "Mode Gelap"),
-                        secondary: Icon(
-                          themeState.status == ThemeStatus.dark
-                              ? Icons.dark_mode
-                              : Icons.light_mode,
-                        ),
-                        value: themeState.status == ThemeStatus.dark,
-                        onChanged: (value) {
-                          context.read<ThemeCubit>().toggleTheme();
-                        },
-                      );
-                    },
-                  ),
-                ),
+                // Material(
+                //   color: CustomColors.pureWhite,
+                //   child: BlocBuilder<ThemeCubit, ThemeState>(
+                //     builder: (context, themeState) {
+                //       return SwitchListTile(
+                //         title: const MainText(text: "Mode Gelap"),
+                //         secondary: Icon(
+                //           themeState.status == ThemeStatus.dark
+                //               ? Icons.dark_mode
+                //               : Icons.light_mode,
+                //         ),
+                //         value: themeState.status == ThemeStatus.dark,
+                //         onChanged: (value) {
+                //           context.read<ThemeCubit>().toggleTheme();
+                //         },
+                //       );
+                //     },
+                //   ),
+                // ),
               ],
             ),
           ).paddingSymmetric(vertical: 16);

@@ -79,6 +79,7 @@ class _HomePageState extends State<HomePage> {
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
       ),
+
       drawer: drawerBasedOnRole(),
 
       body: [

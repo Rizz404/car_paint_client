@@ -29,7 +29,7 @@ class ListStyleWelcome extends StatelessWidget {
         title: const MainText(
           text: "Selamat Datang",
           customTextStyle: TextStyle(
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
         subtitle: MainText(text: "${user?.username}"),

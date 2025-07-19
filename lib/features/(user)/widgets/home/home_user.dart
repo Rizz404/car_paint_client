@@ -44,7 +44,7 @@ class _HomeUserState extends State<HomeUser> {
             ],
           ),
         ),
-      ).paddingSymmetric(vertical: 24),
+      ).paddingOnly(top: 16),
     );
   }
 }

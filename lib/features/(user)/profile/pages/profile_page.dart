@@ -211,15 +211,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           onPickImage: _pickImage,
                           radius: 120,
                         ),
-                        Divider(
-                          thickness: 1,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
                       ],
                     ),
                     MainTextField(
                       controller: usernameController,
-                      hintText: "Masukkan username",
+                      hintText: "Username",
                       leadingIcon: const Icon(Icons.person),
                       isEnabled: state is! BaseLoadingState,
                       validator: (value) {
@@ -231,7 +227,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     MainTextField(
                       controller: emailController,
-                      hintText: "Masukkan email",
+                      hintText: "Email",
                       leadingIcon: const Icon(Icons.email),
                       isEnabled: state is! BaseLoadingState,
                       validator: (value) {
@@ -243,7 +239,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     MainTextField(
                       controller: fullnameController,
-                      hintText: "Masukkan nama lengkap",
+                      hintText: "Nama Lengkap",
                       leadingIcon: const Icon(Icons.person),
                       isEnabled: state is! BaseLoadingState,
                       validator: (value) {
@@ -255,7 +251,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     MainTextField(
                       controller: phoneNumberController,
-                      hintText: "Masukkan nomor telepon",
+                      hintText: "Nomor Telepon",
                       prefixText: "+62 ",
                       leadingIcon: const Icon(Icons.phone),
                       isEnabled: state is! BaseLoadingState,
@@ -271,7 +267,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     MainTextField(
                       controller: addressController,
-                      hintText: "Masukkan alamat",
+                      hintText: "Alamat",
                       leadingIcon: const Icon(Icons.home),
                       isEnabled: state is! BaseLoadingState,
                       validator: (value) {
