@@ -164,7 +164,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
       elevation: 2,
-      color: theme.colorScheme.surface,
+      color: context.adaptiveCommonColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side:

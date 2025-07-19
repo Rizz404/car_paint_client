@@ -210,10 +210,8 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
 
     return Card(
       color: isSelected
-          ? Theme.of(context).colorScheme.secondary
-          : Theme.of(context).colorScheme.secondary.withValues(
-                alpha: 5,
-              ),
+          ? context.adaptivePrimaryColor
+          : context.adaptivePrimaryColor.withValues(alpha: 0.3),
       borderOnForeground: false,
       child: ListTile(
         contentPadding: const EdgeInsets.all(8.0),
@@ -282,7 +280,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                 spacing: 16,
                 children: [
                   Material(
-                    color: CustomColors.pureWhite,
+                    color: context.adaptiveCommonColor,
                     borderRadius: BorderRadius.circular(10),
                     child: Column(
                       children: [
@@ -334,6 +332,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                     onSuccess: (context, data, _) {
                       final paymentMethods = data.data;
                       return Material(
+                        color: context.adaptiveCommonColor,
                         borderRadius: BorderRadius.circular(10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

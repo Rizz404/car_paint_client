@@ -39,6 +39,7 @@ class CustomColors {
   static const guideDarkModeDark = Color(0xFFFFFFFF);
 
   static const pureWhite = Color(0xFFFFFFFF);
+  static const pureBlack = Color(0xFF000000);
 }
 
 extension ThemeExtension on BuildContext {
@@ -52,4 +53,14 @@ extension ThemeExtension on BuildContext {
 
   Color get adaptiveBackgroundColor =>
       isDarkMode ? CustomColors.guideDarkModeGray : CustomColors.pureWhite;
+
+  Color get adaptiveCommonColor =>
+      isDarkMode ? CustomColors.pureBlack : CustomColors.pureWhite;
+
+  Color get adaptiveSecondaryColor =>
+      isDarkMode ? CustomColors.guideDarkModeGray : CustomColors.guideGray;
+  Color get adaptiveTertiaryColor =>
+      isDarkMode ? CustomColors.guideDarkModeDark : CustomColors.guideDark;
+  Color get adaptivePrimaryColor =>
+      isDarkMode ? CustomColors.guideDarkGray : CustomColors.guideGray;
 }

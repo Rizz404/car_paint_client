@@ -37,7 +37,7 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          color: CustomColors.pureWhite,
+          color: context.adaptiveCommonColor,
           boxShadow: [
             BoxShadow(
               color: CustomColors.black.withAlpha(25),
@@ -71,9 +71,9 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
                   children: [
                     MainText(
                       text: widget.title,
-                      customTextStyle: const TextStyle(
+                      customTextStyle: TextStyle(
                         fontSize: 20,
-                        color: CustomColors.guideDarkGray,
+                        color: context.adaptiveTertiaryColor,
                       ),
                       extent: const Medium(),
                     ),
@@ -83,9 +83,9 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
                           double.parse(widget.price),
                         ),
                         extent: const Medium(),
-                        customTextStyle: const TextStyle(
+                        customTextStyle: TextStyle(
                           fontSize: 20,
-                          color: CustomColors.guideDarkGray,
+                          color: context.adaptiveTertiaryColor,
                         ),
                         textAlign: TextAlign.end,
                       ),
@@ -105,6 +105,11 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
                     (states) => const BorderSide(),
                   ),
                   shape: const CircleBorder(),
+                  activeColor: CustomColors.guideRed,
+                  checkColor: context.adaptiveCommonColor,
+                  fillColor: WidgetStateProperty.resolveWith(
+                    (states) => context.adaptiveTertiaryColor,
+                  ),
                 ),
               ),
             ),

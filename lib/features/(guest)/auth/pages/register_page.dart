@@ -108,7 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
               child: SingleChildScrollView(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: context.adaptiveCommonColor,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Padding(

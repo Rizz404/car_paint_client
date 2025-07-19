@@ -12,7 +12,7 @@ class ListStyleWelcome extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 8.0),
       decoration: BoxDecoration(
-        color: CustomColors.pureWhite,
+        color: context.adaptiveCommonColor,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.2),

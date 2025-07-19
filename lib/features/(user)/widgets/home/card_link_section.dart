@@ -13,7 +13,7 @@ class CardLinkSection extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: CustomColors.pureWhite,
+        color: context.adaptiveCommonColor,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
@@ -35,7 +35,7 @@ class CardLinkSection extends StatelessWidget {
                 child: Container(
                   width: 100,
                   decoration: BoxDecoration(
-                    color: CustomColors.guideGray,
+                    color: context.adaptiveSecondaryColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Padding(

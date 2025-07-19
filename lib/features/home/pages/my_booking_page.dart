@@ -65,9 +65,9 @@ class _MyBookingPageState extends State<MyBookingPage>
                 Tab(text: 'Transaksi'),
                 Tab(text: 'Riwayat'),
               ],
-              labelColor: CustomColors.guideDark,
+              labelColor: context.adaptiveTertiaryColor,
               unselectedLabelColor: Colors.grey,
-              indicatorColor: CustomColors.guideDark,
+              indicatorColor: context.adaptiveTertiaryColor,
               indicatorWeight: 3,
             ),
           ),
@@ -81,7 +81,7 @@ class _MyBookingPageState extends State<MyBookingPage>
             ),
           ),
         ],
-      ).paddingSymmetric(vertical: 24),
+      ),
     );
   }
 }

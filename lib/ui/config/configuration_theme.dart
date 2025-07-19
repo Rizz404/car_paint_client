@@ -71,7 +71,7 @@ class ConfigurationTheme {
         brightness: Brightness.dark,
         primary: _primaryColor,
         onPrimary: CustomColors.pureWhite,
-        secondary: CustomColors.guideDarkModeDarkGray,
+        secondary: CustomColors.guideDarkGray,
         onSecondary: CustomColors.guideDarkModeDark,
         surface: _darkSurface,
         onSurface: CustomColors.guideDarkModeDark,

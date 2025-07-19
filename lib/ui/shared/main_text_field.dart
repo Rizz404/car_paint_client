@@ -37,6 +37,7 @@ class MainTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return TextFormField(
       keyboardType: keyboardType,
       controller: controller,
@@ -53,23 +54,41 @@ class MainTextField extends StatelessWidget {
         border: isOutlined
             ? OutlineInputBorder(
                 borderRadius: BorderRadius.circular(borderRadius),
+                borderSide: BorderSide(
+                  color: isDarkMode
+                      ? CustomColors.pureWhite
+                      : CustomColors.pureBlack,
+                ),
               )
             : null,
         enabledBorder: isOutlined
             ? OutlineInputBorder(
                 borderRadius: BorderRadius.circular(borderRadius),
+                borderSide: BorderSide(
+                  color: isDarkMode
+                      ? CustomColors.pureWhite
+                      : CustomColors.pureBlack,
+                ),
               )
             : null,
         focusedBorder: isOutlined
             ? OutlineInputBorder(
                 borderRadius: BorderRadius.circular(borderRadius),
-                borderSide: const BorderSide(width: 2),
+                borderSide: BorderSide(
+                  color: isDarkMode
+                      ? CustomColors.pureWhite
+                      : CustomColors.pureBlack,
+                ),
               )
             : null,
         disabledBorder: isOutlined
             ? OutlineInputBorder(
                 borderRadius: BorderRadius.circular(borderRadius),
-                borderSide: const BorderSide(color: Colors.black12),
+                borderSide: BorderSide(
+                  color: isDarkMode
+                      ? CustomColors.pureWhite
+                      : CustomColors.pureBlack,
+                ),
               )
             : null,
         alignLabelWithHint: true,

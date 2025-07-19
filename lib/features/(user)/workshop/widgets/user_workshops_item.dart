@@ -65,7 +65,7 @@ class _UserWorkshopsItemState extends State<UserWorkshopsItem> {
     // }
 
     return Material(
-      color: CustomColors.pureWhite,
+      color: context.adaptiveCommonColor,
       elevation: 2,
       borderRadius: BorderRadius.circular(8),
       child: InkWell(

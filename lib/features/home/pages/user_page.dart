@@ -44,7 +44,7 @@ class _UserPageState extends State<UserPage> {
                   spacing: 8,
                   children: [
                     Container(
-                      color: CustomColors.pureWhite,
+                      color: context.adaptiveCommonColor,
                       padding: const EdgeInsets.symmetric(
                         vertical: 16,
                       ),
@@ -94,7 +94,7 @@ class _UserPageState extends State<UserPage> {
                   horizontal: 16,
                 ),
                 Material(
-                  color: CustomColors.pureWhite,
+                  color: context.adaptiveCommonColor,
                   child: InkWell(
                     onTap: () {
                       context.read<UserCubit>().logout();
@@ -107,25 +107,39 @@ class _UserPageState extends State<UserPage> {
                     ),
                   ),
                 ),
-                // Material(
-                //   color: CustomColors.pureWhite,
-                //   child: BlocBuilder<ThemeCubit, ThemeState>(
-                //     builder: (context, themeState) {
-                //       return SwitchListTile(
-                //         title: const MainText(text: "Mode Gelap"),
-                //         secondary: Icon(
-                //           themeState.status == ThemeStatus.dark
-                //               ? Icons.dark_mode
-                //               : Icons.light_mode,
-                //         ),
-                //         value: themeState.status == ThemeStatus.dark,
-                //         onChanged: (value) {
-                //           context.read<ThemeCubit>().toggleTheme();
-                //         },
-                //       );
-                //     },
-                //   ),
-                // ),
+                Material(
+                  color: context.adaptiveCommonColor,
+                  child: BlocBuilder<ThemeCubit, ThemeState>(
+                    builder: (context, themeState) {
+                      return SwitchListTile(
+                        activeColor: CustomColors.guideRed,
+                        tileColor: context.adaptiveCommonColor,
+                        hoverColor: CustomColors.guideRed.withOpacity(0.1),
+                        thumbColor: MaterialStateProperty.all(
+                          CustomColors.guideRed,
+                        ),
+                        trackColor: WidgetStateProperty.all(
+                          CustomColors.guideRed.withOpacity(0.3),
+                        ),
+                        overlayColor: WidgetStateProperty.all(
+                          CustomColors.guideRed.withOpacity(0.1),
+                        ),
+                        activeTrackColor:
+                            CustomColors.guideRed.withOpacity(0.3),
+                        title: const MainText(text: "Mode Gelap"),
+                        secondary: Icon(
+                          themeState.status == ThemeStatus.dark
+                              ? Icons.dark_mode
+                              : Icons.light_mode,
+                        ),
+                        value: themeState.status == ThemeStatus.dark,
+                        onChanged: (value) {
+                          context.read<ThemeCubit>().toggleTheme();
+                        },
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ).paddingSymmetric(vertical: 16);
