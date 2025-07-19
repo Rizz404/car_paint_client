@@ -27,7 +27,9 @@ class MainElevatedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
       style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(CustomColors.guideRed),
+        backgroundColor: isLoading
+            ? WidgetStateProperty.all(CustomColors.guideDarkGray)
+            : WidgetStateProperty.all(CustomColors.guideRed),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(

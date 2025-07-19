@@ -259,7 +259,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
             SnackBarUtil.showSnackBar(
               context: context,
               message:
-                  "Order telah berhasil dibuat, silahkan ke menu My Booking untuk melakukan pembayaran",
+                  "Order telah berhasil dibuat, silahkan ke menu Transaksi untuk melakukan pembayaran",
               type: SnackBarType.success,
             );
             Navigator.of(context).pushAndRemoveUntil(
