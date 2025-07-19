@@ -8,6 +8,7 @@ import 'package:paint_car/features/shared/utils/currency_formatter.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter/services.dart';
 
 class UserTransactionsItem extends StatelessWidget {
   final Transactions transactions;
@@ -144,8 +145,10 @@ class UserTransactionsItem extends StatelessWidget {
                                 ),
                       ),
                       const SizedBox(width: 8),
-                      MainText(
-                        text: 'Metode Pembayaran: ${_getPaymentMethodName()}',
+                      Expanded(
+                        child: MainText(
+                          text: 'Metode Pembayaran: ${_getPaymentMethodName()}',
+                        ),
                       ),
                     ],
                   ),
@@ -180,14 +183,35 @@ class UserTransactionsItem extends StatelessWidget {
                               minWidth: 36,
                               minHeight: 36,
                             ),
-                            onPressed: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content:
-                                      Text('Virtual Account number copied'),
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
+                            onPressed: () async {
+                              try {
+                                await Clipboard.setData(
+                                  ClipboardData(
+                                    text: transactions
+                                        .paymentdetail!.virtualAccountNumber!,
+                                  ),
+                                );
+
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Virtual Account number copied'),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                }
+                              } catch (e) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Failed to copy to clipboard'),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                }
+                              }
                             },
                           ),
                       ],
@@ -272,7 +296,6 @@ class UserTransactionsItem extends StatelessWidget {
                       child: TextButton(
                         onPressed: () => _handleTap(context),
                         style: TextButton.styleFrom(
-                          backgroundColor: CustomColors.secondaryBlue,
                           foregroundColor:
                               Theme.of(context).colorScheme.onPrimary,
                           shape: RoundedRectangleBorder(

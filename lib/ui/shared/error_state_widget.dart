@@ -38,7 +38,7 @@ class ErrorStateWidget extends StatelessWidget {
               },
               child: const Text(
                 'Retry',
-                style: TextStyle(color: CustomColors.white),
+                // style: TextStyle(color: CustomColors.white),
               ),
             ),
         ],

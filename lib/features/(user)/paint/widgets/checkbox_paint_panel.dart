@@ -35,10 +35,10 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          color: CustomColors.secondaryWhite,
+          // color: CustomColors.secondaryWhite,
           boxShadow: [
             BoxShadow(
-              color: CustomColors.black.withAlpha(25),
+              // color: CustomColors.black.withAlpha(25),
               blurRadius: 5,
               offset: const Offset(0, 4),
             ),
@@ -64,12 +64,12 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
                 text: widget.title,
                 customTextStyle: TextStyle(
                   fontSize: 36,
-                  color: CustomColors.white,
+                  // color: CustomColors.white,
                   shadows: [
                     Shadow(
                       offset: const Offset(0, 4),
                       blurRadius: 4,
-                      color: CustomColors.black.withAlpha(50),
+                      // color: CustomColors.black.withAlpha(50),
                     ),
                   ],
                 ),
@@ -83,12 +83,12 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
                 ),
                 customTextStyle: TextStyle(
                   fontSize: 36,
-                  color: CustomColors.white,
+                  // color: CustomColors.white,
                   shadows: [
                     Shadow(
                       offset: const Offset(0, 4),
                       blurRadius: 4,
-                      color: CustomColors.black.withAlpha(50),
+                      // color: CustomColors.black.withAlpha(50),
                     ),
                   ],
                 ),
@@ -103,19 +103,19 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
                   onChanged: widget.onChanged,
                   side: WidgetStateBorderSide.resolveWith(
                     (states) => const BorderSide(
-                      color: CustomColors.gray,
+                      // color: CustomColors.gray,
                       width: 2,
                     ),
                   ),
                   shape: const CircleBorder(),
-                  checkColor: CustomColors.blue,
-                  activeColor: CustomColors.blue,
-                  fillColor: WidgetStateProperty.resolveWith((states) {
-                    if (states.contains(WidgetState.selected)) {
-                      return CustomColors.blue;
-                    }
-                    return CustomColors.gray;
-                  }),
+                  // checkColor: CustomColors.blue,
+                  // activeColor: CustomColors.blue,
+                  // fillColor: WidgetStateProperty.resolveWith((states) {
+                  //   if (states.contains(WidgetState.selected)) {
+                  //     return CustomColors.blue;
+                  //   }
+                  //   return CustomColors.gray;
+                  // }),
                 ),
               ),
             ),

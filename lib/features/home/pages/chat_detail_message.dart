@@ -155,7 +155,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: const BoxDecoration(
-                      color: CustomColors.secondaryBlue,
+                      // color: CustomColors.secondaryBlue,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -179,10 +179,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: message.isMe ? CustomColors.secondaryBlue : Colors.grey[200],
-          borderRadius: BorderRadius.circular(18),
-        ),
+        // decoration: BoxDecoration(
+        //   color: message.isMe ? CustomColors.secondaryBlue : Colors.grey[200],
+        //   borderRadius: BorderRadius.circular(18),
+        // ),
         // ! ini untuk membatasi lebar pesan, kenapa? karena pesan yang panjang akan membuat bubble melebar, jadi dikuranin lebarnya berapa persen dari layar
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width * 0.75,

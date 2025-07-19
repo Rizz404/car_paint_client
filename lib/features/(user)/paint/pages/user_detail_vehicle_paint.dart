@@ -240,7 +240,7 @@ class _UserDetailVehiclePaintPageState
 
   Widget _buildVehicleDetailsSection() {
     final divider = const Divider(
-      color: CustomColors.gray,
+      // color: CustomColors.gray,
       thickness: 1,
     );
 

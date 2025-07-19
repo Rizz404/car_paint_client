@@ -207,9 +207,9 @@ class _MessagePageState extends State<MessagePage>
                 Tab(text: 'Pesan'),
                 Tab(text: 'Notifikasi'),
               ],
-              labelColor: CustomColors.secondaryBlue,
+              // labelColor: CustomColors.secondaryBlue,
               unselectedLabelColor: Colors.grey,
-              indicatorColor: CustomColors.secondaryBlue,
+              // indicatorColor: CustomColors.secondaryBlue,
               indicatorWeight: 3,
             ),
           ),
@@ -313,7 +313,7 @@ class _MessagePageState extends State<MessagePage>
                 width: 8,
                 height: 8,
                 decoration: const BoxDecoration(
-                  color: CustomColors.secondaryBlue,
+                  // color: CustomColors.secondaryBlue,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -427,7 +427,7 @@ class _MessagePageState extends State<MessagePage>
               width: 20,
               height: 20,
               decoration: const BoxDecoration(
-                color: CustomColors.secondaryBlue,
+                // color: CustomColors.secondaryBlue,
                 shape: BoxShape.circle,
               ),
               child: Center(

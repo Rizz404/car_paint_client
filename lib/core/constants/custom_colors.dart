@@ -28,17 +28,28 @@ class CustomColors {
   static const darkGray = Color(0xFF404040);
   static const darkSecondaryGray = Color(0xFF606060);
   static const darkTertiaryGray = Color(0xFF808080);
+
+  static const guideRed = Color(0xFFE63B2A);
+  static const guideGray = Color(0xFFE6E7E8);
+  static const guideDarkGray = Color(0xFF707072);
+  static const guideDark = Color(0xFF20272F);
+
+  static const guideDarkModeGray = Color(0xFF2C2C2E);
+  static const guideDarkModeDarkGray = Color(0xFF8E8E93);
+  static const guideDarkModeDark = Color(0xFFFFFFFF);
+
+  static const pureWhite = Color(0xFFFFFFFF);
 }
 
 extension ThemeExtension on BuildContext {
   bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
 
   Color get adaptiveTextColor =>
-      isDarkMode ? CustomColors.darkTextIcon : CustomColors.textIcon;
+      isDarkMode ? CustomColors.guideDarkModeDark : CustomColors.guideDark;
 
   Color get adaptiveBorderColor =>
-      isDarkMode ? CustomColors.darkBorder : CustomColors.border;
+      isDarkMode ? CustomColors.guideDarkModeDarkGray : CustomColors.guideGray;
 
   Color get adaptiveBackgroundColor =>
-      isDarkMode ? CustomColors.darkBackground : CustomColors.white;
+      isDarkMode ? CustomColors.guideDarkModeGray : CustomColors.pureWhite;
 }

@@ -10,8 +10,8 @@ class Loading extends StatelessWidget {
       padding: EdgeInsets.all(16),
       child: Center(
         child: CircularProgressIndicator(
-          color: CustomColors.secondaryBlue,
-        ),
+            // color: CustomColors.secondaryBlue,
+            ),
       ),
     );
   }

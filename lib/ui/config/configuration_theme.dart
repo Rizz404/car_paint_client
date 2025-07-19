@@ -7,33 +7,29 @@ class ConfigurationTheme {
   static ThemeData get lightTheme => _buildLightTheme();
   static ThemeData get darkTheme => _buildDarkTheme();
 
-  static const Color _seedColor = Color(0xFF2291FF);
-  static const Color _primaryColor = Color(0xFF2291FF);
+  static const Color _seedColor = CustomColors.guideRed;
+  static const Color _primaryColor = CustomColors.guideRed;
 
-  static const Color _lightSurface = Color(0xFFFAFAFA);
-  static const Color _lightBackground = Color(0xFFFFFFFF);
-  static const Color _lightSecondary = Color(0xFFF5F5F5);
-  static const Color _lightCardColor = Color(0xFFFFFFFF);
-  static const Color _lightSurfaceDim = Color(0xFFE5E5E5);
+  static const Color _lightSurface = CustomColors.pureWhite;
+  static const Color _lightBackground = CustomColors.pureWhite;
+  static const Color _lightCardColor = CustomColors.pureWhite;
 
-  static const Color _darkSurface = Color(0xFF1A1A1A);
-  static const Color _darkBackground = Color(0xFF121212);
-  static const Color _darkSecondary = Color(0xFF2D2D2D);
-  static const Color _darkCardColor = Color(0xFF1E1E1E);
-  static const Color _darkSurfaceDim = Color(0xFF0F0F0F);
+  static const Color _darkSurface = CustomColors.guideDarkModeGray;
+  static const Color _darkBackground = CustomColors.guideDark;
+  static const Color _darkCardColor = CustomColors.guideDarkModeGray;
 
   static ThemeData _buildLightTheme() {
     return ThemeData(
       colorScheme: ColorScheme.fromSeed(
         seedColor: _seedColor,
         primary: _primaryColor,
-        onPrimary: const Color(0xFFFFFFFF),
-        secondary: const Color(0xFF6B7280),
-        onSecondary: const Color(0xFFFFFFFF),
+        onPrimary: CustomColors.pureWhite,
+        secondary: CustomColors.guideGray,
+        onSecondary: CustomColors.guideDark,
         surface: _lightSurface,
-        onSurface: const Color(0xFF1F2937),
-        onSurfaceVariant: const Color(0xFF4B5563),
-        outline: const Color(0xFFD1D5DB),
+        onSurface: CustomColors.guideDark,
+        onSurfaceVariant: CustomColors.guideDarkGray,
+        outline: CustomColors.guideGray,
         shadow: const Color(0xFF000000).withAlpha(5),
       ),
       useMaterial3: true,
@@ -60,7 +56,7 @@ class ConfigurationTheme {
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: _lightBackground,
-        foregroundColor: Color(0xFF1F2937),
+        foregroundColor: CustomColors.guideDark,
         elevation: 0,
         scrolledUnderElevation: 1,
         surfaceTintColor: Colors.transparent,
@@ -74,13 +70,13 @@ class ConfigurationTheme {
         seedColor: _seedColor,
         brightness: Brightness.dark,
         primary: _primaryColor,
-        onPrimary: const Color(0xFFFFFFFF),
-        secondary: const Color(0xFF9CA3AF),
-        onSecondary: const Color(0xFF1F2937),
+        onPrimary: CustomColors.pureWhite,
+        secondary: CustomColors.guideDarkModeDarkGray,
+        onSecondary: CustomColors.guideDarkModeDark,
         surface: _darkSurface,
-        onSurface: const Color(0xFFE5E7EB),
-        onSurfaceVariant: const Color(0xFF9CA3AF),
-        outline: const Color(0xFF374151),
+        onSurface: CustomColors.guideDarkModeDark,
+        onSurfaceVariant: CustomColors.guideDarkModeDarkGray,
+        outline: CustomColors.guideDarkModeDarkGray,
         shadow: const Color(0xFF000000).withValues(alpha: 0.3),
       ),
       useMaterial3: true,
@@ -107,7 +103,7 @@ class ConfigurationTheme {
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: _darkSurface,
-        foregroundColor: Color(0xFFE5E7EB),
+        foregroundColor: CustomColors.guideDarkModeDark,
         elevation: 0,
         scrolledUnderElevation: 1,
         surfaceTintColor: Colors.transparent,
@@ -126,13 +122,10 @@ class ConfigurationTheme {
 
   static DropdownMenuThemeData dropdownMenuTheme(BuildContext context) {
     return DropdownMenuThemeData(
-      menuStyle: MenuStyle(
-        backgroundColor: WidgetStatePropertyAll(
-          Theme.of(context).colorScheme.surfaceVariant,
-        ),
-        elevation: const WidgetStatePropertyAll(4),
+      menuStyle: const MenuStyle(
+        elevation: WidgetStatePropertyAll(4),
       ),
-      textStyle: TextStyle(
+      textStyle: GoogleFonts.poppins(
         fontWeight: FontWeight.w500,
         color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
@@ -143,28 +136,27 @@ class ConfigurationTheme {
     return ColorScheme.fromSeed(
       seedColor: _seedColor,
       primary: _primaryColor,
-      onPrimary: const Color(0xFFFFFFFF),
+      onPrimary: CustomColors.pureWhite,
       surface: _lightSurface,
-      secondary: _lightSecondary,
-      surfaceVariant: _lightSurfaceDim,
+      secondary: CustomColors.guideGray,
     );
   }
 
   static InputDecorationTheme get inputDecorationTheme {
     return InputDecorationTheme(
-      hintStyle: const TextStyle(
+      hintStyle: GoogleFonts.poppins(
         fontWeight: FontWeight.w500,
-        color: Color(0xFF6B7280),
+        color: CustomColors.guideDarkGray,
       ),
-      labelStyle: const TextStyle(
+      labelStyle: GoogleFonts.poppins(
         fontWeight: FontWeight.w500,
-        color: Color(0xFF6B7280),
+        color: CustomColors.guideDarkGray,
       ),
       contentPadding: const EdgeInsets.all(16),
       errorBorder: OutlineInputBorder(
         borderSide: const BorderSide(
           width: 1.5,
-          color: Color(0xFFEF4444),
+          color: CustomColors.guideRed,
         ),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -172,19 +164,19 @@ class ConfigurationTheme {
       focusedErrorBorder: OutlineInputBorder(
         borderSide: const BorderSide(
           width: 2,
-          color: Color(0xFFEF4444),
+          color: CustomColors.guideRed,
         ),
         borderRadius: BorderRadius.circular(12),
       ),
-      errorStyle: const TextStyle(
+      errorStyle: GoogleFonts.poppins(
         fontSize: 12,
         fontWeight: FontWeight.w400,
-        color: Color(0xFFEF4444),
+        color: CustomColors.guideRed,
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: const BorderSide(
           width: 1.5,
-          color: Color(0xFFE5E7EB),
+          color: CustomColors.guideGray,
         ),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -200,19 +192,19 @@ class ConfigurationTheme {
 
   static InputDecorationTheme get darkInputDecorationTheme {
     return InputDecorationTheme(
-      hintStyle: const TextStyle(
+      hintStyle: GoogleFonts.poppins(
         fontWeight: FontWeight.w500,
-        color: Color(0xFF9CA3AF),
+        color: CustomColors.guideDarkModeDarkGray,
       ),
-      labelStyle: const TextStyle(
+      labelStyle: GoogleFonts.poppins(
         fontWeight: FontWeight.w500,
-        color: Color(0xFF9CA3AF),
+        color: CustomColors.guideDarkModeDarkGray,
       ),
       contentPadding: const EdgeInsets.all(16),
       errorBorder: OutlineInputBorder(
         borderSide: const BorderSide(
           width: 1.5,
-          color: Color(0xFFEF4444),
+          color: CustomColors.guideRed,
         ),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -220,19 +212,19 @@ class ConfigurationTheme {
       focusedErrorBorder: OutlineInputBorder(
         borderSide: const BorderSide(
           width: 2,
-          color: Color(0xFFEF4444),
+          color: CustomColors.guideRed,
         ),
         borderRadius: BorderRadius.circular(12),
       ),
-      errorStyle: const TextStyle(
+      errorStyle: GoogleFonts.poppins(
         fontSize: 12,
         fontWeight: FontWeight.w400,
-        color: Color(0xFFEF4444),
+        color: CustomColors.guideRed,
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: const BorderSide(
           width: 1.5,
-          color: Color(0xFF374151),
+          color: CustomColors.guideDarkModeDarkGray,
         ),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -248,83 +240,77 @@ class ConfigurationTheme {
 
   static TextTheme get textTheme {
     return TextTheme(
-      displayLarge: GoogleFonts.montserrat(
+      displayLarge: GoogleFonts.poppins(
         fontSize: 34,
         fontWeight: FontWeight.w700,
         height: 1.2,
       ),
-      displayMedium: GoogleFonts.montserrat(
+      displayMedium: GoogleFonts.poppins(
         fontSize: 28,
         fontWeight: FontWeight.w700,
         height: 1.2,
       ),
-      displaySmall: GoogleFonts.montserrat(
+      displaySmall: GoogleFonts.poppins(
         fontSize: 22,
         fontWeight: FontWeight.w700,
         height: 1.3,
       ),
-      headlineLarge: GoogleFonts.montserrat(
+      headlineLarge: GoogleFonts.poppins(
         fontSize: 24,
         fontWeight: FontWeight.w600,
         height: 1.3,
       ),
-      headlineMedium: GoogleFonts.montserrat(
+      headlineMedium: GoogleFonts.poppins(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         height: 1.4,
       ),
-      headlineSmall: GoogleFonts.montserrat(
+      headlineSmall: GoogleFonts.poppins(
         fontSize: 18,
         fontWeight: FontWeight.w600,
         height: 1.4,
       ),
-      titleLarge: const TextStyle(
+      titleLarge: GoogleFonts.poppins(
         fontSize: 22,
         fontWeight: FontWeight.w500,
         height: 1.4,
       ),
-      titleMedium: const TextStyle(
+      titleMedium: GoogleFonts.poppins(
         fontSize: 16,
         fontWeight: FontWeight.w500,
         height: 1.5,
       ),
-      titleSmall: const TextStyle(
+      titleSmall: GoogleFonts.poppins(
         fontSize: 14,
         fontWeight: FontWeight.w500,
         height: 1.5,
       ),
-      bodyLarge: const TextStyle(
-        fontFamily: "Cera Pro",
+      bodyLarge: GoogleFonts.poppins(
         fontSize: 16,
         fontWeight: FontWeight.w400,
         height: 1.6,
       ),
-      bodyMedium: const TextStyle(
-        fontFamily: "Cera Pro",
+      bodyMedium: GoogleFonts.poppins(
         fontSize: 14,
         fontWeight: FontWeight.w400,
         height: 1.6,
       ),
-      bodySmall: const TextStyle(
-        fontFamily: "Cera Pro",
+      bodySmall: GoogleFonts.poppins(
         fontSize: 12,
         fontWeight: FontWeight.w400,
         height: 1.6,
       ),
-      labelLarge: const TextStyle(
-        fontFamily: "Cera Pro",
+      labelLarge: GoogleFonts.poppins(
         fontSize: 14,
         fontWeight: FontWeight.w500,
         height: 1.4,
       ),
-      labelMedium: const TextStyle(
-        fontFamily: "Cera Pro",
+      labelMedium: GoogleFonts.poppins(
         fontSize: 12,
         fontWeight: FontWeight.w500,
         height: 1.4,
       ),
-      labelSmall: const TextStyle(
-        fontFamily: "Cera Pro",
+      labelSmall: GoogleFonts.poppins(
         fontSize: 10,
         fontWeight: FontWeight.w500,
         height: 1.4,
