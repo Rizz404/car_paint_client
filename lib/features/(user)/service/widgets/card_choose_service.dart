@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
+import 'package:paint_car/ui/extension/padding.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
 class CardChooseService extends StatefulWidget {
@@ -26,6 +27,7 @@ class _CardChooseServiceState extends State<CardChooseService> {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
+          color: CustomColors.pureWhite,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
@@ -43,12 +45,12 @@ class _CardChooseServiceState extends State<CardChooseService> {
             ),
             Positioned(
               left: 16,
-              bottom: 0,
+              bottom: -20,
               child: MainText(
                 text: widget.title,
                 customTextStyle: TextStyle(
                   fontSize: 48,
-                  color: CustomColors.white,
+                  color: CustomColors.guideDarkGray,
                   shadows: [
                     Shadow(
                       offset: const Offset(0, 4),
@@ -60,7 +62,7 @@ class _CardChooseServiceState extends State<CardChooseService> {
               ),
             ),
           ],
-        ),
+        ).paddingSymmetric(vertical: 20),
       ),
     );
   }

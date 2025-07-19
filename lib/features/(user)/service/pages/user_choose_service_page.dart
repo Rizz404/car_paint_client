@@ -30,7 +30,7 @@ class _UserChooseServicePageState extends State<UserChooseServicePage> {
           children: [
             const MainText(
               text: "Mau Cat Apa Hari Ini Sob?",
-              extent: Large(),
+              extent: Medium(),
             ),
             GestureDetector(
               onTap: () {},
