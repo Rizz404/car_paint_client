@@ -254,6 +254,9 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                   ).paddingSymmetric(
                     horizontal: 16,
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                 ],
               ),
             ),
@@ -337,6 +340,9 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
               children: [
                 MainText(
                   text: label,
+                  customTextStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 MainText(
