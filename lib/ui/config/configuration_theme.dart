@@ -37,7 +37,7 @@ class ConfigurationTheme {
       textTheme: ConfigurationTheme.textTheme,
       inputDecorationTheme: ConfigurationTheme.inputDecorationTheme,
       elevatedButtonTheme: ConfigurationTheme.elevatedButtonTheme,
-      scaffoldBackgroundColor: _lightBackground,
+      scaffoldBackgroundColor: CustomColors.guideGray,
       cardTheme: const CardThemeData(
         color: _lightCardColor,
         elevation: 2,

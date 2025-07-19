@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/user_model.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
@@ -11,6 +12,7 @@ class ListStyleWelcome extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 8.0),
       decoration: BoxDecoration(
+        color: CustomColors.pureWhite,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.2),

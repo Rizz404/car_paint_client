@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
@@ -12,6 +13,7 @@ class CardLinkSection extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
+        color: CustomColors.pureWhite,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
@@ -33,10 +35,11 @@ class CardLinkSection extends StatelessWidget {
                 child: Container(
                   width: 100,
                   decoration: BoxDecoration(
+                    color: CustomColors.guideGray,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Padding(
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(12),
                     child: Icon(
                       Icons.add,
                     ),
