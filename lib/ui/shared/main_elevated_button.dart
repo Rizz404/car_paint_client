@@ -27,6 +27,7 @@ class MainElevatedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
       style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.all(CustomColors.guideRed),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
@@ -36,7 +37,11 @@ class MainElevatedButton extends StatelessWidget {
         ),
         minimumSize: WidgetStateProperty.all(Size(width, height)),
       ),
-      child: MainText(text: text, extent: extent),
+      child: MainText(
+        text: text,
+        extent: extent,
+        color: CustomColors.pureWhite,
+      ),
     );
   }
 }

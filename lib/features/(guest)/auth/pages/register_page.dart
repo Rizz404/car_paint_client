@@ -116,7 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const MainText(text: "Daftar", extent: ExtraLarge()),
+                        const MainText(text: "Daftar", extent: Large()),
                         const SizedBox(height: 32),
                         Form(
                           key: formKey,
@@ -197,9 +197,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 onPressed: signUp,
                                 text: "Daftar",
                                 isLoading: state is BaseLoadingState,
-                                height: 52,
-                                borderRadius: 40,
-                                extent: const Large(),
+                                borderRadius: 32,
                               ),
                             ],
                           ),
@@ -220,8 +218,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                     fontWeight: FontWeight.w600,
                                     decoration: TextDecoration.underline,
                                     decorationColor:
-                                        Theme.of(context).colorScheme.primary,
-                                    color:
                                         Theme.of(context).colorScheme.primary,
                                   ),
                                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 
 class GradientBgAuth extends StatelessWidget {
   final Widget child;
@@ -13,6 +14,9 @@ class GradientBgAuth extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        color: CustomColors.guideGray,
+      ),
       child: SafeArea(
         child: Padding(
           padding: padding ?? const EdgeInsets.all(0),

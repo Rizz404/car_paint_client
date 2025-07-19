@@ -102,6 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
+                    color: CustomColors.pureWhite,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(24),
@@ -110,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         const MainText(
                           text: "Masuk",
-                          extent: ExtraLarge(),
+                          extent: Large(),
                         ),
                         const SizedBox(height: 32),
                         Form(
@@ -148,9 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                                 onPressed: signIn,
                                 text: "Masuk",
                                 isLoading: state is BaseLoadingState,
-                                height: 52,
                                 borderRadius: 32,
-                                extent: const Large(),
                               ),
                             ],
                           ),
