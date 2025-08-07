@@ -364,6 +364,7 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
         const MainText(
           text: 'Langkah-Langkah Penggunaan Aplikasi',
           extent: Medium(),
+          maxLines: 2,
         ),
         const SizedBox(height: 16),
         ...steps.map((step) => _buildStepCard(
@@ -412,10 +413,10 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                   const SizedBox(height: 4),
                   MainText(
                     text: description,
-                    extent: const Small(),
                     customTextStyle: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
+                    maxLines: 5,
                   ),
                 ],
               ),
@@ -463,6 +464,7 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                               child: MainText(
                                 text: tip,
                                 extent: const Small(),
+                                maxLines: 5,
                                 customTextStyle: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
@@ -511,6 +513,7 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                       text: 'Selamat Datang di Panduan Aplikasi',
                       extent: Medium(),
                       textAlign: TextAlign.center,
+                      maxLines: 2,
                     ),
                     const SizedBox(height: 8),
                     MainText(
@@ -521,6 +524,7 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                       customTextStyle: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
+                      maxLines: 5,
                     ),
                   ],
                 ),
@@ -557,6 +561,7 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                     MainText(
                       text: 'Tim customer service kami siap membantu Anda',
                       extent: const Small(),
+                      maxLines: 3,
                       textAlign: TextAlign.center,
                       customTextStyle: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,

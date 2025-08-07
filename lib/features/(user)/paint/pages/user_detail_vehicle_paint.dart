@@ -207,7 +207,7 @@ class _UserDetailVehiclePaintPageState
         );
       },
       child: const MainText(
-        text: "Cara menemukan kode warna mobil anda",
+        text: "Panduan Kode Warna Mobil",
         customTextStyle: TextStyle(decoration: TextDecoration.underline),
         extent: Medium(),
       ),

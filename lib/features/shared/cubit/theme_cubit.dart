@@ -9,8 +9,8 @@ class ThemeCubit extends Cubit<ThemeState> {
   ThemeCubit(this._themeLocal)
       : super(
           ThemeState(
-            status: ThemeStatus.light,
-            themeData: ConfigurationTheme.lightTheme,
+            status: ThemeStatus.dark,
+            themeData: ConfigurationTheme.darkTheme,
           ),
         );
 

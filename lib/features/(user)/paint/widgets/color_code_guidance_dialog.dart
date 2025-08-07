@@ -328,6 +328,7 @@ class _ColorCodeGuidanceDialogState extends State<ColorCodeGuidanceDialog> {
         text: "Cara Menemukan Kode Warna Mobil",
         textAlign: TextAlign.center,
         extent: Large(),
+        maxLines: 3,
       ),
       content: SizedBox(
         width: double.maxFinite,
@@ -336,6 +337,18 @@ class _ColorCodeGuidanceDialogState extends State<ColorCodeGuidanceDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              const MainText(
+                text: "Video Panduan:",
+                extent: Medium(),
+                customTextStyle: TextStyle(fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 12),
+              _buildVideoPlayer(),
+              const SizedBox(height: 16),
+              Divider(
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+              ),
+              const SizedBox(height: 12),
               const MainText(
                 text: "Lokasi Kode Warna:",
                 extent: Medium(),
@@ -357,46 +370,6 @@ class _ColorCodeGuidanceDialogState extends State<ColorCodeGuidanceDialog> {
                   "assets/images/car/location_code_color_car_2.png",
                   fit: BoxFit.cover,
                   height: 180,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Divider(
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
-              ),
-              const SizedBox(height: 12),
-              const MainText(
-                text: "Video Panduan:",
-                extent: Medium(),
-                customTextStyle: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 12),
-              _buildVideoPlayer(),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color:
-                        Theme.of(context).colorScheme.primary.withOpacity(0.3),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.lightbulb_outline,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 8),
-                    const Expanded(
-                      child: MainText(
-                        text:
-                            "Kode warna biasanya terdapat di plat VIN atau stiker di bagian dalam mobil",
-                      ),
-                    ),
-                  ],
                 ),
               ),
             ],
