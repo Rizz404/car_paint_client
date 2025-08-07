@@ -11,8 +11,7 @@ class BannerSlider extends StatefulWidget {
 class _BannerSliderState extends State<BannerSlider> {
   late final PageController _pageController;
   final List<String> _images = [
-    "assets/images/banner/banner-1.jpg",
-    "assets/images/banner/banner-2.jpg",
+    "assets/images/banner/banner.jpg",
   ];
   int _currentPage = 0;
   Timer? _timer;
@@ -52,10 +51,10 @@ class _BannerSliderState extends State<BannerSlider> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(42),
               child: Image.asset(
                 _images[index],
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
           );

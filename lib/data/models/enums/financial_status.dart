@@ -54,7 +54,7 @@ extension WorkStatusExtension on WorkStatus {
   static WorkStatus fromMap(String status) {
     return WorkStatus.values.firstWhere(
       (e) => e.name == status,
-      orElse: () => WorkStatus.INSPECTION,
+      orElse: () => WorkStatus.QUEUED,
     );
   }
 

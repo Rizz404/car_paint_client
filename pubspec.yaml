@@ -116,6 +116,7 @@ flutter:
     - assets/images/logo/1200_1200.png
     - assets/images/logo/new_logo.svg
     - assets/images/logo/new_logo.png
+    - assets/images/banner/banner.jpg
     - assets/images/banner/banner-1.jpg
     - assets/images/banner/banner-2.jpg
     - assets/images/car/red_car.png

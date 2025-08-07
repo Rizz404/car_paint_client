@@ -7,6 +7,7 @@ import 'package:paint_car/data/models/car_service.dart';
 import 'package:paint_car/data/models/car_workshop.dart';
 import 'package:paint_car/data/models/e_ticket.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
+import 'package:paint_car/dependencies/services/log_service.dart';
 
 class Orders {
   final String? id;
@@ -103,7 +104,7 @@ class Orders {
       transactionId: map['transactionId'] as String? ?? '',
       workStatus: map['workStatus'] != null
           ? WorkStatusExtension.fromMap(map['workStatus'] as String)
-          : WorkStatus.INSPECTION,
+          : WorkStatus.QUEUED,
       orderStatus: map['orderStatus'] != null
           ? OrderStatusExtension.fromMap(map['orderStatus'] as String)
           : OrderStatus.DRAFT,

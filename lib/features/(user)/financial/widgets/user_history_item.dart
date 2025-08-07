@@ -51,7 +51,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
     }
   }
 
-  // Fungsi untuk mendapatkan warna work status
   Color getWorkStatusColor(WorkStatus status) {
     switch (status) {
       case WorkStatus.QUEUED:
@@ -77,7 +76,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
     }
   }
 
-  // Fungsi untuk mendapatkan warna order status
   Color getOrderStatusColor(OrderStatus status) {
     switch (status) {
       case OrderStatus.DRAFT:
@@ -125,7 +123,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
     );
   }
 
-  // Widget untuk work status
   Widget buildWorkStatusWidget(WorkStatus status) {
     final Color statusColor = getWorkStatusColor(status);
     return Container(
@@ -156,7 +153,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
     );
   }
 
-  // Widget untuk order status
   Widget buildOrderStatusWidget(OrderStatus status) {
     final Color statusColor = getOrderStatusColor(status);
     return Container(
@@ -187,7 +183,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
     );
   }
 
-  // Widget WorkStatus Dropdown dengan semua data status
   Widget buildWorkStatusDropdown() {
     final theme = Theme.of(context);
 
@@ -202,7 +197,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header dengan toggle expand/collapse
           InkWell(
             onTap: () {
               setState(() {
@@ -248,8 +242,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
               ),
             ),
           ),
-
-          // Current Status Display (always visible)
           if (selectedWorkStatus != null) ...[
             Container(
               padding: const EdgeInsets.all(16),
@@ -340,12 +332,8 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
               ),
             ),
           ],
-
-          // Expanded content
           if (isWorkStatusExpanded) ...[
             const Divider(height: 1),
-
-            // Dropdown untuk edit status (jika diaktifkan)
             if (widget.enableWorkStatusEdit) ...[
               Container(
                 padding:
@@ -385,8 +373,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
               ),
               const Divider(height: 1),
             ],
-
-            // Semua status timeline
             Container(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -410,7 +396,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
     );
   }
 
-  // Widget untuk item status dalam dropdown
   Widget _buildWorkStatusItem(WorkStatus status) {
     final Color statusColor = getWorkStatusColor(status);
     final bool isSelected = status == selectedWorkStatus;
@@ -462,7 +447,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
     );
   }
 
-  // Widget timeline status
   Widget _buildStatusTimeline() {
     final currentIndex = selectedWorkStatus != null
         ? WorkStatus.values.indexOf(selectedWorkStatus!)
@@ -478,7 +462,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
 
         return Row(
           children: [
-            // Timeline indicator
             Column(
               children: [
                 Container(
@@ -519,7 +502,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
               ],
             ),
             const SizedBox(width: 16),
-            // Status info
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 8),
@@ -581,7 +563,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
     }
   }
 
-  // Icon untuk work status
   IconData _getWorkStatusIcon(WorkStatus status) {
     switch (status) {
       case WorkStatus.QUEUED:
@@ -607,7 +588,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
     }
   }
 
-  // Icon untuk order status
   IconData _getOrderStatusIcon(OrderStatus status) {
     switch (status) {
       case OrderStatus.DRAFT:
@@ -669,7 +649,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
   String _getPaymentMethodName(String? name) {
     if (name == null) return '-';
 
-    // Capitalize with proper spacing for payment methods
     switch (name.toUpperCase()) {
       case 'SHOPEEPAY':
         return ' ShopeePay';
@@ -690,7 +669,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
     final theme = Theme.of(context);
     final expandTheme = theme.copyWith(dividerColor: Colors.transparent);
 
-    // Validasi order
     if (transactions.order == null || transactions.order!.isEmpty) {
       return const SizedBox();
     }
@@ -714,13 +692,11 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header dengan tanggal dan status
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Invoice ID
                 MainText(
                   text: 'Invoice #${transactions.id.substring(0, 8)}',
                   extent: const Medium(),
@@ -728,10 +704,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-
                 const SizedBox(height: 8),
-
-                // Tanggal dan Status Pembayaran
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -748,8 +721,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                     buildPaymentStatusWidget(transactions.paymentStatus),
                   ],
                 ),
-
-                // Status Order dan Work
                 if (order.orderStatus != null || order.workStatus != null) ...[
                   const SizedBox(height: 12),
                   Row(
@@ -766,13 +737,8 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
               ],
             ),
           ),
-
-          // WorkStatus Dropdown dengan timeline
           if (selectedWorkStatus != null) buildWorkStatusDropdown(),
-
           const Divider(height: 1),
-
-          // Informasi Utama
           Container(
             padding: const EdgeInsets.all(16.0),
             decoration: const BoxDecoration(),
@@ -802,8 +768,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
               ],
             ),
           ),
-
-          // Workshop Info
           if (hasWorkshop) ...[
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -850,8 +814,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
             ),
             const Divider(height: 1),
           ],
-
-          // Services
           if (hasServices) ...[
             Theme(
               data: expandTheme,
@@ -922,8 +884,6 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
             ),
             const Divider(height: 1),
           ],
-
-          // Total
           Container(
             padding: const EdgeInsets.all(16.0),
             decoration: const BoxDecoration(

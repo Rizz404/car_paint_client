@@ -6,15 +6,12 @@ class WorkStatusTimeline extends StatelessWidget {
   final WorkStatus? currentStatus;
   final bool showDescription;
   final bool isCompact;
-
   const WorkStatusTimeline({
     Key? key,
     this.currentStatus,
     this.showDescription = true,
     this.isCompact = false,
   }) : super(key: key);
-
-  // Fungsi untuk mendapatkan warna work status
   Color getWorkStatusColor(WorkStatus status) {
     switch (status) {
       case WorkStatus.QUEUED:
@@ -40,7 +37,6 @@ class WorkStatusTimeline extends StatelessWidget {
     }
   }
 
-  // Icon untuk work status
   IconData getWorkStatusIcon(WorkStatus status) {
     switch (status) {
       case WorkStatus.QUEUED:
@@ -69,10 +65,8 @@ class WorkStatusTimeline extends StatelessWidget {
   bool isStatusCompleted(WorkStatus status, WorkStatus? currentStatus) {
     if (currentStatus == null) return false;
     if (currentStatus == WorkStatus.CANCELLED) return false;
-
     final statusIndex = WorkStatus.values.indexOf(status);
     final currentIndex = WorkStatus.values.indexOf(currentStatus);
-
     return statusIndex < currentIndex || status == currentStatus;
   }
 
@@ -86,7 +80,6 @@ class WorkStatusTimeline extends StatelessWidget {
     final validStatuses = WorkStatus.values
         .where((status) => status != WorkStatus.CANCELLED)
         .toList();
-
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -97,7 +90,6 @@ class WorkStatusTimeline extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Container(
             padding: EdgeInsets.all(isCompact ? 12 : 16),
             decoration: BoxDecoration(
@@ -148,8 +140,6 @@ class WorkStatusTimeline extends StatelessWidget {
               ],
             ),
           ),
-
-          // Timeline
           Container(
             padding: EdgeInsets.all(isCompact ? 12 : 16),
             child: Column(
@@ -160,14 +150,11 @@ class WorkStatusTimeline extends StatelessWidget {
                 final isCompleted = isStatusCompleted(status, currentStatus);
                 final isCurrent = isCurrentStatus(status, currentStatus);
                 final statusColor = getWorkStatusColor(status);
-
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Timeline indicator
                     Column(
                       children: [
-                        // Icon circle
                         Container(
                           width: isCompact ? 36 : 40,
                           height: isCompact ? 36 : 40,
@@ -191,7 +178,6 @@ class WorkStatusTimeline extends StatelessWidget {
                             size: isCompact ? 18 : 20,
                           ),
                         ),
-                        // Connecting line
                         if (!isLast)
                           Container(
                             width: 2,
@@ -217,10 +203,7 @@ class WorkStatusTimeline extends StatelessWidget {
                           ),
                       ],
                     ),
-
                     const SizedBox(width: 16),
-
-                    // Content
                     Expanded(
                       child: Container(
                         padding: EdgeInsets.only(
@@ -229,7 +212,6 @@ class WorkStatusTimeline extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Status label
                             Row(
                               children: [
                                 Expanded(
@@ -268,8 +250,6 @@ class WorkStatusTimeline extends StatelessWidget {
                                   ),
                               ],
                             ),
-
-                            // Description
                             if (showDescription && !isCompact) ...[
                               const SizedBox(height: 4),
                               MainText(
@@ -282,8 +262,6 @@ class WorkStatusTimeline extends StatelessWidget {
                                 ),
                               ),
                             ],
-
-                            // Current status highlight
                             if (isCurrent && showDescription) ...[
                               const SizedBox(height: 8),
                               Container(
@@ -327,8 +305,6 @@ class WorkStatusTimeline extends StatelessWidget {
               }).toList(),
             ),
           ),
-
-          // Progress bar
           Container(
             margin: const EdgeInsets.all(16),
             child: Column(

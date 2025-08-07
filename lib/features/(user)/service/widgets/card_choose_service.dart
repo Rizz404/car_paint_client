@@ -45,7 +45,7 @@ class _CardChooseServiceState extends State<CardChooseService> {
             ),
             Positioned(
               left: 16,
-              bottom: -20,
+              bottom: -12,
               child: MainText(
                 text: widget.title,
                 customTextStyle: TextStyle(

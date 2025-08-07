@@ -31,7 +31,6 @@ class _MyBookingPageState extends State<MyBookingPage>
     _historyCancelToken = CancelToken();
     _tabController = TabController(length: 2, vsync: this);
 
-    // Initial load untuk kedua tab
     context
         .read<UserTransactionsCubit>()
         .refresh(ApiConstant.limit, _transactionsCancelToken);
@@ -82,6 +81,6 @@ class _MyBookingPageState extends State<MyBookingPage>
           ),
         ],
       ),
-    );
+    ).paddingOnly(top: 32);
   }
 }

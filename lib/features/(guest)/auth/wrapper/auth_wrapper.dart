@@ -8,7 +8,6 @@ import 'package:paint_car/features/shared/cubit/user_cubit.dart';
 
 class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
-
   @override
   State<AuthWrapper> createState() => _AuthWrapperState();
 }
@@ -21,13 +20,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
   }
 
   Future<void> getUser() async {
-    // final cubit = context.read<UserCubit>();
     await context.read<UserCubit>().getUserLocal();
-
-    // if (cubit.state is BaseSuccessState<UserWithProfile?> &&
-    //     (cubit.state as BaseSuccessState<UserWithProfile?>).data != null) {
-    //   await context.read<NotificationCubit>();
-    // }
   }
 
   @override
