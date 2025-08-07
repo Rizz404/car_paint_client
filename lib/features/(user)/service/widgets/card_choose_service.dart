@@ -27,7 +27,9 @@ class _CardChooseServiceState extends State<CardChooseService> {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: CustomColors.pureWhite,
+          color: widget.isDisabled
+              ? CustomColors.guideDarkGray
+              : CustomColors.white,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
@@ -50,7 +52,9 @@ class _CardChooseServiceState extends State<CardChooseService> {
                 text: widget.title,
                 customTextStyle: TextStyle(
                   fontSize: 48,
-                  color: CustomColors.guideDarkGray,
+                  color: widget.isDisabled
+                      ? CustomColors.darkTextIcon
+                      : CustomColors.guideDarkGray,
                   shadows: [
                     Shadow(
                       offset: const Offset(0, 4),

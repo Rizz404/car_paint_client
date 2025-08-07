@@ -14,6 +14,7 @@ import 'package:paint_car/features/(superadmin)/car/cubit/car_colors_cubit.dart'
 import 'package:paint_car/features/(superadmin)/car/cubit/car_models_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_services_cubit.dart';
 import 'package:paint_car/features/(user)/paint/widgets/checkbox_paint_panel.dart';
+import 'package:paint_car/features/(user)/paint/widgets/color_code_guidance_dialog.dart';
 import 'package:paint_car/features/(user)/paint/widgets/select_field_vehicle.dart';
 import 'package:paint_car/features/(user)/workshop/pages/user_workshops_page.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
@@ -202,32 +203,13 @@ class _UserDetailVehiclePaintPageState
       onPressed: () {
         showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            title: const MainText(
-              text: "Lokasi Kode Warna Mobil",
-              textAlign: TextAlign.center,
-              extent: Large(),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  "assets/images/car/location_code_color_car_1.png",
-                  fit: BoxFit.cover,
-                ),
-                Image.asset(
-                  "assets/images/car/location_code_color_car_2.png",
-                  fit: BoxFit.cover,
-                ),
-              ],
-            ),
-          ),
+          builder: (context) => const ColorCodeGuidanceDialog(),
         );
       },
       child: const MainText(
         text: "Cara menemukan kode warna mobil anda",
         customTextStyle: TextStyle(decoration: TextDecoration.underline),
-        extent: const Medium(),
+        extent: Medium(),
       ),
     );
   }
