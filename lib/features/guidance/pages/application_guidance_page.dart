@@ -22,7 +22,6 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
   bool _isVideoInitialized = false;
   bool _hasError = false;
   String? _errorMessage;
-
   @override
   void initState() {
     super.initState();
@@ -119,7 +118,6 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
         ),
       );
     }
-
     if (!_isVideoInitialized) {
       return Container(
         height: 200,
@@ -132,7 +130,6 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
         ),
       );
     }
-
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -153,7 +150,6 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
               child: Stack(
                 children: [
                   VideoPlayer(_videoController),
-                  // Fullscreen button
                   Positioned(
                     top: 12,
                     right: 12,
@@ -216,14 +212,11 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  // Fixed overflow issue with responsive layout
                   LayoutBuilder(
                     builder: (context, constraints) {
                       final screenWidth = constraints.maxWidth;
                       final isSmallScreen = screenWidth < 300;
-
                       if (isSmallScreen) {
-                        // Stack controls vertically for very small screens
                         return Column(
                           children: [
                             Row(
@@ -268,7 +261,6 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                           ],
                         );
                       } else {
-                        // Horizontal layout for normal screens
                         return Row(
                           children: [
                             IconButton(
@@ -294,7 +286,6 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                               icon: const Icon(Icons.replay),
                             ),
                             const Spacer(),
-                            // Flexible widget to prevent overflow
                             Flexible(
                               child: MainText(
                                 text:
@@ -326,36 +317,62 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
   Widget _buildGuidanceSteps() {
     final steps = [
       {
-        'title': 'Langkah 1: Registrasi',
+        'title': 'Langkah 1: Registrasi & Login',
+        'description': 'Daftar dan masuk ke akun Anda untuk memulai.',
+        'icon': Icons.login,
+      },
+      {
+        'title': 'Langkah 2: Lengkapi Profil',
         'description':
-            'Daftarkan akun Anda dengan mengisi informasi yang diperlukan',
-        'icon': Icons.person_add,
+            'Isi data diri Anda pada halaman profil untuk kemudahan booking.',
+        'icon': Icons.account_circle,
       },
       {
-        'title': 'Langkah 2: Pilih Layanan',
+        'title': 'Langkah 3: Mulai Order',
         'description':
-            'Pilih layanan cat mobil yang sesuai dengan kebutuhan Anda',
-        'icon': Icons.build,
+            'Klik tombol "Order Disini" pada halaman utama untuk membuat pesanan baru.',
+        'icon': Icons.add_shopping_cart,
       },
       {
-        'title': 'Langkah 3: Pilih Bengkel',
-        'description': 'Temukan bengkel terdekat dengan lokasi Anda',
-        'icon': Icons.location_on,
+        'title': 'Langkah 4: Pilih Jenis Kendaraan',
+        'description': 'Tentukan apakah Anda ingin mengecat mobil atau motor.',
+        'icon': Icons.commute,
       },
       {
-        'title': 'Langkah 4: Booking',
-        'description': 'Lakukan booking dan konfirmasi jadwal pengecatan',
-        'icon': Icons.calendar_today,
+        'title': 'Langkah 5: Isi Data Kendaraan',
+        'description':
+            'Masukkan detail lengkap mengenai kendaraan yang akan dicat.',
+        'icon': Icons.edit_note,
       },
       {
-        'title': 'Langkah 5: Pembayaran',
-        'description': 'Pilih metode pembayaran yang tersedia',
+        'title': 'Langkah 6: Pilih Bagian Pengecatan',
+        'description':
+            'Pilih satu atau lebih bagian dari kendaraan Anda yang memerlukan pengecatan.',
+        'icon': Icons.color_lens,
+      },
+      {
+        'title': 'Langkah 7: Pilih Bengkel',
+        'description':
+            'Pilih bengkel rekanan yang terdekat atau sesuai dengan preferensi Anda.',
+        'icon': Icons.store,
+      },
+      {
+        'title': 'Langkah 8: Konfirmasi & Pembayaran',
+        'description':
+            'Periksa ringkasan pesanan Anda dan pilih metode pembayaran yang diinginkan.',
+        'icon': Icons.receipt_long,
+      },
+      {
+        'title': 'Langkah 9: Selesaikan Transaksi',
+        'description':
+            'Lakukan pembayaran di halaman transaksi sesuai metode yang telah dipilih.',
         'icon': Icons.payment,
       },
       {
-        'title': 'Langkah 6: Tracking',
-        'description': 'Pantau progress pengecatan mobil Anda secara real-time',
-        'icon': Icons.track_changes,
+        'title': 'Langkah 10: Order Diproses',
+        'description':
+            'Setelah pembayaran berhasil, pesanan Anda akan kami proses. Pantau statusnya di halaman transaksi.',
+        'icon': Icons.sync,
       },
     ];
     return Column(
@@ -409,6 +426,7 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                     customTextStyle: const TextStyle(
                       fontWeight: FontWeight.w600,
                     ),
+                    maxLines: 2,
                   ),
                   const SizedBox(height: 4),
                   MainText(
