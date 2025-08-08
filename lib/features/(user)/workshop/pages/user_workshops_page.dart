@@ -1,4 +1,4 @@
-// ignore_for_file: require_trailing_commas
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,43 +17,44 @@ import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 
-// ! design example
 class UserWorkshopsPage extends StatefulWidget {
   static route({
     required VehicleData vehicleData,
     required List<String> carServices,
-    // required String carModelYearId,
     required String carModelId,
     required String carColorId,
     required String carModelColorId,
     required double totalPrice,
     required int totalAllServices,
+    required List<File> carColors,
   }) =>
       MaterialPageRoute(
-          builder: (_) => UserWorkshopsPage(
-                vehicleData: vehicleData,
-                carServices: carServices,
-                // carModelYearId: carModelYearId,
-                carModelId: carModelId,
-                carColorId: carColorId,
-                carModelColorId: vehicleData.carModelColorId ?? "",
-                totalPrice: totalPrice,
-                totalAllServices: totalAllServices,
-              ));
+        builder: (_) => UserWorkshopsPage(
+          vehicleData: vehicleData,
+          carColors: carColors,
+          carServices: carServices,
+          carModelId: carModelId,
+          carColorId: carColorId,
+          carModelColorId: vehicleData.carModelColorId ?? "",
+          totalPrice: totalPrice,
+          totalAllServices: totalAllServices,
+        ),
+      );
   final VehicleData vehicleData;
   final List<String> carServices;
-  // final String carModelYearId;
+
   final String carColorId;
   final String carModelId;
   final String carModelColorId;
   final double totalPrice;
+  final List<File> carColors;
   final int totalAllServices;
   const UserWorkshopsPage({
     super.key,
     required this.vehicleData,
+    required this.carColors,
     required this.carServices,
     required this.carModelId,
-    // required this.carModelYearId,
     required this.carColorId,
     required this.carModelColorId,
     required this.totalPrice,
@@ -65,7 +66,6 @@ class UserWorkshopsPage extends StatefulWidget {
 }
 
 class _UserWorkshopsPageState extends State<UserWorkshopsPage> {
-  // ignore: unused_field
   static const limit = ApiConstant.limit;
   late final ScrollController _scrollController;
   late final CancelToken _cancelToken;
@@ -163,10 +163,9 @@ class _UserWorkshopsPageState extends State<UserWorkshopsPage> {
               controller: _scrollController,
               thumbVisibility: true,
               child: CustomScrollView(
-                cacheExtent: 2000, // ! Preload area di luar viewport
+                cacheExtent: 2000,
                 controller: _scrollController,
-                physics:
-                    const AlwaysScrollableScrollPhysics(), // buat RefreshIndicator
+                physics: const AlwaysScrollableScrollPhysics(),
                 slivers: [
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
@@ -175,12 +174,12 @@ class _UserWorkshopsPageState extends State<UserWorkshopsPage> {
                         onRefresh: _onRefresh,
                         vehicleData: widget.vehicleData,
                         carServices: widget.carServices,
-                        // carModelYearId: widget.carModelYearId,
                         carColorId: widget.carColorId,
                         carModelId: widget.carModelId,
                         carModelColorId: widget.carModelColorId,
                         totalPrice: widget.totalPrice,
                         totalAllServices: widget.totalAllServices,
+                        carColors: widget.carColors,
                       ),
                       childCount: workshops.length,
                     ),

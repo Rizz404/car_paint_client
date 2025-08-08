@@ -1,4 +1,4 @@
-// ignore_for_file: require_trailing_commas
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
@@ -15,24 +15,23 @@ class UserWorkshopsItem extends StatefulWidget {
   final VehicleData? vehicleData;
   final List<String> carServices;
   final String carModelColorId;
-  // final String carModelYearId;
-  // final String colorId;
+
   final String carColorId;
   final String carModelId;
   final double totalPrice;
   final int totalAllServices;
+  final List<File> carColors;
 
   const UserWorkshopsItem(
       {super.key,
       required this.workshop,
       required this.onRefresh,
       this.vehicleData,
+      required this.carColors,
       required this.carModelId,
       required this.carColorId,
       required this.carModelColorId,
       required this.carServices,
-      // required this.carModelYearId,
-      // required this.colorId,
       required this.totalPrice,
       required this.totalAllServices});
 
@@ -50,20 +49,6 @@ class _UserWorkshopsItemState extends State<UserWorkshopsItem> {
 
   @override
   Widget build(BuildContext context) {
-    // old() {
-    //   return ListTile(
-    //     onTap: () {
-    //       Navigator.of(context).push(
-    //         UserDetailWorkshopsPage.route(workshop: workshop),
-    //       );
-    //     },
-    //     title: MainText(
-    //       text: workshop.name,
-    //     ),
-    //     subtitle: workshop.distance != null ? Text(workshop.distance!) : null,
-    //   );
-    // }
-
     return Material(
       color: context.adaptiveCommonColor,
       elevation: 2,
@@ -75,13 +60,12 @@ class _UserWorkshopsItemState extends State<UserWorkshopsItem> {
                 workshop: workshop,
                 vehicleData: widget.vehicleData,
                 carServices: widget.carServices,
-                // carModelYearId: widget.carModelYearId,
-                // colorId: widget.colorId,
                 carModelId: widget.carModelId,
                 carColorId: widget.carColorId,
                 carModelColorId: widget.carModelColorId,
                 totalPrice: widget.totalPrice,
                 totalAllServices: widget.totalAllServices,
+                carColors: widget.carColors,
               ),
             );
           },

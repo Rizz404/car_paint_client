@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/local/vehicle_data_sp.dart';
 import 'package:paint_car/data/models/car_brand.dart';
@@ -27,13 +30,12 @@ import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
+import 'package:paint_car/ui/validator/file_validator.dart';
 
 class UserDetailVehiclePaintPage extends StatefulWidget {
   static route() =>
       MaterialPageRoute(builder: (_) => const UserDetailVehiclePaintPage());
-
   const UserDetailVehiclePaintPage({super.key});
-
   @override
   State<UserDetailVehiclePaintPage> createState() =>
       _UserDetailVehiclePaintPageState();
@@ -42,26 +44,21 @@ class UserDetailVehiclePaintPage extends StatefulWidget {
 class _UserDetailVehiclePaintPageState
     extends State<UserDetailVehiclePaintPage> {
   static const int limit = 100;
-
   late final CancelToken _cancelToken;
-
   late VehicleData _vehicleData;
-
   List<String> carServices = [];
   List<String> selectedServices = [];
   bool isSelectAll = false;
   final VehicleDataLocal _vehicleDataLocal = getIt<VehicleDataLocal>();
-
+  List<File> _selectedCarColorImages = [];
   Future<void> _loadSavedVehicleData() async {
     final savedData = _vehicleDataLocal.getVehicleData();
     if (savedData != null) {
       setState(() {
         _vehicleData = savedData;
       });
-
       if (_vehicleData.carBrandId != null) {
         await getModelsByBrandId(_vehicleData.carBrandId);
-
         if (_vehicleData.carModelId != null) {
           await getColorsByModelId(_vehicleData.carModelId);
         }
@@ -114,13 +111,83 @@ class _UserDetailVehiclePaintPageState
     });
   }
 
+  bool _isFileSizeValid(int fileSize) {
+    const int maxSizeInBytes = 5 * 1024 * 1024;
+    return fileSize <= maxSizeInBytes;
+  }
+
+  Future<void> _pickCarColorImages() async {
+    try {
+      final List<XFile> pickedFiles = await ImagePicker().pickMultiImage(
+        maxWidth: 1024,
+        maxHeight: 1024,
+      );
+      if (pickedFiles.isNotEmpty) {
+        List<File> newImages = [];
+        List<String> rejectedFiles = [];
+        for (XFile pickedFile in pickedFiles) {
+          final fileSize = await File(pickedFile.path).length();
+          if (_isFileSizeValid(fileSize)) {
+            newImages.add(File(pickedFile.path));
+          } else {
+            rejectedFiles.add(pickedFile.name ?? 'Unknown file');
+            fileValidatorSize(context, fileSize);
+          }
+        }
+        if (newImages.isNotEmpty) {
+          setState(() {
+            _selectedCarColorImages.addAll(newImages);
+          });
+          String message = "${newImages.length} gambar berhasil dipilih";
+          if (rejectedFiles.isNotEmpty) {
+            message +=
+                ", ${rejectedFiles.length} gambar ditolak karena ukuran terlalu besar";
+          }
+          SnackBarUtil.showSnackBar(
+            context: context,
+            message: message,
+            type: SnackBarType.success,
+          );
+        } else {
+          SnackBarUtil.showSnackBar(
+            context: context,
+            message:
+                "Tidak ada gambar yang valid dipilih. Pastikan ukuran file tidak lebih dari 5MB",
+            type: SnackBarType.warning,
+          );
+        }
+      }
+    } on PlatformException catch (e) {
+      LogService.e("Error picking images: $e");
+      SnackBarUtil.showSnackBar(
+        context: context,
+        message: "Terjadi kesalahan saat memilih gambar",
+        type: SnackBarType.error,
+      );
+    }
+  }
+
+  void _removeCarColorImage(int index) {
+    setState(() {
+      _selectedCarColorImages[index].delete();
+      _selectedCarColorImages.removeAt(index);
+    });
+  }
+
+  void _clearAllCarColorImages() {
+    setState(() {
+      for (File image in _selectedCarColorImages) {
+        image.delete();
+      }
+      _selectedCarColorImages.clear();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _cancelToken = CancelToken();
-
     _vehicleData = VehicleData();
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.wait([
         getBrands(),
@@ -171,6 +238,10 @@ class _UserDetailVehiclePaintPageState
   @override
   void dispose() {
     _cancelToken.cancel();
+    for (File image in _selectedCarColorImages) {
+      image.delete();
+    }
+    _selectedCarColorImages.clear();
     super.dispose();
   }
 
@@ -188,6 +259,7 @@ class _UserDetailVehiclePaintPageState
               const SizedBox(height: 24),
               _buildVehicleDetailsSection(),
               _buildLocationCodeColorCar(),
+              _buildCarColorImagesSection(),
               _buildPaintSelectionSection(),
               const SizedBox(height: 24),
               _buildNextButton(),
@@ -195,6 +267,145 @@ class _UserDetailVehiclePaintPageState
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildCarColorImagesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 24),
+        const MainText(
+          text: "Gambar Warna Mobil",
+          extent: Large(),
+        ),
+        const SizedBox(height: 12),
+        const MainText(
+          text: "Upload beberapa gambar untuk referensi warna mobil Anda",
+          maxLines: 3,
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: _pickCarColorImages,
+                icon: const Icon(Icons.add_photo_alternate),
+                label: const Text("Pilih Gambar"),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+            ),
+            if (_selectedCarColorImages.isNotEmpty) ...[
+              const SizedBox(width: 8),
+              IconButton(
+                onPressed: _clearAllCarColorImages,
+                icon: const Icon(Icons.clear_all),
+                tooltip: "Hapus Semua",
+                color: Colors.red,
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(height: 16),
+        if (_selectedCarColorImages.isEmpty)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Column(
+              children: [
+                Icon(
+                  Icons.image_outlined,
+                  size: 48,
+                  color: Colors.grey,
+                ),
+                SizedBox(height: 8),
+                MainText(
+                  text: "Belum ada gambar dipilih",
+                  extent: Medium(),
+                ),
+              ],
+            ),
+          )
+        else
+          _buildSelectedCarColorImages(),
+        const SizedBox(height: 16),
+        const Divider(thickness: 1),
+      ],
+    );
+  }
+
+  Widget _buildSelectedCarColorImages() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        MainText(
+          text: "Gambar dipilih (${_selectedCarColorImages.length})",
+          extent: const Medium(),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          height: 120,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: _selectedCarColorImages.length,
+            itemBuilder: (context, index) {
+              final image = _selectedCarColorImages[index];
+              return Container(
+                margin: const EdgeInsets.only(right: 8),
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(
+                        image,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            width: 100,
+                            height: 100,
+                            color: Colors.grey.shade300,
+                            child: const Icon(
+                              Icons.broken_image,
+                              color: Colors.grey,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    Positioned(
+                      top: 4,
+                      right: 4,
+                      child: GestureDetector(
+                        onTap: () => _removeCarColorImage(index),
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -223,10 +434,8 @@ class _UserDetailVehiclePaintPageState
 
   Widget _buildVehicleDetailsSection() {
     final divider = const Divider(
-      // color: CustomColors.gray,
       thickness: 1,
     );
-
     return Column(
       children: [
         _buildBrandsSelectField(divider),
@@ -255,7 +464,6 @@ class _UserDetailVehiclePaintPageState
                 setState(() {
                   _vehicleData.carBrand = value;
                   _vehicleData.carBrandId = selectedBrand.id;
-
                   _vehicleData.carModel = null;
                   _vehicleData.carModelId = null;
                   _vehicleData.carColor = null;
@@ -290,11 +498,9 @@ class _UserDetailVehiclePaintPageState
                 setState(() {
                   _vehicleData.carModel = value;
                   _vehicleData.carModelId = selectedModel.id;
-
                   _vehicleData.carColor = null;
                   _vehicleData.carColorId = null;
                 });
-
                 getColorsByModelId(_vehicleData.carModelId);
               },
             ),
@@ -358,14 +564,12 @@ class _UserDetailVehiclePaintPageState
         if (carServices.isEmpty && services.isNotEmpty) {
           carServices = services.map((e) => e.id!).toList();
         }
-
         double totalPriceFromDb = 0;
         for (var service in services) {
           if (carServices.contains(service.id)) {
             totalPriceFromDb += double.parse(service.price);
           }
         }
-
         return Column(
           spacing: 12,
           children: [
@@ -433,8 +637,15 @@ class _UserDetailVehiclePaintPageState
       );
       return;
     }
+    if (_selectedCarColorImages.isEmpty) {
+      SnackBarUtil.showSnackBar(
+        context: context,
+        message: "Mohon pilih setidaknya satu gambar warna mobil",
+        type: SnackBarType.warning,
+      );
+      return;
+    }
     _vehicleDataLocal.saveVehicleData(_vehicleData);
-
     Navigator.of(context).push(
       UserWorkshopsPage.route(
         vehicleData: _vehicleData,
@@ -444,6 +655,7 @@ class _UserDetailVehiclePaintPageState
         carColorId: _vehicleData.carColorId!,
         totalAllServices: totalServices(),
         totalPrice: totalPrice(),
+        carColors: _selectedCarColorImages,
       ),
     );
   }

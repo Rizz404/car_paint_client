@@ -1,12 +1,10 @@
-// ignore_for_file: require_trailing_commas
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
-// ignore: depend_on_referenced_packages
+
 import 'package:http_parser/http_parser.dart';
 
 import 'package:paint_car/core/common/api_response.dart';
@@ -181,7 +179,19 @@ class ApiClient {
     LogService.i('bodyMap: $bodyMap');
 
     bodyMap.forEach((key, value) {
-      request.fields[key] = value.toString();
+      if (key == 'carServices' && value is List) {
+        for (int i = 0; i < value.length; i++) {
+          final service = value[i];
+          if (service is Map && service.containsKey('carServiceId')) {
+            request.fields['carServices[$i][carServiceId]'] =
+                service['carServiceId'].toString();
+          }
+        }
+      } else if (value is List || value is Map) {
+        request.fields[key] = jsonEncode(value);
+      } else {
+        request.fields[key] = value.toString();
+      }
     });
 
     if (imageFiles != null) {

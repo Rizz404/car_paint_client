@@ -1,5 +1,7 @@
 // ignore_for_file: require_trailing_commas
 
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/types/paginated_data.dart';
 import 'package:paint_car/core/types/pagination.dart';
@@ -110,11 +112,12 @@ class UserOrdersCubit extends Cubit<BaseState> with Cancelable {
     String carModelColorId,
     String carColorId,
     String carModelId,
+    List<File> carColors,
   ) async {
     await handleBaseCubit<void>(
       emit,
       () => userOrdersRepo.createOrder(cancelToken, paymentMethodId, workshopId,
-          note, carServices, carModelColorId, carColorId, carModelId
+          note, carServices, carModelColorId, carColorId, carModelId, carColors
           // carModelYearId,
           // colorId,
           ),

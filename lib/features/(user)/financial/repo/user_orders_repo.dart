@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:paint_car/core/common/api_response.dart';
 import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/core/types/paginated_data.dart';
@@ -8,11 +9,11 @@ import 'package:paint_car/features/shared/utils/build_pagination_params.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/from_json_pagination.dart';
 import 'package:paint_car/features/shared/utils/handle_api_response.dart';
+import 'dart:convert';
 
 class UserOrdersRepo {
   final ApiClient apiClient;
   const UserOrdersRepo({required this.apiClient});
-
   Future<ApiResponse<PaginatedData<Orders>>> getOrders(
     int page,
     int limit,
@@ -36,26 +37,31 @@ class UserOrdersRepo {
     String workshopId,
     String? note,
     List<String> carServices,
-    // String carModelYearId,
-    // String colorId,
     String carModelColorId,
     String carColorId,
     String carModelId,
+    List<File> carColors,
   ) async {
+    Map<String, dynamic> requestBody = {
+      'paymentMethodId': paymentMethodId,
+      'workshopId': workshopId,
+      'carServices': carServices.map((id) => {'carServiceId': id}).toList(),
+      'colorId': carColorId,
+      'carModelId': carModelId,
+    };
+    if (note != null && note.isNotEmpty) {
+      requestBody['note'] = note;
+    }
+    if (carModelColorId.isNotEmpty) {
+      requestBody['carModelColorId'] = carModelColorId;
+    }
     final result = await apiClient.post<Transactions>(
       ApiConstant.ordersWithMidtrans,
+      requestBody,
+      imageFiles: carColors,
+      keyImageFile: 'carColors',
+      isMultiPart: true,
       fromJson: (json) => Transactions.fromMap(json),
-      {
-        'paymentMethodId': paymentMethodId,
-        'workshopId': workshopId,
-        'note': note,
-        'carServices': carServices.map((id) => {'carServiceId': id}).toList(),
-        // 'carModelYearId': carModelYearId,
-        // 'colorId': colorId,
-        // 'carModelColorId': carModelColorId,
-        'colorId': carColorId,
-        'carModelId': carModelId,
-      },
       cancelToken: cancelToken,
     );
     return await handleApiResponse(result);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:paint_car/data/models/car_workshop.dart';
@@ -25,6 +27,7 @@ class UserDetailWorkshopsPage extends StatefulWidget {
   final String carModelColorId;
   final double totalPrice;
   final int totalAllServices;
+  final List<File> carColors;
 
   static Route route({
     required CarWorkshop workshop,
@@ -37,6 +40,7 @@ class UserDetailWorkshopsPage extends StatefulWidget {
     required String carModelId,
     required String carModelColorId,
     required double totalPrice,
+    required List<File> carColors,
     required int totalAllServices,
   }) =>
       MaterialPageRoute(
@@ -50,6 +54,7 @@ class UserDetailWorkshopsPage extends StatefulWidget {
           carModelId: carModelId,
           carModelColorId: carModelColorId,
           totalPrice: totalPrice,
+          carColors: carColors,
           totalAllServices: totalAllServices,
         ),
       );
@@ -62,6 +67,7 @@ class UserDetailWorkshopsPage extends StatefulWidget {
     required this.carServices,
     // required this.carModelColorId,
     required this.carModelColorId,
+    required this.carColors,
     // required this.carModelYearId,
     // required this.colorId,
     required this.totalPrice,
@@ -247,6 +253,7 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                           totalPrice: widget.totalPrice,
                           totalAllServices: widget.totalAllServices,
                           vehicleData: widget.vehicleData,
+                          carColors: widget.carColors,
                         ),
                       );
                     },

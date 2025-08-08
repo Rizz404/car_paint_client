@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
@@ -34,6 +36,7 @@ class FinalUserCreateOrderPage extends StatefulWidget {
   final String carModelColorId;
   final String carColorId;
   final String carModelId;
+  final List<File> carColors;
 
   static route({
     required String workshopId,
@@ -48,6 +51,7 @@ class FinalUserCreateOrderPage extends StatefulWidget {
     required String carModelColorId,
     required String carColorId,
     required String carModelId,
+    required List<File> carColors,
   }) =>
       MaterialPageRoute(
         builder: (_) => FinalUserCreateOrderPage(
@@ -62,6 +66,7 @@ class FinalUserCreateOrderPage extends StatefulWidget {
           carModelColorId: carModelColorId,
           carColorId: carColorId,
           carModelId: carModelId,
+          carColors: carColors,
         ),
       );
 
@@ -78,6 +83,7 @@ class FinalUserCreateOrderPage extends StatefulWidget {
     required this.carModelColorId,
     required this.carColorId,
     required this.carModelId,
+    required this.carColors,
   });
 
   @override
@@ -135,6 +141,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
           widget.carModelColorId,
           widget.carColorId,
           widget.carModelId,
+          widget.carColors,
         );
   }
 

@@ -19,15 +19,14 @@ class ImageCircleAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // kalo ada gambar lokal, tampilin gambar nya
     if (selectedImage != null) {
       return _buildLocalImage(
         context,
       );
     }
-    // kalo ga ada gambar lokal, tapi ada url
+
     if (logoUrl != null) return _buildImageFromUrl();
-    // kalo ga ada gambar sama sekali
+
     return _buildPickImageButton();
   }
 

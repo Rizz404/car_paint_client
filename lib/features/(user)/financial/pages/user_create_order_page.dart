@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/data/models/user_detail_vehicle_paint_model.dart';
@@ -24,6 +26,7 @@ class UserCreateOrderPage extends StatefulWidget {
   final String carModelColorId;
   final String carColorId;
   final String carModelId;
+  final List<File> carColors;
 
   static route({
     required String workshopId,
@@ -36,6 +39,7 @@ class UserCreateOrderPage extends StatefulWidget {
     // required String carModelYearId,
     // required String colorId,
     required String carModelColorId,
+    required List<File> carColors,
   }) =>
       MaterialPageRoute(
         builder: (_) => UserCreateOrderPage(
@@ -46,6 +50,7 @@ class UserCreateOrderPage extends StatefulWidget {
           vehicleData: vehicleData,
           carModelId: carModelId,
           carColorId: carColorId,
+          carColors: carColors,
           // carModelYearId: carModelYearId,
           // colorId: colorId,
           carModelColorId: carModelColorId,
@@ -64,6 +69,7 @@ class UserCreateOrderPage extends StatefulWidget {
     // required this.carModelYearId,
     // required this.colorId,
     required this.carModelColorId,
+    required this.carColors,
   });
 
   @override
@@ -114,6 +120,7 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
         // colorId: widget.colorId,
         carModelColorId: widget.carModelColorId,
         carColorId: widget.carColorId,
+        carColors: widget.carColors,
         carModelId: widget.carModelId,
       ),
     );

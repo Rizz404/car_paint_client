@@ -751,7 +751,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                 ),
                 if (hasNote) ...[
                   const SizedBox(height: 8),
-                  _keyValue('Catatan', order.note!),
+                  _keyValue('', order.note!),
                 ],
                 if (hasETicket) ...[
                   const SizedBox(height: 8),

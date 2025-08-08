@@ -66,7 +66,6 @@ class UserTransactionsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    LogService.i("TRANSACTIONS ITEM: ${transactions.paymentdetail.toString()}");
     final hasVirtualAccount =
         transactions.paymentdetail?.virtualAccountNumber != null;
     final isPending =
@@ -147,7 +146,8 @@ class UserTransactionsItem extends StatelessWidget {
                       const SizedBox(width: 8),
                       Expanded(
                         child: MainText(
-                          text: 'Metode Pembayaran: ${_getPaymentMethodName()}',
+                          text: _getPaymentMethodName(),
+                          maxLines: 2,
                         ),
                       ),
                     ],
@@ -168,7 +168,8 @@ class UserTransactionsItem extends StatelessWidget {
                         Expanded(
                           child: MainText(
                             text:
-                                'Virtual Account: ${transactions.paymentdetail?.virtualAccountNumber}',
+                                '${transactions.paymentdetail?.virtualAccountNumber}',
+                            maxLines: 2,
                           ),
                         ),
                         if (transactions.paymentdetail?.virtualAccountNumber !=
@@ -233,7 +234,7 @@ class UserTransactionsItem extends StatelessWidget {
                         const SizedBox(width: 8),
                         Expanded(
                           child: MainText(
-                            text: "Catatan: ${transactions.order?.first?.note}",
+                            text: "${transactions.order?.first?.note}",
                             customTextStyle: TextStyle(
                               fontSize: 14,
                               color: Theme.of(context)
