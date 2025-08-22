@@ -40,16 +40,42 @@ class CustomColors {
 
   static const pureWhite = Color(0xFFFFFFFF);
   static const pureBlack = Color(0xFF000000);
+
+  static const primaryBackground = Color(0xFFE6E7E8);
+  static const primaryCard = Color(0xFFFFFFFF);
+  static const primaryText = Color(0xFF20272F);
+  static const secondaryText = Color(0xFF707072);
+  static const primaryBorder = Color(0xFFE6E7E8);
+  static const primaryBorderInput = Color(0xFF79747E);
+
+  static const darkPrimaryBackground = Color(0xFF121212);
+  static const darkPrimaryCard = Color(0xFF1E1E1E);
+  static const darkPrimaryText = Color(0xFFFFFFFF);
+  static const darkSecondaryText = Color(0xFFA0A0A0);
+  static const darkPrimaryBorder = Color(0xFF2C2C2E);
+
+  static const bothThemeBottomBorder = Color(0xFF70707233);
 }
 
 extension ThemeExtension on BuildContext {
   bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
 
+  Color get adaptivePrimaryBackground => isDarkMode
+      ? CustomColors.darkPrimaryBackground
+      : CustomColors.primaryBackground;
+
+  Color get adaptivePrimaryCard =>
+      isDarkMode ? CustomColors.darkPrimaryCard : CustomColors.primaryCard;
+
   Color get adaptiveTextColor =>
-      isDarkMode ? CustomColors.guideDarkModeDark : CustomColors.guideDark;
+      isDarkMode ? CustomColors.darkPrimaryText : CustomColors.primaryText;
 
   Color get adaptiveBorderColor =>
       isDarkMode ? CustomColors.guideDarkModeDarkGray : CustomColors.guideGray;
+
+  Color get adaptiveBorderInputColor => isDarkMode
+      ? CustomColors.darkPrimaryBorder
+      : CustomColors.primaryBorderInput;
 
   Color get adaptiveBackgroundColor =>
       isDarkMode ? CustomColors.guideDarkModeGray : CustomColors.pureWhite;

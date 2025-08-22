@@ -17,6 +17,9 @@ class MainTextField extends StatelessWidget {
   final bool isOutlined;
   final double borderRadius;
   final String? prefixText;
+  final Color? borderColor;
+  final Color? focusedBorderColor;
+
   const MainTextField({
     super.key,
     required this.controller,
@@ -33,11 +36,19 @@ class MainTextField extends StatelessWidget {
     this.isOutlined = true,
     this.borderRadius = 10,
     this.prefixText,
+    this.borderColor,
+    this.focusedBorderColor,
   });
 
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    final defaultBorderColor = borderColor ?? context.adaptiveBorderInputColor;
+
+    final defaultFocusedBorderColor =
+        focusedBorderColor ?? Theme.of(context).primaryColor;
+
     return TextFormField(
       keyboardType: keyboardType,
       controller: controller,
@@ -51,52 +62,45 @@ class MainTextField extends StatelessWidget {
         prefixIcon: leadingIcon,
         prefixText: prefixText,
         enabled: isEnabled,
-        border: isOutlined
-            ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(borderRadius),
-                borderSide: BorderSide(
-                  color: isDarkMode
-                      ? CustomColors.pureWhite
-                      : CustomColors.pureBlack,
-                ),
-              )
-            : null,
-        enabledBorder: isOutlined
-            ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(borderRadius),
-                borderSide: BorderSide(
-                  color: isDarkMode
-                      ? CustomColors.pureWhite
-                      : CustomColors.pureBlack,
-                ),
-              )
-            : null,
-        focusedBorder: isOutlined
-            ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(borderRadius),
-                borderSide: BorderSide(
-                  color: isDarkMode
-                      ? CustomColors.pureWhite
-                      : CustomColors.pureBlack,
-                ),
-              )
-            : null,
-        disabledBorder: isOutlined
-            ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(borderRadius),
-                borderSide: BorderSide(
-                  color: isDarkMode
-                      ? CustomColors.pureWhite
-                      : CustomColors.pureBlack,
-                ),
-              )
-            : null,
-        alignLabelWithHint: true,
         labelText: hintText,
         contentPadding: const EdgeInsets.symmetric(
           vertical: 16,
           horizontal: 12,
         ),
+        border: isOutlined
+            ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(borderRadius),
+                borderSide: BorderSide(color: defaultBorderColor),
+              )
+            : InputBorder.none,
+        enabledBorder: isOutlined
+            ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(borderRadius),
+                borderSide: BorderSide(
+                  color: defaultBorderColor,
+                  width: 1.5,
+                ),
+              )
+            : InputBorder.none,
+        focusedBorder: isOutlined
+            ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(borderRadius),
+                borderSide: BorderSide(
+                  color: defaultFocusedBorderColor,
+                  width: 2,
+                ),
+              )
+            : InputBorder.none,
+        disabledBorder: isOutlined
+            ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(borderRadius),
+                borderSide: BorderSide(
+                  color: defaultBorderColor.withOpacity(0.5),
+                  width: 1,
+                ),
+              )
+            : InputBorder.none,
+        alignLabelWithHint: true,
       ),
     );
   }

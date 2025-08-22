@@ -102,7 +102,15 @@ class _LoginPageState extends State<LoginPage> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    color: context.adaptiveCommonColor,
+                    color: context.adaptivePrimaryCard,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.25),
+                        offset: const Offset(0, 4),
+                        blurRadius: 4,
+                        spreadRadius: 0,
+                      ),
+                    ],
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(24),
@@ -162,10 +170,10 @@ class _LoginPageState extends State<LoginPage> {
                           child: RichText(
                             text: TextSpan(
                               style: Theme.of(context).textTheme.bodyMedium,
-                              text: "Tidak punya akun? ",
+                              text: "Don’t have an account? ",
                               children: [
                                 const TextSpan(
-                                  text: "Daftar",
+                                  text: "Sign Up",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     decoration: TextDecoration.underline,
