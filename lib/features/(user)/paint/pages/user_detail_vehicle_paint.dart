@@ -456,7 +456,7 @@ class _UserDetailVehiclePaintPageState
       children: [
         _buildBrandsSelectField(divider),
         _buildModelSelectField(divider),
-        // _buildColorsByModelIdSelectField(divider),
+        _buildColorsByModelIdSelectField(divider),
       ],
     );
   }
