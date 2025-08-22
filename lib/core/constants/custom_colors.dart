@@ -69,6 +69,8 @@ extension ThemeExtension on BuildContext {
 
   Color get adaptiveTextColor =>
       isDarkMode ? CustomColors.darkPrimaryText : CustomColors.primaryText;
+  Color get adaptiveSecondaryTextColor =>
+      isDarkMode ? CustomColors.darkSecondaryText : CustomColors.secondaryText;
 
   Color get adaptiveBorderColor =>
       isDarkMode ? CustomColors.guideDarkModeDarkGray : CustomColors.guideGray;

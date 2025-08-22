@@ -43,7 +43,7 @@ class ListStyleWelcome extends StatelessWidget {
             IconButton(
               icon: Icon(
                 Icons.help_outline,
-                color: Theme.of(context).colorScheme.primary,
+                color: context.adaptiveSecondaryTextColor,
               ),
               onPressed: () {
                 Navigator.of(context).push(

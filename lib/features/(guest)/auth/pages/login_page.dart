@@ -170,10 +170,10 @@ class _LoginPageState extends State<LoginPage> {
                           child: RichText(
                             text: TextSpan(
                               style: Theme.of(context).textTheme.bodyMedium,
-                              text: "Don’t have an account? ",
+                              text: "Tidak punya akun? ",
                               children: [
                                 const TextSpan(
-                                  text: "Sign Up",
+                                  text: "Daftar",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     decoration: TextDecoration.underline,
