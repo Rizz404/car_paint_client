@@ -11,11 +11,11 @@ class ConfigurationTheme {
   static const Color _primaryColor = CustomColors.guideRed;
 
   static const Color _lightSurface = CustomColors.pureWhite;
-  static const Color _lightBackground = CustomColors.pureWhite;
+  static const Color _lightBackground = CustomColors.primaryBackground;
   static const Color _lightCardColor = CustomColors.pureWhite;
 
   static const Color _darkSurface = CustomColors.guideDarkModeGray;
-  static const Color _darkBackground = CustomColors.guideDark;
+  static const Color _darkBackground = CustomColors.darkPrimaryBackground;
   static const Color _darkCardColor = CustomColors.guideDarkModeGray;
 
   static ThemeData _buildLightTheme() {
@@ -102,7 +102,7 @@ class ConfigurationTheme {
         backgroundColor: _darkSurface,
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: _darkSurface,
+        backgroundColor: _darkBackground,
         foregroundColor: CustomColors.guideDarkModeDark,
         elevation: 0,
         scrolledUnderElevation: 1,

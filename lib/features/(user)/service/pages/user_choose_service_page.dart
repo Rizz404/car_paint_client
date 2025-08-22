@@ -1,6 +1,7 @@
 // ignore_for_file: require_trailing_commas
 
 import 'package:flutter/material.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/features/(user)/paint/pages/user_detail_vehicle_paint.dart';
 import 'package:paint_car/features/(user)/service/widgets/card_choose_service.dart';
 import 'package:paint_car/ui/common/extent.dart';
@@ -29,9 +30,12 @@ class _UserChooseServicePageState extends State<UserChooseServicePage> {
         spacing: 24,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const MainText(
+          MainText(
             text: "Mau Cat Apa Hari Ini Sob?",
-            extent: Medium(),
+            color: context.adaptiveTextColor,
+            extent: const Large(),
+            customTextStyle:
+                const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
           ),
           GestureDetector(
             onTap: () {},

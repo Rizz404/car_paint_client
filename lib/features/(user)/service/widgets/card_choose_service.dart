@@ -11,10 +11,12 @@ class CardChooseService extends StatefulWidget {
     required this.onTap,
     this.isDisabled = false,
   });
+
   final bool isDisabled;
   final String imageAsset;
   final String title;
   final Function() onTap;
+
   @override
   State<CardChooseService> createState() => _CardChooseServiceState();
 }
@@ -26,47 +28,45 @@ class _CardChooseServiceState extends State<CardChooseService> {
       onTap: widget.onTap,
       child: Container(
         width: double.infinity,
+        height: 300,
         decoration: BoxDecoration(
-          color: widget.isDisabled
-              ? CustomColors.guideDarkGray
-              : CustomColors.white,
+          color: context.adaptivePrimaryCard,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
               color: CustomColors.black.withAlpha(25),
-              blurRadius: 5,
-              offset: const Offset(0, 4),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
-        child: Stack(
-          children: [
-            Image.asset(
-              widget.imageAsset,
-              fit: BoxFit.cover,
-            ),
-            Positioned(
-              left: 16,
-              bottom: -12,
-              child: MainText(
-                text: widget.title,
-                customTextStyle: TextStyle(
-                  fontSize: 48,
-                  color: widget.isDisabled
-                      ? CustomColors.darkTextIcon
-                      : CustomColors.guideDarkGray,
-                  shadows: [
-                    Shadow(
-                      offset: const Offset(0, 4),
-                      blurRadius: 4,
-                      color: CustomColors.black.withAlpha(50),
-                    ),
-                  ],
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Transform.scale(
+                  scale: 1,
+                  child: Image.asset(
+                    widget.imageAsset,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ).paddingSymmetric(vertical: 20),
+              Positioned(
+                bottom: 0,
+                child: MainText(
+                  text: widget.title,
+                  customTextStyle: TextStyle(
+                    fontSize: 48,
+                    color: context.adaptiveSecondaryTextColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ).paddingSymmetric(horizontal: 20),
+        ),
       ),
     );
   }
