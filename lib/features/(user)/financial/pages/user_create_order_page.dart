@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/user_detail_vehicle_paint_model.dart';
 import 'package:paint_car/dependencies/helper/base_state.dart';
 
@@ -12,6 +13,7 @@ import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/main_elevated_button.dart';
+import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:paint_car/ui/shared/main_text_field.dart';
 import 'package:paint_car/ui/utils/snack_bar.dart';
 
@@ -174,6 +176,7 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
               key: formKey,
               child: Column(
                 spacing: 16,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // StateHandler<UserCarCubit, PaginationState<UserCar>>(
                   //   onRetry: () => getUserCars(),
@@ -228,15 +231,23 @@ class _UserCreateOrderPageState extends State<UserCreateOrderPage> {
                   //     );
                   //   },
                   // ),
+                  MainText(
+                    text: "Catatan",
+                    customTextStyle: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                    color: context.adaptiveTextColor,
+                  ),
                   MainTextField(
                     controller: noteController,
                     isEnabled: state is! BaseLoadingState,
                     maxLines: 3,
-                    hintText: "Masukkan catatan",
+                    borderColor: context.adaptiveSecondaryTextColor,
                   ),
                   MainElevatedButton(
                     onPressed: submitForm,
-                    text: "Selanjutnya",
+                    text: "Pembayaran",
                     isLoading: state is BaseLoadingState,
                   ),
                 ],
