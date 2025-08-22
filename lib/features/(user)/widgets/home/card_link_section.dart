@@ -13,7 +13,7 @@ class CardLinkSection extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: context.adaptiveCommonColor,
+        color: context.adaptivePrimaryCard,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
@@ -29,19 +29,24 @@ class CardLinkSection extends StatelessWidget {
           child: Column(
             spacing: 8,
             children: [
-              MainText(text: text, extent: const Medium()),
+              MainText(
+                text: text,
+                extent: const Medium(),
+                color: context.adaptiveTextColor,
+              ),
               GestureDetector(
                 onTap: onTap,
                 child: Container(
                   width: 100,
                   decoration: BoxDecoration(
-                    color: context.adaptiveSecondaryColor,
+                    color: context.adaptivePrimaryBorder,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.all(12),
                     child: Icon(
                       Icons.add,
+                      color: context.adaptiveSecondaryTextColor,
                     ),
                   ),
                 ),

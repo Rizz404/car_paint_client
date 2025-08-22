@@ -41,6 +41,7 @@ class CustomColors {
   static const pureWhite = Color(0xFFFFFFFF);
   static const pureBlack = Color(0xFF000000);
 
+  static const primaryRed = Color(0xFFE63B2A);
   static const primaryBackground = Color(0xFFE6E7E8);
   static const primaryCard = Color(0xFFFFFFFF);
   static const primaryText = Color(0xFF20272F);
@@ -48,6 +49,7 @@ class CustomColors {
   static const primaryBorder = Color(0xFFE6E7E8);
   static const primaryBorderInput = Color(0xFF79747E);
 
+  static const darkPrimaryRed = Color(0xFFFF5A4A);
   static const darkPrimaryBackground = Color(0xFF121212);
   static const darkPrimaryCard = Color(0xFF1E1E1E);
   static const darkPrimaryText = Color(0xFFFFFFFF);
@@ -63,9 +65,13 @@ extension ThemeExtension on BuildContext {
   Color get adaptivePrimaryBackground => isDarkMode
       ? CustomColors.darkPrimaryBackground
       : CustomColors.primaryBackground;
+  Color get adaptivePrimaryRed =>
+      isDarkMode ? CustomColors.darkPrimaryRed : CustomColors.primaryRed;
 
   Color get adaptivePrimaryCard =>
       isDarkMode ? CustomColors.darkPrimaryCard : CustomColors.primaryCard;
+  Color get adaptivePrimaryBorder =>
+      isDarkMode ? CustomColors.darkPrimaryBorder : CustomColors.primaryBorder;
 
   Color get adaptiveTextColor =>
       isDarkMode ? CustomColors.darkPrimaryText : CustomColors.primaryText;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:video_player/video_player.dart';
 import 'package:paint_car/features/(user)/paint/widgets/full_screen_video_player.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
@@ -384,11 +385,13 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
           maxLines: 2,
         ),
         const SizedBox(height: 16),
-        ...steps.map((step) => _buildStepCard(
-              title: step['title'] as String,
-              description: step['description'] as String,
-              icon: step['icon'] as IconData,
-            )),
+        ...steps.map(
+          (step) => _buildStepCard(
+            title: step['title'] as String,
+            description: step['description'] as String,
+            icon: step['icon'] as IconData,
+          ),
+        ),
       ],
     );
   }
@@ -465,34 +468,34 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: tips
-                  .map((tip) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: Row(
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(top: 4, right: 12),
-                              width: 6,
-                              height: 6,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary,
-                                shape: BoxShape.circle,
+                  .map(
+                    (tip) => Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(top: 4, right: 12),
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              color: context.adaptivePrimaryRed,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          Expanded(
+                            child: MainText(
+                              text: tip,
+                              maxLines: 5,
+                              customTextStyle: TextStyle(
+                                color: context.adaptiveSecondaryTextColor,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                            Expanded(
-                              child: MainText(
-                                text: tip,
-                                extent: const Small(),
-                                maxLines: 5,
-                                customTextStyle: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ))
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
                   .toList(),
             ),
           ),
@@ -524,7 +527,7 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                     Icon(
                       Icons.help_outline,
                       size: 48,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: context.adaptiveSecondaryTextColor,
                     ),
                     const SizedBox(height: 16),
                     const MainText(
@@ -540,7 +543,7 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                       extent: const Small(),
                       textAlign: TextAlign.center,
                       customTextStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        color: context.adaptiveSecondaryTextColor,
                       ),
                       maxLines: 5,
                     ),
@@ -556,8 +559,8 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
             const SizedBox(height: 16),
             _buildVideoPlayer(),
             const SizedBox(height: 32),
-            _buildGuidanceSteps(),
-            const SizedBox(height: 32),
+            // _buildGuidanceSteps(),
+            // const SizedBox(height: 32),
             _buildTipsSection(),
             const SizedBox(height: 32),
             Card(
@@ -568,12 +571,14 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                     Icon(
                       Icons.support_agent,
                       size: 32,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: context.adaptiveSecondaryTextColor,
                     ),
                     const SizedBox(height: 12),
-                    const MainText(
+                    MainText(
                       text: 'Butuh Bantuan Lebih Lanjut?',
-                      customTextStyle: TextStyle(fontWeight: FontWeight.w600),
+                      customTextStyle: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: context.adaptiveTextColor),
                     ),
                     const SizedBox(height: 8),
                     MainText(
@@ -582,7 +587,7 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                       maxLines: 3,
                       textAlign: TextAlign.center,
                       customTextStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        color: context.adaptiveSecondaryTextColor,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -593,7 +598,8 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(
-                                  'Fitur hubungi customer service akan segera tersedia'),
+                                'Fitur hubungi customer service akan segera tersedia',
+                              ),
                             ),
                           );
                         },
