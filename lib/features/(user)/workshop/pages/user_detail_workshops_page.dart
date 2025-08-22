@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/car_workshop.dart';
 import 'package:paint_car/data/models/user_detail_vehicle_paint_model.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_services_cubit.dart';
@@ -146,7 +147,6 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: mainAppBar(widget.workshop.name),
-      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(
         children: [
           Expanded(
@@ -297,10 +297,20 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                 MainText(
                   text: widget.workshop.name,
                   extent: const Large(),
+                  color: context.adaptiveTextColor,
+                  customTextStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                  ),
                 ),
                 MainText(
                   text: widget.workshop.distance ?? "N/A",
                   extent: const Medium(),
+                  color: context.adaptiveTextColor,
+                  customTextStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                  ),
                 ),
               ],
             ),
@@ -340,7 +350,7 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
       child: Row(
         spacing: 16,
         children: [
-          Icon(icon, color: Colors.grey.shade600, size: 26),
+          Icon(icon, color: context.adaptiveSecondaryTextColor, size: 26),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -350,10 +360,12 @@ class _UserDetailWorkshopsPageState extends State<UserDetailWorkshopsPage> {
                   customTextStyle: const TextStyle(
                     fontWeight: FontWeight.w600,
                   ),
+                  color: context.adaptiveTextColor,
                 ),
                 const SizedBox(height: 4),
                 MainText(
                   text: value,
+                  color: context.adaptiveSecondaryTextColor,
                 ),
               ],
             ),
