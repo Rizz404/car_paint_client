@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paint_car/core/constants/api.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
@@ -41,32 +40,10 @@ class _MyBookingPageState extends State<MyBookingPage>
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: context.adaptivePrimaryCard,
-        statusBarIconBrightness:
-            context.isDarkMode ? Brightness.light : Brightness.dark,
-        systemNavigationBarColor: context.adaptivePrimaryCard,
-        systemNavigationBarIconBrightness:
-            context.isDarkMode ? Brightness.light : Brightness.dark,
-      ),
-    );
-  }
-
-  @override
   void dispose() {
     _transactionsCancelToken.cancel();
     _historyCancelToken.cancel();
     _tabController.dispose();
-
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-      ),
-    );
     super.dispose();
   }
 

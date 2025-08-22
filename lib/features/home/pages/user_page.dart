@@ -26,6 +26,7 @@ class _UserPageState extends State<UserPage> {
   @override
   void initState() {
     context.read<UserCubit>().getUserLocal();
+
     super.initState();
   }
 
@@ -44,7 +45,6 @@ class _UserPageState extends State<UserPage> {
                   spacing: 8,
                   children: [
                     Container(
-                      color: context.adaptiveCommonColor,
                       padding: const EdgeInsets.symmetric(
                         vertical: 16,
                       ),
@@ -64,9 +64,11 @@ class _UserPageState extends State<UserPage> {
                                   MainText(
                                     text: " ${data?.username}",
                                     extent: const Medium(),
+                                    color: context.adaptiveTextColor,
                                   ),
                                   MainText(
                                     text: " ${data?.email}",
+                                    color: context.adaptiveTextColor,
                                   ),
                                 ],
                               ),
@@ -80,66 +82,91 @@ class _UserPageState extends State<UserPage> {
                                 ),
                               );
                             },
-                            icon: const Icon(Icons.edit),
+                            icon: Icon(
+                              Icons.edit,
+                              color: context.adaptiveTextColor,
+                            ),
                           ),
                         ],
                       ).paddingSymmetric(horizontal: 16),
                     ),
                     const Divider(
                       thickness: 1,
-                    ),
+                    ).paddingSymmetric(horizontal: 20),
                   ],
                 ),
-                const MainText(text: "Aksi", extent: Medium()).paddingSymmetric(
-                  horizontal: 16,
+                MainText(
+                  text: "Aksi",
+                  extent: const Medium(),
+                  color: context.adaptiveTextColor,
+                ).paddingSymmetric(
+                  horizontal: 20,
                 ),
-                Material(
-                  color: context.adaptiveCommonColor,
-                  child: InkWell(
-                    onTap: () {
-                      context.read<UserCubit>().logout();
-                      Navigator.of(context)
-                          .pushAndRemoveUntil(LoginPage.route(), (_) => false);
-                    },
-                    child: const ListTile(
-                      title: MainText(text: "Keluar"),
-                      leading: Icon(Icons.logout),
-                    ),
-                  ),
-                ),
-                Material(
-                  color: context.adaptiveCommonColor,
-                  child: BlocBuilder<ThemeCubit, ThemeState>(
-                    builder: (context, themeState) {
-                      return SwitchListTile(
-                        activeColor: CustomColors.guideRed,
-                        tileColor: context.adaptiveCommonColor,
-                        hoverColor: CustomColors.guideRed.withOpacity(0.1),
-                        thumbColor: MaterialStateProperty.all(
-                          CustomColors.guideRed,
-                        ),
-                        trackColor: WidgetStateProperty.all(
-                          CustomColors.guideRed.withOpacity(0.3),
-                        ),
-                        overlayColor: WidgetStateProperty.all(
-                          CustomColors.guideRed.withOpacity(0.1),
-                        ),
-                        activeTrackColor:
-                            CustomColors.guideRed.withOpacity(0.3),
-                        title: const MainText(text: "Mode Gelap"),
-                        secondary: Icon(
-                          themeState.status == ThemeStatus.dark
-                              ? Icons.dark_mode
-                              : Icons.light_mode,
-                        ),
-                        value: themeState.status == ThemeStatus.dark,
-                        onChanged: (value) {
-                          context.read<ThemeCubit>().toggleTheme();
+                Column(
+                  spacing: 8,
+                  children: [
+                    Material(
+                      color: context.adaptiveCommonColor,
+                      child: InkWell(
+                        onTap: () {
+                          context.read<UserCubit>().logout();
+                          Navigator.of(context).pushAndRemoveUntil(
+                            LoginPage.route(),
+                            (_) => false,
+                          );
                         },
-                      );
-                    },
-                  ),
-                ),
+                        child: ListTile(
+                          title: MainText(
+                            text: "Keluar",
+                            color: context.adaptiveTextColor,
+                          ),
+                          leading: Icon(
+                            Icons.logout,
+                            color: context.adaptiveTextColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Material(
+                      color: context.adaptiveCommonColor,
+                      child: BlocBuilder<ThemeCubit, ThemeState>(
+                        builder: (context, themeState) {
+                          return SwitchListTile(
+                            activeColor: context.adaptiveSecondaryTextColor,
+                            hoverColor: context.adaptiveSecondaryTextColor
+                                .withOpacity(0.1),
+                            thumbColor: MaterialStateProperty.all(
+                              context.adaptiveSecondaryTextColor,
+                            ),
+                            trackColor: WidgetStateProperty.all(
+                              context.adaptiveSecondaryTextColor
+                                  .withOpacity(0.3),
+                            ),
+                            overlayColor: WidgetStateProperty.all(
+                              context.adaptiveSecondaryTextColor
+                                  .withOpacity(0.1),
+                            ),
+                            activeTrackColor: context.adaptiveSecondaryTextColor
+                                .withOpacity(0.3),
+                            title: MainText(
+                              text: "Mode Gelap",
+                              color: context.adaptiveTextColor,
+                            ),
+                            secondary: Icon(
+                              themeState.status == ThemeStatus.dark
+                                  ? Icons.dark_mode
+                                  : Icons.light_mode,
+                            ),
+                            value: themeState.status == ThemeStatus.dark,
+                            onChanged: (value) {
+                              context.read<ThemeCubit>().toggleTheme();
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ).paddingSymmetric(horizontal: 20),
               ],
             ),
           ).paddingSymmetric(vertical: 16);
