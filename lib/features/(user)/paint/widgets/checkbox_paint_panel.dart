@@ -37,12 +37,12 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          color: context.adaptiveCommonColor,
+          color: context.adaptivePrimaryCard,
           boxShadow: [
             BoxShadow(
               color: CustomColors.black.withAlpha(25),
               blurRadius: 5,
-              offset: const Offset(0, 4),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -73,7 +73,8 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
                       text: widget.title,
                       customTextStyle: TextStyle(
                         fontSize: 20,
-                        color: context.adaptiveTertiaryColor,
+                        color: context.adaptiveSecondaryTextColor,
+                        fontWeight: FontWeight.w600,
                       ),
                       extent: const Medium(),
                     ),
@@ -84,8 +85,9 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
                         ),
                         extent: const Medium(),
                         customTextStyle: TextStyle(
+                          color: context.adaptiveSecondaryTextColor,
+                          fontWeight: FontWeight.w600,
                           fontSize: 20,
-                          color: context.adaptiveTertiaryColor,
                         ),
                         textAlign: TextAlign.end,
                       ),
@@ -102,13 +104,14 @@ class _CheckboxPaintPanelState extends State<CheckboxPaintPanel> {
                   value: widget.value,
                   onChanged: widget.onChanged,
                   side: WidgetStateBorderSide.resolveWith(
-                    (states) => const BorderSide(),
+                    (states) => BorderSide(
+                      color: context.adaptiveSecondaryTextColor,
+                    ),
                   ),
                   shape: const CircleBorder(),
-                  activeColor: CustomColors.guideRed,
-                  checkColor: context.adaptiveCommonColor,
+                  checkColor: context.adaptiveTextColor,
                   fillColor: WidgetStateProperty.resolveWith(
-                    (states) => context.adaptiveTertiaryColor,
+                    (states) => context.adaptivePrimaryCard,
                   ),
                 ),
               ),

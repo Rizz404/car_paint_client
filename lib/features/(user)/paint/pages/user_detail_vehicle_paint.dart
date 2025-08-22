@@ -275,14 +275,16 @@ class _UserDetailVehiclePaintPageState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 24),
-        const MainText(
+        MainText(
           text: "Gambar Warna Mobil",
-          extent: Large(),
+          extent: const Large(),
+          color: context.adaptiveTextColor,
         ),
         const SizedBox(height: 12),
-        const MainText(
+        MainText(
           text: "Upload beberapa gambar untuk referensi warna mobil Anda",
           maxLines: 3,
+          color: context.adaptiveTextColor,
         ),
         const SizedBox(height: 16),
         Row(
@@ -290,10 +292,19 @@ class _UserDetailVehiclePaintPageState
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: _pickCarColorImages,
-                icon: const Icon(Icons.add_photo_alternate),
-                label: const Text("Pilih Gambar"),
+                icon: const Icon(
+                  Icons.add_photo_alternate,
+                  color: CustomColors.white,
+                ),
+                label: const MainText(
+                  text: "Pilih Gambar",
+                  color: CustomColors.white,
+                  customTextStyle:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 12),
+                  backgroundColor: context.adaptivePrimaryRed,
                 ),
               ),
             ),
@@ -314,20 +325,21 @@ class _UserDetailVehiclePaintPageState
             width: double.infinity,
             padding: const EdgeInsets.all(32),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.shade300),
-              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: context.adaptiveSecondaryTextColor),
+              borderRadius: BorderRadius.circular(20),
             ),
-            child: const Column(
+            child: Column(
               children: [
                 Icon(
                   Icons.image_outlined,
                   size: 48,
-                  color: Colors.grey,
+                  color: context.adaptiveSecondaryTextColor,
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 MainText(
                   text: "Belum ada gambar dipilih",
-                  extent: Medium(),
+                  extent: const Medium(),
+                  color: context.adaptiveTextColor,
                 ),
               ],
             ),
@@ -335,7 +347,6 @@ class _UserDetailVehiclePaintPageState
         else
           _buildSelectedCarColorImages(),
         const SizedBox(height: 16),
-        const Divider(thickness: 1),
       ],
     );
   }
@@ -418,7 +429,7 @@ class _UserDetailVehiclePaintPageState
         );
       },
       child: const MainText(
-        text: "Panduan Kode Warna Mobil",
+        text: "Cara menemukan kode warna mobil Anda",
         customTextStyle: TextStyle(decoration: TextDecoration.underline),
         extent: Medium(),
       ),
@@ -426,9 +437,14 @@ class _UserDetailVehiclePaintPageState
   }
 
   Widget _buildHeader() {
-    return const MainText(
+    return MainText(
       text: "Detail Pengecatan Kendaraan",
-      extent: Large(),
+      extent: const Large(),
+      customTextStyle: const TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: 20,
+      ),
+      color: context.adaptiveTextColor,
     );
   }
 
@@ -547,9 +563,10 @@ class _UserDetailVehiclePaintPageState
     return Column(
       spacing: 16,
       children: [
-        const MainText(
+        MainText(
           text: "Pilih Bagian yang Ingin di Cat",
           extent: Large(),
+          color: context.adaptiveTextColor,
         ),
         _buildPaintCheckboxes(),
       ],
@@ -575,7 +592,7 @@ class _UserDetailVehiclePaintPageState
           children: [
             _buildCheckboxPaintPanel(
               "assets/images/car/black_car_full_body.png",
-              "Semua",
+              "Semua Bagian",
               isSelectAll,
               totalPriceFromDb.toString(),
               (value) {

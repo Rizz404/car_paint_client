@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/features/(user)/paint/widgets/full_screen_video_player.dart';
 import 'package:video_player/video_player.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
@@ -324,12 +325,14 @@ class _ColorCodeGuidanceDialogState extends State<ColorCodeGuidanceDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const MainText(
+      title: MainText(
         text: "Cara Menemukan Kode Warna Mobil",
         textAlign: TextAlign.center,
         extent: Large(),
+        color: context.adaptiveTextColor,
         maxLines: 3,
       ),
+      backgroundColor: context.adaptivePrimaryCard,
       content: SizedBox(
         width: double.maxFinite,
         height: MediaQuery.of(context).size.height * 0.8,
@@ -337,10 +340,11 @@ class _ColorCodeGuidanceDialogState extends State<ColorCodeGuidanceDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const MainText(
+              MainText(
                 text: "Video Panduan:",
                 extent: Medium(),
                 customTextStyle: TextStyle(fontWeight: FontWeight.w600),
+                color: context.adaptiveTextColor,
               ),
               const SizedBox(height: 12),
               _buildVideoPlayer(),
@@ -349,10 +353,11 @@ class _ColorCodeGuidanceDialogState extends State<ColorCodeGuidanceDialog> {
                 color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
               ),
               const SizedBox(height: 12),
-              const MainText(
+              MainText(
                 text: "Lokasi Kode Warna:",
                 extent: Medium(),
                 customTextStyle: TextStyle(fontWeight: FontWeight.w600),
+                color: context.adaptiveTextColor,
               ),
               const SizedBox(height: 12),
               ClipRRect(

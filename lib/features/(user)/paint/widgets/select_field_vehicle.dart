@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 
@@ -34,12 +35,14 @@ class _SelectFieldVehicleState extends State<SelectFieldVehicle> {
             MainText(
               extent: const Medium(),
               text: widget.field,
+              color: context.adaptiveTextColor,
             ),
             Row(
               children: [
                 MainText(
                   extent: const Medium(),
                   text: widget.value,
+                  color: context.adaptiveTextColor,
                 ),
                 const SizedBox(width: 8),
                 const Icon(
