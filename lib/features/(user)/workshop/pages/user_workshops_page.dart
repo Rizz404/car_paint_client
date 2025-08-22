@@ -12,6 +12,7 @@ import 'package:paint_car/features/(user)/workshop/cubit/user_workshops_cubit.da
 import 'package:paint_car/features/(user)/workshop/widgets/user_workshops_item.dart';
 import 'package:paint_car/features/shared/types/pagination_state.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
+import 'package:paint_car/ui/extension/padding.dart';
 import 'package:paint_car/ui/shared/loading.dart';
 import 'package:paint_car/ui/shared/main_app_bar.dart';
 import 'package:paint_car/ui/shared/state_handler.dart';
@@ -149,7 +150,6 @@ class _UserWorkshopsPageState extends State<UserWorkshopsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: mainAppBar("Bengkel"),
       body: StateHandler<UserWorkshopCubit, PaginationState<CarWorkshop>>(
         onRetry: () => _onRefresh(),
         onSuccess: (context, data, message) {
@@ -191,7 +191,7 @@ class _UserWorkshopsPageState extends State<UserWorkshopsPage> {
                 ],
               ),
             ),
-          );
+          ).paddingOnly(top: 30);
         },
       ),
     );
