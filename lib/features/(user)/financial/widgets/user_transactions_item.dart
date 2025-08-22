@@ -102,9 +102,10 @@ class UserTransactionsItem extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.receipt_long_rounded,
                         size: 20,
+                        color: context.adaptiveTextColor,
                       ),
                       const SizedBox(width: 8),
                       MainText(
@@ -113,6 +114,7 @@ class UserTransactionsItem extends StatelessWidget {
                         customTextStyle: const TextStyle(
                           fontWeight: FontWeight.w600,
                         ),
+                        color: context.adaptiveTextColor,
                       ),
                     ],
                   ),
@@ -138,16 +140,14 @@ class UserTransactionsItem extends StatelessWidget {
                       Icon(
                         Icons.payment_rounded,
                         size: 16,
-                        color:
-                            Theme.of(context).colorScheme.onSurface.withValues(
-                                  alpha: 0.7,
-                                ),
+                        color: context.adaptiveTextColor,
                       ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: MainText(
                           text: _getPaymentMethodName(),
                           maxLines: 2,
+                          color: context.adaptiveTextColor,
                         ),
                       ),
                     ],
@@ -159,10 +159,7 @@ class UserTransactionsItem extends StatelessWidget {
                         Icon(
                           Icons.account_balance_rounded,
                           size: 16,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.7),
+                          color: context.adaptiveTextColor,
                         ),
                         const SizedBox(width: 8),
                         Expanded(
@@ -170,6 +167,7 @@ class UserTransactionsItem extends StatelessWidget {
                             text:
                                 '${transactions.paymentdetail?.virtualAccountNumber}',
                             maxLines: 2,
+                            color: context.adaptiveTextColor,
                           ),
                         ),
                         if (transactions.paymentdetail?.virtualAccountNumber !=
@@ -178,7 +176,7 @@ class UserTransactionsItem extends StatelessWidget {
                             icon: Icon(
                               Icons.copy_rounded,
                               size: 16,
-                              color: Theme.of(context).colorScheme.primary,
+                              color: context.adaptiveSecondaryTextColor,
                             ),
                             constraints: const BoxConstraints(
                               minWidth: 36,
@@ -195,10 +193,13 @@ class UserTransactionsItem extends StatelessWidget {
 
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content:
-                                          Text('Virtual Account number copied'),
-                                      duration: Duration(seconds: 2),
+                                    SnackBar(
+                                      backgroundColor:
+                                          context.adaptivePrimaryCard,
+                                      content: const MainText(
+                                          text:
+                                              'Virtual Account number copied'),
+                                      duration: const Duration(seconds: 4),
                                     ),
                                   );
                                 }
@@ -268,26 +269,33 @@ class UserTransactionsItem extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const MainText(
-                          text: 'Total:',
-                          customTextStyle: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 13,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        MainText(
-                          text: CurrencyFormatter.toRupiah(
-                            double.parse(
-                              transactions.totalPrice,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            MainText(
+                              text: 'Total:',
+                              extent: const Medium(),
+                              customTextStyle: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                              color: context.adaptiveTextColor,
                             ),
-                          ),
-                          extent: const Medium(),
-                          customTextStyle: const TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                          ),
-                        ),
+                            MainText(
+                              text: CurrencyFormatter.toRupiah(
+                                double.parse(
+                                  transactions.totalPrice,
+                                ),
+                              ),
+                              extent: const Medium(),
+                              customTextStyle: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                              color: context.adaptiveTextColor,
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),

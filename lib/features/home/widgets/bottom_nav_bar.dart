@@ -21,6 +21,12 @@ class BottomNavBar extends StatelessWidget {
       selectedItemColor: context.adaptiveTextColor,
       unselectedItemColor: context.adaptiveSecondaryTextColor,
       showUnselectedLabels: true,
+      unselectedLabelStyle: const TextStyle(
+        fontWeight: FontWeight.w500,
+      ),
+      selectedLabelStyle: const TextStyle(
+        fontWeight: FontWeight.w600,
+      ),
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),

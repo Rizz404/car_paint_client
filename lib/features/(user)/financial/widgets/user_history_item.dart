@@ -623,13 +623,10 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
           child: MainText(
             text: key,
             customTextStyle: keyStyle ??
-                TextStyle(
+                const TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.7),
                 ),
+            color: context.adaptiveTextColor,
           ),
         ),
         Expanded(
@@ -703,6 +700,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                   customTextStyle: const TextStyle(
                     fontWeight: FontWeight.w600,
                   ),
+                  color: context.adaptiveTextColor,
                 ),
                 const SizedBox(height: 8),
                 Row(
@@ -711,34 +709,33 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                     Flexible(
                       child: MainText(
                         text: _formatDate(transactions.createdAt),
-                        customTextStyle: TextStyle(
+                        customTextStyle: const TextStyle(
                           fontSize: 13,
-                          color: theme.colorScheme.onSurface
-                              .withValues(alpha: 0.7),
                         ),
+                        color: context.adaptiveSecondaryTextColor,
                       ),
                     ),
                     buildPaymentStatusWidget(transactions.paymentStatus),
                   ],
                 ),
-                if (order.orderStatus != null || order.workStatus != null) ...[
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      if (order.orderStatus != null) ...[
-                        buildOrderStatusWidget(order.orderStatus!),
-                        const SizedBox(width: 8),
-                      ],
-                      if (order.workStatus != null)
-                        buildWorkStatusWidget(order.workStatus!),
-                    ],
-                  ),
-                ],
+                // if (order.orderStatus != null || order.workStatus != null) ...[
+                //   const SizedBox(height: 12),
+                //   Row(
+                //     children: [
+                //       if (order.orderStatus != null) ...[
+                //         buildOrderStatusWidget(order.orderStatus!),
+                //         const SizedBox(width: 8),
+                //       ],
+                //       if (order.workStatus != null)
+                //         buildWorkStatusWidget(order.workStatus!),
+                //     ],
+                //   ),
+                // ],
               ],
             ),
           ),
-          if (selectedWorkStatus != null) buildWorkStatusDropdown(),
-          const Divider(height: 1),
+          // if (selectedWorkStatus != null) buildWorkStatusDropdown(),
+          // const Divider(height: 1),
           Container(
             padding: const EdgeInsets.all(16.0),
             decoration: const BoxDecoration(),
@@ -795,17 +792,14 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
+                          color: context.adaptiveTextColor,
                         ),
                         const SizedBox(height: 4),
                         MainText(
-                          text: order.workshop!.address,
-                          extent: const ExtraSmall(),
-                          maxLines: 2,
-                          customTextStyle: TextStyle(
-                            color: theme.colorScheme.onSurface
-                                .withValues(alpha: 0.7),
-                          ),
-                        ),
+                            text: order.workshop!.address,
+                            extent: const ExtraSmall(),
+                            maxLines: 2,
+                            color: context.adaptiveSecondaryTextColor),
                       ],
                     ),
                   ),
@@ -820,12 +814,13 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
               child: ExpansionTile(
                 tilePadding:
                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                iconColor: context.adaptiveTextColor,
                 title: Row(
                   children: [
                     Icon(
                       Icons.build_outlined,
                       size: 18,
-                      color: theme.colorScheme.primary,
+                      color: context.adaptiveTextColor,
                     ),
                     const SizedBox(width: 8),
                     MainText(
@@ -834,6 +829,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.onSurface,
                       ),
+                      color: context.adaptiveTextColor,
                     ),
                   ],
                 ),
@@ -866,6 +862,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                             customTextStyle: const TextStyle(
                               fontWeight: FontWeight.w500,
                             ),
+                            color: context.adaptiveTextColor,
                           ),
                           trailing: MainText(
                             text: CurrencyFormatter.toRupiah(
@@ -874,6 +871,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                             customTextStyle: const TextStyle(
                               fontWeight: FontWeight.w600,
                             ),
+                            color: context.adaptiveTextColor,
                           ),
                         );
                       },
@@ -894,13 +892,14 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
             ),
             child: Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: MainText(
                     text: 'Total Pembayaran',
-                    extent: Medium(),
-                    customTextStyle: TextStyle(
+                    extent: const Medium(),
+                    customTextStyle: const TextStyle(
                       fontWeight: FontWeight.w600,
                     ),
+                    color: context.adaptiveTextColor,
                   ),
                 ),
                 MainText(
@@ -913,6 +912,7 @@ class _UserHistoryItemState extends State<UserHistoryItem> {
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
                   ),
+                  color: context.adaptiveTextColor,
                 ),
               ],
             ),
