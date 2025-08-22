@@ -18,8 +18,8 @@ class BottomNavBar extends StatelessWidget {
       iconSize: 28,
       elevation: 0.0,
       onTap: onItemTapped,
-      selectedItemColor: CustomColors.guideRed,
-      unselectedItemColor: CustomColors.tertiaryGray,
+      selectedItemColor: context.adaptiveTextColor,
+      unselectedItemColor: context.adaptiveSecondaryTextColor,
       showUnselectedLabels: true,
       items: const [
         BottomNavigationBarItem(

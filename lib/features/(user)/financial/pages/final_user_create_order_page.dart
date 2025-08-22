@@ -161,9 +161,14 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
           customTextStyle: TextStyle(
             fontWeight: isBold ? FontWeight.w600 : FontWeight.normal,
           ),
+          color: context.adaptiveTextColor,
         ),
         MainText(
           text: value,
+          customTextStyle: TextStyle(
+            fontWeight: isBold ? FontWeight.w600 : FontWeight.normal,
+          ),
+          color: context.adaptiveTextColor,
         ),
       ],
     );
@@ -204,7 +209,9 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
               fontWeight: FontWeight.w600,
             ),
             extent: const Medium(),
+            color: context.adaptiveTextColor,
           ),
+          iconColor: context.adaptiveTextColor,
           children:
               entry.value.map((pm) => _buildPaymentMethodTile(pm)).toList(),
         );
@@ -217,8 +224,8 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
 
     return Card(
       color: isSelected
-          ? context.adaptivePrimaryColor
-          : context.adaptivePrimaryColor.withValues(alpha: 0.3),
+          ? context.adaptivePrimaryBackground
+          : context.adaptivePrimaryBackground.withValues(alpha: 0.3),
       borderOnForeground: false,
       child: ListTile(
         contentPadding: const EdgeInsets.all(8.0),
@@ -296,7 +303,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                           "${widget.carServices.length.toString()}/${widget.totalAllServices.toString()}",
                           isBold: true,
                         ),
-                        Divider(
+                        const Divider(
                           thickness: 1,
                         ),
                         rowKeyValue(
@@ -314,7 +321,7 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                                 )
                               : "-",
                         ),
-                        Divider(
+                        const Divider(
                           thickness: 1,
                         ),
                         rowKeyValue(
@@ -345,11 +352,16 @@ class _FinalUserCreateOrderPageState extends State<FinalUserCreateOrderPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           spacing: 8,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               child: MainText(
                                 text: "Metode Pembayaran",
-                                extent: Large(),
+                                color: context.adaptiveTextColor,
+                                customTextStyle: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ).paddingOnly(top: 16),
                             _buildPaymentMethodSections(paymentMethods),
