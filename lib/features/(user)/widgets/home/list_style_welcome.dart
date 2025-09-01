@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/user_model.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
-// Import halaman guidance yang sudah dibuat
+
 import 'package:paint_car/features/guidance/pages/application_guidance_page.dart';
 
 class ListStyleWelcome extends StatelessWidget {
@@ -19,7 +19,7 @@ class ListStyleWelcome extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 4,
-            offset: const Offset(0, 2), // x,y
+            offset: const Offset(0, 2),
           ),
         ],
         borderRadius: const BorderRadius.only(
@@ -34,12 +34,11 @@ class ListStyleWelcome extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        subtitle: MainText(text: "${user?.username}"),
+        subtitle: user != null ? MainText(text: "${user?.username}") : null,
         leading: const Icon(Icons.person_outline),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Tombol Help untuk membuka halaman guidance
             IconButton(
               icon: Icon(
                 Icons.help_outline,
@@ -52,13 +51,6 @@ class ListStyleWelcome extends StatelessWidget {
               },
               tooltip: 'Panduan Aplikasi',
             ),
-            // Tombol notifikasi yang sudah ada bisa ditambahkan di sini jika diperlukan
-            // IconButton(
-            //   icon: const Icon(Icons.notifications_outlined),
-            //   onPressed: () {
-            //     Navigator.of(context).push(NotificationScreen.route());
-            //   },
-            // ),
           ],
         ),
       ),
