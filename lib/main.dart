@@ -58,7 +58,6 @@ Future<void> main() async {
   );
 
   await initializeSL();
-  await requestNotificationPermissions();
 
   runApp(
     MultiBlocProvider(

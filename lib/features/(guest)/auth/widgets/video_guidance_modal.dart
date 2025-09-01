@@ -357,7 +357,7 @@ class _VideoGuidanceModalState extends State<VideoGuidanceModal> {
                               Flexible(
                                 child: MainText(
                                   text: _isVideoCompleted
-                                      ? 'Lanjutkan ke Login'
+                                      ? 'Lanjutkan'
                                       : 'Menunggu video selesai...',
                                   customTextStyle: const TextStyle(
                                     color: Colors.white,
