@@ -51,18 +51,18 @@ class _UserChooseServicePageState extends State<UserChooseServicePage> {
                     );
                   },
                 ),
-                CardChooseService(
-                  imageAsset: "assets/images/motorcycle/red_motorcycle.png",
-                  title: "Motor",
-                  onTap: () {
-                    SnackBarUtil.showSnackBar(
-                      context: context,
-                      message: "Coming Soon",
-                      duration: const Duration(seconds: 2),
-                    );
-                  },
-                  isDisabled: true,
-                ),
+                // CardChooseService(
+                //   imageAsset: "assets/images/motorcycle/red_motorcycle.png",
+                //   title: "Motor",
+                //   onTap: () {
+                //     SnackBarUtil.showSnackBar(
+                //       context: context,
+                //       message: "Coming Soon",
+                //       duration: const Duration(seconds: 2),
+                //     );
+                //   },
+                //   isDisabled: true,
+                // ),
               ],
             ),
           )

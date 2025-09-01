@@ -428,10 +428,25 @@ class _UserDetailVehiclePaintPageState
           builder: (context) => const ColorCodeGuidanceDialog(),
         );
       },
-      child: const MainText(
-        text: "Cara menemukan kode warna mobil Anda",
-        customTextStyle: TextStyle(decoration: TextDecoration.underline),
-        extent: Medium(),
+      child: Row(
+        children: [
+          Icon(
+            Icons.question_mark,
+            size: 16,
+            color: context.adaptivePrimaryRed,
+          ),
+          const SizedBox(width: 4),
+          Flexible(
+            child: MainText(
+              text: "Cara menemukan kode warna mobil Anda",
+              customTextStyle: TextStyle(
+                decoration: TextDecoration.underline,
+                color: context.adaptivePrimaryRed,
+              ),
+              extent: const Medium(),
+            ),
+          ),
+        ],
       ),
     );
   }

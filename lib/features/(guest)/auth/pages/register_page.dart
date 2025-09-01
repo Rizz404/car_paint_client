@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/core/constants/mock.dart';
 import 'package:paint_car/features/(guest)/auth/widgets/gradient_bg_auth.dart';
+import 'package:paint_car/features/(guest)/auth/widgets/video_guidance_modal.dart';
 import 'package:paint_car/features/shared/cubit/user_cubit.dart';
 import 'package:paint_car/features/shared/utils/cancel_token.dart';
 import 'package:paint_car/features/shared/utils/handle_form_listener_state.dart';
@@ -94,8 +95,18 @@ class _RegisterPageState extends State<RegisterPage> {
                 message: "Register berhasil",
                 type: SnackBarType.success,
               );
-              Navigator.of(context)
-                  .pushAndRemoveUntil(LoginPage.route(), (_) => false);
+
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => VideoGuidanceModal(
+                  onVideoCompleted: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context)
+                        .pushAndRemoveUntil(LoginPage.route(), (_) => false);
+                  },
+                ),
+              );
             }
           },
         );
