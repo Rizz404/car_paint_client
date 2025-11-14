@@ -2,6 +2,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- For Android 13+ (API 33+) -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -67,6 +71,56 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+
+        <!-- Query untuk payment apps -->
+        <!-- Gojek -->
+        <package android:name="com.gojek.app" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="gojek" />
+        </intent>
+
+        <!-- ShopeePay -->
+        <package android:name="com.shopee.id" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="shopeepay" />
+        </intent>
+
+        <!-- DANA -->
+        <package android:name="id.dana" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="dana" />
+        </intent>
+
+        <!-- Kredivo -->
+        <package android:name="com.kredivo.android" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="kredivo" />
+        </intent>
+
+        <!-- LinkAja -->
+        <package android:name="com.telkom.mwallet" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="linkaja" />
+        </intent>
+
+        <!-- OVO -->
+        <package android:name="ovo.id" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="ovo" />
+        </intent>
+
+        <!-- Akulaku -->
+        <package android:name="com.akulaku.overseas" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="akulaku" />
         </intent>
     </queries>
 </manifest>

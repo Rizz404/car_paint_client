@@ -11,8 +11,10 @@ import 'package:paint_car/features/shared/utils/currency_formatter.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-// IMPORT TAMBAHAN
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+import 'dart:typed_data';
 
 class UserTransactionsItem extends StatelessWidget {
   final Transactions transactions;
@@ -70,6 +72,79 @@ class UserTransactionsItem extends StatelessWidget {
           onReturnFromWebView!();
         }
       });
+    }
+  }
+
+  /// Download QR Code image dari URL dan simpan ke galeri
+  Future<void> _downloadQrCode(BuildContext context, String qrCodeUrl) async {
+    try {
+      LogService.i("Downloading QR Code from: $qrCodeUrl");
+
+      // Tampilkan loading indicator
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: context.adaptivePrimaryCard,
+            content: const Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                ),
+                SizedBox(width: 16),
+                MainText(text: 'Mengunduh QR Code...'),
+              ],
+            ),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+
+      // Download gambar
+      final response = await http.get(Uri.parse(qrCodeUrl));
+
+      if (response.statusCode == 200) {
+        // Simpan ke galeri
+        final Uint8List bytes = response.bodyBytes;
+        final result = await ImageGallerySaverPlus.saveImage(
+          bytes,
+          quality: 100,
+          name: "qris_${DateTime.now().millisecondsSinceEpoch}",
+        );
+
+        LogService.i("QR Code saved: $result");
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: context.adaptivePrimaryCard,
+              content: const MainText(
+                text: '✓ QR Code berhasil disimpan ke galeri',
+              ),
+              duration: const Duration(seconds: 3),
+            ),
+          );
+        }
+      } else {
+        throw Exception('Failed to download QR Code: ${response.statusCode}');
+      }
+    } catch (e) {
+      LogService.e("Failed to download QR Code: $e");
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: MainText(
+              text: 'Gagal mengunduh QR Code: ${e.toString()}',
+            ),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
     }
   }
 
@@ -336,29 +411,7 @@ class UserTransactionsItem extends StatelessWidget {
                           ),
                           constraints:
                               const BoxConstraints(minWidth: 36, minHeight: 36),
-                          onPressed: () async {
-                            try {
-                              final Uri uri = Uri.parse(qrCodeUrl);
-                              if (await canLaunchUrl(uri)) {
-                                await launchUrl(uri,
-                                    mode: LaunchMode.externalApplication);
-                              } else {
-                                if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content:
-                                            Text('Tidak bisa membuka URL')),
-                                  );
-                                }
-                              }
-                            } catch (e) {
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Error: $e')),
-                                );
-                              }
-                            }
-                          },
+                          onPressed: () => _downloadQrCode(context, qrCodeUrl),
                         ),
                       ],
                     ),
@@ -572,6 +625,50 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
   late final WebViewController _controller;
   bool _isLoading = true;
 
+  /// Map deeplink scheme ke nama aplikasi yang user-friendly
+  String _getAppNameFromScheme(String scheme) {
+    switch (scheme.toLowerCase()) {
+      case 'gojek':
+        return 'Gojek';
+      case 'shopeepay':
+        return 'ShopeePay';
+      case 'dana':
+        return 'DANA';
+      case 'kredivo':
+        return 'Kredivo';
+      case 'linkaja':
+        return 'LinkAja';
+      case 'ovo':
+        return 'OVO';
+      case 'akulaku':
+        return 'Akulaku';
+      default:
+        return scheme.substring(0, 1).toUpperCase() + scheme.substring(1);
+    }
+  }
+
+  /// Map deeplink scheme ke Android package name
+  String _getPackageNameFromScheme(String scheme) {
+    switch (scheme.toLowerCase()) {
+      case 'gojek':
+        return 'com.gojek.app';
+      case 'shopeepay':
+        return 'com.shopee.id';
+      case 'dana':
+        return 'id.dana';
+      case 'kredivo':
+        return 'com.kredivo.android';
+      case 'linkaja':
+        return 'com.telkom.mwallet';
+      case 'ovo':
+        return 'ovo.id';
+      case 'akulaku':
+        return 'com.akulaku.overseas';
+      default:
+        return 'com.unknown.app';
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -600,33 +697,164 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
           onNavigationRequest: (NavigationRequest request) async {
             LogService.i("WebView navigating to: ${request.url}");
 
-            // 1. CEK JIKA INI DEEPLINK GOJEK
-            if (request.url.startsWith('gojek://')) {
-              LogService.i("Gojek deeplink intercepted. Trying to launch...");
+            // 1. CEK JIKA INI DEEPLINK PAYMENT APP (GOJEK, SHOPEEPAY, DANA, KREDIVO, DLL)
+            // Deteksi berbagai deeplink scheme payment
+            final paymentDeeplinks = [
+              'gojek://',
+              'shopeepay://',
+              'dana://',
+              'kredivo://',
+              'linkaja://',
+              'ovo://',
+              'akulaku://'
+            ];
+            final isPaymentDeeplink = paymentDeeplinks
+                .any((scheme) => request.url.startsWith(scheme));
+
+            if (isPaymentDeeplink) {
+              LogService.i("Payment deeplink intercepted: ${request.url}");
               try {
                 final Uri uri = Uri.parse(request.url);
-                if (await canLaunchUrl(uri)) {
-                  // Buka aplikasi Gojek secara eksternal
-                  await launchUrl(uri, mode: LaunchMode.externalApplication);
-                } else {
-                  LogService.w("Gojek app not installed.");
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Aplikasi Gojek tidak terinstall.')),
+                final appScheme =
+                    uri.scheme; // e.g., "gojek", "shopeepay", "dana"
+                final appName = _getAppNameFromScheme(appScheme);
+
+                LogService.i("Parsed URI: $uri");
+                LogService.i("URI scheme: $appScheme");
+                LogService.i("App name: $appName");
+                LogService.i("URI host: ${uri.host}");
+                LogService.i("URI path: ${uri.path}");
+
+                // Strategi 1: Coba launch dengan mode externalNonBrowserApplication
+                bool launched = false;
+                try {
+                  LogService.i(
+                      "[Strategy 1] Attempting launch $appName with externalNonBrowserApplication...");
+                  launched = await launchUrl(
+                    uri,
+                    mode: LaunchMode.externalNonBrowserApplication,
+                  );
+                  LogService.i("[Strategy 1] Launch $appName: $launched");
+                } catch (e) {
+                  LogService.w("[Strategy 1] Failed for $appName: $e");
+                }
+
+                // Strategi 2: Jika gagal, coba dengan externalApplication
+                if (!launched) {
+                  try {
+                    LogService.i(
+                        "[Strategy 2] Attempting launch $appName with externalApplication...");
+                    // Untuk MIUI, tambahkan delay kecil
+                    await Future.delayed(const Duration(milliseconds: 300));
+                    launched = await launchUrl(
+                      uri,
+                      mode: LaunchMode.externalApplication,
                     );
+                    LogService.i("[Strategy 2] Launch $appName: $launched");
+                  } catch (e) {
+                    LogService.w("[Strategy 2] Failed for $appName: $e");
                   }
+                }
+
+                // Strategi 3: Jika masih gagal, coba dengan intent langsung untuk Android
+                if (!launched) {
+                  try {
+                    LogService.i(
+                        "[Strategy 3] Attempting launch $appName with Android intent...");
+                    // Coba buka dengan package name langsung (Android)
+                    final packageName = _getPackageNameFromScheme(appScheme);
+                    final deepLinkPath = request.url.substring(
+                        appScheme.length + 3); // Hilangkan "scheme://"
+                    final intentUrl =
+                        'intent://$deepLinkPath#Intent;scheme=$appScheme;package=$packageName;end';
+                    LogService.i("Intent URL: $intentUrl");
+
+                    final intentUri = Uri.parse(intentUrl);
+                    launched = await launchUrl(
+                      intentUri,
+                      mode: LaunchMode.externalApplication,
+                    );
+                    LogService.i("[Strategy 3] Launch $appName: $launched");
+                  } catch (e) {
+                    LogService.w("[Strategy 3] Failed for $appName: $e");
+                  }
+                }
+
+                // Strategi 4: Fallback manual untuk MIUI - coba langsung tanpa canLaunchUrl
+                if (!launched) {
+                  try {
+                    LogService.i(
+                        "[Strategy 4] Final attempt: Force launch $appName without checking...");
+                    // Di beberapa perangkat MIUI, canLaunchUrl return false meskipun app ada
+                    // Jadi kita coba launch langsung
+                    await launchUrl(
+                      uri,
+                      mode: LaunchMode.platformDefault,
+                    );
+                    launched = true; // Assume sukses jika tidak throw error
+                    LogService.i(
+                        "[Strategy 4] Force launch $appName completed");
+                  } catch (e) {
+                    LogService.w("[Strategy 4] Failed for $appName: $e");
+                  }
+                }
+
+                // Jika semua strategi gagal
+                if (!launched && mounted) {
+                  // Tampilkan dialog untuk membuka Play Store
+                  final packageName = _getPackageNameFromScheme(appScheme);
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: Text('Aplikasi $appName Tidak Ditemukan'),
+                      content: Text(
+                        'Aplikasi $appName tidak dapat dibuka. Apakah Anda ingin menginstall atau memperbarui aplikasi dari Play Store?',
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(ctx),
+                          child: const Text('Batal'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            Navigator.pop(ctx);
+                            try {
+                              // Buka Play Store untuk download app
+                              final playStoreUri =
+                                  Uri.parse('market://details?id=$packageName');
+                              if (await canLaunchUrl(playStoreUri)) {
+                                await launchUrl(playStoreUri,
+                                    mode: LaunchMode.externalApplication);
+                              } else {
+                                // Fallback ke browser jika Play Store tidak ada
+                                final webUri = Uri.parse(
+                                    'https://play.google.com/store/apps/details?id=$packageName');
+                                await launchUrl(webUri,
+                                    mode: LaunchMode.externalApplication);
+                              }
+                            } catch (e) {
+                              LogService.e("Failed to open Play Store: $e");
+                            }
+                          },
+                          child: const Text('Buka Play Store'),
+                        ),
+                      ],
+                    ),
+                  );
                 }
               } catch (e) {
                 LogService.e("Failed to launch deeplink: $e");
                 if (mounted) {
+                  final Uri uri = Uri.parse(request.url);
+                  final appName = _getAppNameFromScheme(uri.scheme);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Gagal membuka aplikasi Gojek.')),
+                    SnackBar(
+                      content: Text('Gagal membuka aplikasi $appName: $e'),
+                    ),
                   );
                 }
               }
-              // Hentikan WebView agar tidak mencoba memuat gojek://
+              // Hentikan WebView agar tidak mencoba memuat payment deeplink
               return NavigationDecision.prevent;
             }
 
