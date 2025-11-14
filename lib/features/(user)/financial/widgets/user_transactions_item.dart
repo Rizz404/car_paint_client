@@ -1,4 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
 import 'package:paint_car/data/models/enums/financial_status.dart';
@@ -8,7 +11,8 @@ import 'package:paint_car/features/shared/utils/currency_formatter.dart';
 import 'package:paint_car/ui/common/extent.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:flutter/services.dart';
+// IMPORT TAMBAHAN
+import 'package:url_launcher/url_launcher.dart';
 
 class UserTransactionsItem extends StatelessWidget {
   final Transactions transactions;
@@ -48,12 +52,17 @@ class UserTransactionsItem extends StatelessWidget {
       return;
     }
 
+    LogService.i("WebView navigating to: $paymentDetail");
+
     if (transactions.paymentStatus.name.toUpperCase() == "PENDING") {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => PaymentWebViewPage(
             paymentUrl: url,
+            // Kirim callback URL kamu ke WebViewPage
+            callbackUrl:
+                'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app',
           ),
         ),
       ).then((value) {
@@ -66,14 +75,26 @@ class UserTransactionsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasVirtualAccount =
-        transactions.paymentdetail?.virtualAccountNumber != null;
+    final paymentDetail = transactions.paymentdetail;
+
+    final hasVirtualAccount = paymentDetail?.virtualAccountNumber != null &&
+        paymentDetail!.virtualAccountNumber!.isNotEmpty;
     final isPending =
         transactions.paymentStatus.name.toUpperCase() == "PENDING";
     final hasNote = transactions.order != null &&
         transactions.order!.isNotEmpty &&
         transactions.order!.first?.note != null &&
         transactions.order!.first!.note!.isNotEmpty;
+
+    // == LOGIKA BARU UNTUK WEBVIEW & QR ==
+    final webViewUrl = paymentDetail?.deeplinkUrl ??
+        paymentDetail?.mobileUrl ??
+        paymentDetail?.webUrl;
+    final hasWebViewUrl = webViewUrl != null && webViewUrl.isNotEmpty;
+
+    final qrCodeUrl = paymentDetail?.midtransQrCodeUrl;
+    final hasQrCode = qrCodeUrl != null && qrCodeUrl.isNotEmpty;
+    // =====================================
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -87,7 +108,8 @@ class UserTransactionsItem extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: isPending && !hasVirtualAccount
+        // Logika diperbarui: Hanya bisa di-tap jika ada WebView URL
+        onTap: isPending && hasWebViewUrl
             ? () {
                 _handleTap(context);
               }
@@ -219,6 +241,130 @@ class UserTransactionsItem extends StatelessWidget {
                       ],
                     ),
                   ],
+
+                  // == WIDGET BARU UNTUK QRIS ==
+                  if (hasQrCode) ...[
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.qr_code_2_rounded,
+                          size: 16,
+                          color: context.adaptiveTextColor,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: MainText(
+                            text: 'QRIS Code',
+                            maxLines: 2,
+                            color: context.adaptiveTextColor,
+                          ),
+                        ),
+                        // Tombol "Lihat" QR
+                        IconButton(
+                          icon: Icon(
+                            Icons.visibility_rounded,
+                            size: 16,
+                            color: context.adaptiveSecondaryTextColor,
+                          ),
+                          constraints:
+                              const BoxConstraints(minWidth: 36, minHeight: 36),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                backgroundColor: context.adaptiveCommonColor,
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    MainText(
+                                      text: 'Pindai QRIS',
+                                      color: context.adaptiveTextColor,
+                                      extent: const Medium(),
+                                      customTextStyle: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    SizedBox(
+                                      width: 250,
+                                      height: 250,
+                                      child: Image.network(
+                                        qrCodeUrl,
+                                        fit: BoxFit.contain,
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          }
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        },
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                const Center(
+                                          child: Icon(
+                                            Icons.error_outline_rounded,
+                                            color: Colors.red,
+                                            size: 48,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: const MainText(
+                                      text: 'Tutup',
+                                      customTextStyle: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    onPressed: () => Navigator.of(ctx).pop(),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        // Tombol "Download" QR
+                        IconButton(
+                          icon: Icon(
+                            Icons.download_rounded,
+                            size: 16,
+                            color: context.adaptiveSecondaryTextColor,
+                          ),
+                          constraints:
+                              const BoxConstraints(minWidth: 36, minHeight: 36),
+                          onPressed: () async {
+                            try {
+                              final Uri uri = Uri.parse(qrCodeUrl);
+                              if (await canLaunchUrl(uri)) {
+                                await launchUrl(uri,
+                                    mode: LaunchMode.externalApplication);
+                              } else {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text('Tidak bisa membuka URL')),
+                                  );
+                                }
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Error: $e')),
+                                );
+                              }
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                  // ============================
+
                   if (hasNote) ...[
                     const SizedBox(height: 8),
                     Row(
@@ -299,7 +445,8 @@ class UserTransactionsItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (isPending && !hasVirtualAccount)
+                  // Logika diperbarui: Hanya tampilkan tombol jika ada WebView URL
+                  if (isPending && hasWebViewUrl)
                     SizedBox(
                       height: 32,
                       child: TextButton(
@@ -403,11 +550,19 @@ class UserTransactionsItem extends StatelessWidget {
   }
 }
 
+// ==================================================================
+//               BAGIAN INI YANG DIPERBAIKI
+// ==================================================================
+
 class PaymentWebViewPage extends StatefulWidget {
   final String paymentUrl;
+  final String callbackUrl; // Tambahkan ini
 
-  const PaymentWebViewPage({Key? key, required this.paymentUrl})
-      : super(key: key);
+  const PaymentWebViewPage({
+    Key? key,
+    required this.paymentUrl,
+    required this.callbackUrl, // Tambahkan ini
+  }) : super(key: key);
 
   @override
   State createState() => _PaymentWebViewPageState();
@@ -441,10 +596,60 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
               _isLoading = false;
             });
           },
-          onNavigationRequest: (NavigationRequest request) {
+          // =================== LOGIKA UTAMA ===================
+          onNavigationRequest: (NavigationRequest request) async {
+            LogService.i("WebView navigating to: ${request.url}");
+
+            // 1. CEK JIKA INI DEEPLINK GOJEK
+            if (request.url.startsWith('gojek://')) {
+              LogService.i("Gojek deeplink intercepted. Trying to launch...");
+              try {
+                final Uri uri = Uri.parse(request.url);
+                if (await canLaunchUrl(uri)) {
+                  // Buka aplikasi Gojek secara eksternal
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                } else {
+                  LogService.w("Gojek app not installed.");
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Aplikasi Gojek tidak terinstall.')),
+                    );
+                  }
+                }
+              } catch (e) {
+                LogService.e("Failed to launch deeplink: $e");
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Gagal membuka aplikasi Gojek.')),
+                  );
+                }
+              }
+              // Hentikan WebView agar tidak mencoba memuat gojek://
+              return NavigationDecision.prevent;
+            }
+
+            // 2. CEK JIKA INI URL CALLBACK (TANDA PEMBAYARAN SELESAI)
+            if (request.url.startsWith(widget.callbackUrl)) {
+              LogService.i("Callback URL intercepted. Closing WebView.");
+              // Pembayaran selesai (sukses/gagal), kembali ke halaman list
+              // dan kirim 'true' agar list di-refresh
+              if (mounted) {
+                Navigator.pop(context, true);
+              }
+              // Hentikan WebView memuat halaman callback
+              return NavigationDecision.prevent;
+            }
+
+            // 3. UNTUK URL LAINNYA (Misal: halaman GoPay https://)
+            // Biarkan WebView melanjutkan navigasi
             return NavigationDecision.navigate;
           },
+          // =================== AKHIR LOGIKA ===================
           onWebResourceError: (WebResourceError error) {
+            LogService.e(
+                "WebView Error: ${error.description} (Code: ${error.errorCode})");
             setState(() {
               _isLoading = false;
             });
@@ -462,6 +667,8 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
+          // Kirim 'true' saat user menekan back
+          // agar list transaksi bisa di-refresh
           onPressed: () => Navigator.pop(context, true),
         ),
         elevation: 0,

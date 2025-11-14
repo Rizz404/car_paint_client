@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <!-- 
+    <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
              To get one, follow the directions here:

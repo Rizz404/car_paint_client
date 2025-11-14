@@ -59,7 +59,9 @@ dependencies:
   socket_io_client: ^3.0.2
   flutter_local_notifications: ^18.0.1
   permission_handler: ^11.4.0
+  image_gallery_saver_plus: ^4.0.1
   video_player: ^2.10.0
+  device_info_plus: ^12.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -9,10 +9,19 @@ class PaymentDetail {
   final String? mobileUrl;
   final String? webUrl;
   final String? deeplinkUrl;
-  final String? xenditInvoiceId;
-  final String? xenditPaymentRequestId;
-  final String? xenditPaymentMethodId;
   final DateTime? paidAt;
+  final String? midtransTransactionId;
+  final String? midtransOrderId;
+  final String? midtransPaymentType;
+  final String? midtransTransactionStatus;
+  final String? midtransFraudStatus;
+  final String? midtransPaymentCode;
+  final String? midtransBillKey;
+  final String? midtransBillerCode;
+  final String? midtransQrCodeUrl;
+  final String? midtransRedirectUrl;
+  final String? midtransExpiryTime;
+  final String? snapToken;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   PaymentDetail({
@@ -23,10 +32,19 @@ class PaymentDetail {
     this.mobileUrl,
     this.webUrl,
     this.deeplinkUrl,
-    this.xenditInvoiceId,
-    this.xenditPaymentRequestId,
-    this.xenditPaymentMethodId,
     this.paidAt,
+    this.midtransTransactionId,
+    this.midtransOrderId,
+    this.midtransPaymentType,
+    this.midtransTransactionStatus,
+    this.midtransFraudStatus,
+    this.midtransPaymentCode,
+    this.midtransBillKey,
+    this.midtransBillerCode,
+    this.midtransQrCodeUrl,
+    this.midtransRedirectUrl,
+    this.midtransExpiryTime,
+    this.snapToken,
     this.createdAt,
     this.updatedAt,
   });
@@ -39,10 +57,19 @@ class PaymentDetail {
     String? mobileUrl,
     String? webUrl,
     String? deeplinkUrl,
-    String? xenditInvoiceId,
-    String? xenditPaymentRequestId,
-    String? xenditPaymentMethodId,
     DateTime? paidAt,
+    String? midtransTransactionId,
+    String? midtransOrderId,
+    String? midtransPaymentType,
+    String? midtransTransactionStatus,
+    String? midtransFraudStatus,
+    String? midtransPaymentCode,
+    String? midtransBillKey,
+    String? midtransBillerCode,
+    String? midtransQrCodeUrl,
+    String? midtransRedirectUrl,
+    String? midtransExpiryTime,
+    String? snapToken,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -54,12 +81,21 @@ class PaymentDetail {
       mobileUrl: mobileUrl ?? this.mobileUrl,
       webUrl: webUrl ?? this.webUrl,
       deeplinkUrl: deeplinkUrl ?? this.deeplinkUrl,
-      xenditInvoiceId: xenditInvoiceId ?? this.xenditInvoiceId,
-      xenditPaymentRequestId:
-          xenditPaymentRequestId ?? this.xenditPaymentRequestId,
-      xenditPaymentMethodId:
-          xenditPaymentMethodId ?? this.xenditPaymentMethodId,
       paidAt: paidAt ?? this.paidAt,
+      midtransTransactionId:
+          midtransTransactionId ?? this.midtransTransactionId,
+      midtransOrderId: midtransOrderId ?? this.midtransOrderId,
+      midtransPaymentType: midtransPaymentType ?? this.midtransPaymentType,
+      midtransTransactionStatus:
+          midtransTransactionStatus ?? this.midtransTransactionStatus,
+      midtransFraudStatus: midtransFraudStatus ?? this.midtransFraudStatus,
+      midtransPaymentCode: midtransPaymentCode ?? this.midtransPaymentCode,
+      midtransBillKey: midtransBillKey ?? this.midtransBillKey,
+      midtransBillerCode: midtransBillerCode ?? this.midtransBillerCode,
+      midtransQrCodeUrl: midtransQrCodeUrl ?? this.midtransQrCodeUrl,
+      midtransRedirectUrl: midtransRedirectUrl ?? this.midtransRedirectUrl,
+      midtransExpiryTime: midtransExpiryTime ?? this.midtransExpiryTime,
+      snapToken: snapToken ?? this.snapToken,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -74,10 +110,19 @@ class PaymentDetail {
       'mobileUrl': mobileUrl,
       'webUrl': webUrl,
       'deeplinkUrl': deeplinkUrl,
-      'xenditInvoiceId': xenditInvoiceId,
-      'xenditPaymentRequestId': xenditPaymentRequestId,
-      'xenditPaymentMethodId': xenditPaymentMethodId,
-      'paidAt': paidAt?.millisecondsSinceEpoch,
+      'paidAt': paidAt?.toIso8601String(),
+      'midtransTransactionId': midtransTransactionId,
+      'midtransOrderId': midtransOrderId,
+      'midtransPaymentType': midtransPaymentType,
+      'midtransTransactionStatus': midtransTransactionStatus,
+      'midtransFraudStatus': midtransFraudStatus,
+      'midtransPaymentCode': midtransPaymentCode,
+      'midtransBillKey': midtransBillKey,
+      'midtransBillerCode': midtransBillerCode,
+      'midtransQrCodeUrl': midtransQrCodeUrl,
+      'midtransRedirectUrl': midtransRedirectUrl,
+      'midtransExpiryTime': midtransExpiryTime,
+      'snapToken': snapToken,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
     };
@@ -97,18 +142,43 @@ class PaymentDetail {
       webUrl: map['webUrl'] != null ? map['webUrl'] as String : null,
       deeplinkUrl:
           map['deeplinkUrl'] != null ? map['deeplinkUrl'] as String : null,
-      xenditInvoiceId: map['xenditInvoiceId'] != null
-          ? map['xenditInvoiceId'] as String
-          : null,
-      xenditPaymentRequestId: map['xenditPaymentRequestId'] != null
-          ? map['xenditPaymentRequestId'] as String
-          : null,
-      xenditPaymentMethodId: map['xenditPaymentMethodId'] != null
-          ? map['xenditPaymentMethodId'] as String
-          : null,
       paidAt: map['paidAt'] != null
           ? DateTime.parse(map['paidAt'] as String)
           : null,
+      midtransTransactionId: map['midtransTransactionId'] != null
+          ? map['midtransTransactionId'] as String
+          : null,
+      midtransOrderId: map['midtransOrderId'] != null
+          ? map['midtransOrderId'] as String
+          : null,
+      midtransPaymentType: map['midtransPaymentType'] != null
+          ? map['midtransPaymentType'] as String
+          : null,
+      midtransTransactionStatus: map['midtransTransactionStatus'] != null
+          ? map['midtransTransactionStatus'] as String
+          : null,
+      midtransFraudStatus: map['midtransFraudStatus'] != null
+          ? map['midtransFraudStatus'] as String
+          : null,
+      midtransPaymentCode: map['midtransPaymentCode'] != null
+          ? map['midtransPaymentCode'] as String
+          : null,
+      midtransBillKey: map['midtransBillKey'] != null
+          ? map['midtransBillKey'] as String
+          : null,
+      midtransBillerCode: map['midtransBillerCode'] != null
+          ? map['midtransBillerCode'] as String
+          : null,
+      midtransQrCodeUrl: map['midtransQrCodeUrl'] != null
+          ? map['midtransQrCodeUrl'] as String
+          : null,
+      midtransRedirectUrl: map['midtransRedirectUrl'] != null
+          ? map['midtransRedirectUrl'] as String
+          : null,
+      midtransExpiryTime: map['midtransExpiryTime'] != null
+          ? map['midtransExpiryTime'] as String
+          : null,
+      snapToken: map['snapToken'] != null ? map['snapToken'] as String : null,
       createdAt: map['createdAt'] != null
           ? DateTime.parse(map['createdAt'] as String)
           : null,
@@ -125,7 +195,7 @@ class PaymentDetail {
 
   @override
   String toString() {
-    return 'PaymentDetail(id: $id, transactionId: $transactionId, virtualAccountNumber: $virtualAccountNumber, invoiceUrl: $invoiceUrl, mobileUrl: $mobileUrl, webUrl: $webUrl, deeplinkUrl: $deeplinkUrl, xenditInvoiceId: $xenditInvoiceId, xenditPaymentRequestId: $xenditPaymentRequestId, xenditPaymentMethodId: $xenditPaymentMethodId, paidAt: $paidAt, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'PaymentDetail(id: $id, transactionId: $transactionId, virtualAccountNumber: $virtualAccountNumber, invoiceUrl: $invoiceUrl, mobileUrl: $mobileUrl, webUrl: $webUrl, deeplinkUrl: $deeplinkUrl, paidAt: $paidAt, midtransTransactionId: $midtransTransactionId, midtransOrderId: $midtransOrderId, midtransPaymentType: $midtransPaymentType, midtransTransactionStatus: $midtransTransactionStatus, midtransFraudStatus: $midtransFraudStatus, midtransPaymentCode: $midtransPaymentCode, midtransBillKey: $midtransBillKey, midtransBillerCode: $midtransBillerCode, midtransQrCodeUrl: $midtransQrCodeUrl, midtransRedirectUrl: $midtransRedirectUrl, midtransExpiryTime: $midtransExpiryTime, snapToken: $snapToken, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -139,10 +209,19 @@ class PaymentDetail {
         other.mobileUrl == mobileUrl &&
         other.webUrl == webUrl &&
         other.deeplinkUrl == deeplinkUrl &&
-        other.xenditInvoiceId == xenditInvoiceId &&
-        other.xenditPaymentRequestId == xenditPaymentRequestId &&
-        other.xenditPaymentMethodId == xenditPaymentMethodId &&
         other.paidAt == paidAt &&
+        other.midtransTransactionId == midtransTransactionId &&
+        other.midtransOrderId == midtransOrderId &&
+        other.midtransPaymentType == midtransPaymentType &&
+        other.midtransTransactionStatus == midtransTransactionStatus &&
+        other.midtransFraudStatus == midtransFraudStatus &&
+        other.midtransPaymentCode == midtransPaymentCode &&
+        other.midtransBillKey == midtransBillKey &&
+        other.midtransBillerCode == midtransBillerCode &&
+        other.midtransQrCodeUrl == midtransQrCodeUrl &&
+        other.midtransRedirectUrl == midtransRedirectUrl &&
+        other.midtransExpiryTime == midtransExpiryTime &&
+        other.snapToken == snapToken &&
         other.createdAt == createdAt &&
         other.updatedAt == updatedAt;
   }
@@ -156,10 +235,19 @@ class PaymentDetail {
         mobileUrl.hashCode ^
         webUrl.hashCode ^
         deeplinkUrl.hashCode ^
-        xenditInvoiceId.hashCode ^
-        xenditPaymentRequestId.hashCode ^
-        xenditPaymentMethodId.hashCode ^
         paidAt.hashCode ^
+        midtransTransactionId.hashCode ^
+        midtransOrderId.hashCode ^
+        midtransPaymentType.hashCode ^
+        midtransTransactionStatus.hashCode ^
+        midtransFraudStatus.hashCode ^
+        midtransPaymentCode.hashCode ^
+        midtransBillKey.hashCode ^
+        midtransBillerCode.hashCode ^
+        midtransQrCodeUrl.hashCode ^
+        midtransRedirectUrl.hashCode ^
+        midtransExpiryTime.hashCode ^
+        snapToken.hashCode ^
         createdAt.hashCode ^
         updatedAt.hashCode;
   }

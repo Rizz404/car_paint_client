@@ -9,7 +9,7 @@ class ApiConstant {
   // static const String baseUrl = 'http://192.168.1.3:5500/api/v1';
   // static const String baseUrl = 'https://e413c22c1659.ngrok-free.app/api/v1';
   static const String baseUrl =
-      'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
+      'https://carpaint-server-production.up.railway.app/api/v1';
   // static const String baseUrl = 'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
   // static const String baseUrl =
   //     'https://familiar-tomasina-happiness-overload-148b3187.koyeb.app/api/v1';
