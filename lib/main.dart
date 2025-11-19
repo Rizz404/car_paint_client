@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:paint_car/features/(admin)/cubit/admin_orders_cubit.dart';
 import 'package:paint_car/features/(guest)/auth/cubit/auth_cubit.dart';
 import 'package:paint_car/features/(guest)/auth/wrapper/auth_wrapper.dart';
@@ -50,7 +51,11 @@ Future<void> requestNotificationPermissions() async {
 }
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  // Preserve splash screen
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -128,8 +133,28 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    _removeSplashScreen();
+  }
+
+  Future<void> _removeSplashScreen() async {
+    // Atur durasi splash screen di sini (dalam detik)
+    // Ganti angka 3 dengan durasi yang Anda inginkan
+    await Future.delayed(const Duration(seconds: 2));
+
+    // Hapus splash screen setelah durasi selesai
+    FlutterNativeSplash.remove();
+  }
 
   @override
   Widget build(BuildContext context) {
