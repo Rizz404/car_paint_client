@@ -95,20 +95,20 @@ class _UserWorkshopsItemState extends State<UserWorkshopsItem> {
                     color: context.adaptiveSecondaryTextColor,
                     maxLines: 2,
                   ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.location_on,
-                            size: 16,
-                            color: context.adaptiveSecondaryTextColor),
-                        MainText(
-                            text: workshop.distance ?? 'N/A',
-                            color: context.adaptiveSecondaryTextColor),
-                      ],
-                    ),
-                  ),
+                  // Align(
+                  //   alignment: Alignment.centerRight,
+                  //   child: Row(
+                  //     mainAxisSize: MainAxisSize.min,
+                  //     children: [
+                  //       Icon(Icons.location_on,
+                  //           size: 16,
+                  //           color: context.adaptiveSecondaryTextColor),
+                  //       MainText(
+                  //           text: workshop.distance ?? 'N/A',
+                  //           color: context.adaptiveSecondaryTextColor),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),

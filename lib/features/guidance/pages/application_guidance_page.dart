@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paint_car/core/constants/custom_colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 import 'package:paint_car/features/(user)/paint/widgets/full_screen_video_player.dart';
 import 'package:paint_car/ui/shared/main_text.dart';
@@ -23,10 +24,34 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
   bool _isVideoInitialized = false;
   bool _hasError = false;
   String? _errorMessage;
+
   @override
   void initState() {
     super.initState();
     _initializeVideoPlayer();
+  }
+
+  // Fungsi untuk membuka WhatsApp
+  Future<void> _launchWhatsApp() async {
+    const phoneNumber = '6282321830023'; // Format internasional tanpa '+'
+    final Uri whatsappUrl = Uri.parse('https://wa.me/$phoneNumber');
+
+    try {
+      if (!await launchUrl(
+        whatsappUrl,
+        mode: LaunchMode.externalApplication,
+      )) {
+        throw Exception('Could not launch WhatsApp');
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Gagal membuka aplikasi WhatsApp'),
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _initializeVideoPlayer() async {
@@ -315,6 +340,7 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
     );
   }
 
+  // ignore: unused_element
   Widget _buildGuidanceSteps() {
     final steps = [
       {
@@ -582,7 +608,8 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                     ),
                     const SizedBox(height: 8),
                     MainText(
-                      text: 'Tim customer service kami siap membantu Anda',
+                      text:
+                          'Tim customer service kami siap membantu Anda\nNomor WA: 082321830023',
                       extent: const Small(),
                       maxLines: 3,
                       textAlign: TextAlign.center,
@@ -594,15 +621,7 @@ class _ApplicationGuidancePageState extends State<ApplicationGuidancePage> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Fitur hubungi customer service akan segera tersedia',
-                              ),
-                            ),
-                          );
-                        },
+                        onPressed: _launchWhatsApp,
                         icon: const Icon(Icons.phone),
                         label: const Text('Hubungi Customer Service'),
                       ),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:paint_car/features/(admin)/cubit/admin_orders_cubit.dart';
 import 'package:paint_car/features/(guest)/auth/cubit/auth_cubit.dart';
 import 'package:paint_car/features/(guest)/auth/wrapper/auth_wrapper.dart';
+import 'package:paint_car/ui/splash_screen.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_brands_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_colors_cubit.dart';
 import 'package:paint_car/features/(superadmin)/car/cubit/car_models_cubit.dart';
@@ -51,10 +51,7 @@ Future<void> requestNotificationPermissions() async {
 }
 
 Future<void> main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-
-  // Preserve splash screen
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -141,19 +138,21 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool _showSplash = true;
+
   @override
   void initState() {
     super.initState();
-    _removeSplashScreen();
+    _hideSplashScreen();
   }
 
-  Future<void> _removeSplashScreen() async {
-    // Atur durasi splash screen di sini (dalam detik)
-    // Ganti angka 3 dengan durasi yang Anda inginkan
+  Future<void> _hideSplashScreen() async {
     await Future.delayed(const Duration(seconds: 2));
-
-    // Hapus splash screen setelah durasi selesai
-    FlutterNativeSplash.remove();
+    if (mounted) {
+      setState(() {
+        _showSplash = false;
+      });
+    }
   }
 
   @override
@@ -163,7 +162,7 @@ class _MyAppState extends State<MyApp> {
         return MaterialApp(
           title: 'Nikken Paint',
           theme: themeState.themeData,
-          home: const AuthWrapper(),
+          home: _showSplash ? const SplashScreen() : const AuthWrapper(),
           debugShowCheckedModeBanner: false,
         );
       },
